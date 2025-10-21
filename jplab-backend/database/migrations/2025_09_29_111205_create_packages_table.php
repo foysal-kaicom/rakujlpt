@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->decimal('price', 10, 2);
+            $table->integer('order')->nullable();
+            $table->boolean('is_home')->default(false);
             $table->string('short_description')->nullable();
             $table->text('description')->nullable();
             $table->boolean('status')->default(1);

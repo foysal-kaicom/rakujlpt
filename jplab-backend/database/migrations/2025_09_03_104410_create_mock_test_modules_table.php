@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('mock_test_modules', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('exam_id')->nullable()->constrained('exams')->onDelete('cascade');
             $table->string('slug')->unique();
             $table->string('name');
             $table->enum('status', ['active', 'disabled'])->default('active');

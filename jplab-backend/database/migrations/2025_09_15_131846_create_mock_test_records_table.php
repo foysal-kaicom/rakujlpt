@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('mock_test_records', function (Blueprint $table) {
             $table->id();
             $table->foreignId('candidate_id')->constrained('candidates')->cascadeOnDelete();
+            $table->foreignId('exam_id')->nullable()->constrained('exams')->onDelete('cascade');
             $table->integer('question_set');
             // Reading module
             $table->integer('reading_answered')->default(0);
