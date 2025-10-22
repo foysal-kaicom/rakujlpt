@@ -3,10 +3,13 @@
 namespace App\Providers;
 
 // use App\Models\BusinessSetting;
+
+use App\Models\BusinessSetting;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -44,10 +47,16 @@ class AppServiceProvider extends ServiceProvider
             });
         }
 
-        // $settings = BusinessSetting::first();
+        $settings=[];
+        
+        if(Schema::hasTable('business_settings'))
+        {
+            $settings = BusinessSetting::first();
+        }
+       
 
         // Share with all views
-        // View::share('settings', $settings);
+        View::share('settings', $settings);
 
         Blade::directive('hasPermission', function ($permission) {
             return "<?php if (checkAdminPermission($permission)) : ?>";
