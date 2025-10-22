@@ -21,7 +21,7 @@
                 </svg>
                 Total Payment Success
             </h2>
-            <p class="text-4xl font-semibold mt-2 text-right md:text-start">{{$dashboardData->total_amount}}</p>
+            <p class="text-4xl font-semibold mt-2 text-right md:text-start">0</p>
         </div>
         <div class="bg-green-50 p-4 rounded shadow-sm hover:scale-105 duration-300">
             <h2 class="text-xl font-semibold text-gray-700 flex items-center gap-2">
@@ -39,7 +39,7 @@
                 </svg>
                 Booking This Month
             </h2>
-            <p class="text-4xl font-semibold mt-2 text-right md:text-start">{{$dashboardData->total_bookings_this_month}}</p>
+            <p class="text-4xl font-semibold mt-2 text-right md:text-start">0</p>
         </div>
         <div class="bg-orange-50 p-4 rounded shadow-sm hover:scale-105 duration-300">
             <h2 class="text-xl font-semibold text-gray-700 flex items-center gap-2">
@@ -48,7 +48,7 @@
                 </svg>
                 Certificate Claimed
             </h2>
-            <p class="text-4xl font-semibold mt-2 text-right md:text-start">{{$dashboardData->total_certificates_claimed}}</p>
+            <p class="text-4xl font-semibold mt-2 text-right md:text-start">0</p>
         </div>
     </section>
 </div>
