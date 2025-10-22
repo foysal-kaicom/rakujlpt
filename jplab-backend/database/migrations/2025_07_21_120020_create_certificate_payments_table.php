@@ -15,7 +15,7 @@ class CreateCertificatePaymentsTable extends Migration
     {
         Schema::create('certificate_claims', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('booking_id')->constrained('bookings')->onDelete('cascade');
+           // $table->foreignId('booking_id')->constrained('bookings')->onDelete('cascade');
             $table->string('receiver_number');
             $table->decimal('amount', 15, 2);
             $table->decimal('received_amount', 15, 2)->nullable();
