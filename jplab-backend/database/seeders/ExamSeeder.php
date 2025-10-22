@@ -14,6 +14,7 @@ class ExamSeeder extends Seeder
             [
                 'title' => 'Japan Yunus Test',
                 'slug' => Str::slug('General Knowledge Test'),
+                'name' => "27 November, 2025",
                 'description' => 'This exam tests general knowledge skills including current affairs, history, and reasoning.',
                 'exam_date' => '2025-08-10',
                 'application_deadline' => '2025-08-01',
@@ -30,6 +31,7 @@ class ExamSeeder extends Seeder
             [
                 'title' => 'Arigana Proficiency Exam',
                 'slug' => Str::slug('English Proficiency Exam'),
+                'name' => "14 December, 2025",
                 'description' => 'Assessment of grammar, vocabulary, comprehension and writing skills.',
                 'exam_date' => '2025-09-05',
                 'application_deadline' => '2025-08-25',
