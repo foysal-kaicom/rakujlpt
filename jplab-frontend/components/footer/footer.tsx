@@ -130,6 +130,92 @@ export default function Footer() {
             <p>
               © {new Date().getFullYear()} Your Company. All rights reserved.
             </p>
+            <div className="mt-6 flex space-x-4">
+              <a href="#" className="bg-gradient-to-r from-indigo-300 to-purple-400 text-white rounded-full p-2">
+                <FaFacebookF className="size-4"/>
+              </a>
+              <a href="#" className="bg-gradient-to-r from-indigo-300 to-purple-400 text-white rounded-full p-2">
+                  <FaLinkedinIn className="size-4"/>
+              </a>
+              <a href="#" className="bg-gradient-to-r from-indigo-300 to-purple-400 text-white rounded-full p-2">
+                  <IoLogoYoutube className="size-4"/>
+              </a>
+            </div>
+          </div>
+
+          {/* Column 2: Company Links */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Company</h3>
+            <ul className="space-y-2 text-gray-500 text-sm">
+              <li>
+                <a href="#" className="hover:text-white transition">
+                  About Us
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white transition">
+                  Careers
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white transition">
+                  Blog
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white transition">
+                  Press
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 3: Resources Links */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Resources</h3>
+            <ul className="space-y-2 text-gray-500 text-sm">
+              <li>
+                <a href="#" className="hover:text-white transition">
+                  Courses
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white transition">
+                  FAQ
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white transition">
+                  Help Center
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white transition">
+                  Privacy Policy
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Newsletter */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Subscribe</h3>
+            <p className="text-gray-500 text-sm mb-4">
+              Get latest updates and offers.
+            </p>
+            <form className="flex flex-col sm:flex-row sm:space-x-2">
+              <input
+                type="email"
+                placeholder="Your email"
+                className="w-full px-4 py-2 rounded-full text-gray-900 focus:outline-none border border-gray-500"
+              />
+              <button
+                type="submit"
+                className="mt-2 sm:mt-0 px-8 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold rounded-full hover:bg-yellow-500 transition  cursor-pointer"
+              >
+                Subscribe
+              </button>
+            </form>
           </div>
         </div>
       </footer>
