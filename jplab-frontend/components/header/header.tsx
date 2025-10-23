@@ -211,7 +211,7 @@ export default function Header() {
 
   const MainHeader = () => {
     return (
-      <div className="hidden xl:flex gap-3 2xl:gap-5 h-full xl:items-center">
+      <div className="hidden xl:flex gap-5  2xl:gap-15 h-full xl:items-center">
         {navdata.map((item, index) => (
           <div
             key={index}
@@ -225,16 +225,13 @@ export default function Header() {
           >
             <Link
               href={item.to}
-              className={`font-semibold text-sm 2xl:text-base ${
-                item.id === "mockTest"
-                  ? "flex gap-2 items-center bg-white/95 backdrop-blur-md hover:bg-gradient-to-r hover:from-purple-400 hover:to-indigo-400 duration-300 cursor-pointer p-3 px-5 rounded-2xl border-3 border-purple-300 hover:border-white/50 shadow-lg transform hover:scale-105 hover:-rotate-1 group"
-                  : ""
-              }`}
+              className={`font-semibold text-sm 2xl:text-lg flex items-center gap-1`}
             >
               {item.label}
+              {Array.isArray(item.links) && <IoMdArrowDropdown className="size-6 group-hover:-rotate-180 duration-300"/>}
             </Link>
             {Array.isArray(item.links) && (
-              <div className="bg-white absolute overflow-hidden scale-0 group-hover:scale-100 transform origin-top-left left-0 top-[80px] w-[300px] duration-400 rounded-md shadow outline outline-gray-200 py-2 grid grid-cols-1 gap-1">
+              <div className="bg-white absolute overflow-hidden scale-0 group-hover:scale-100 transform origin-top left-1/2 -translate-x-1/2 top-[80px] w-[300px] duration-400 rounded-md shadow ring-1 ring-purple-200 py-2 grid grid-cols-1 gap-1">
                 {item.links.map((link, i) => (
                   <Link href={link.to} key={i}>
                     <div
@@ -551,9 +548,7 @@ export default function Header() {
 
   return (
     <>
-      <SubHeader />
-
-      <div className="h-[80px] w-full bg-white flex items-center fixed xl:relative z-50 justify-between px-[4%] md:px-[9%] top-0">
+      <div className={`h-[80px] w-full flex items-center fixed xl:sticky z-50 justify-between px-[4%] md:px-[9%] top-0 ${scrollCount > 10 ? "bg-purple-50" : "bg-white" }`}>
         <div
           className="p-1.5 bg-blue-50 rounded shadow-sm xl:hidden"
           onClick={toggleSidebar}
@@ -565,16 +560,13 @@ export default function Header() {
           )}
         </div>
         <Link href="/">
-          {/* <Image
+          <Image
             src="/assets/logo/logo.png"
             alt="logo"
             width={461}
             height={74}
-            className="w-[130px] 2xl:w-[180px]"
-          /> */}
-          <div className="text-2xl font-black bg-gradient-to-r from-blue-400 via-blue-400 to-purple-600 bg-clip-text text-transparent tracking-tight">
-            Hashira
-          </div>
+            className="w-[130px] 2xl:w-[180px] h-[45px]"
+          />
         </Link>
         <MainHeader />
 
@@ -588,31 +580,6 @@ export default function Header() {
         ) : (
           <p className="block xl:hidden"></p>
         )}
-      </div>
-
-      <div
-        className={`hidden xl:block fixed top-0 py-3 px-[3%] md:px-[5%] duration-700 z-50 w-full ${
-          scrollCount > 350 ? "translate-y-0" : "-translate-y-[200%]"
-        }`}
-      >
-        <div className="h-[80px] flex items-center px-5 bg-blue-50 justify-between rounded-md drop-shadow-2xl shadow relative">
-          <Link href="/">
-            {/* <Image
-              src="/assets/logo/logo.png"
-              alt="logo"
-              width={461}
-              height={74}
-              className="w-[130px] 2xl:w-[180px]"
-            /> */}
-            <div className="text-2xl font-black bg-gradient-to-r from-blue-400 via-blue-400 to-purple-600 bg-clip-text text-transparent tracking-tight">
-              Hashira
-            </div>
-          </Link>
-          <MainHeader />
-          <div className="hidden xl:grid grid-cols-2 items-center gap-8">
-            <NavCta />
-          </div>
-        </div>
       </div>
 
       <SmHeader />

@@ -12,7 +12,7 @@ export default function WebLayout({
   return (
     <>
       <Header />
-      <div className="w-full min-h-[70vh] pt-20 xl:pt-0">{children}</div>
+      <div className="w-full min-h-[70vh]">{children}</div>
       <PopUpVedio />
       <PoPVideoButton />
       <Footer />
