@@ -1,12 +1,12 @@
 import {
   FaTachometerAlt,
   FaUser,
-  FaHistory,
-  FaPoll,
   FaHeadset,
   FaKey,
 } from "react-icons/fa";
 import { PiExamFill } from "react-icons/pi";
+import { MdSubscriptions } from "react-icons/md";
+
 
 const SidebarData = [
   {
@@ -19,16 +19,6 @@ const SidebarData = [
     to: "/profile",
     icon: <FaUser />,
   },
-  // {
-  //   label: "Exam Booking",
-  //   to: "/exam_history",
-  //   icon: <FaHistory />,
-  // },
-  // {
-  //   label: "Results & Certificate",
-  //   to: "/exam_result",
-  //   icon: <FaPoll />,
-  // },
   {
     label: "Mock Test",
     to: "/mock_test_result",
@@ -37,7 +27,7 @@ const SidebarData = [
   {
     label: "My Subscriptions",
     to: "/my_subscriptions",
-    icon: <PiExamFill />,
+    icon: <MdSubscriptions />,
   },
   {
     label: "Support",

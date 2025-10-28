@@ -7,7 +7,7 @@ const navdata = [
   },
   {
     id: "packages",
-    label: "Subcription Plan",
+    label: "Pricing",
     to: "/packages",
     links: "",
   },
@@ -17,27 +17,19 @@ const navdata = [
     to: "/about_jpt",
     links: [
       {
-        to: "/sample_question",
+        to: "/about_jpt",
         label: "About JPLAB",
-      },
-      {
-        to: "/sample_question",
-        label: "Why Choose Us",
       },
       {
         to: "/question_composition",
         label: "Question Composition",
       },
       {
-        to: "/measurement_content",
-        label: "Measurement Content",
-      },
-      {
-        to: "/sample_question",
+        to: "/faq",
         label: "FAQ",
       },
       {
-        to: "/sample_question",
+        to: "/news",
         label: "Blog",
       },
     ],
