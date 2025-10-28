@@ -1,11 +1,12 @@
 "use client";
-import axios from "@/utils/axios";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import parse from "html-react-parser";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/useAuthStore";
 import Link from "next/link";
+import axiosInstance from "@/utils/axios";
+
 
 // Define plan type
 interface Plan {
@@ -31,8 +32,8 @@ const PricingSection = () => {
 
   const getPlansData = async () => {
     try {
-      const response = await axios.get<{ success: boolean; data: Plan[] }>(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/subscriptions?is_home=1`
+      const response = await axiosInstance.get<{ success: boolean; data: Plan[] }>(
+        `/subscriptions?is_home=1`
       );
       if (response?.data?.success) {
         setPlansData(response.data.data);
@@ -60,8 +61,8 @@ const PricingSection = () => {
 
   const handleSubscribe = async (plan: Plan) => {
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/subscribe`,
+      const response = await axiosInstance.post(
+        `/subscribe`,
         { package_id: plan.id }
       );
       const url = response?.data?.url;
@@ -86,7 +87,7 @@ const PricingSection = () => {
   return (
     <section
       id="pricing"
-      className="py-20 bg-gradient-to-br from-gray-50 to-blue-50"
+      className="py-20"
     >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-16">
@@ -99,11 +100,11 @@ const PricingSection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className={`gap-8 max-w-5xl mx-auto ${plansData.length<3 ? "flex flex-col sm:flex-row justify-center" : "grid sm:grid-cols-2 lg:grid-cols-3 "}`}>
           {plansData.map((plan) => (
             <div
               key={plan.id}
-              className={`bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 relative ${
+              className={`bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 relative w-full sm:max-w-[350px] ${
                 plan.is_popular ? "ring-4 ring-blue-200 relative" : ""
               }`}
             >
@@ -130,14 +131,14 @@ const PricingSection = () => {
               </div>
 
               <div className="space-y-4 mb-12">
-                <p className="text-gray-600">
+                <div className="text-gray-600">
                   {plan.description && parse(plan.description)}
-                </p>
+                </div>
               </div>
 
-              <div className="w-full absolute bottom-3 flex justify-center">
+              <div className="w-full flex justify-center">
                 <button
-                className={`w-full py-4 px-6 rounded-full font-semibold transition-all duration-300 mr-16 ${
+                className={`w-full py-4 px-6 rounded-full font-semibold transition-all duration-300 ${
                   plan.is_popular
                     ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-xl transform hover:scale-105"
                     : "bg-blue-600 text-white hover:bg-blue-700"
@@ -154,7 +155,7 @@ const PricingSection = () => {
         {/* Modal Start */}
         {isModalOpen && selectedPlan && (
           <div
-            className="fixed bg-gray bg-opacity-50 backdrop-blur-sm inset-0 flex items-center justify-center z-50"
+            className="fixed bg-black/25 backdrop-blur-xs inset-0 flex items-center justify-center z-50 drop-shadow-sm"
             onClick={() => {
               setIsModalOpen(false);
               setSelectedPlan(null);
@@ -213,8 +214,8 @@ const PricingSection = () => {
                   disabled={!agreed}
                   className={`px-4 py-2 rounded-lg font-semibold ${
                     agreed
-                      ? "bg-blue-600 text-white hover:bg-blue-700"
-                      : "bg-blue-300 text-white cursor-not-allowed"
+                      ? "bg-purple-600 text-white hover:bg-purple-700"
+                      : "bg-purple-300 text-white cursor-not-allowed"
                   }`}
                   onClick={() => {
                     if (selectedPlan) handleSubscribe(selectedPlan);

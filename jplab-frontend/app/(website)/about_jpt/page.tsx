@@ -66,51 +66,6 @@ export default function AboutJPT() {
                   Japanese.
                 </p>
                 </div>
-
-              {/* JPT Info Cards Section */}
-              {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                {[
-                  {
-                    img: "/assets/img/about/about-jpt-3.jpg",
-                    to: "/list_of_colleges_and_companies_admitted_to_jpt",
-                    lable: "Schools and companies accept JPT",
-                  },
-                  {
-                    img: "/assets/img/about/about-jpt-1.jpg",
-                    to: "/features_of_the_jpt",
-                    lable: "Features of the JPT",
-                  },
-                  {
-                    img: "/assets/img/about/about-jpt-4.jpg",
-                    to: "/score_descriptions",
-                    lable: "Score Descriptions of JPT",
-                  },
-                  {
-                    img: "/assets/img/about/about-jpt-2.jpg",
-                    to: "/differences_between_the_jpt_and_jlpt",
-                    lable: "Differences between JLPT & JPT",
-                  },
-                ].map((item, index) => (
-                  <a
-                    key={index}
-                    href={item.to}
-                    className="group block bg-white rounded-2xl overflow-hidden border border-gray-200 shadow hover:shadow-xl transition duration-300"
-                  >
-                    <div className="overflow-hidden">
-                      <img
-                        src={item.img}
-                        alt={item.lable}
-                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                    <div className="p-4 text-center">
-                      <p className="font-semibold text-gray-800 group-hover:text-blue-700 transition-colors duration-300">
-                        {item.lable}
-                      </p>
-                    </div>
-                  </a>
-                ))}
-              </div> */}
             </div>
           </WebpageWrapper>
         </div>
