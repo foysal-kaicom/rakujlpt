@@ -148,24 +148,19 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Company</h3>
             <ul className="space-y-2 text-gray-500 text-sm">
               <li>
-                <a href="#" className="hover:text-white transition">
-                  About Us
-                </a>
+                <Link href="/about_jpt" className="hover:text-purple-500 transition">
+                  About JPLAB
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition">
-                  Careers
-                </a>
+                <Link href="/contact_us" className="hover:text-purple-500 transition">
+                  Contact Us
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition">
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition">
-                  Press
-                </a>
+                <Link href="/terms_condition" className="hover:text-purple-500 transition">
+                  Terms & Condition
+                </Link>
               </li>
             </ul>
           </div>
@@ -174,23 +169,24 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Resources</h3>
             <ul className="space-y-2 text-gray-500 text-sm">
+             
               <li>
-                <a href="#" className="hover:text-white transition">
-                  Courses
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition">
+                <Link href="/faq" className="hover:text-purple-500 transition">
                   FAQ
+                </Link>
+              </li>
+              <li>
+                <Link href="/news" className="hover:text-purple-500 transition">
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <a href="/refund_and_cancellation" className="hover:text-purple-500 transition">
+                  Refund & Cancellation
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition">
-                  Help Center
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition">
+                <a href="#" className="hover:text-purple-500 transition">
                   Privacy Policy
                 </a>
               </li>
@@ -211,7 +207,7 @@ export default function Footer() {
               />
               <button
                 type="submit"
-                className="mt-2 sm:mt-0 px-8 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold rounded-full hover:bg-yellow-500 transition  cursor-pointer"
+                className="mt-2 sm:mt-0 px-8 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold rounded-full hover:bg-yellow-500 transition  cursor-pointer"
               >
                 Subscribe
               </button>
