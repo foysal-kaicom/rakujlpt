@@ -69,9 +69,9 @@ export default function Notification({ token }: any) {
     <div className=" flex justify-end relative group">
       <div
         onClick={toggleNotification}
-        className="p-1 rounded-full bg-white border border-gray-200 drop-shadow font-semibold relative cursor-pointer"
+        className="p-1 rounded-full bg-white border border-purple-400 font-semibold relative cursor-pointer"
       >
-        <GoBellFill className="size-5 text-blue-600" />
+        <GoBellFill className="size-5 text-purple-600" />
         {notifications?.unread_count > 0 && (
           <p className="size-3 bg-red-600 rounded-full absolute -top-1 -right-1"></p>
         )}
@@ -82,15 +82,15 @@ export default function Notification({ token }: any) {
         }`}
       >
         <div className="border-b border-gray-200 flex gap-3 justify-between items-center p-2 sticky top-0 bg-white">
-          <p className="font-semibold">Notification</p>
+          <p className="font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">Notification</p>
 
           <button
             disabled={notifications?.unread_count < 1}
             onClick={notificationReadAll}
-            className={`duration-300 text-xs ${
+            className={`duration-300 text-xs font-medium ${
               notifications?.unread_count > 0
-                ? "cursor-pointer hover:text-blue-600"
-                : "text-gray-400 cursor-not-allowed"
+                ? "cursor-pointer hover:text-purple-600"
+                : "text-gray-500 cursor-not-allowed"
             }`}
           >
             Mark as read
@@ -120,7 +120,7 @@ export default function Notification({ token }: any) {
             </div>
           ))
         ) : (
-          <p className="text-sm p-2 text-center">No notification</p>
+          <p className="text-sm p-2 text-center bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">No notification</p>
         )}
       </div>
     </div>

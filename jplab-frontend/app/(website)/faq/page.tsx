@@ -15,12 +15,18 @@ interface FAQ {
 }
 
 const getFaqList = async (): Promise<FAQ[]> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/faq/list`, {
-    cache: "no-store",
-  });
-  if (!res.ok) throw new Error("Failed to fetch centers");
-  const data = await res.json();
-  return data?.data || [];
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/faq/list`,
+      {
+        cache: "no-store",
+      }
+    );
+    const data = await res.json();
+    return data?.data || [];
+  } catch (error) {
+    return []
+  }
 };
 
 export default async function FaqPageWrapper() {

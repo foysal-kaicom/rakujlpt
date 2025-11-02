@@ -1,8 +1,9 @@
 import { Metadata } from "next";
 
 import { Suspense } from "react";
-import SuspenseLoader from "@/components/SuspenseLoader";
+
 import PackagesComponent from "@/components/packages/PackagesComponent";
+import PackagesSkeleton from "./PackageSkeleton";
 
 // Metadata
 export const metadata: Metadata = {
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function SignInPageWrapper() {
   return (
-    <Suspense fallback={<SuspenseLoader/>}>
+    <Suspense fallback={<PackagesSkeleton/>}>
       <PackagesComponent />
     </Suspense>
   );

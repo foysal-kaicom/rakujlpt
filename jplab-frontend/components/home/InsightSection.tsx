@@ -69,7 +69,7 @@ export default function InsightSection() {
 
             <div className="flex flex-wrap gap-3">
               <a
-                href="#mock-tests"
+                href="/mock_test_select"
                 className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-linear-to-r from-blue-600 to-purple-600 text-white font-medium shadow hover:opacity-85 transition"
               >
                 Start Mock Test

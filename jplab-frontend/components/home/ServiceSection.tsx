@@ -71,7 +71,7 @@ export default function ServiceSection() {
               )}
 
               {/* Content layer */}
-              <div className="relative z-10 bg-black/30 rounded-2xl min-h-[300px] lg:min-h-[220px] flex flex-col justify-center items-center overflow-hidden group">
+              <div className="relative z-10 bg-black/30 rounded-2xl min-h-[300px] lg:min-h-[250px] flex flex-col justify-center items-center overflow-hidden group">
                 {/* Title */}
                 <h3
                   className="text-6xl font-semibold text-white mb-2"
