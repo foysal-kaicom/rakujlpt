@@ -31,6 +31,7 @@ import { MdVerified } from "react-icons/md";
 import { FaSquareFacebook, FaLinkedin } from "react-icons/fa6";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import SuspenseLoader from "@/components/SuspenseLoader";
+import ProfileNew from "./profileNew";
 
 export default function UserProfile() {
   // ─── Constants ─────────────────────────────────────────────────────
@@ -373,21 +374,6 @@ export default function UserProfile() {
                       required
                       onChange={handleChange}
                     />
-                    <div className="absolute right-3 top-[0px]">
-                      {formData.is_email_verified ? (
-                        <MdVerified
-                          className="text-green-500"
-                          title="Email verified"
-                        />
-                      ) : (
-                        <button
-                          type="button"
-                          className="text-xs text-red-600 font-semibold hover:underline hover:text-blue-600"
-                        >
-                          Verify now
-                        </button>
-                      )}
-                    </div>
                   </div>
 
                   <div className="relative">
@@ -400,41 +386,7 @@ export default function UserProfile() {
                       required
                       onChange={handleChange}
                     />
-                    <div className="absolute right-3 top-[0px]">
-                      {formData.is_phone_verified ? (
-                        <MdVerified
-                          className="text-green-500"
-                          title="Phone verified"
-                        />
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() =>
-                            router.push(
-                              `/otp_verify?callbackUrl=${encodeURIComponent(
-                                `/profile`
-                              )}`
-                            )
-                          }
-                          className="text-xs text-red-600 font-semibold hover:underline hover:text-blue-600"
-                        >
-                          Verify now
-                        </button>
-                      )}
-                    </div>
                   </div>
-                </div>
-
-                <div className="grid sm:grid-cols-1 gap-4">
-                  <InputField
-                    label="NID / Passport No."
-                    name="national_id"
-                    value={formData.national_id}
-                    icon={<FaIdCard />}
-                    editMode={editMode}
-                    required
-                    onChange={handleChange}
-                  />
                 </div>
 
                 <InputField
@@ -493,6 +445,10 @@ export default function UserProfile() {
               </form>
             </div>
           </div>
+        </div>
+
+        <div>
+          <ProfileNew/>
         </div>
       </Suspense>
     </>

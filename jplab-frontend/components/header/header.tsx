@@ -62,7 +62,7 @@ export default function Header() {
 
   const MainHeader = () => {
     return (
-      <div className="hidden xl:flex gap-5  2xl:gap-15 h-full xl:items-center">
+      <div className="hidden xl:flex gap-5 lg:gap-15 h-full xl:items-center">
         {navdata.map((item, index) => (
           <div
             key={index}
@@ -76,7 +76,7 @@ export default function Header() {
           >
             <Link
               href={item.to}
-              className={`font-semibold text-sm 2xl:text-lg flex items-center gap-1`}
+              className={`font-semibold text-base lg:text-lg flex items-center gap-1`}
             >
               {item.label}
               {Array.isArray(item.links) && (
@@ -114,9 +114,9 @@ export default function Header() {
             alt="profile pic"
             height={40}
             width={40}
-            className="size-8 rounded-full object-cover aspect-auto ring-2 ring-[#173fa4]"
+            className="size-8 rounded-full object-cover aspect-auto ring-2 ring-purple-400"
           />
-          <p className="line-clamp-1 capitalize font-semibold text-[#173fa4]">
+          <p className="line-clamp-1 capitalize font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
             {user?.first_name?.slice(0, 10)}
             {user?.first_name.length > 10 && "..."}
           </p>
@@ -125,9 +125,9 @@ export default function Header() {
               <Link
                 key={i}
                 href={item.to}
-                className="flex gap-1.5 items-center hover:bg-blue-50 duration-300 cursor-pointer line-clamp-1 p-1 px-4"
+                className="flex gap-1.5 items-center hover:bg-purple-50 duration-300 cursor-pointer line-clamp-1 p-1 px-4"
               >
-                <span className="p-1 bg-white rounded outline outline-blue-100 text-blue-500">
+                <span className="p-1 bg-white rounded outline outline-purple-200 text-purple-500">
                   {item.icon}
                 </span>
                 {item.label}
@@ -181,20 +181,20 @@ export default function Header() {
           <div className="flex flex-col gap-5 h-full overflow-y-scroll pb-10 pt-5 px-6 lg:px-8 container mx-auto scrollbar-hide">
             <div className="space-y-5">
               {isAuthenticated && token && user && (
-                <div onClick={toggleSidebar} className="space-y-3">
+                <div onClick={toggleSidebar} className="space-y-3 flex flex-col items-center border-b pb-3 border-white/70">
                   <Link href="/dashboard">
                     <Image
                       src={user.photo}
                       alt="profile pic"
-                      height={40}
-                      width={40}
-                      className="size-20 rounded-full object-cover aspect-auto"
+                      height={100}
+                      width={100}
+                      className="size-30 rounded-full object-cover aspect-auto"
                     />
                   </Link>
 
                   <Link
                     href="/dashboard"
-                    className="line-clamp-1 capitalize font-semibold text-white text-lg mt-3"
+                    className="line-clamp-1 capitalize font-semibold text-lg mt-3"
                   >
                     {user?.first_name}
                   </Link>

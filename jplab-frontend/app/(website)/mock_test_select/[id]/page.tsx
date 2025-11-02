@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import SuspenseLoader from "@/components/SuspenseLoader";
+
 import MockTestQuestionComposition from "./MockTestSelect";
+import QuestionCompositionSkeleton from "../../question_composition/QusetionCompositionSkeleton";
 
 // Metadata
 export const metadata: Metadata = {
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function MockTestQuestionCompositionWrapper() {
   return (
-    <Suspense fallback={<SuspenseLoader />}>
+    <Suspense fallback={<QuestionCompositionSkeleton />}>
       <MockTestQuestionComposition/>
     </Suspense>
   );

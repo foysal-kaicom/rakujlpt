@@ -2,22 +2,31 @@
 
 import { useState, FormEvent, ChangeEvent } from "react";
 import { MdEmail } from "react-icons/md";
-import { FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaUser, FaLock, FaEye, FaEyeSlash, FaPhone } from "react-icons/fa";
 import Link from "next/link";
 
 import { signIn } from "next-auth/react";
 
 import { signOut } from "next-auth/react";
 
-
+interface FormData {
+  firstName:string,
+  lastName:string
+  email: string;
+  phone: string;
+  password:string,
+  confirmPassword:string
+}
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [formData, setFormData] = useState({
+  const [method, setMethod] = useState("email");
+  const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
     email: "",
+    phone: "",
     password: "",
     confirmPassword: "",
   });
@@ -36,9 +45,9 @@ export default function SignUpPage() {
     console.log("Form submitted:", formData);
   };
 
- const handleGoogleSignup = () => {
-  signIn("google", { callbackUrl: "/" });
-};
+  const handleGoogleSignup = () => {
+    signIn("google", { callbackUrl: "/" });
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
@@ -49,7 +58,6 @@ export default function SignUpPage() {
             <h2 className="text-4xl font-extrabold bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
               Create Your Account
             </h2>
-            <p className="text-gray-600 mt-2 text-sm">Join the fun! 🚀</p>
           </div>
 
           <form className="space-y-5" onSubmit={handleSubmit}>
@@ -81,19 +89,97 @@ export default function SignUpPage() {
               </div>
             </div>
 
-            {/* Email */}
-            <div className="relative group">
-              <MdEmail className="absolute top-3.5 left-3 text-indigo-400 group-focus-within:scale-110 transition-transform" />
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                placeholder="you@example.com"
-                className="w-full pl-10 pr-3 py-2.5 rounded-xl border-2 border-transparent bg-gradient-to-r from-indigo-50 to-pink-50 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-300 outline-none text-gray-700 transition-all duration-300"
-              />
+            <div className="flex gap-5 mb-5">
+              <label
+                className={`flex items-center gap-2 px-4 py-2 border rounded-xl cursor-pointer transition-all ${
+                  method === "email"
+                    ? "border-pink-500 bg-pink-50 text-pink-600"
+                    : "border-gray-300 hover:border-gray-400 text-gray-600"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="contactMethod"
+                  value="email"
+                  checked={method === "email"}
+                  onChange={() => setMethod("email")}
+                  className="hidden"
+                />
+                <div
+                  className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                    method === "email" ? "border-pink-500" : "border-gray-400"
+                  }`}
+                >
+                  {method === "email" && (
+                    <div className="w-2.5 h-2.5 bg-pink-500 rounded-full"></div>
+                  )}
+                </div>
+                <span className="text-sm font-medium">Email</span>
+              </label>
+
+              <label
+                className={`flex items-center gap-2 px-4 py-2 border rounded-xl cursor-pointer transition-all ${
+                  method === "phone"
+                    ? "border-pink-500 bg-pink-50 text-pink-600"
+                    : "border-gray-300 hover:border-gray-400 text-gray-600"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="contactMethod"
+                  value="phone"
+                  checked={method === "phone"}
+                  onChange={() => setMethod("phone")}
+                  className="hidden"
+                />
+                <div
+                  className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                    method === "phone" ? "border-pink-500" : "border-gray-400"
+                  }`}
+                >
+                  {method === "phone" && (
+                    <div className="w-2.5 h-2.5 bg-pink-500 rounded-full"></div>
+                  )}
+                </div>
+                <span className="text-sm font-medium">Phone</span>
+              </label>
             </div>
+
+            {/* Input Field */}
+            {method === "email" ? (
+              <div className="relative group">
+                <MdEmail className="absolute top-3.5 left-3 text-pink-400 group-focus-within:scale-110 transition-transform" />
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  placeholder="you@example.com"
+                  className="w-full pl-10 pr-3 py-2.5 rounded-xl border-2 border-transparent bg-gradient-to-r from-pink-50 to-rose-50 focus:border-pink-400 focus:ring-2 focus:ring-pink-200 outline-none text-gray-700 transition-all duration-300"
+                />
+              </div>
+            ) : (
+              <div className="relative group">
+                <FaPhone className="absolute top-3.5 left-3 text-pink-400 group-focus-within:scale-110 transition-transform rotate-90" />
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+onChange={(e) => {
+      // Limit to 11 digits only
+      const value = e.target.value.replace(/\D/g, ""); // Remove non-numeric
+      if (value.length <= 11) {
+        handleChange({ target: { name: "phone", value } });
+      }
+    }}
+    required
+    pattern="[0-9]{11}"
+    placeholder="01xxxxxxxxx"
+                  className="w-full pl-10 pr-3 py-2.5 rounded-xl border-2 border-transparent bg-gradient-to-r from-pink-50 to-rose-50 focus:border-pink-400 focus:ring-2 focus:ring-pink-200 outline-none text-gray-700 transition-all duration-300"
+                />
+              </div>
+            )}
 
             {/* Password */}
             <div className="relative group">
@@ -182,11 +268,11 @@ export default function SignUpPage() {
       </div>
 
       <button
-  onClick={() => signOut({ callbackUrl: "/signup" })} // redirect to signup page
-  className="bg-red-500 text-white px-4 py-2 rounded"
->
-  Sign Out
-</button>
+        onClick={() => signOut({ callbackUrl: "/signup" })} // redirect to signup page
+        className="bg-red-500 text-white px-4 py-2 rounded"
+      >
+        Sign Out
+      </button>
     </div>
   );
 }
