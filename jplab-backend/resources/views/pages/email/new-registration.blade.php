@@ -29,12 +29,14 @@
         .button {
             display: inline-block;
             margin-top: 20px;
+            margin-bottom: 20px;
             padding: 12px 24px;
             background-color: #1d4ed8;
             color: #ffffff;
             text-decoration: none;
             border-radius: 6px;
             font-weight: bold;
+            text-align: center;
         }
 
         .footer {
@@ -65,21 +67,19 @@
 
         <h2>Welcome, {{ $candidate->full_name }}!</h2>
 
-        <p>We’re excited to have you on board. Your account has been successfully created. Below are your login credentials:</p>
+        <p>We’re excited to have you on board. Your account has been successfully created.</p>
 
-        <div class="info-box">
-            <p><strong>Email:</strong> {{ $candidate->email }}</p>
-            <p><strong>Password:</strong> {{ $plainPassword }}</p>
-        </div>
 
         <p>To access your account, click the button below:</p>
 
-        <a href="{{config('app.frontend.url')}}/sign_in" class="button" style="color:white !important">Login to Your Account</a>
+        <div style="text-align: center; margin-bottom: 30px;">
 
+            <a href="{{config('app.frontend.url')}}/sign_in" class="button" style="color:white !important">Login to Your Account</a>
+        </div>
         <p>If you didn’t request this account or believe this was a mistake, please contact our support team.</p>
 
         <div class="footer">
-            &copy; {{ date('Y') }} kaicomsolutions. All rights reserved.
+            &copy; {{ date('Y') }} {{config('app.name')}} All rights reserved.
         </div>
     </div>
 </body>

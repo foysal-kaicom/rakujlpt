@@ -15,15 +15,15 @@ return new class extends Migration
             $table->string('last_name')->nullable();
             $table->string('surname')->nullable();
 
-            $table->string('email')->unique();
+            $table->string('email')->nullable()->unique();
             $table->string('password');
 
             $table->date('date_of_birth')->nullable();
-            $table->string('phone_number');
+            $table->string('phone_number')->nullable()->unique();
             $table->string('nationality')->nullable();
             $table->string('national_id')->nullable();
 
-            $table->enum('gender', ['male', 'female']);
+            $table->enum('gender', ['male', 'female',null])->default(null);
             $table->text('photo')->nullable(); // path to uploaded image
             $table->string('social_facebook')->nullable(); // path to uploaded image
             $table->string('social_linkedin')->nullable(); // path to uploaded image
