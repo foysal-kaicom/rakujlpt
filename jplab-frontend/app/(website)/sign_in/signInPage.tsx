@@ -1,5 +1,7 @@
 "use client";
 
+import { signIn } from "next-auth/react";
+
 // React & Next.js core
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -92,6 +94,10 @@ export default function LoginPage() {
      router.push("/dashboard")
   },[isAuthenticated && token && user])
 
+  const handleGoogleSignup = () => {
+    signIn("google", { callbackUrl: "/" });
+  };
+
   return (
     <>
       {loading && <Loader />}
@@ -109,7 +115,7 @@ export default function LoginPage() {
 
         <div className="min-h-[60vh] flex flex-col gap-5 items-center justify-center mt-5">
           {registered && (
-            <div className="flex items-start gap-3 p-5 border-l-8 border-blue-400 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl max-w-md w-full transform hover:scale-105 transition-all duration-300 border-4 border-white/50">
+            <div className="flex items-start gap-3 p-5 border-l-8 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl max-w-md w-full transform hover:scale-105 transition-all duration-300 border-4 border-white/50">
               <div className="bg-blue-100 rounded-full p-2">
                 <MdErrorOutline className="size-[30px] text-blue-700" />
               </div>
@@ -127,7 +133,7 @@ export default function LoginPage() {
           <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl max-w-md w-full p-8 border-4 border-white/50 transform hover:scale-105 transition-all duration-300">
             {/* Header */}
             <div className="text-center mb-8">
-              <div className="bg-gradient-to-r from-yellow-400 to-orange-400 rounded-3xl p-4 inline-block mb-4 shadow-lg transform -rotate-2">
+              <div className="bg-gradient-to-r from-indigo-400 to-purple-400 rounded-3xl p-4 inline-block mb-4 shadow-lg transform -rotate-2">
                 <h2 className="text-4xl font-bold text-white">
                   👋 Welcome
                 </h2>
@@ -202,6 +208,24 @@ export default function LoginPage() {
               >
                 ✨ Sign In ✨
               </button>
+              <div className="relative flex items-center justify-center my-5">
+              <div className="w-full h-px bg-gradient-to-r from-pink-300 via-yellow-300 to-indigo-300"></div>
+              <span className="absolute bg-white px-3 text-gray-600 text-sm">
+                or
+              </span>
+            </div>
+              <button
+              type="button"
+              onClick={handleGoogleSignup}
+              className="w-full flex items-center justify-center gap-3 bg-white border border-pink-300 hover:bg-pink-50 text-gray-700 font-semibold rounded-full py-2.5 transition-all duration-300 shadow-[0_0_10px_rgba(255,105,180,0.3)] hover:shadow-[0_0_20px_rgba(255,105,180,0.4)]"
+            >
+              <img
+                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                alt="Google"
+                className="w-5 h-5"
+              />
+              <span>Sign In with Google</span>
+            </button>
             </form>
 
             {/* Footer Links */}

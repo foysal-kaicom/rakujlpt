@@ -42,37 +42,37 @@ const HeroSection = () => {
           </div>
           
           <div className="relative">
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-8 text-white shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
+            <div className="bg-gradient-to-r from-blue-300/70 via-sky-40/70 to-purple-300/70 backdrop-blur-lg rounded-3xl p-8 text-gray-900 shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xl font-bold">Mock Test Dashboard</h3>
-                  <div className="bg-white/20 px-3 py-1 rounded-full text-sm">JLPT N2</div>
+                  <div className="bg-white/40 px-4 py-1 rounded-full text-sm">JLPT N2</div>
                 </div>
                 <div className="space-y-3">
-                  <div className="bg-white/10 rounded-lg p-4">
+                  <div className="bg-white/40 rounded-lg p-4">
                     <div className="flex justify-between items-center mb-2">
                       <span>Reading Comprehension</span>
-                      <span className="text-green-300">85%</span>
+                      <span className="text-green-600">85%</span>
                     </div>
-                    <div className="bg-white/20 rounded-full h-2">
+                    <div className="bg-white/50 rounded-full h-2">
                       <div className="bg-green-400 h-2 rounded-full w-4/5"></div>
                     </div>
                   </div>
-                  <div className="bg-white/10 rounded-lg p-4">
+                  <div className="bg-white/40 rounded-lg p-4">
                     <div className="flex justify-between items-center mb-2">
                       <span>Listening</span>
-                      <span className="text-yellow-300">72%</span>
+                      <span className="text-yellow-600">72%</span>
                     </div>
-                    <div className="bg-white/20 rounded-full h-2">
+                    <div className="bg-white/50 rounded-full h-2">
                       <div className="bg-yellow-400 h-2 rounded-full w-3/4"></div>
                     </div>
                   </div>
-                  <div className="bg-white/10 rounded-lg p-4">
+                  <div className="bg-white/40 rounded-lg p-4">
                     <div className="flex justify-between items-center mb-2">
                       <span>Grammar</span>
-                      <span className="text-blue-300">92%</span>
+                      <span className="text-blue-600">92%</span>
                     </div>
-                    <div className="bg-white/20 rounded-full h-2">
+                    <div className="bg-white/50 rounded-full h-2">
                       <div className="bg-blue-400 h-2 rounded-full w-11/12"></div>
                     </div>
                   </div>

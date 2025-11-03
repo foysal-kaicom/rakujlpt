@@ -43,7 +43,7 @@ export default function RouteLoader() {
   return (
     <div className="fixed top-0 left-0 h-1 z-[60] w-full bg-transparent">
       <div
-        className="h-1 bg-[#f8ff00] transition-all duration-200 ease-out"
+        className="h-1 bg-[#eeb4fa] transition-all duration-200 ease-out"
         style={{ width: `${width}%` }}
       ></div>
     </div>

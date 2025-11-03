@@ -1,5 +1,5 @@
 import Footer from "@/components/footer/footer";
-import Header from "@/components/header/header";
+import HeaderWrapper from "@/components/wrapper/HeaderWrapper";
 import PopUpVedio from "@/components/popVideo/PopUpVideo";
 import PoPVideoButton from "@/components/popVideo/PopVideoButton";
 
@@ -11,10 +11,10 @@ export default function WebLayout({
 }>) {
   return (
     <>
-      <Header />
-      <div className="w-full min-h-[70vh] pt-20 xl:pt-0">{children}</div>
-      <PopUpVedio />
-      <PoPVideoButton />
+     <HeaderWrapper />
+      <div className="w-full min-h-[70vh]">{children}</div>
+      {/* <PopUpVedio />
+      <PoPVideoButton /> */}
       <Footer />
     </>
   );

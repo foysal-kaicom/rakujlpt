@@ -6,87 +6,33 @@ const navdata = [
     links: "",
   },
   {
-    id: "aboutJpt",
-    label: "About Mock Test",
-    to: "/about_jpt",
+    id: "packages",
+    label: "Pricing",
+    to: "/packages",
     links: "",
-    // links: [
-    //   {
-    //     to: "/application_procedure",
-    //     label: "Application Procedure",
-    //   },
-    //   {
-    //     to: "/exam_center",
-    //     label: "Exam Center in Bangladesh",
-    //   },
-    //   {
-    //     to: "/list_of_colleges_and_companies_admitted_to_jpt",
-    //     label: "List of colleges and companies accept JPT",
-    //   },
-    //   {
-    //     to: "/differences_between_the_jpt_and_jlpt",
-    //     label: "Difference between the JPT and JLPT",
-    //   },
-    //   {
-    //     to: "/recognized_by_isa_japan",
-    //     label: "Recognized By Immigration Service Agency of Japan",
-    //   },
-    //   {
-    //     to: "/score_descriptions",
-    //     label: "Score Descriptions",
-    //   },
-    //   {
-    //     to: "/features_of_the_jpt",
-    //     label: "Features of the JPT",
-    //   },
-    // ],
   },
   {
-    id: "sampleQuestion",
-    label: "Test & Sample Question",
-    to: "/question_composition",
+    id: "aboutJpt",
+    label: "Information",
+    to: "/about_jpt",
     links: [
+      {
+        to: "/about_jpt",
+        label: "About JPLAB",
+      },
       {
         to: "/question_composition",
         label: "Question Composition",
       },
       {
-        to: "/measurement_content",
-        label: "Measurement Content",
+        to: "/faq",
+        label: "FAQ",
       },
-      // {
-      //   to: "/sample_question",
-      //   label: "Sample Question",
-      // },
-      // {
-      //   to: "/test_date_in_bangladesh",
-      //   label: "Test Date in Bangladesh",
-      // },
+      {
+        to: "/news",
+        label: "Blog",
+      },
     ],
-  },
-  // {
-  //   id: "result",
-  //   label: "Result & Certificate",
-  //   to: "/result_and_certificate",
-  //   links: "",
-  // },
-  {
-    id: "packages",
-    label: "Our Packages",
-    to: "/packages",
-    links: "",
-  },
-  // {
-  //   id: "faq",
-  //   label: "FAQ",
-  //   to: "/faq",
-  //   links: "",
-  // },
-  {
-    id: "mockTest",
-    label: "Mock Test",
-    to: "/mock_test_select",
-    links: "",
   },
 ];
 
