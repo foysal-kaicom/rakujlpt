@@ -1,0 +1,2 @@
+[2025-11-03 10:42:04] local.INFO: select exists (select 1 from information_schema.tables where table_schema = schema() and table_name = 'business_settings' and table_type in ('BASE TABLE', 'SYSTEM VERSIONED')) as `exists`  
+[2025-11-03 10:42:04] local.INFO: select * from `business_settings` limit 1  
