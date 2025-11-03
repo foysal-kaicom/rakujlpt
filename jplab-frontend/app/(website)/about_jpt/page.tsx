@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
+import { FaBook, FaLaptop, FaChartLine, FaSmileBeam } from "react-icons/fa";
+
 // Components
 import BreadCrumb from "@/components/BreadCrumb";
 import HeadLine2 from "@/components/HeadLine2";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import SuspenseLoader from "@/components/SuspenseLoader";
+import Link from "next/link";
 
 // Metadata
 export const metadata: Metadata = {
@@ -20,100 +23,87 @@ export default function AboutJPT() {
   ];
   return (
     <>
-      <Suspense
-        fallback={
-         <SuspenseLoader/>
-        }
-      >
-        <div className="pt-5">
+      <Suspense fallback={<SuspenseLoader />}>
+        <section className="relative bg-gradient-to-br from-blue-50 via-pink-50 to-purple-100 text-gray-900 pt-5 pb-28 overflow-hidden">
+          {/* Background funky shapes */}
+          <div className="absolute -top-16 -left-16 w-60 h-60 bg-yellow-200/30 rounded-full filter blur-3xl animate-bounce-slow"></div>
+          <div className="absolute -bottom-24 -right-16 w-96 h-96 bg-pink-200/30 rounded-full filter blur-3xl animate-pulse-slow"></div>
+
           <WebpageWrapper>
             <BreadCrumb breadCrumbData={breadCrumbData} />
-            <div className="w-1/2 mt-5">
-              <HeadLine2 mainText="About Mocktest" preText="" subText="" />
-            </div>
-            <div className="mt-10 pb-15 space-y-15 ">
-              {/* JPT Description Section */}
-                <div className="space-y-5 text-gray-700 sm:text-lg leading-relaxed">
-                <p>
-                  <span className="font-semibold text-blue-700">
-                  The JPT (Japanese Proficiency Test)
-                  </span>{" "}
-                  is a Japanese language certification recognized by the
-                  Ministry of Justice Immigration Services Agency of Japan.
+
+            <div className="flex flex-col-reverse lg:flex-row items-center gap-12 relative z-10 pt-15">
+              {/* Left content */}
+              <div className="lg:w-1/2 space-y-6">
+                <h2 className="text-4xl sm:text-5xl font-extrabold leading-snug bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-400 to-purple-500 animate-gradient-x">
+                  Fun & Interactive Japanese Learning
+                </h2>
+                <p className="text-lg sm:text-xl text-gray-700/90">
+                  Practice{" "}
+                  <span className="font-bold text-indigo-500">JPT & JLPT</span>{" "}
+                  exams, track your skills, and have a blast while learning! Our
+                  platform is perfect for anyone dreaming of going to Japan.
                 </p>
-                <p>
-                  This site helps you prepare for Japanese language exams such as{" "}
-                  <span className="font-medium text-green-600">JPT</span> and{" "}
-                  <span className="font-medium text-green-600">JLPT</span> with mock tests and resources.
-                </p>
-                <p>
-                  <span className="font-medium text-green-600">
-                  JPT Score 68+
-                  </span>{" "}
-                  is equivalent to{" "}
-                  <span className="font-medium text-green-600">JLPT-N5</span>
-                </p>
-                <p>
-                  <span className="font-medium text-green-600">
-                  JPT Score 89+
-                  </span>{" "}
-                  is equivalent to{" "}
-                  <span className="font-medium text-green-600">JLPT-N4</span>
-                </p>
-                <p>
-                  The JPT aims to objectively measure and evaluate advanced and
-                  functional communication skills for daily and business life in
-                  Japanese.
-                </p>
+
+                {/* Funky feature cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6 pb-8">
+                  <div className="bg-white/60 backdrop-blur-md rounded-3xl p-6 flex flex-col items-center text-center shadow-lg transform hover:-translate-y-2 hover:rotate-1 transition-all duration-300">
+                    <FaBook
+                      size={32}
+                      className="mb-3 text-yellow-400 animate-bounce"
+                    />
+                    <h3 className="font-bold text-lg text-gray-900">
+                      Mock Tests
+                    </h3>
+                    <p className="text-gray-800/80 mt-1 text-sm">
+                      Fun practice anytime, anywhere!
+                    </p>
+                  </div>
+                  <div className="bg-white/60 backdrop-blur-md rounded-3xl p-6 flex flex-col items-center text-center shadow-lg transform hover:-translate-y-2 hover:-rotate-1 transition-all duration-300">
+                    <FaLaptop
+                      size={32}
+                      className="mb-3 text-pink-400 animate-bounce"
+                    />
+                    <h3 className="font-bold text-lg text-gray-900">
+                      Easy Subscription
+                    </h3>
+                    <p className="text-gray-800/80 mt-1 text-sm">
+                      Plans that fit your learning style!
+                    </p>
+                  </div>
+                  <div className="bg-white/60 backdrop-blur-md rounded-3xl p-6 flex flex-col items-center text-center shadow-lg transform hover:-translate-y-2 hover:rotate-1 transition-all duration-300">
+                    <FaSmileBeam
+                      size={32}
+                      className="mb-3 text-green-400 animate-bounce"
+                    />
+                    <h3 className="font-bold text-lg text-gray-900">
+                      Track Progress
+                    </h3>
+                    <p className="text-gray-800/80 mt-1 text-sm">
+                      See your improvement in real time!
+                    </p>
+                  </div>
                 </div>
 
-              {/* JPT Info Cards Section */}
-              {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                {[
-                  {
-                    img: "/assets/img/about/about-jpt-3.jpg",
-                    to: "/list_of_colleges_and_companies_admitted_to_jpt",
-                    lable: "Schools and companies accept JPT",
-                  },
-                  {
-                    img: "/assets/img/about/about-jpt-1.jpg",
-                    to: "/features_of_the_jpt",
-                    lable: "Features of the JPT",
-                  },
-                  {
-                    img: "/assets/img/about/about-jpt-4.jpg",
-                    to: "/score_descriptions",
-                    lable: "Score Descriptions of JPT",
-                  },
-                  {
-                    img: "/assets/img/about/about-jpt-2.jpg",
-                    to: "/differences_between_the_jpt_and_jlpt",
-                    lable: "Differences between JLPT & JPT",
-                  },
-                ].map((item, index) => (
-                  <a
-                    key={index}
-                    href={item.to}
-                    className="group block bg-white rounded-2xl overflow-hidden border border-gray-200 shadow hover:shadow-xl transition duration-300"
-                  >
-                    <div className="overflow-hidden">
-                      <img
-                        src={item.img}
-                        alt={item.lable}
-                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                    <div className="p-4 text-center">
-                      <p className="font-semibold text-gray-800 group-hover:text-blue-700 transition-colors duration-300">
-                        {item.lable}
-                      </p>
-                    </div>
-                  </a>
-                ))}
-              </div> */}
+                <Link
+                  href="/mock_test_select"
+                  className="bg-gradient-to-r from-pink-500 to-purple-500 px-8 py-3 rounded-3xl font-bold text-white shadow-lg hover:shadow-xl transition-all duration-300 border border-white"
+                >
+                  Start Practicing Now
+                </Link>
+              </div>
+
+              {/* Right funky illustration */}
+              <div className="lg:w-1/2 flex justify-end relative">
+                <img
+                  src="/assets/test.jpg"
+                  alt="Funky Japanese learning illustration"
+                  className="w-full max-w-lg rounded-2xl hover:scale-105 transition-transform duration-500"
+                />
+              </div>
             </div>
           </WebpageWrapper>
-        </div>
+        </section>
       </Suspense>
     </>
   );
