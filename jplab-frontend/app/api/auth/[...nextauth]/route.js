@@ -11,20 +11,19 @@ export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user, account }) {
-      // This runs on sign in
       if (account && user) {
         token.accessToken = account.access_token;
         token.id = user.id;
       }
       return token;
     },
+
     async session({ session, token }) {
-      // This is sent to the client
       session.user.id = token.id;
       session.accessToken = token.accessToken;
 
-      // Send user info to backend
       try {
+        // Send to your backend for login/registration
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/google-login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -36,8 +35,12 @@ export const authOptions = {
           }),
         });
 
-        console.log(res)
-        alert(res)
+        if (!res.ok) throw new Error("Backend login failed");
+        const backendRes = await res.json();
+
+        // Attach backend data to session
+        session.backendUser = backendRes.data;
+        session.backendToken = backendRes.token;
       } catch (err) {
         console.error("Error sending user to backend:", err);
       }
@@ -49,4 +52,3 @@ export const authOptions = {
 
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
-
