@@ -101,7 +101,7 @@ class CandidateController extends Controller
 
     public function logout()
     {
-        Auth::guard('candidate')->logout();
+        JWTAuth::invalidate(JWTAuth::getToken());
         return $this->responseWithSuccess([], 'Logout successful');
     }
 
