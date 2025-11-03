@@ -10,12 +10,12 @@ import { signIn } from "next-auth/react";
 import { signOut } from "next-auth/react";
 
 interface FormData {
-  firstName:string,
-  lastName:string
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
-  password:string,
-  confirmPassword:string
+  password: string;
+  confirmPassword: string;
 }
 
 export default function SignUpPage() {
@@ -166,16 +166,14 @@ export default function SignUpPage() {
                   type="tel"
                   name="phone"
                   value={formData.phone}
-onChange={(e) => {
-      // Limit to 11 digits only
-      const value = e.target.value.replace(/\D/g, ""); // Remove non-numeric
-      if (value.length <= 11) {
-        handleChange({ target: { name: "phone", value } });
-      }
-    }}
-    required
-    pattern="[0-9]{11}"
-    placeholder="01xxxxxxxxx"
+                  onChange={(e) => {
+                    let value = e.target.value.replace(/\D/g, "");
+                    if (value.length > 11) value = value.slice(0, 11);
+                    setFormData((prev) => ({ ...prev, phone: value }));
+                  }}
+                  required
+                  pattern="[0-9]{11}"
+                  placeholder="01xxxxxxxxx"
                   className="w-full pl-10 pr-3 py-2.5 rounded-xl border-2 border-transparent bg-gradient-to-r from-pink-50 to-rose-50 focus:border-pink-400 focus:ring-2 focus:ring-pink-200 outline-none text-gray-700 transition-all duration-300"
                 />
               </div>
@@ -268,7 +266,7 @@ onChange={(e) => {
       </div>
 
       <button
-        onClick={() => signOut({ callbackUrl: "/signup" })} // redirect to signup page
+        onClick={() => signOut({ callbackUrl: "/signup" })}
         className="bg-red-500 text-white px-4 py-2 rounded"
       >
         Sign Out
