@@ -13,12 +13,14 @@ use App\Http\Controllers\Api\MockTestController;
 use App\Http\Controllers\Api\CandidateController;
 use App\Http\Controllers\Api\TestimonialController;
 use App\Http\Controllers\Api\DemoQuestionController;
+use App\Http\Controllers\Api\GoogleAuthController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\SslCommerzPaymentController;
 
 Route::prefix('v1')->group(function () {
 
     Route::post('/login', [CandidateController::class, 'doLogin']);
+    Route::post('/google-login', [GoogleAuthController::class, 'googleLogin']);
 
     Route::post('/test', [HomeController::class, 'test']);
 
