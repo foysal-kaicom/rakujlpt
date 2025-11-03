@@ -1,0 +1,54 @@
+[
+  {
+    "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/dashboard(\\\\.json)?[\\/#\\?]?$",
+    "originalSource": "/dashboard"
+  },
+  {
+    "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/profile(\\\\.json)?[\\/#\\?]?$",
+    "originalSource": "/profile"
+  },
+  {
+    "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/exam_history(?:\\/(.*))(\\\\.json)?[\\/#\\?]?$",
+    "originalSource": "/exam_history/(.*)"
+  },
+  {
+    "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/exam_result(\\\\.json)?[\\/#\\?]?$",
+    "originalSource": "/exam_result"
+  },
+  {
+    "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/mock_test_result(\\\\.json)?[\\/#\\?]?$",
+    "originalSource": "/mock_test_result"
+  },
+  {
+    "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/support(\\\\.json)?[\\/#\\?]?$",
+    "originalSource": "/support"
+  },
+  {
+    "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/update_password(\\\\.json)?[\\/#\\?]?$",
+    "originalSource": "/update_password"
+  },
+  {
+    "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/checkout(?:\\/(.*))(\\\\.json)?[\\/#\\?]?$",
+    "originalSource": "/checkout/(.*)"
+  },
+  {
+    "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/payment-success(?:\\/(.*))(\\\\.json)?[\\/#\\?]?$",
+    "originalSource": "/payment-success/(.*)"
+  },
+  {
+    "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/payment-failed(?:\\/(.*))(\\\\.json)?[\\/#\\?]?$",
+    "originalSource": "/payment-failed/(.*)"
+  },
+  {
+    "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/payment-cancle(?:\\/(.*))(\\\\.json)?[\\/#\\?]?$",
+    "originalSource": "/payment-cancle/(.*)"
+  },
+  {
+    "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/otp_verify(\\\\.json)?[\\/#\\?]?$",
+    "originalSource": "/otp_verify"
+  },
+  {
+    "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/mock_test\\/start(?:\\/(.*))(\\\\.json)?[\\/#\\?]?$",
+    "originalSource": "/mock_test/start/(.*)"
+  }
+]

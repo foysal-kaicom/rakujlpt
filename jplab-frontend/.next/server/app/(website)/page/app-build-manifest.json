@@ -1,0 +1,42 @@
+{
+  "pages": {
+    "/(website)/page": [
+      "static/chunks/css_globals_90fea0e5.css",
+      "static/chunks/node_modules_c8274f7e._.js",
+      "static/chunks/components_RouteLoader_tsx_80234a29._.js",
+      "static/chunks/app_layout_tsx_0a548d63._.js",
+      "static/chunks/app_not-found_tsx_802d4caa._.js",
+      "static/chunks/app_not-found_tsx_d8ce42d3._.js",
+      "static/chunks/node_modules_next_dist_client_components_builtin_global-error_d8ce42d3.js",
+      "static/chunks/_7f9261f1._.js",
+      "static/chunks/node_modules_next_b4f284d7._.js",
+      "static/chunks/node_modules_react-icons_io_index_mjs_7f31b177._.js",
+      "static/chunks/node_modules_react-icons_fa_index_mjs_0459ff00._.js",
+      "static/chunks/node_modules_react-icons_io5_index_mjs_9bce8f6c._.js",
+      "static/chunks/node_modules_react-icons_gi_index_mjs_657583d5._.js",
+      "static/chunks/node_modules_react-icons_rx_index_mjs_03f9ea46._.js",
+      "static/chunks/node_modules_react-icons_pi_index_mjs_39252f67._.js",
+      "static/chunks/node_modules_react-icons_md_index_mjs_65e576c2._.js",
+      "static/chunks/node_modules_react-icons_fa6_index_mjs_79da82bd._.js",
+      "static/chunks/node_modules_react-icons_go_index_mjs_f86356b3._.js",
+      "static/chunks/node_modules_react-icons_lib_844c6c50._.js",
+      "static/chunks/node_modules_axios_lib_99e19c7d._.js",
+      "static/chunks/node_modules_c7b1819b._.js",
+      "static/chunks/app_(website)_layout_tsx_d8ce42d3._.js",
+      "static/chunks/node_modules_react-icons_tb_index_mjs_c5ac7ced._.js",
+      "static/chunks/node_modules_react-icons_bs_index_mjs_8a44a60a._.js",
+      "static/chunks/node_modules_b2623b65._.js",
+      "static/chunks/components_32465ec2._.js",
+      "static/chunks/app_(website)_page_tsx_4a426698._.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_57d40746._.js",
+      "static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js",
+      "static/chunks/node_modules_next_dist_compiled_next-devtools_index_a9cb0712.js",
+      "static/chunks/node_modules_next_dist_compiled_5150ccfd._.js",
+      "static/chunks/node_modules_next_dist_client_cf1d9188._.js",
+      "static/chunks/node_modules_next_dist_b0daae9a._.js",
+      "static/chunks/node_modules_@swc_helpers_cjs_b3dc30d6._.js",
+      "static/chunks/_a0ff3932._.js",
+      "static/chunks/turbopack-_cdba956c._.js"
+    ]
+  }
+}

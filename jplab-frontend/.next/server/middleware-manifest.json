@@ -1,0 +1,81 @@
+{
+  "version": 3,
+  "middleware": {
+    "/": {
+      "files": [
+        "server/edge/chunks/_7d9b4a52._.js",
+        "server/edge/chunks/[root-of-the-server]__f2b15f93._.js",
+        "server/edge/chunks/turbopack-edge-wrapper_574eb55e.js"
+      ],
+      "name": "middleware",
+      "page": "/",
+      "matchers": [
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/dashboard(\\\\.json)?[\\/#\\?]?$",
+          "originalSource": "/dashboard"
+        },
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/profile(\\\\.json)?[\\/#\\?]?$",
+          "originalSource": "/profile"
+        },
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/exam_history(?:\\/(.*))(\\\\.json)?[\\/#\\?]?$",
+          "originalSource": "/exam_history/(.*)"
+        },
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/exam_result(\\\\.json)?[\\/#\\?]?$",
+          "originalSource": "/exam_result"
+        },
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/mock_test_result(\\\\.json)?[\\/#\\?]?$",
+          "originalSource": "/mock_test_result"
+        },
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/support(\\\\.json)?[\\/#\\?]?$",
+          "originalSource": "/support"
+        },
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/update_password(\\\\.json)?[\\/#\\?]?$",
+          "originalSource": "/update_password"
+        },
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/checkout(?:\\/(.*))(\\\\.json)?[\\/#\\?]?$",
+          "originalSource": "/checkout/(.*)"
+        },
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/payment-success(?:\\/(.*))(\\\\.json)?[\\/#\\?]?$",
+          "originalSource": "/payment-success/(.*)"
+        },
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/payment-failed(?:\\/(.*))(\\\\.json)?[\\/#\\?]?$",
+          "originalSource": "/payment-failed/(.*)"
+        },
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/payment-cancle(?:\\/(.*))(\\\\.json)?[\\/#\\?]?$",
+          "originalSource": "/payment-cancle/(.*)"
+        },
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/otp_verify(\\\\.json)?[\\/#\\?]?$",
+          "originalSource": "/otp_verify"
+        },
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/mock_test\\/start(?:\\/(.*))(\\\\.json)?[\\/#\\?]?$",
+          "originalSource": "/mock_test/start/(.*)"
+        }
+      ],
+      "wasm": [],
+      "assets": [],
+      "env": {
+        "__NEXT_BUILD_ID": "development",
+        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "KVFUtP3XNzGBBKIWsWROXiEv2zrM1fNGNa41Oe5sJe8=",
+        "__NEXT_PREVIEW_MODE_ID": "f57f65e3ea8b31ffc59a5e3cc05ca557",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "f8603d9bfc03c16e27cd12eb6ddc0df620edd6cddb3b09dcfb6f600d48ec7ef3",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "a30b964741182f9e50ea4b484fbd6ca4bedf85c337b2309e06fe0d1f3d06c117"
+      }
+    }
+  },
+  "sortedMiddleware": [
+    "/"
+  ],
+  "functions": {}
+}
