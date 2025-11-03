@@ -16,12 +16,13 @@ return new class extends Migration
             $table->string('surname')->nullable();
 
             $table->string('email')->nullable()->unique();
-            $table->string('password');
+            $table->string('password')->nullable();
 
             $table->date('date_of_birth')->nullable();
             $table->string('phone_number')->nullable()->unique();
             $table->string('nationality')->nullable();
             $table->string('national_id')->nullable();
+            $table->string('google_id')->nullable();
 
             $table->enum('gender', ['male', 'female',null])->default(null);
             $table->text('photo')->nullable(); // path to uploaded image
