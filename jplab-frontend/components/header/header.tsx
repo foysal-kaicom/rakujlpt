@@ -18,7 +18,6 @@ import { SidebarData } from "../user/Sidebar/sidebarData";
 
 import { useAuthStore } from "@/stores/useAuthStore";
 import Notification from "./notificationComponent";
-import { useAuthSession } from "@/utils/authSession";
 
 export default function Header() {
   const [scrollCount, setScrollCount] = useState(0);
@@ -307,8 +306,6 @@ export default function Header() {
       </>
     );
   };
-
-  // useAuthSession()
 
   return (
     <>
