@@ -47,13 +47,12 @@ class CandidateController extends Controller
             }
 
             // phone number needs to sanitize
-            $plainPassword = (string) random_int(100000, 999999);
-            $data['password'] = bcrypt($plainPassword);
+            $data['password'] = bcrypt($data['password']);
 
             $candidate = Candidate::create($data);
 
             //send congratulation email with password
-            dispatch(new SendRegistrationEmailJob($candidate, $plainPassword));
+            dispatch(new SendRegistrationEmailJob($candidate));
 
             return $this->responseWithSuccess($candidate, "Candidate registered successfully", 201);
         } catch (Throwable $e) {
@@ -65,7 +64,7 @@ class CandidateController extends Controller
     public function doLogin(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'email_or_phone' => 'required|string',
             'password' => 'required|min:6',
         ]);
 
@@ -73,7 +72,11 @@ class CandidateController extends Controller
             return $this->responseWithError('Something went wrong.', $validator->getMessageBag());
         }
 
-        $candidate = Candidate::where('email', $request->email)->first();
+        $email_or_phone = $request->input('email_or_phone');    
+        $field = filter_var($email_or_phone, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone_number';
+
+
+        $candidate = Candidate::where($field, $email_or_phone)->first();
 
         if ($candidate && $candidate->status == 'active' && Hash::check($request->password, $candidate->password)) {
             try {
