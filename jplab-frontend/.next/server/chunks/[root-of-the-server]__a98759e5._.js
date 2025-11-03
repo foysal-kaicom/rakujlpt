@@ -142,7 +142,7 @@ const authOptions = {
             session.accessToken = token.accessToken;
             // Send user info to backend
             try {
-                await fetch(`${("TURBOPACK compile-time value", "http://localhost:8080/api/v1")}/auth/google`, {
+                const res = await fetch(`${("TURBOPACK compile-time value", "http://localhost:8080/api/v1")}/google-login`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -151,9 +151,11 @@ const authOptions = {
                         name: session.user.name,
                         email: session.user.email,
                         image: session.user.image,
-                        accessToken: token.accessToken
+                        token: token.accessToken
                     })
                 });
+                console.log(res);
+                alert(res);
             } catch (err) {
                 console.error("Error sending user to backend:", err);
             }

@@ -25,16 +25,19 @@ export const authOptions = {
 
       // Send user info to backend
       try {
-        await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/google-login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name: session.user.name,
             email: session.user.email,
             image: session.user.image,
-            accessToken: token.accessToken,
+            token: token.accessToken,
           }),
         });
+
+        console.log(res)
+        alert(res)
       } catch (err) {
         console.error("Error sending user to backend:", err);
       }
