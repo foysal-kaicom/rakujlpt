@@ -56,7 +56,7 @@ export default function FAQ({ faqs }: FAQProps) {
         "Yes, you can review your answers, see detailed explanations, and track your improvement over time through your dashboard.",
     },
     {
-      question: "Do I need to pay for every mock test?",
+      question: "Do I need to pay for every mock test?2",
       answer:
         "You can try free mock tests, but premium users get unlimited access, performance analytics, and personalized recommendations.",
     },
