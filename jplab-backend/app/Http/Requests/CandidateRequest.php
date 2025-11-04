@@ -29,9 +29,9 @@ class CandidateRequest extends FormRequest
         return [
             'first_name'    => 'required|string|max:100',
             'last_name'     => 'required|string|max:100',
-            'email'         => 'nullable|email|required_without:phone_number|max:150',
-            'phone_number'  => 'nullable|string|required_without:email|max:20',
-            'password'      => 'required|min:6',
+            'email'         => 'nullable|email|unique:candidates|required_without:phone_number|max:150',
+            'phone_number'  => 'nullable|string|unique:candidates|required_without:email|max:20',
+            'password'      => 'required|min:6|confirmed',
         ];
 
 
