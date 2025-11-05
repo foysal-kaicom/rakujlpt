@@ -4,18 +4,20 @@ import { useState, FormEvent, ChangeEvent } from "react";
 import { MdEmail } from "react-icons/md";
 import { FaUser, FaLock, FaEye, FaEyeSlash, FaPhone } from "react-icons/fa";
 import Link from "next/link";
+import axios from "axios";
+import { toast } from "sonner";
 
-import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-import { signOut } from "next-auth/react";
+import { googleLoginUtils } from "@/utils/googleLoginUtils";
 
 interface FormData {
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   email: string;
-  phone: string;
+  phone_number: string;
   password: string;
-  confirmPassword: string;
+  password_confirmation: string;
 }
 
 export default function SignUpPage() {
@@ -23,30 +25,44 @@ export default function SignUpPage() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [method, setMethod] = useState("email");
   const [formData, setFormData] = useState<FormData>({
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     email: "",
-    phone: "",
+    phone_number: "",
     password: "",
-    confirmPassword: "",
+    password_confirmation: "",
   });
+
+  const router = useRouter()
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+    if (formData.password !== formData.password_confirmation) {
+      toast.error("Passwords do not match!");
       return;
     }
     console.log("Form submitted:", formData);
+    try{
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/candidate/register`,formData)
+      router.push('/sign_in');
+      toast.success(response.data.message || "Sign up completed")
+
+    }catch(error:any){
+      toast.error(error?.response?.data?.message || error.message || "Sign up failed")
+    }
   };
 
-  const handleGoogleSignup = () => {
-    signIn("google", { callbackUrl: "/" });
+  const handleGoogleLogin = async () => {
+    const useraData = await googleLoginUtils()
+      if(useraData){
+        console.log(useraData , "yoo")
+        router.push('/dashboard')
+      }
   };
 
   return (
@@ -67,8 +83,8 @@ export default function SignUpPage() {
                 <FaUser className="absolute top-3.5 left-3 text-pink-400 group-focus-within:scale-110 transition-transform" />
                 <input
                   type="text"
-                  name="firstName"
-                  value={formData.firstName}
+                  name="first_name"
+                  value={formData.first_name}
                   onChange={handleChange}
                   required
                   placeholder="First name"
@@ -79,8 +95,8 @@ export default function SignUpPage() {
                 <FaUser className="absolute top-3.5 left-3 text-purple-400 group-focus-within:scale-110 transition-transform" />
                 <input
                   type="text"
-                  name="lastName"
-                  value={formData.lastName}
+                  name="last_name"
+                  value={formData.last_name}
                   onChange={handleChange}
                   required
                   placeholder="Last name"
@@ -164,12 +180,12 @@ export default function SignUpPage() {
                 <FaPhone className="absolute top-3.5 left-3 text-pink-400 group-focus-within:scale-110 transition-transform rotate-90" />
                 <input
                   type="tel"
-                  name="phone"
-                  value={formData.phone}
+                  name="phone_number"
+                  value={formData.phone_number}
                   onChange={(e) => {
                     let value = e.target.value.replace(/\D/g, "");
                     if (value.length > 11) value = value.slice(0, 11);
-                    setFormData((prev) => ({ ...prev, phone: value }));
+                    setFormData((prev) => ({ ...prev, phone_number: value }));
                   }}
                   required
                   pattern="[0-9]{11}"
@@ -205,8 +221,8 @@ export default function SignUpPage() {
               <FaLock className="absolute top-3.5 left-3 text-green-400 group-focus-within:scale-110 transition-transform" />
               <input
                 type={showConfirm ? "text" : "password"}
-                name="confirmPassword"
-                value={formData.confirmPassword}
+                name="password_confirmation"
+                value={formData.password_confirmation}
                 onChange={handleChange}
                 required
                 placeholder="Confirm password"
@@ -240,7 +256,7 @@ export default function SignUpPage() {
             {/* Google Sign Up */}
             <button
               type="button"
-              onClick={handleGoogleSignup}
+              onClick={handleGoogleLogin}
               className="w-full flex items-center justify-center gap-3 bg-white border border-pink-300 hover:bg-pink-50 text-gray-700 font-semibold rounded-full py-2.5 transition-all duration-300 shadow-[0_0_10px_rgba(255,105,180,0.3)] hover:shadow-[0_0_20px_rgba(255,105,180,0.4)]"
             >
               <img
@@ -264,13 +280,6 @@ export default function SignUpPage() {
           </p>
         </div>
       </div>
-
-      <button
-        onClick={() => signOut({ callbackUrl: "/signup" })}
-        className="bg-red-500 text-white px-4 py-2 rounded"
-      >
-        Sign Out
-      </button>
     </div>
   );
 }
