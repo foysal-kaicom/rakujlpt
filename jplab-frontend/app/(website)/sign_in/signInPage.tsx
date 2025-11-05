@@ -46,6 +46,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email_or_phone: "",
+    email_or_phone: "",
     password: "",
   });
 
