@@ -4,6 +4,7 @@ import { IoMdArrowDropright, IoMdArrowDropdown } from "react-icons/io";
 import { IoLogIn, IoLogOut } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RxCross2 } from "react-icons/rx";
+import { signOut } from "next-auth/react";
 
 import { toast } from "sonner";
 import axiosInstance from "@/utils/axios";
@@ -18,7 +19,6 @@ import { SidebarData } from "../user/Sidebar/sidebarData";
 
 import { useAuthStore } from "@/stores/useAuthStore";
 import Notification from "./notificationComponent";
-import { useAuthSession } from "@/utils/authSession";
 
 export default function Header() {
   const [scrollCount, setScrollCount] = useState(0);
@@ -50,7 +50,7 @@ export default function Header() {
     try {
       const response = await axiosInstance.get("/candidate/logout");
       if (response.status == 200) {
-        logout();
+        signOut().then(() => logout())
         router.push("/sign_in");
       }
     } catch (error: any) {
@@ -307,8 +307,6 @@ export default function Header() {
       </>
     );
   };
-
-  // useAuthSession()
 
   return (
     <>
