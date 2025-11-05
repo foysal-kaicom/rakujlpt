@@ -46,7 +46,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
+    email_or_phone: "",
     password: "",
   });
 
@@ -159,7 +159,7 @@ export default function LoginPage() {
                   </button>
                   <input
                     id="email"
-                    name="email"
+                    name="email_or_phone"
                     type="email"
                     value={formData.email}
                     onChange={handleChange}

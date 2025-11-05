@@ -1,499 +1,343 @@
 "use client";
-import { useState, useEffect } from "react";
-import {
-  X,
-  Clock,
-  Lightbulb,
-  Check,
-  AlertCircle,
-  ChevronRight,
-} from "lucide-react";
-import { useParams } from "next/navigation";
+
+import axiosInstance from "@/utils/axios";
 import Link from "next/link";
-import Image from "next/image";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
-// Types
-type QuestionType =
-  | "yes-no"
-  | "multiple-choice"
-  | "multiple-answer"
-  | "text-input";
-
-interface BaseQuestion {
+interface Stage {
   id: number;
-  type: QuestionType;
-  question: string;
-  explanation: string;
-  hint: string;
+  slug: string;
+  title: string;
+  image: string;
+  order: number;
+  total_questions: number;
+  stage_status: string;
 }
+export default function Roadmap() {
+  const breadCrumbData = [
+    { name: "Home", to: "/" },
+    { name: "Roadmap", to: "/roadmap" },
+  ];
 
-interface YesNoQuestion extends BaseQuestion {
-  type: "yes-no";
-  word: string;
-  correctAnswer: "yes" | "no";
-}
-
-interface MultipleChoiceQuestion extends BaseQuestion {
-  type: "multiple-choice";
-  options: string[];
-  correctAnswer: number;
-}
-
-interface MultipleAnswerQuestion extends BaseQuestion {
-  type: "multiple-answer";
-  options: string[];
-  correctAnswers: number[];
-}
-
-interface TextInputQuestion extends BaseQuestion {
-  type: "text-input";
-  correctAnswer: string;
-  acceptableAnswers: string[];
-}
-
-type Question =
-  | YesNoQuestion
-  | MultipleChoiceQuestion
-  | MultipleAnswerQuestion
-  | TextInputQuestion;
-
-// Sample questions data
-const questionsData: Question[] = [
-  {
-    id: 1,
-    type: "yes-no",
-    question: "Is this a real English word?",
-    word: "tuces",
-    correctAnswer: "no",
-    explanation:
-      "'Tuces' is not a valid English word. You might be thinking of 'twice' or 'truces'.",
-    hint: "Think about common English word patterns and spelling rules.",
-  },
-  {
-    id: 2,
-    type: "multiple-choice",
-    question: "What is the correct meaning of 'benevolent'?",
-    options: [
-      "Angry and hostile",
-      "Kind and generous",
-      "Sad and depressed",
-      "Confused and lost",
-    ],
-    correctAnswer: 1,
-    explanation:
-      "Benevolent means showing kindness and goodwill. It comes from Latin 'bene' (well) and 'volent' (wishing).",
-    hint: "The prefix 'bene-' means 'good' or 'well', like in 'benefit' or 'beneficial'.",
-  },
-  {
-    id: 3,
-    type: "multiple-answer",
-    question:
-      "Which of the following are synonyms for 'happy'? (Select all that apply)",
-    options: ["Joyful", "Melancholy", "Cheerful", "Sorrowful", "Delighted"],
-    correctAnswers: [0, 2, 4],
-    explanation:
-      "Joyful, cheerful, and delighted are all synonyms for happy. Melancholy and sorrowful mean sad.",
-    hint: "Think about words that describe positive emotions.",
-  },
-  {
-    id: 4,
-    type: "text-input",
-    question: "Fill in the blank: The cat ____ on the mat.",
-    correctAnswer: "sat",
-    acceptableAnswers: ["sat", "sits", "was sitting"],
-    explanation:
-      "The most common answer is 'sat' (past tense). Other acceptable answers include 'sits' (present tense) or 'was sitting' (past continuous).",
-    hint: "Think of a simple verb that describes what a cat does when it rests.",
-  },
-];
-
-export default function PracticeQuestion() {
   const params = useParams();
   const slug = params.slug;
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<number | string | null>(
-    null
-  );
-  const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
-  const [textAnswer, setTextAnswer] = useState<string>("");
-  const [showHint, setShowHint] = useState<boolean>(false);
-  const [showExplanation, setShowExplanation] = useState<boolean>(false);
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
-  const [timeElapsed, setTimeElapsed] = useState<number>(0);
-  const [isAnswered, setIsAnswered] = useState<boolean>(false);
 
-  const currentQuestion = questionsData[currentQuestionIndex];
-  const totalQuestions = questionsData.length;
-  const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+  const roadmapData = [
+    {
+      id: 1,
+      title: "Hiragana Basics",
+      details: "Learn the fundamental Japanese syllabary - Hiragana characters",
+      lessons: 5,
+      xp: 100,
+      status: "completed",
+    },
+    {
+      id: 2,
+      title: "Katakana Basics",
+      details: "Master Katakana for foreign words and names",
+      lessons: 5,
+      xp: 100,
+      status: "completed",
+    },
+    {
+      id: 3,
+      title: "Basic Greetings",
+      details: "Essential phrases for daily conversations",
+      lessons: 8,
+      xp: 150,
+      status: "current",
+    },
+    {
+      id: 4,
+      title: "Numbers & Counting",
+      details: "Learn to count and use numbers in Japanese",
+      lessons: 6,
+      xp: 120,
+      status: "locked",
+    },
+    {
+      id: 5,
+      title: "Family & People",
+      details: "Vocabulary for family members and relationships",
+      lessons: 7,
+      xp: 140,
+      status: "locked",
+    },
+    {
+      id: 6,
+      title: "Basic Kanji",
+      details: "Introduction to common Chinese characters",
+      lessons: 10,
+      xp: 200,
+      status: "locked",
+    },
+    {
+      id: 7,
+      title: "Food & Dining",
+      details: "Order food and discuss meals in Japanese",
+      lessons: 8,
+      xp: 160,
+      status: "locked",
+    },
+    {
+      id: 8,
+      title: "Travel & Directions",
+      details: "Navigate and ask for directions",
+      lessons: 9,
+      xp: 180,
+      status: "locked",
+    },
+  ];
 
-  // Timer
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeElapsed((prev) => prev + 1);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [currentQuestionIndex]);
+  const [loader, setLoader] = useState(false);
+  const [hoveredStage, setHoveredStage] = useState<number | null>(null);
 
-  const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
-  };
-
-  const handleAnswerSelect = (answer: number | string) => {
-    if (isAnswered) return;
-    setSelectedAnswer(answer);
-  };
-
-  const handleMultipleAnswerSelect = (index: number) => {
-    if (isAnswered) return;
-    if (selectedAnswers.includes(index)) {
-      setSelectedAnswers(selectedAnswers.filter((i) => i !== index));
-    } else {
-      setSelectedAnswers([...selectedAnswers, index]);
-    }
-  };
-
-  const checkAnswer = () => {
-    let correct = false;
-
-    switch (currentQuestion.type) {
-      case "yes-no":
-        correct = selectedAnswer === currentQuestion.correctAnswer;
-        break;
-      case "multiple-choice":
-        correct = selectedAnswer === currentQuestion.correctAnswer;
-        break;
-      case "multiple-answer":
-        const sortedSelected = [...selectedAnswers].sort();
-        const sortedCorrect = [...currentQuestion.correctAnswers].sort();
-        correct =
-          JSON.stringify(sortedSelected) === JSON.stringify(sortedCorrect);
-        break;
-      case "text-input":
-        correct = currentQuestion.acceptableAnswers.some(
-          (answer) => answer.toLowerCase() === textAnswer.trim().toLowerCase()
-        );
-        break;
-    }
-
-    setIsCorrect(correct);
-    setShowExplanation(true);
-    setIsAnswered(true);
-  };
-
-  const nextQuestion = () => {
-    if (currentQuestionIndex < totalQuestions - 1) {
-      setCurrentQuestionIndex((prev) => prev + 1);
-      resetQuestion();
-    } else {
-      // Quiz complete
-      alert("Practice complete!");
-    }
-  };
-
-  const resetQuestion = () => {
-    setSelectedAnswer(null);
-    setSelectedAnswers([]);
-    setTextAnswer("");
-    setShowHint(false);
-    setShowExplanation(false);
-    setIsCorrect(null);
-    setIsAnswered(false);
-    setTimeElapsed(0);
-  };
-
-  const canSubmit = (): boolean => {
-    switch (currentQuestion.type) {
-      case "yes-no":
-      case "multiple-choice":
-        return selectedAnswer !== null;
-      case "multiple-answer":
-        return selectedAnswers.length > 0;
-      case "text-input":
-        return textAnswer.trim().length > 0;
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "completed":
+        return "from-green-400 to-emerald-500";
+      case "current":
+        return "from-yellow-400 to-amber-500";
       default:
-        return false;
+        return "from-gray-300 to-gray-400";
     }
   };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "completed":
+        return "✓";
+      case "current":
+        return "→";
+      default:
+        return "🔒";
+    }
+  };
+
+  const [stagesData, setStagesData] = useState<Stage[]>([]);
+  
+    useEffect(() => {
+    
+        const fetchStages = async () => {
+          try {
+            setLoader(true);
+            const response = await axiosInstance.get(`/roadmaps/${slug}/stages`);
+            if(response?.data?.success){
+              setStagesData(response.data.data);
+            }
+            toast.success(response?.data?.message || "Stages loaded!");
+          } catch (error: any) {
+            toast.error(
+              error?.response?.data?.message ||
+                "Cannot fetch Stages right now"
+            );
+          } finally {
+            setLoader(false);
+          }
+        };
+    
+        fetchStages();
+      }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link href={"/practice"} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-              <X className="w-6 h-6 text-gray-600" />
-            </Link>
-
-            <div className="flex-1 mx-6">
-              <div className="relative">
-                <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-500"
-                    style={{ width: `${progress}%` }}
-                  ></div>
-                </div>
-                <div className="text-xs text-gray-600 mt-1 text-center">
-                  Question {currentQuestionIndex + 1} of {totalQuestions}
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 text-gray-600">
-              <Clock className="w-5 h-5" />
-              <span className="font-mono font-semibold">
-                {formatTime(timeElapsed)}
-              </span>
-            </div>
-          </div>
+    <>
+      {loader && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
         </div>
-      </div>
+      )}
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 pb-20 pt-8 relative overflow-hidden">
+        {/* Background Decorations */}
+        <div className="absolute top-20 -left-20 w-64 h-64 bg-gradient-to-br from-cyan-200 to-blue-200 rounded-full opacity-20 blur-3xl"></div>
+        <div className="absolute bottom-20 -right-20 w-96 h-96 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full opacity-20 blur-3xl"></div>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12">
-          {/* Question */}
-          <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-8">
-              {currentQuestion.question}
-            </h2>
-
-            {currentQuestion.type === "yes-no" && (
-              <div className="text-5xl md:text-6xl font-bold text-gray-700 my-12">
-                {currentQuestion.word}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-sm text-gray-600 mb-8">
+            {breadCrumbData.map((item, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <a
+                  href={item.to}
+                  className="hover:text-blue-600 transition-colors"
+                >
+                  {item.name}
+                </a>
+                {index < breadCrumbData.length - 1 && <span>/</span>}
               </div>
-            )}
+            ))}
           </div>
 
-          {/* Answer Options */}
-          <div className="mb-8">
-            {/* Yes/No Options */}
-            {currentQuestion.type === "yes-no" && (
-              <div className="flex gap-4 justify-center">
-                {(["yes", "no"] as const).map((option) => (
-                  <button
-                    key={option}
-                    onClick={() => handleAnswerSelect(option)}
-                    disabled={isAnswered}
-                    className={`flex flex-col items-center gap-3 p-8 rounded-2xl border-3 transition-all transform hover:scale-105 ${
-                      selectedAnswer === option
-                        ? "border-blue-500 bg-blue-50 shadow-lg"
-                        : "border-gray-300 bg-white hover:border-blue-300"
-                    } ${
-                      isAnswered
-                        ? "cursor-not-allowed opacity-75"
-                        : "cursor-pointer"
+          {/* Header */}
+          <div className="text-center mb-16">
+            <h1 className="text-5xl font-bold text-gray-800 mb-4">
+              Japanese Learning Path
+            </h1>
+            <p className="text-xl text-gray-600">
+              Master Japanese step by step 🇯🇵
+            </p>
+          </div>
+
+          {/* Roadmap */}
+          <div className="relative max-w-2xl mx-auto">
+            {stagesData.map((stage, index) => {
+              const isEven = index % 2 === 0;
+              const isLast = index === stagesData.length - 1;
+
+              return (
+                <div key={stage.id} className="relative mb-8">
+                  {/* Connecting Path */}
+                  {!isLast && (
+                    <div
+                      className={`absolute ${
+                        isEven ? "left-1/2" : "right-1/2"
+                      } top-32 w-1 h-20 bg-gradient-to-b ${
+                        stage.stage_status === "completed"
+                          ? "from-green-400 to-green-300"
+                          : stage.stage_status === "current"
+                          ? "from-yellow-400 to-yellow-300"
+                          : "from-gray-300 to-gray-200"
+                      } transform transition-all duration-500`}
+                      style={{
+                        animation:
+                          stage.stage_status === "completed"
+                            ? "flowDown 2s ease-in-out infinite"
+                            : "none",
+                      }}
+                    ></div>
+                  )}
+
+                  {/* Stage Container */}
+                  <div
+                    className={`flex items-center ${
+                      isEven ? "justify-start" : "justify-end"
                     }`}
                   >
-                    {option === "yes" ? (
-                      <Check className="w-12 h-12 text-blue-500" />
-                    ) : (
-                      <X className="w-12 h-12 text-blue-500" />
-                    )}
-                    <span className="text-xl font-semibold capitalize text-gray-700">
-                      {option}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Multiple Choice Options */}
-            {currentQuestion.type === "multiple-choice" && (
-              <div className="space-y-3">
-                {currentQuestion.options.map((option, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleAnswerSelect(index)}
-                    disabled={isAnswered}
-                    className={`w-full p-5 rounded-xl border-2 text-left transition-all transform hover:scale-[1.02] ${
-                      selectedAnswer === index
-                        ? "border-blue-500 bg-blue-50 shadow-md"
-                        : "border-gray-300 bg-white hover:border-blue-300"
-                    } ${
-                      isAnswered && index === currentQuestion.correctAnswer
-                        ? "border-green-500 bg-green-50"
-                        : ""
-                    } ${
-                      isAnswered &&
-                      selectedAnswer === index &&
-                      index !== currentQuestion.correctAnswer
-                        ? "border-red-500 bg-red-50"
-                        : ""
-                    } ${isAnswered ? "cursor-not-allowed" : "cursor-pointer"}`}
-                  >
-                    <div className="flex items-center gap-4">
+                    <div
+                      className={`w-full md:w-5/12 transform transition-all duration-300 ${
+                        hoveredStage === stage.id ? "scale-105" : "scale-100"
+                      }`}
+                      onMouseEnter={() => setHoveredStage(stage.id)}
+                      onMouseLeave={() => setHoveredStage(null)}
+                    >
+                      {/* Stage Card */}
                       <div
-                        className={`w-8 h-8 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                          selectedAnswer === index
-                            ? "border-blue-500 bg-blue-500"
-                            : "border-gray-400"
+                        className={`relative bg-white rounded-2xl shadow-lg p-6 border-4 ${
+                          stage.stage_status === "current"
+                            ? "border-yellow-400 animate-pulse"
+                            : stage.stage_status === "completed"
+                            ? "border-green-400"
+                            : "border-gray-200"
+                        } cursor-pointer transition-all duration-300 ${
+                          stage.stage_status === "locked"
+                            ? "opacity-60"
+                            : "opacity-100"
                         }`}
                       >
-                        {selectedAnswer === index && (
-                          <Check className="w-5 h-5 text-white" />
+                        {/* Stage Number Badge */}
+                        <Link
+                          href={
+                            stage.stage_status !== "locked"
+                              ? `/practice/${slug}/${stage.id}`
+                              : "#"
+                          }
+                        >
+                          <div
+                            className={`absolute -top-4 -right-4 w-14 h-14 rounded-full bg-gradient-to-br ${getStatusColor(
+                              stage.stage_status
+                            )} flex items-center justify-center text-white text-xl font-bold shadow-lg transform transition-transform duration-300 ${
+                              hoveredStage === stage.id
+                                ? "rotate-12 scale-110"
+                                : "rotate-0 scale-100"
+                            }`}
+                          >
+                            {getStatusIcon(stage.stage_status)}
+                          </div>
+                        </Link>
+
+                        <div className="flex items-start gap-4">
+                          {/* Icon */}
+                          <div
+                            className={`w-16 h-16 rounded-xl bg-gradient-to-br ${getStatusColor(
+                              stage.stage_status
+                            )} flex items-center justify-center text-3xl shadow-md`}
+                          >
+                            {stage.stage_status === "completed"
+                              ? "✨"
+                              : stage.stage_status === "current"
+                              ? "📚"
+                              : "🔐"}
+                          </div>
+
+                          {/* Content */}
+                          <div className="flex-1">
+                            <h3 className="text-xl font-bold text-gray-800 mb-2">
+                              {stage.title}
+                            </h3>
+                            {/* <p className="text-gray-600 text-sm mb-3">
+                              {stage.details}
+                            </p> */}
+                            <div className="flex items-center gap-4 text-sm">
+                              <span className="flex items-center gap-1 text-gray-500">
+                                📖 {stage.total_questions} questions
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Progress Bar for Current */}
+                        {stage.stage_status === "current" && (
+                          <div className="mt-4 bg-gray-200 rounded-full h-2 overflow-hidden">
+                            <div
+                              className="h-full bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full transition-all duration-500"
+                              style={{
+                                width: "60%",
+                                animation: "shimmer 2s ease-in-out infinite",
+                              }}
+                            ></div>
+                          </div>
                         )}
                       </div>
-                      <span className="text-lg text-gray-800">{option}</span>
                     </div>
-                  </button>
-                ))}
-              </div>
-            )}
+                  </div>
 
-            {/* Multiple Answer Options */}
-            {currentQuestion.type === "multiple-answer" && (
-              <div className="space-y-3">
-                {currentQuestion.options.map((option, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleMultipleAnswerSelect(index)}
-                    disabled={isAnswered}
-                    className={`w-full p-5 rounded-xl border-2 text-left transition-all transform hover:scale-[1.02] ${
-                      selectedAnswers.includes(index)
-                        ? "border-blue-500 bg-blue-50 shadow-md"
-                        : "border-gray-300 bg-white hover:border-blue-300"
-                    } ${
-                      isAnswered &&
-                      currentQuestion.correctAnswers.includes(index)
-                        ? "border-green-500 bg-green-50"
-                        : ""
-                    } ${
-                      isAnswered &&
-                      selectedAnswers.includes(index) &&
-                      !currentQuestion.correctAnswers.includes(index)
-                        ? "border-red-500 bg-red-50"
-                        : ""
-                    } ${isAnswered ? "cursor-not-allowed" : "cursor-pointer"}`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div
-                        className={`w-8 h-8 rounded-lg border-2 flex items-center justify-center flex-shrink-0 ${
-                          selectedAnswers.includes(index)
-                            ? "border-blue-500 bg-blue-500"
-                            : "border-gray-400"
-                        }`}
-                      >
-                        {selectedAnswers.includes(index) && (
-                          <Check className="w-5 h-5 text-white" />
-                        )}
-                      </div>
-                      <span className="text-lg text-gray-800">{option}</span>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Text Input */}
-            {currentQuestion.type === "text-input" && (
-              <div>
-                <input
-                  type="text"
-                  value={textAnswer}
-                  onChange={(e) => setTextAnswer(e.target.value)}
-                  disabled={isAnswered}
-                  placeholder="Type your answer here..."
-                  className={`w-full p-5 text-lg rounded-xl border-2 transition-all ${
-                    isAnswered
-                      ? isCorrect
-                        ? "border-green-500 bg-green-50"
-                        : "border-red-500 bg-red-50"
-                      : "border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                  } outline-none`}
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Hint Section */}
-          {!showExplanation && (
-            <div className="mb-6">
-              <button
-                onClick={() => setShowHint(!showHint)}
-                className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors mx-auto"
-              >
-                <Lightbulb className="w-5 h-5" />
-                <span className="font-semibold">
-                  {showHint ? "Hide Hint" : "Show Hint"}
-                </span>
-              </button>
-
-              {showHint && (
-                <div className="mt-4 p-4 bg-yellow-50 border-2 border-yellow-200 rounded-xl">
-                  <div className="flex gap-3">
-                    <Lightbulb className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-                    <p className="text-gray-700">{currentQuestion.hint}</p>
+                  {/* Center Circle */}
+                  <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <div
+                      className={`w-6 h-6 rounded-full bg-gradient-to-br ${getStatusColor(
+                        stage.stage_status
+                      )} shadow-lg border-4 border-white transition-all duration-300 ${
+                        hoveredStage === stage.id ? "scale-150" : "scale-100"
+                      }`}
+                    ></div>
                   </div>
                 </div>
-              )}
-            </div>
-          )}
-
-          {/* Explanation Section */}
-          {showExplanation && (
-            <div
-              className={`mb-6 p-6 rounded-xl border-2 ${
-                isCorrect
-                  ? "bg-green-50 border-green-200"
-                  : "bg-red-50 border-red-200"
-              }`}
-            >
-              <div className="flex items-start gap-3 mb-3">
-                {isCorrect ? (
-                  <>
-                  {/* <Check className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" /> */}
-                  <Image src="/assets/img/smiling_smile.gif" alt="Correct" width={60} height={60} className="flex-shrink-0 mt-0.5" /></>
-                ) : (
-                  <>
-                  {/* <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" /> */}
-                  <Image src="/assets/img/smiling_smile.gif" alt="Incorrect" width={60} height={60} className="flex-shrink-0 mt-0.5" />
-                  </>
-                )}
-                <div>
-                  <h3
-                    className={`font-bold text-lg mb-2 ${
-                      isCorrect ? "text-green-800" : "text-red-800"
-                    }`}
-                  >
-                    {isCorrect ? "Correct!" : "Incorrect"}
-                  </h3>
-                  <p className="text-gray-700">{currentQuestion.explanation}</p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Action Buttons */}
-          <div className="flex gap-4 justify-center">
-            {!isAnswered ? (
-              <button
-                onClick={checkAnswer}
-                disabled={!canSubmit()}
-                className={`px-8 py-4 rounded-xl font-semibold text-white transition-all transform hover:scale-105 ${
-                  canSubmit()
-                    ? "bg-gradient-to-r from-blue-500 to-purple-500 hover:shadow-lg"
-                    : "bg-gray-300 cursor-not-allowed"
-                }`}
-              >
-                Check Answer
-              </button>
-            ) : (
-              <button
-                onClick={nextQuestion}
-                className="px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:shadow-lg transition-all transform hover:scale-105 flex items-center gap-2"
-              >
-                {currentQuestionIndex < totalQuestions - 1
-                  ? "Next Question"
-                  : "Finish"}
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            )}
+              );
+            })}
           </div>
         </div>
       </div>
-    </div>
+
+      <style jsx>{`
+        @keyframes flowDown {
+          0%,
+          100% {
+            opacity: 0.5;
+          }
+          50% {
+            opacity: 1;
+          }
+        }
+        @keyframes shimmer {
+          0% {
+            background-position: -100% 0;
+          }
+          100% {
+            background-position: 200% 0;
+          }
+        }
+      `}</style>
+    </>
   );
 }
