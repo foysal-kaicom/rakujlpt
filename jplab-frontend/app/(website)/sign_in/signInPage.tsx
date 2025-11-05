@@ -43,12 +43,21 @@ export default function LoginPage() {
   // Local state
   const { isAuthenticated, token, user } = useAuthStore();
   const [loading, setLoading] = useState(false);
+  const [redirecting, setRedirecting] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email_or_phone: "",
     email_or_phone: "",
     password: "",
   });
+
+  useEffect(() => {
+    if (isAuthenticated && token && user) {
+      router.replace("/dashboard");
+    } else {
+      setRedirecting(false);
+    }
+  }, [isAuthenticated, token, user, router]);
 
   // Handle form input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,6 +80,7 @@ export default function LoginPage() {
         const user = {
           id: data.id,
           first_name: data.first_name,
+          last_name: data.last_name || "",
           email: data.email,
           is_phone_verified: data.is_phone_verified,
           is_email_verified: data.is_email_verified,
@@ -91,15 +101,20 @@ export default function LoginPage() {
   };
 
   const handleGoogleLogin = async () => {
-    const useraData = await googleLoginUtils();
-    if (useraData) {
-      router.push(callbackUrl);
+    try {
+      setLoading(true);
+
+      const userData = await googleLoginUtils();
+
+      if (!userData) {
+        toast.error("Google login failed");
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
-
-  useEffect(() => {
-    router.push("/dashboard");
-  }, [isAuthenticated && token && user]);
 
   return (
     <>
@@ -227,7 +242,7 @@ export default function LoginPage() {
                 </div>
                 <button
                   type="button"
-                  onClick={handleGoogleLogin}
+                  onClick={() => handleGoogleLogin()}
                   className="w-full flex items-center justify-center gap-3 bg-white border border-pink-300 hover:bg-pink-50 text-gray-700 font-semibold rounded-full py-2.5 transition-all duration-300 shadow-[0_0_10px_rgba(255,105,180,0.3)] hover:shadow-[0_0_20px_rgba(255,105,180,0.4)]"
                 >
                   <img

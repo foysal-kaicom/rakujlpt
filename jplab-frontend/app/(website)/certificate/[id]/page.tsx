@@ -17,7 +17,7 @@ export default function Certificate({
 }: CertificateProps) {
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100 p-6">
-      <div className="relative w-full max-w-5xl bg-gradient-to-r from-white via-gray-50 to-white rounded-3xl shadow-xl p-12 border-[12px] border-gradient-r-purple-500">
+      <div className="relative w-full max-w-5xl bg-gradient-to-r from-white via-gray-50 to-white rounded-3xl shadow-xl p-12 border-[12px] border-pink-300">
         {/* Decorative Top Line */}
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-2/3 h-1 bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-400 rounded-full"></div>
 
@@ -28,10 +28,12 @@ export default function Certificate({
 
         {/* Header */}
         <div className="text-center relative z-10 mb-10">
-          <h1 className="text-5xl font-serif font-bold text-gray-900 mb-2 tracking-wide">
+          <h1 className="text-5xl font-serif font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2 tracking-wide">
             Certificate of Achievement
           </h1>
-          <p className="text-lg text-gray-600 italic">This certificate is proudly presented to</p>
+          <p className="text-lg text-gray-600 italic">
+            This certificate is proudly presented to
+          </p>
         </div>
 
         {/* Student Name */}
@@ -54,7 +56,10 @@ export default function Certificate({
             For completing the <span className="font-semibold">{testName}</span>
           </p>
           <p>
-            Score: <span className="font-semibold">{score} / {totalScore}</span>
+            Score:{" "}
+            <span className="font-semibold">
+              {score} / {totalScore}
+            </span>
           </p>
           <p className="text-gray-500">{date}</p>
         </div>
@@ -63,19 +68,23 @@ export default function Certificate({
         <div className="flex justify-between relative z-10 mt-12 px-20">
           <div className="text-center">
             <p className="border-t-2 border-gray-400 w-40 mx-auto"></p>
-            <p className="font-serif text-gray-700 mt-2 italic text-lg">Instructor</p>
+            <p className="font-serif text-gray-700 mt-2 italic text-lg">
+              Instructor
+            </p>
           </div>
           <div className="text-center">
             <p className="border-t-2 border-gray-400 w-40 mx-auto"></p>
-            <p className="font-serif text-gray-700 mt-2 italic text-lg">Administrator</p>
+            <p className="font-serif text-gray-700 mt-2 italic text-lg">
+              Administrator
+            </p>
           </div>
         </div>
 
         {/* Decorative Corners */}
-        <div className="absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 border-purple-600 rounded-br-3xl"></div>
-        <div className="absolute top-0 right-0 w-16 h-16 border-t-4 border-r-4 border-purple-600 rounded-bl-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-16 h-16 border-b-4 border-l-4 border-purple-600 rounded-tr-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 border-purple-600 rounded-tl-3xl"></div>
+        <div className="absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 border-purple-600 rounded-tl-xl"></div>
+        <div className="absolute top-0 right-0 w-16 h-16 border-t-4 border-r-4 border-purple-600 rounded-tr-xl"></div>
+        <div className="absolute bottom-0 left-0 w-16 h-16 border-b-4 border-l-4 border-purple-600 rounded-bl-xl"></div>
+        <div className="absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 border-purple-600 rounded-br-xl"></div>
       </div>
     </div>
   );

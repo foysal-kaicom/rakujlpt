@@ -4,7 +4,7 @@ import { IoMdArrowDropright, IoMdArrowDropdown } from "react-icons/io";
 import { IoLogIn, IoLogOut } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RxCross2 } from "react-icons/rx";
-import { signOut } from "next-auth/react";
+import { FaUser } from "react-icons/fa";
 
 import { toast } from "sonner";
 import axiosInstance from "@/utils/axios";
@@ -50,8 +50,8 @@ export default function Header() {
     try {
       const response = await axiosInstance.get("/candidate/logout");
       if (response.status == 200) {
-        signOut().then(() => logout())
         router.push("/sign_in");
+        logout();
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -109,17 +109,27 @@ export default function Header() {
       <>
         <Notification />
         <div className="flex gap-2 items-center relative group cursor-pointer">
-          <Image
-            src={user.photo}
-            alt="profile pic"
-            height={40}
-            width={40}
-            className="size-8 rounded-full object-cover aspect-auto ring-2 ring-purple-400"
-          />
-          <p className="line-clamp-1 capitalize font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-            {user?.first_name?.slice(0, 10)}
-            {user?.first_name.length > 10 && "..."}
-          </p>
+          {user?.photo ? (
+            <Image
+              src={user.photo}
+              alt="profile pic"
+              height={40}
+              width={40}
+              className="size-8 rounded-full object-cover aspect-auto ring-2 ring-purple-400"
+            />
+          ) : (
+            <FaUser className="size-8 rounded-full object-cover aspect-auto ring-3 ring-purple-400 text-white bg-purple-400" />
+          )}
+          <div>
+            <p className="line-clamp-1 capitalize font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              {user?.first_name?.slice(0, 10)}
+              {user?.first_name.length > 10 && "..."}
+            </p>
+            <p className="line-clamp-1 text-xs font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              {user?.email || user?.phone_number}
+            </p>
+          </div>
+
           <div className="bg-white grid grid-cols-1 rounded-md text-sm shadow absolute right-1/2 translate-x-1/2 top-[40px] scale-0 group-hover:scale-100 w-[200px] h-[180px] overflow-clip duration-400 origin-top outline outline-gray-200">
             {SidebarData.slice(0, 4).map((item, i) => (
               <Link
@@ -181,22 +191,31 @@ export default function Header() {
           <div className="flex flex-col gap-5 h-full overflow-y-scroll pb-10 pt-5 px-6 lg:px-8 container mx-auto scrollbar-hide">
             <div className="space-y-5">
               {isAuthenticated && token && user && (
-                <div onClick={toggleSidebar} className="space-y-3 flex flex-col items-center border-b pb-3 border-white/70">
+                <div
+                  onClick={toggleSidebar}
+                  className="space-y-3 flex flex-col items-center border-b pb-3 border-white/70"
+                >
                   <Link href="/dashboard">
-                    <Image
-                      src={user.photo}
-                      alt="profile pic"
-                      height={100}
-                      width={100}
-                      className="size-30 rounded-full object-cover aspect-auto"
-                    />
+                    {user.photo ? (
+                      <Image
+                        src={user.photo || "#"}
+                        alt="profile pic"
+                        height={100}
+                        width={100}
+                        className="size-30 rounded-full object-cover aspect-auto border-3 border-white"
+                      />
+                    ) : (
+                      <FaUser className="size-30 rounded-full object-cover aspect-auto border-5 border-purple-400 bg-purple-400 text-white" />
+                    )}
                   </Link>
 
                   <Link
                     href="/dashboard"
-                    className="line-clamp-1 capitalize font-semibold text-lg mt-3"
+                    className="text-center mt-3"
                   >
-                    {user?.first_name}
+                    <p className="capitalize font-semibold text-xl">{user?.first_name} {user?.last_name}</p>
+                    
+                    <p className="text-sm">{user?.email || user?.phone_number}</p>
                   </Link>
                 </div>
               )}

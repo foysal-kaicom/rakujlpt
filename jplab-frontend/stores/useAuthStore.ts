@@ -5,6 +5,7 @@ import nookies from 'nookies';
 interface User {
   id: string;
   first_name: string;
+  last_name:string;
   email: string;
   is_email_verified: number;
   is_phone_verified: number;
