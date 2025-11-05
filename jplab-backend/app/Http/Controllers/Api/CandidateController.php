@@ -72,7 +72,7 @@ class CandidateController extends Controller
             return $this->responseWithError('Something went wrong.', $validator->getMessageBag());
         }
 
-        $email_or_phone = $request->input('email_or_phone');    
+        $email_or_phone = $request->input('email_or_phone');
         $field = filter_var($email_or_phone, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone_number';
 
 
@@ -90,19 +90,27 @@ class CandidateController extends Controller
             } catch (JWTException $e) {
                 return $this->responseWithError('Could not create token.', $e->getMessage());
             }
-        } 
-        elseif($candidate && $candidate->status == 'frozen'){
+        } elseif ($candidate && $candidate->status == 'frozen') {
             return $this->responseWithError('Your account is frozen. Please contact with administrator.');
-        }
-        else {
+        } else {
             return $this->responseWithError('Invalid credentials');
         }
     }
 
     public function logout()
     {
-        JWTAuth::invalidate(JWTAuth::getToken());
-        return $this->responseWithSuccess([], 'Logout successful');
+        try {
+
+            $token = JWTAuth::getToken();
+
+            if ($token) {
+                JWTAuth::invalidate($token);
+            }
+
+            return $this->responseWithSuccess([], 'Logout successful');
+        } catch (\Exception $e) {
+            return $this->responseWithSuccess([], 'Failed to logout or token missing.');
+        }
     }
 
     public function profile()
@@ -115,19 +123,12 @@ class CandidateController extends Controller
     public function dashboard()
     {
 
-        $summary = Booking::selectRaw("
-            COUNT(*) as total_bookings,
-            COUNT(CASE WHEN payment_status = 'success' THEN 1 END) as total_success_payments,
-            COUNT(CASE WHEN status = 'pending' THEN 1 END) as pending_booking,
-            COUNT(CASE WHEN result > 0 THEN 1 END) as total_results_published
-        ")->where('candidate_id',auth('candidate')->user()->id)
-            ->first();
 
         $data = [
-            'total_bookings' => $summary->total_bookings,
-            'total_success_payments' => $summary->total_success_payments,
-            'pending_booking' => $summary->pending_booking,
-            'total_results_published' => $summary->total_results_published,
+            'total_bookings' => 0,
+            'total_success_payments' => 0,
+            'pending_booking' => 0,
+            'total_results_published' => 0
         ];
 
         return $this->responseWithSuccess($data, 'Candidate Dashboard.');
@@ -196,7 +197,7 @@ class CandidateController extends Controller
                 return $this->responseWithError('Mobile number already verified.', ["Already Verified."]);
             } elseif ($candidate->otp && $candidate->otp_expired_at > now()) {
 
-                return $this->responseWithError('OTP already sent. Please Check Your Mobile.', ['otp_expired_at'=>$candidate->otp_expired_at]);
+                return $this->responseWithError('OTP already sent. Please Check Your Mobile.', ['otp_expired_at' => $candidate->otp_expired_at]);
             } else {
 
                 $otp = rand(100000, 999999);
@@ -247,13 +248,13 @@ class CandidateController extends Controller
                     ]);
 
 
-                    $data=[
-                    'title'=>"Phone Verification Success",
-                    'message'=>"Your phone numbner verified successfully. Now you can place booking. ",
-                    'url'=>'',
+                    $data = [
+                        'title' => "Phone Verification Success",
+                        'message' => "Your phone numbner verified successfully. Now you can place booking. ",
+                        'url' => '',
 
-                ];
-                $candidate->notify(new CandidateNotification($data));
+                    ];
+                    $candidate->notify(new CandidateNotification($data));
 
                     return $this->responseWithSuccess($candidate, 'Verification success.');
                 }
@@ -274,9 +275,8 @@ class CandidateController extends Controller
 
         $email = $request->input('email');
         $candidate = Candidate::where('email', $email)->first();
-        if(!$candidate)
-        {
-            return $this->responseWithError('Account not found or Inactive',[]);
+        if (!$candidate) {
+            return $this->responseWithError('Account not found or Inactive', []);
         }
 
         if (
@@ -284,7 +284,7 @@ class CandidateController extends Controller
             $candidate->token_expired_at &&
             Carbon::parse($candidate->token_expired_at)->isFuture()
         ) {
-            return $this->responseWithError('A reset link was already sent. Please wait before requesting again.',[]);
+            return $this->responseWithError('A reset link was already sent. Please wait before requesting again.', []);
         }
 
         $token = Str::random(120);
@@ -299,7 +299,7 @@ class CandidateController extends Controller
             $candidate->save();
 
             //need to put job
-            
+
             Mail::send('emails.forgot-password', [
                 'resetLink' => $resetLink,
                 'candidate_name' => $candidate->first_name
