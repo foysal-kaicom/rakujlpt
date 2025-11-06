@@ -27,6 +27,9 @@
 /storage/logs
 /storage/framework/*
 /storage/app/*
+/storage/debugbar/*
+/storage/sessions/*
+/storage/views/*
 /vendor
 Homestead.json
 Homestead.yaml
