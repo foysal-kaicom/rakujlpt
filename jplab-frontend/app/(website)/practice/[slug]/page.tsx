@@ -14,11 +14,13 @@ interface Stage {
   order: number;
   total_questions: number;
   stage_status: string;
+  duration: number | null;
 }
 export default function Roadmap() {
   const breadCrumbData = [
     { name: "Home", to: "/" },
-    { name: "Roadmap", to: "/roadmap" },
+    { name: "Practice", to: "/practice" },
+    { name: "Roadmap", to: "/practice/roadmap" },
   ];
 
   const params = useParams();
@@ -117,29 +119,27 @@ export default function Roadmap() {
   };
 
   const [stagesData, setStagesData] = useState<Stage[]>([]);
-  
-    useEffect(() => {
-    
-        const fetchStages = async () => {
-          try {
-            setLoader(true);
-            const response = await axiosInstance.get(`/roadmaps/${slug}/stages`);
-            if(response?.data?.success){
-              setStagesData(response.data.data);
-            }
-            toast.success(response?.data?.message || "Stages loaded!");
-          } catch (error: any) {
-            toast.error(
-              error?.response?.data?.message ||
-                "Cannot fetch Stages right now"
-            );
-          } finally {
-            setLoader(false);
-          }
-        };
-    
-        fetchStages();
-      }, []);
+
+  useEffect(() => {
+    const fetchStages = async () => {
+      try {
+        setLoader(true);
+        const response = await axiosInstance.get(`/roadmaps/${slug}/stages`);
+        if (response?.data?.success) {
+          setStagesData(response.data.data);
+        }
+        // toast.success(response?.data?.message || "Stages loaded!");
+      } catch (error: any) {
+        toast.error(
+          error?.response?.data?.message || "Cannot fetch Stages right now"
+        );
+      } finally {
+        setLoader(false);
+      }
+    };
+
+    fetchStages();
+  }, []);
 
   return (
     <>
@@ -158,12 +158,12 @@ export default function Roadmap() {
           <div className="flex items-center gap-2 text-sm text-gray-600 mb-8">
             {breadCrumbData.map((item, index) => (
               <div key={index} className="flex items-center gap-2">
-                <a
+                <Link
                   href={item.to}
                   className="hover:text-blue-600 transition-colors"
                 >
                   {item.name}
-                </a>
+                </Link>
                 {index < breadCrumbData.length - 1 && <span>/</span>}
               </div>
             ))}
@@ -239,7 +239,7 @@ export default function Roadmap() {
                         <Link
                           href={
                             stage.stage_status !== "locked"
-                              ? `/practice/${slug}/${stage.id}`
+                              ? `/practice/${slug}/${stage.slug}/${stage.id}`
                               : "#"
                           }
                         >
@@ -278,10 +278,28 @@ export default function Roadmap() {
                             {/* <p className="text-gray-600 text-sm mb-3">
                               {stage.details}
                             </p> */}
-                            <div className="flex items-center gap-4 text-sm">
+                            <div className=" gap-4 text-sm">
                               <span className="flex items-center gap-1 text-gray-500">
                                 📖 {stage.total_questions} questions
                               </span>
+                              {stage.duration !== null && (
+                                <span className="flex items-center text-gray-500 gap-1">
+                                  <svg
+                                    className="w-4 h-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                  </svg>
+                                  {stage.duration} min
+                                </span>
+                              )}
                             </div>
                           </div>
                         </div>

@@ -109,13 +109,14 @@ export default function Header() {
       <>
         <Notification />
         <div className="flex gap-2 items-center relative group cursor-pointer">
-          <Image
+          {user.photo && (<Image
             src={user.photo}
             alt="profile pic"
             height={40}
             width={40}
             className="size-8 rounded-full object-cover aspect-auto ring-2 ring-purple-400"
-          />
+          />)}
+          
           <p className="line-clamp-1 capitalize font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
             {user?.first_name?.slice(0, 10)}
             {user?.first_name.length > 10 && "..."}
@@ -183,13 +184,14 @@ export default function Header() {
               {isAuthenticated && token && user && (
                 <div onClick={toggleSidebar} className="space-y-3 flex flex-col items-center border-b pb-3 border-white/70">
                   <Link href="/dashboard">
-                    <Image
+                  {user.photo && (<Image
                       src={user.photo}
                       alt="profile pic"
                       height={100}
                       width={100}
                       className="size-30 rounded-full object-cover aspect-auto"
-                    />
+                    />)}
+                    
                   </Link>
 
                   <Link
