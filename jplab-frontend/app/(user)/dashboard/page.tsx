@@ -83,16 +83,16 @@ export default function Dashboard() {
           <UserHeadline mainText="Dashboard" subText="" preText="" />
         </section>
 
-        <div className="relative bg-gradient-to-t from-purple-400 to-pink-400 text-white rounded-xl overflow-hidden px-8 py-4 lg:px-16 flex flex-col lg:flex-row justify-between items-center gap-8 shadow-md hover:shadow-lg transition-shadow duration-500">
+        <div className="relative bg-gradient-to-t from-purple-400 to-pink-400 text-white rounded-xl overflow-hidden px-8 py-4 lg:py-0 lg:px-16 flex justify-between items-center gap-8 shadow-md hover:shadow-lg transition-shadow duration-500 mb-5">
           {/* Animated Floating Orbs */}
           <div className="absolute -top-20 -left-20 w-56 h-56 rounded-full bg-purple-500 blur-3xl"></div>
           <div className="absolute -bottom-24 -right-24 w-72 h-72 rounded-full bg-pink-400 blur-3xl"></div>
 
-          <div className="relative z-10 lg:max-w-1/2 text-center lg:text-left mt-10 lg:mt-0">
-            <h1 className="text-xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold mb-4">
+          <div className="relative z-10 w-2/3">
+            <h1 className="text-lg sm:text-3xl lg:text-4xl xl:text-5xl font-semibold mb-4">
               📝 Boost Your Japanese Skills!
             </h1>
-            <p className="text-sm sm:text-base mb-6 text-white font-medium">
+            <p className="text-sm sm:text-base mb-6 text-white font-medium hidden sm:block">
               Take interactive mock tests for JPT (N5 & N4). Track your
               progress, improve fast, and achieve your goals!
             </p>
@@ -104,79 +104,22 @@ export default function Dashboard() {
             </Link>
           </div>
 
-          <div className="w-full sm:w-[300px] 2xl:w-[400px]">
+          <div className="w-1/3 drop-shadow-xl drop-shadow-amber-50/50 flex justify-end">
             <Image
               src="/assets/img/mocktest/t13.png"
               alt="Mock Test Illustration"
               height={400}
               width={400}
-              className="w-full"
+              className="w-full max-w-[300px]"
             />
           </div>
         </div>
 
         <section className="space-y-4">
-          <div className="space-y-2 sm:bg-white sm:p-5 rounded-md lg:mx-10 sm:border border-gray-200">
-            <h1 className="font-bold sm:text-xl">Daily Practice</h1>
-            <section className="grid grid-cols-2 xl:grid-cols-4 gap-6">
-              {[
-                {
-                  title: "Vocabulary",
-                  value: dashboard?.total_bookings,
-                  icon: (
-                    <RxLetterCaseCapitalize className="size-8 sm:size-14" />
-                  ),
-                  iconBg: "bg-sky-600",
-                  cardBg: "bg-sky-200",
-                },
-                {
-                  title: "Grammer",
-                  value: dashboard?.total_success_payments,
-                  icon: <LuLetterText className="size-8 sm:size-14" />,
-                  iconBg: "bg-green-600",
-                  cardBg: "bg-green-200",
-                },
-                {
-                  title: "Listening",
-                  value: dashboard?.pending_booking,
-                  icon: <SiAudiobookshelf className="size-8 sm:size-14" />,
-                  iconBg: "bg-yellow-500",
-                  cardBg: "bg-amber-100",
-                },
-                {
-                  title: "Reading",
-                  value: dashboard?.total_results_published,
-                  icon: <IoIosBookmarks className="size-8 sm:size-14" />,
-                  iconBg: "bg-cyan-600",
-                  cardBg: "bg-cyan-200",
-                },
-              ].map((item, index) => (
-                <div
-                  className={`${item.cardBg} flex gap-2 items-center p-2 rounded-md shadow-md hover:shadow-xl transition duration-300 border border-transparent hover:border-gray-200`}
-                >
-                  <div className={`${item.iconBg} p-1 rounded-md text-white`}>
-                    {item.icon}
-                  </div>
-                  <div className="space-y-2 w-[calc(100%-74px)]">
-                    <h1 className="text-sm sm:text-lg font-semibold">
-                      {item.title}
-                    </h1>
-                    <div className="w-full bg-white rounded-full h-2">
-                      <div
-                        className={`bg-sky-400 h-2 rounded-full transition-all duration-1000`}
-                        style={{ width: `10%` }}
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </section>
-          </div>
-
-          <div className=" lg:mx-10 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             <section className="space-y-2 sm:bg-white sm:p-5 rounded-md sm:border border-gray-200 mt-3 sm:mt-0">
               <h1 className="font-bold sm:text-xl">Learn & Practice</h1>
-              <section className="grid grid-cols-4 sm:grid-cols-2 gap-2 sm:gap-6">
+              <section className="grid grid-cols-4 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-6">
                 {[
                   {
                     title: "Practice",
@@ -208,7 +151,7 @@ export default function Dashboard() {
                   },
                 ].map((item, index) => (
                   <div
-                    className={`sm:bg-purple-200 flex flex-col sm:flex-row gap-2 items-center p-2 rounded-md sm:shadow-md hover:shadow-xl transition duration-300 border border-transparent hover:border-gray-200`}
+                    className={`sm:bg-purple-200 flex flex-col gap-2 items-center p-2 rounded-md sm:shadow-md hover:shadow-xl transition duration-300 border border-transparent hover:border-gray-200 max-w-[300px]`}
                   >
                     <div className={`${item.iconBg} p-1 rounded-md text-white`}>
                       {item.icon}
@@ -226,7 +169,7 @@ export default function Dashboard() {
 
             <section className="space-y-2 sm:bg-white sm:p-5 rounded-md sm:border border-gray-200">
               <h1 className="font-bold sm:text-xl">Exam Solution</h1>
-              <section className="grid grid-cols-4 sm:grid-cols-2 gap-2 sm:gap-6">
+              <section className="grid grid-cols-4 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-6">
                 {[
                   {
                     title: "JPT Exam",
@@ -258,7 +201,7 @@ export default function Dashboard() {
                   },
                 ].map((item, index) => (
                   <div
-                    className={`sm:bg-purple-200 flex flex-col sm:flex-row gap-2 items-center p-2 rounded-md sm:shadow-md hover:shadow-xl transition duration-300 border border-transparent hover:border-gray-200`}
+                    className={`sm:bg-purple-200 flex flex-col gap-2 items-center p-2 rounded-md sm:shadow-md hover:shadow-xl transition duration-300 border border-transparent hover:border-gray-200 max-w-[300px]`}
                   >
                     <div className={`${item.iconBg} p-1 rounded-md text-white`}>
                       {item.icon}
@@ -274,8 +217,65 @@ export default function Dashboard() {
               </section>
             </section>
           </div>
+          <div className="space-y-2 sm:bg-white sm:p-5 rounded-xl sm:border border-gray-200">
+            <h1 className="font-bold sm:text-xl">Daily Practice</h1>
+            <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+              {[
+                {
+                  title: "Vocabulary",
+                  value: dashboard?.total_bookings,
+                  icon: (
+                    <RxLetterCaseCapitalize className="size-6 2xl:size-10" />
+                  ),
+                  iconBg: "bg-sky-600",
+                  cardBg: "bg-sky-200",
+                },
+                {
+                  title: "Grammer",
+                  value: dashboard?.total_success_payments,
+                  icon: <LuLetterText className="size-6 2xl:size-10" />,
+                  iconBg: "bg-green-600",
+                  cardBg: "bg-green-200",
+                },
+                {
+                  title: "Listening",
+                  value: dashboard?.pending_booking,
+                  icon: <SiAudiobookshelf className="size-6 2xl:size-10" />,
+                  iconBg: "bg-yellow-500",
+                  cardBg: "bg-amber-100",
+                },
+                {
+                  title: "Reading",
+                  value: dashboard?.total_results_published,
+                  icon: <IoIosBookmarks className="size-6 2xl:size-10" />,
+                  iconBg: "bg-cyan-600",
+                  cardBg: "bg-cyan-200",
+                },
+              ].map((item, index) => (
+                <div
+                  className={`${item.cardBg} flex gap-2 items-center p-2 rounded-md shadow-md hover:shadow-xl transition duration-300 border border-transparent hover:border-gray-200`}
+                >
+                  <div className={`${item.iconBg} p-3 rounded-full text-white`}>
+                    {item.icon}
+                  </div>
+                  <div className="space-y-2 w-[calc(100%-74px)]">
+                    <h1 className="text-sm md:text-base 2xl:text-lg font-semibold flex gap-1.5 justify-between items-center">
+                      <span>{item.title}</span> <span className="text-xs lg:text-sm font-medium">{item.value}/10</span>
+                    </h1>
+                    <div className="w-full bg-white rounded-full h-2">
+                      <div
+                        className={`bg-sky-400 h-2 rounded-full transition-all duration-1000`}
+                        style={{ width: `10%` }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </section>
+          </div>
+
+          
         </section>
-        
       </div>
 
       {/* </Suspense> */}

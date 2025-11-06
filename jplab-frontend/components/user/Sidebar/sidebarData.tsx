@@ -7,6 +7,7 @@ import {
 import { PiExamFill } from "react-icons/pi";
 import { MdSubscriptions } from "react-icons/md";
 import { FaGear } from "react-icons/fa6";
+import { GiStairsGoal } from "react-icons/gi";
 
 
 
@@ -56,8 +57,8 @@ const SidebarData = [
   },
   {
     label: "Roadmap",
-    to: "/dashboard",
-    icon: <FaTachometerAlt />,
+    to: "/test",
+    icon: <GiStairsGoal />,
   },
   
   {

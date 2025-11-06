@@ -86,17 +86,17 @@ export default function Sidebar() {
 
     return (
       <div className="fixed bottom-0 inset-x-0 z-30 bg-white shadow-t border-t border-gray-200 flex justify-evenly gap-3 items-center py-4 rounded-t-2xl xl:hidden">
-        {SidebarData.map((item, i) => (
+        {SidebarData.slice(0,4).map((item, i) => (
           <Link
             key={i}
             href={item.to}
-            className={`flex flex-col items-center text-xs tracking-wide p-2 transition-colors duration-200 ${
+            className={`flex flex-col items-center text-xs tracking-wide p-1 transition-colors duration-200 rounded-lg ${
               path.startsWith(item.to)
-                ? "bg-blue-400 text-white rounded-lg"
-                : " bg-white text-blue-400 "
+                ? "bg-gradient-to-tr from-purple-500 to-indigo-500 text-white "
+                : " bg-white text-purple-600 border"
             }`}
           >
-            <span className="text-xl">{item.icon}</span>
+            <span className="text-3xl">{item.icon}</span>
             <span className="mt-1 hidden md:block">{item.label}</span>
           </Link>
         ))}

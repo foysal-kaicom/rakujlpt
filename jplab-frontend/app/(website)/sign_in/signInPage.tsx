@@ -156,9 +156,9 @@ export default function LoginPage() {
                 <div className="bg-gradient-to-r from-indigo-400 to-purple-400 rounded-3xl p-4 inline-block mb-4 shadow-lg transform -rotate-2">
                   <h2 className="text-4xl font-bold text-white">👋 Welcome</h2>
                 </div>
-                <p className="text-gray-600 mt-3 font-medium">
+                {/* <p className="text-gray-600 mt-3 font-medium">
                   Sign in to continue your journey!
-                </p>
+                </p> */}
               </div>
 
               <form className="space-y-6" onSubmit={handleSubmit}>

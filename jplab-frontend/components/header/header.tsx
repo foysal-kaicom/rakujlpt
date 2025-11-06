@@ -5,6 +5,8 @@ import { IoLogIn, IoLogOut } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RxCross2 } from "react-icons/rx";
 import { FaUser } from "react-icons/fa";
+import { HiViewGridAdd } from "react-icons/hi";
+
 
 import { toast } from "sonner";
 import axiosInstance from "@/utils/axios";
@@ -188,13 +190,14 @@ export default function Header() {
     return (
       <>
         <div
-          className={`xl:hidden h-[calc(100vh-80px)] w-full fixed z-40 top-20 left-0 bg-gradient-to-r from-indigo-300 to-purple-200 duration-500 transform ${
+          className={`xl:hidden h-[calc(100vh-80px)] w-full fixed z-40 top-20 left-0 bg-gradient-to-r from-indigo-200 to-purple-200 duration-500 transform ${
             isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
           <div className="flex flex-col gap-5 h-full overflow-y-scroll pb-10 pt-5 px-6 lg:px-8 container mx-auto scrollbar-hide">
             <div className="space-y-5">
               {isAuthenticated && token && user && (
+                <>
                 <div
                   onClick={toggleSidebar}
                   className="space-y-3 flex flex-col items-center border-b pb-3 border-white/70"
@@ -223,6 +226,26 @@ export default function Header() {
                     </p>
                   </Link>
                 </div>
+                <div className="space-y-5 border-b border-white/70 pb-5 text-indigo-800">
+                    {/* Sidebar Items */}
+                    {SidebarData.map((item, index) => (
+                      <Link
+                        key={index}
+                        href={item.to}
+                        onClick={toggleSidebar}
+                        className={`font-semibold text-sm 2xl:text-base hover:text-[#d400ff] transition flex items-center gap-2 ${
+                          path.startsWith(item.to) ? "text-[#d400ff]" : ""
+                        }`}
+                      >
+                        <span className="text-lg rounded-sm">
+                          {item.icon}
+                        </span>
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </>
+                
               )}
 
               {navdata.map((item, index) => {
@@ -238,8 +261,8 @@ export default function Header() {
                     {item.links ? (
                       <button
                         onClick={() => toggleDropdown(index)}
-                        className={`flex justify-between gap-2 w-full text-left font-semibold text-sm 2xl:text-base ${
-                          isActive ? "text-[#001aff]" : ""
+                        className={`flex justify-between gap-2 w-full text-left font-semibold text-sm 2xl:text-base hover:text-[#d400ff]  ${
+                          isActive ? "text-[#d400ff]" : "text-indigo-800"
                         }`}
                       >
                         <p className="w-[calc(100%-24px)]">{item.label}</p>
@@ -255,8 +278,8 @@ export default function Header() {
                       <Link
                         href={item.to}
                         onClick={toggleSidebar}
-                        className={`flex justify-between gap-2 w-full text-left font-semibold text-sm 2xl:text-base ${
-                          isActive ? "text-[#001aff]" : ""
+                        className={`flex justify-between gap-2 w-full text-left font-semibold text-sm 2xl:text-base hover:text-[#d400ff] ${
+                          isActive ? "text-[#d400ff]" : "text-indigo-800"
                         }`}
                       >
                         {item.label}
@@ -272,7 +295,7 @@ export default function Header() {
                             item.label == "Information"
                               ? "hidden"
                               : item.to == path
-                              ? "text-[#001aff]"
+                              ? "text-[#d400ff]"
                               : ""
                           }`}
                         >
@@ -283,8 +306,8 @@ export default function Header() {
                             onClick={toggleSidebar}
                             key={i}
                             href={link.to}
-                            className={`block hover:text-[#001aff] text-sm duration-300 font-medium ${
-                              link.to === path ? "text-[#001aff]" : ""
+                            className={`block hover:text-[#d400ff] text-sm duration-300 font-medium ${
+                              link.to === path ? "text-[#d400ff]" : "text-indigo-800"
                             }`}
                           >
                             {link.label}
@@ -345,22 +368,26 @@ export default function Header() {
       >
         <div className="px-6 lg:px-8 container mx-auto flex justify-between xl:grid grid-cols-3 items-center h-[80px] ">
           <div
-            className="p-1.5 bg-blue-50 rounded shadow-sm xl:hidden"
+            className="text-purple-600 drop-shadow-2xl drop-shadow-amber-500 xl:hidden"
             onClick={toggleSidebar}
           >
             {isSidebarOpen ? (
-              <RxCross2 className="size-4" />
+              <RxCross2 className="size-6" />
             ) : (
-              <GiHamburgerMenu className="size-4" />
+              // <HiViewGridAdd className="size-6" />
+              <Image src="/assets/icon/menu.png"
+              alt="menu"
+              width={64}
+              height={64} className="size-6"/>
             )}
           </div>
           <Link href="/">
             <Image
               src="/assets/test-logo4.png"
               alt="logo"
-              width={120}
-              height={46}
-              className="w-36"
+              width={600}
+              height={160}
+              className="w-36 drop-shadow-sm"
             />
           </Link>
           <MainHeader />
