@@ -24,6 +24,8 @@ use App\Http\Controllers\DemoQuestionController;
 use App\Http\Controllers\MockTestModuleController;
 use App\Http\Controllers\BusinessSettingController;
 use App\Http\Controllers\CertificateClaimContoller;
+use App\Http\Controllers\PartnerController;
+use App\Http\Controllers\ReviewController;
 
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/do-login', [LoginController::class, 'doLogin'])->name('doLogin');
@@ -88,8 +90,29 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/edit-question/{id}', [MockTestController::class, 'editQuestion'])->name('edit.question');
         Route::post('/update-question/{id}', [MockTestController::class, 'updateQuestion'])->name('question.update');
         Route::delete('/delete-question/{id}', [MockTestController::class, 'deleteQuestion'])->name('question.delete');
-
+        Route::post('/update-question-group/{id}', [MockTestController::class, 'updateQuestionGroup'])->name('question-group.update');
         Route::get('/reports/list', [MockTestController::class, 'getReportsData'])->name('reports.list');
+
+    });
+
+    Route::group(['prefix' => 'review', 'as' => 'review.', 'module' => 'review'], function () {
+        Route::get('/', [ReviewController::class, 'list'])->name('list');
+        Route::get('/create', [ReviewController::class, 'create'])->name('create');
+        Route::post('/store', [ReviewController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [ReviewController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [ReviewController::class, 'update'])->name('update');
+        Route::post('{id}/toggle-status', [ReviewController::class, 'toggleStatus'])->name('toggleStatus');
+
+    });
+
+
+    Route::group(['prefix' => 'partner', 'as' => 'partner.', 'module' => 'partner'], function () {
+        Route::get('/', [PartnerController::class, 'list'])->name('list');
+        Route::post('/store', [PartnerController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [PartnerController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [PartnerController::class, 'update'])->name('update');
+        Route::delete('/{id}', [PartnerController::class, 'destroy'])->name('destroy');
+        Route::post('/{id}/toggle-status', [PartnerController::class, 'toggleStatus'])->name('toggleStatus');
 
     });
 
