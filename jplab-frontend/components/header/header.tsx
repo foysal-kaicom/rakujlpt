@@ -24,6 +24,7 @@ export default function Header() {
   const [scrollCount, setScrollCount] = useState(0);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+  const [hydrated, setHydrated] = useState(false);
 
   const { isAuthenticated, token, logout, user } = useAuthStore();
 
@@ -105,6 +106,9 @@ export default function Header() {
   };
 
   const NavCta = () => {
+    if (!hydrated) {
+      return null;
+    }
     return isAuthenticated && token && user ? (
       <>
         <Notification />
@@ -159,7 +163,7 @@ export default function Header() {
       <>
         <Link
           href="/registration"
-          className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-5 2xl:py-4 2xl:px-7 text-indigo-700 bg-white rounded-full border-4 border-indigo-300 hover:border-orange-400 duration-300 shadow-2xl transform hover:scale-110 hover:-rotate-2 font-bold group relative overflow-hidden"
+          className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-5 2xl:py-4 2xl:px-7 text-indigo-700 bg-white rounded-full border-4 border-indigo-300 hover:border-orange-400 duration-300 shadow-2xl transform hover:scale-110 hover:-rotate-2 font-bold group relative overflow-hidden max-w-42"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-30 group-hover:translate-x-full transition-all duration-700 -skew-x-12"></div>
           <span className="relative z-10 group-hover:text-orange-600 transition-colors duration-300">
@@ -170,7 +174,7 @@ export default function Header() {
 
         <Link
           href="/sign_in"
-          className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-5 2xl:py-4 2xl:px-7 rounded-full border-4 border-white/50 bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-pink-500 hover:to-rose-500 hover:border-pink-300 duration-300 shadow-2xl transform hover:scale-110 hover:rotate-2 font-bold group relative overflow-hidden"
+          className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-5 2xl:py-4 2xl:px-7 rounded-full border-4 border-white/50 bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-pink-500 hover:to-rose-500 hover:border-pink-300 duration-300 shadow-2xl transform hover:scale-110 hover:rotate-2 font-bold group relative overflow-hidden max-w-42"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 group-hover:translate-x-full transition-all duration-700 -skew-x-12"></div>
           <span className="relative z-10">🔑 Sign In</span>
@@ -209,13 +213,14 @@ export default function Header() {
                     )}
                   </Link>
 
-                  <Link
-                    href="/dashboard"
-                    className="text-center mt-3"
-                  >
-                    <p className="capitalize font-semibold text-xl">{user?.first_name} {user?.last_name}</p>
-                    
-                    <p className="text-sm">{user?.email || user?.phone_number}</p>
+                  <Link href="/dashboard" className="text-center mt-3">
+                    <p className="capitalize font-semibold text-xl">
+                      {user?.first_name} {user?.last_name}
+                    </p>
+
+                    <p className="text-sm">
+                      {user?.email || user?.phone_number}
+                    </p>
                   </Link>
                 </div>
               )}
@@ -327,6 +332,10 @@ export default function Header() {
     );
   };
 
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
   return (
     <>
       <div
@@ -334,7 +343,7 @@ export default function Header() {
           scrollCount > 10 ? "bg-purple-50" : "bg-white"
         }`}
       >
-        <div className="px-6 lg:px-8 container mx-auto flex items-center justify-between h-[80px] ">
+        <div className="px-6 lg:px-8 container mx-auto flex justify-between xl:grid grid-cols-3 items-center h-[80px] ">
           <div
             className="p-1.5 bg-blue-50 rounded shadow-sm xl:hidden"
             onClick={toggleSidebar}
@@ -347,16 +356,20 @@ export default function Header() {
           </div>
           <Link href="/">
             <Image
-              src="/assets/logo/logo.png"
+              src="/assets/test-logo4.png"
               alt="logo"
-              width={461}
-              height={74}
-              className="w-[130px] 2xl:w-[180px] h-[45px]"
+              width={120}
+              height={46}
+              className="w-36"
             />
           </Link>
           <MainHeader />
 
-          <div className="hidden xl:grid grid-cols-2 items-center gap-8">
+          <div
+            className={`hidden items-center gap-8 xl:flex justify-end
+               
+            `}
+          >
             <NavCta />
           </div>
           {isAuthenticated && token && user ? (

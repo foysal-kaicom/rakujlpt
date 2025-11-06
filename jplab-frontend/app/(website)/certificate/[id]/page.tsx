@@ -1,20 +1,14 @@
 import { FaCertificate } from "react-icons/fa";
 
-interface CertificateProps {
-  studentName: string;
-  testName: string;
-  score: number;
-  totalScore: number;
-  date: string;
-}
+// interface CertificateProps {
+//   studentName: string;
+//   testName: string;
+//   score: number;
+//   totalScore: number;
+//   date: string;
+// }
 
-export default function Certificate({
-  studentName,
-  testName,
-  score,
-  totalScore,
-  date,
-}: CertificateProps) {
+export default function Certificate() {
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100 p-6">
       <div className="relative w-full max-w-5xl bg-gradient-to-r from-white via-gray-50 to-white rounded-3xl shadow-xl p-12 border-[12px] border-pink-300">
@@ -39,7 +33,8 @@ export default function Certificate({
         {/* Student Name */}
         <div className="text-center relative z-10 mb-6">
           <h2 className="text-6xl font-serif font-extrabold text-purple-700">
-            {studentName}
+            {/* {studentName} */}
+            Arif Akib
           </h2>
         </div>
 
@@ -53,15 +48,22 @@ export default function Certificate({
         {/* Test Info */}
         <div className="text-center relative z-10 text-gray-700 text-lg mb-12 space-y-2">
           <p>
-            For completing the <span className="font-semibold">{testName}</span>
+            For completing the <span className="font-semibold">
+              {/* {testName} */}
+JPT
+            </span>
           </p>
           <p>
             Score:{" "}
             <span className="font-semibold">
-              {score} / {totalScore}
+              {/* {score} / {totalScore} */}
+              180 / 200
             </span>
           </p>
-          <p className="text-gray-500">{date}</p>
+          <p className="text-gray-500">
+            {/* {date} */}
+            November 6 , 2025
+            </p>
         </div>
 
         {/* Signature Section */}

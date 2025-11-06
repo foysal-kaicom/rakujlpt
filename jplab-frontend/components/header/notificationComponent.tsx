@@ -66,7 +66,7 @@ export default function Notification({ token }: any) {
   };
 
   return (
-    <div className=" flex justify-end relative group">
+    <div className="flex justify-end relative group size-7">
       <div
         onClick={toggleNotification}
         className="p-1 rounded-full bg-white border border-purple-400 font-semibold relative cursor-pointer"

@@ -183,7 +183,7 @@ export default function ProfileNew() {
         {loading && <Loader />}
         <div className="min-h-[60vh]">
           <BreadCrumb breadCrumbData={breadCrumbData} />
-          <div className="mt-5 lg:px-10 lg:pb-10">
+          <div className="mt-5 lg:pb-10">
             <UserHeadline mainText="Profile" subText="" preText="" />
 
             <div className="max-w-3xl bg-white p-2 rounded-md mx-auto shadow-md relative">
