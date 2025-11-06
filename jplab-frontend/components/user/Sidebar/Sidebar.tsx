@@ -10,6 +10,8 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 
+import { FaUser } from "react-icons/fa";
+
 export default function Sidebar() {
   const path = usePathname();
   const router = useRouter();
@@ -24,13 +26,18 @@ export default function Sidebar() {
         <Link href="/profile">
           <div className="p-5 flex flex-col items-center relative pt-8">
             <div className="h-22 w-full bg-purple-300 absolute left-0 top-0"></div>
-            <Image
-              src={user?.photo || ""}
-              alt="profile picture"
-              height={100}
-              width={100}
-              className="rounded-full size-24 aspect-auto object-cover relative z-10 ring-5 ring-white bg-white"
-            />
+            {user?.photo ? (
+              <Image
+                src={user?.photo || ""}
+                alt="profile picture"
+                height={100}
+                width={100}
+                className="rounded-full size-24 aspect-auto object-cover relative z-10 ring-5 ring-white bg-white"
+              />
+            ) : (
+              <FaUser className="rounded-full size-24 aspect-auto object-cover text-purple-400 relative z-10 ring-5 ring-white bg-white" />
+            )}
+
             <p className="text-2xl font-semibold px-5">
               {user?.first_name} {""} {user?.last_name}
             </p>
@@ -86,7 +93,7 @@ export default function Sidebar() {
 
     return (
       <div className="fixed bottom-0 inset-x-0 z-30 bg-white shadow-t border-t border-gray-200 flex justify-evenly gap-3 items-center py-4 rounded-t-2xl xl:hidden">
-        {SidebarData.slice(0,4).map((item, i) => (
+        {SidebarData.slice(0, 4).map((item, i) => (
           <Link
             key={i}
             href={item.to}
@@ -97,7 +104,7 @@ export default function Sidebar() {
             }`}
           >
             <span className="text-3xl">{item.icon}</span>
-            <span className="mt-1 hidden md:block">{item.label}</span>
+            <span className="mt-1 hidden md:block font-medium">{item.label}</span>
           </Link>
         ))}
       </div>
