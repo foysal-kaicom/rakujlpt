@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FeatureRequest;
 use App\Models\Feature;
 use App\Services\FileStorageService;
+use Brian2694\Toastr\Facades\Toastr;
 
 class FeatureController extends Controller
 {
@@ -39,6 +40,7 @@ class FeatureController extends Controller
 
         Feature::create($data);
 
+        Toastr::success("Feature created Successfully.");
         return redirect()->route('features.list')->with('success', 'Feature created.');
     }
 
@@ -66,6 +68,7 @@ class FeatureController extends Controller
 
         $feature->update($data);
 
+        Toastr::success("Feature updated Successfully.");
         return redirect()->route('features.list')->with('success', 'Feature updated.');
     }
 
@@ -79,6 +82,7 @@ class FeatureController extends Controller
 
         $feature->delete();
 
-        return redirect()->route('features.list')->with('success', 'Feature deleted.');
+        Toastr::success("Feature deleted Successfully.");
+        return redirect()->route('features.list');
     }
 }

@@ -44,6 +44,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('{id}/toggle-status', [RoleController::class, 'toggleStatus'])->name('toggleStatus')->middleware('checkPermission:user.roles.toggleStatus');
     });
 
+    Route::group(['prefix' => 'business-settings', 'as' => 'business-settings.', 'module' => 'Business-Settings'], function () {
+        Route::get('/edit/{id}', [BusinessSettingController::class, 'showEditPage'])->name('edit');
+        Route::post('/general', [BusinessSettingController::class, 'updateGeneralInfo'])->name('general');
+        Route::post('/legal', [BusinessSettingController::class, 'updateLegalInfo'])->name('legal');
+        Route::post('/social', [BusinessSettingController::class, 'updateSocialLinks'])->name('social');
+        Route::post('/policies', [BusinessSettingController::class, 'updatePolicies'])->name('policies');
+    });
+
     Route::group(['prefix' => 'users', 'as' => 'users.', 'module' => 'users'], function () {
         Route::get('/', [UserController::class, 'index'])->name('list');
         Route::get('/create', [UserController::class, 'create'])->name('create');

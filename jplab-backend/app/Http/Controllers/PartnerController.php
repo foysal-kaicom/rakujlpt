@@ -77,6 +77,7 @@ class PartnerController extends Controller
 
         $partner->delete();
 
+        Toastr::success('Partner deleted successfully.');
         return back()->with('success', 'Partner deleted.');
     }
 

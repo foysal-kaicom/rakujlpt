@@ -26,11 +26,6 @@
     </div>
 
     <div class="p-6">
-        {{-- Flash --}}
-        @if (session('success'))
-            <div class="alert alert-success rounded-2">{{ session('success') }}</div>
-        @endif
-
         <div class="table-responsive">
             <table class="table align-middle">
                 <thead class="table-light bg-indigo-500">

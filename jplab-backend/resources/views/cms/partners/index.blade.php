@@ -104,7 +104,7 @@
                     </td>
                     <td class="d-none d-md-table-cell">
                         @if($partner->logo)
-                            <img class="avatar" src="{{ asset('storage/'.$partner->logo) }}" alt="logo">
+                            <img class="avatar" src="{{ asset($partner->logo) }}" alt="logo">
                         @else
                             <img class="avatar" src="{{ asset('imagePH.png') }}" alt="placeholder">
                         @endif

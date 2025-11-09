@@ -46,10 +46,10 @@ Route::prefix('v1')->group(function () {
     Route::get('/partner/list', [CMSController::class, 'getPartnerList']);
 
 
-    Route::group(['prefix' => 'center', 'as' => 'center.'], function () {
-        Route::get('/list', [CenterController::class, 'list']);
-        Route::get('/view/{center_id}', [CenterController::class, 'view']);
-    });
+    // Route::group(['prefix' => 'center', 'as' => 'center.'], function () {
+    //     Route::get('/list', [CenterController::class, 'list']);
+    //     Route::get('/view/{center_id}', [CenterController::class, 'view']);
+    // });
 
 
     Route::group(['middleware' => 'auth:candidate'], function () {
@@ -65,9 +65,9 @@ Route::prefix('v1')->group(function () {
             Route::post('/post-verify-phone', [CandidateController::class, 'postVerifyPhoneNumber']);
         });
 
-        Route::group(['prefix' => 'exam', 'as' => 'exam.'], function () {
-            Route::post('/booking/store/{slug}', [BookingController::class, 'book']);
-        });
+        // Route::group(['prefix' => 'exam', 'as' => 'exam.'], function () {
+        //     Route::post('/booking/store/{slug}', [BookingController::class, 'book']);
+        // });
 
 
         Route::group(['prefix' => 'notifications', 'as' => 'notifications.'], function () {

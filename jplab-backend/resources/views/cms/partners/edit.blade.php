@@ -15,7 +15,7 @@
             <div class="col-md-3 text-center">
                 <div class="position-relative border rounded bg-light d-flex align-items-center justify-content-center shadow-sm" style="height:160px;">
                     <img id="logoPreview"
-                         src="{{ $partner->logo ? asset('storage/'.$partner->logo) : asset('imagePH.png') }}"
+                         src="{{ $partner->logo ? asset($partner->logo) : asset('imagePH.png') }}"
                          class="w-100 h-100 object-fit-contain rounded" alt="Logo">
                     <button type="button" id="removeLogo" class="btn btn-sm btn-light border shadow-sm position-absolute top-0 end-0 rounded-circle">×</button>
                 </div>

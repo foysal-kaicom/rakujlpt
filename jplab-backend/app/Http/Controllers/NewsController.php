@@ -83,7 +83,8 @@ class NewsController extends Controller
 
         News::create($validatedData);
 
-        return redirect()->route('news.list')->with('success', 'News created successfully.');
+        Toastr::success("News updated Successfully.");
+        return redirect()->route('news.list');
     }
 
 
