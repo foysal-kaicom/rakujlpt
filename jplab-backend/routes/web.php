@@ -24,6 +24,7 @@ use App\Http\Controllers\DemoQuestionController;
 use App\Http\Controllers\MockTestModuleController;
 use App\Http\Controllers\BusinessSettingController;
 use App\Http\Controllers\CertificateClaimContoller;
+use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\ReviewController;
 
@@ -127,14 +128,24 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
 
-    Route::group(['prefix' => 'news', 'as' => 'news.', 'module' => 'News'], function () {
-        Route::get('/', [NewsController::class, 'list'])->name('list')->middleware('checkPermission:news.list');
-        Route::get('/create', [NewsController::class, 'create'])->name('create')->middleware('checkPermission:news.create');
-        Route::post('/store', [NewsController::class, 'store'])->name('store')->middleware('checkPermission:news.store');
-        Route::get('/edit/{id}', [NewsController::class, 'edit'])->name('edit')->middleware('checkPermission:news.edit');
-        Route::put('/update/{id}', [NewsController::class, 'update'])->name('update')->middleware('checkPermission:news.update');
-        Route::get('/delete/{id}', [NewsController::class, 'delete'])->name('delete')->middleware('checkPermission:news.delete');
-        Route::post('{id}/toggle-status', [NewsController::class, 'toggleStatus'])->name('toggleStatus')->middleware('checkPermission:news.toggleStatus');
+    Route::group(['prefix' => 'news', 'as' => 'news.', 'module' => 'news'], function () {
+        Route::get('/', [NewsController::class, 'list'])->name('list');
+        Route::get('/create', [NewsController::class, 'create'])->name('create');
+        Route::post('/store', [NewsController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [NewsController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [NewsController::class, 'update'])->name('update');
+        Route::get('/delete/{id}', [NewsController::class, 'delete'])->name('delete');
+        Route::post('{id}/toggle-status', [NewsController::class, 'toggleStatus'])->name('toggleStatus');
+    });
+
+    Route::group(['prefix' => 'features', 'as' => 'features.', 'module' => 'features'], function () {
+        Route::get('/', [FeatureController::class, 'list'])->name('list');
+        Route::get('/create', [FeatureController::class, 'create'])->name('create');
+        Route::post('/store', [FeatureController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [FeatureController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [FeatureController::class, 'update'])->name('update');
+        Route::get('/delete/{id}', [FeatureController::class, 'delete'])->name('destroy');
+        Route::post('{id}/toggle-status', [FeatureController::class, 'toggleStatus'])->name('toggleStatus');
     });
 
     Route::resource('packages', PackageController::class);
