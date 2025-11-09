@@ -293,7 +293,8 @@
     <div class="login-container">
       <div class="login-card">
         <div class="logo-container">
-          <img src="{{ asset('logo/logo.png') }}" alt="JPTBD Logo">
+
+          <img src="{{ $settings->logo }}" alt="{{ $settings->business_name }} Logo" />
         </div>
 
         <div class="welcome-text">
