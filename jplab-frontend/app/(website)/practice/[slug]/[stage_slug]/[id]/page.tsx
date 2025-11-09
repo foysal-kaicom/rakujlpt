@@ -27,6 +27,7 @@ interface Question {
   answer: string; // stores the selected option key like "1"
   hints?: string;
   explanation?: string;
+  audio_file?: string;
 }
 interface Stage {
   stage_id: number;
@@ -219,6 +220,10 @@ export default function PracticeQuestion() {
     switch (currentQuestion?.question_type) {
       case "text":
         return selectedAnswer !== null;
+      case "audio":
+        return selectedAnswer !== null;
+      case "image":
+        return selectedAnswer !== null;
       default:
         return false;
     }
@@ -330,10 +335,55 @@ export default function PracticeQuestion() {
             <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12">
               {/* Question */}
               <div className="text-center mb-12">
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-8">
-                  {currentQuestion?.question}
-                </h2>
+                {currentQuestion?.question_type === "image" && (
+                  <div className="w-full max-h-[500px] overflow-hidden rounded-lg bg-gray-50 flex items-center justify-center">
+                    <Image
+                      src={currentQuestion?.question || ""}
+                      alt={currentQuestion?.question || "Question image"}
+                      width={1600}
+                      height={900}
+                      className="w-full h-auto object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+                {currentQuestion?.question_type === "text" && (
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-8">
+                    {currentQuestion?.question}
+                  </h2>
+                )}
+                {currentQuestion?.question_type === "audio" && (
+                  <div className="flex flex-col items-center gap-4 mb-6">
+                    {currentQuestion?.question && (
+                      <div className="w-full max-h-[500px] overflow-hidden rounded-lg bg-gray-50 flex items-center justify-center">
+                        <Image
+                          src={currentQuestion?.question || ""}
+                          alt={currentQuestion?.question || "Question image"}
+                          width={1600}
+                          height={900}
+                          className="w-full h-auto object-contain"
+                          loading="lazy"
+                        />
+                      </div>
+                    )}
 
+                    {currentQuestion?.audio_file && (
+                      <div className="w-full flex justify-center">
+                        <audio
+                          controls
+                          className="w-full max-w-2xl rounded-md p-2"
+                          aria-label="Question audio"
+                        >
+                          <source
+                            src={currentQuestion.audio_file}
+                            type="audio/mpeg"
+                          />
+                          Your browser does not support the audio element.
+                        </audio>
+                      </div>
+                    )}
+                  </div>
+                )}
                 {/* {currentQuestion.question_type === "yes-no" && (
               <div className="text-5xl md:text-6xl font-bold text-gray-700 my-12">
                 {currentQuestion.word}
@@ -375,58 +425,58 @@ export default function PracticeQuestion() {
             )} */}
 
                 {/* Multiple Choice Options */}
-                {currentQuestion?.question_type === "text" && (
-                  <div className="space-y-3">
-                    {Array.from({ length: 4 }).map((_, index) => {
-                      const optObj = currentQuestion?.options || {};
-                      const optionText = String(
-                        optObj[index + 1] || `Option ${index + 1}`
-                      );
-                      const selectedKey = String(index + 1);
-                      return (
-                        <button
-                          key={index}
-                          onClick={() => handleAnswerSelect(selectedKey)}
-                          disabled={isAnswered}
-                          className={`w-full p-5 rounded-xl border-2 text-left transition-all transform hover:scale-[1.02] ${
-                            selectedAnswer === String(index + 1)
-                              ? "border-blue-500 bg-blue-50 shadow-md"
-                              : "border-gray-300 bg-white hover:border-blue-300"
-                          } ${
-                            isAnswered && selectedKey === currentQuestion.answer
-                              ? "border-green-500 bg-green-50"
-                              : ""
-                          } ${
-                            isAnswered &&
-                            selectedAnswer === selectedKey &&
-                            selectedKey !== currentQuestion.answer
-                              ? "border-red-500 bg-red-50"
-                              : ""
-                          } ${
-                            isAnswered ? "cursor-not-allowed" : "cursor-pointer"
-                          }`}
-                        >
-                          <div className="flex items-center gap-4">
-                            <div
-                              className={`w-8 h-8 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                                selectedAnswer === String(index + 1)
-                                  ? "border-blue-500 bg-blue-500"
-                                  : "border-gray-400"
-                              }`}
-                            >
-                              {selectedAnswer === String(index + 1) && (
-                                <Check className="w-5 h-5 text-white" />
-                              )}
-                            </div>
-                            <span className="text-lg text-gray-800">
-                              {optionText}
-                            </span>
+                {/* {currentQuestion?.question_type === "text" && ( */}
+                <div className="space-y-3">
+                  {Array.from({ length: 4 }).map((_, index) => {
+                    const optObj = currentQuestion?.options || {};
+                    const optionText = String(
+                      optObj[index + 1] || `Option ${index + 1}`
+                    );
+                    const selectedKey = String(index + 1);
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => handleAnswerSelect(selectedKey)}
+                        disabled={isAnswered}
+                        className={`w-full p-5 rounded-xl border-2 text-left transition-all transform hover:scale-[1.02] ${
+                          selectedAnswer === String(index + 1)
+                            ? "border-blue-500 bg-blue-50 shadow-md"
+                            : "border-gray-300 bg-white hover:border-blue-300"
+                        } ${
+                          isAnswered && selectedKey === currentQuestion.answer
+                            ? "border-green-500 bg-green-50"
+                            : ""
+                        } ${
+                          isAnswered &&
+                          selectedAnswer === selectedKey &&
+                          selectedKey !== currentQuestion.answer
+                            ? "border-red-500 bg-red-50"
+                            : ""
+                        } ${
+                          isAnswered ? "cursor-not-allowed" : "cursor-pointer"
+                        }`}
+                      >
+                        <div className="flex items-center gap-4">
+                          <div
+                            className={`w-8 h-8 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+                              selectedAnswer === String(index + 1)
+                                ? "border-blue-500 bg-blue-500"
+                                : "border-gray-400"
+                            }`}
+                          >
+                            {selectedAnswer === String(index + 1) && (
+                              <Check className="w-5 h-5 text-white" />
+                            )}
                           </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
+                          <span className="text-lg text-gray-800">
+                            {optionText}
+                          </span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+                {/* )} */}
 
                 {/* Multiple Answer Options */}
                 {/* {currentQuestion.question_type === "multiple-answer" && (
@@ -510,7 +560,7 @@ export default function PracticeQuestion() {
                     <div className="mt-4 p-4 bg-yellow-50 border-2 border-yellow-200 rounded-xl">
                       <div className="flex gap-3">
                         <Lightbulb className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-                        <p className="text-gray-700">{currentQuestion.hints}</p>
+                        <p className="text-gray-700">{currentQuestion.hints ?? "No hints available."}</p>
                       </div>
                     </div>
                   )}
@@ -559,7 +609,7 @@ export default function PracticeQuestion() {
                         {isCorrect ? "Correct!" : "Incorrect"}
                       </h3>
                       <p className="text-gray-700">
-                        {currentQuestion.explanation}
+                        {currentQuestion.explanation ?? "No explanation available."}
                       </p>
                     </div>
                   </div>
