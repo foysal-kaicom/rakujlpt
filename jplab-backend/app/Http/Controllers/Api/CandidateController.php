@@ -146,7 +146,7 @@ class CandidateController extends Controller
             'phone_number'      => 'nullable|string|unique:candidates|required_without:email|max:20',
             'date_of_birth'     => 'nullable|date',
             'nationality'       => 'nullable|string|max:100',
-            'national_id'       => 'nullable|string|max:50|unique:users,national_id',
+            'national_id'       => 'nullable|string|max:50|',
             'gender'            => 'nullable|in:male,female,other',
             'photo'             => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'address'           => 'nullable|string|max:255',
@@ -165,7 +165,7 @@ class CandidateController extends Controller
         $candidate = Candidate::findOrFail(auth('candidate')->user()->id);
 
         // Get validated data from CandidateRequest
-        $data = $request->validated();
+        $data = $validator->validated();
 
         // Handle photo upload/update
         if ($request->hasFile('photo')) {
