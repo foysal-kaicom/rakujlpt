@@ -141,12 +141,14 @@ export default function ProfileNew() {
     const payload = new FormData();
     payload.append("first_name", profile.first_name || "");
     payload.append("last_name", profile.last_name || "");
-    if (!profile.email) {
-      payload.append("email", profile.email);
-    }
-    if (!profile.phone_number) {
-      payload.append("phone_number", profile.phone_number || "");
-    }
+    payload.append("email", profile.email);
+    payload.append("phone_number", profile.phone_number || "");
+    // if (!profile.email) {
+    //   payload.append("email", profile.email);
+    // }
+    // if (!profile.phone_number) {
+    //   payload.append("phone_number", profile.phone_number || "");
+    // }
     payload.append("about", profile.about || "");
     payload.append("gender", profile.gender || "");
     payload.append("address", profile.address || "");
@@ -165,7 +167,7 @@ export default function ProfileNew() {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       toast.success("Information updated");
     } catch (error: any) {
