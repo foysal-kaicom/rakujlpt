@@ -11,6 +11,7 @@ interface Roadmap {
   title: string;
   image: string;
   description: string;
+  total_stages: string;
 }
 
 export default function Practice() {
@@ -106,7 +107,7 @@ export default function Practice() {
           if(response?.data?.success){
             setPracticeTestsData(response.data.data);
           }
-          toast.success(response?.data?.message || "Roadmaps loaded!");
+          // toast.success(response?.data?.message || "Roadmaps loaded!");
         } catch (error: any) {
           toast.error(
             error?.response?.data?.message ||
@@ -138,12 +139,12 @@ export default function Practice() {
           <div className="flex items-center gap-2 text-sm text-gray-600 mb-8">
             {breadCrumbData.map((item, index) => (
               <div key={index} className="flex items-center gap-2">
-                <a
+                <Link
                   href={item.to}
                   className="hover:text-blue-600 transition-colors"
                 >
                   {item.name}
-                </a>
+                </Link>
                 {index < breadCrumbData.length - 1 && <span>/</span>}
               </div>
             ))}
@@ -207,7 +208,7 @@ export default function Practice() {
                   <p className="text-gray-600 mb-4">{test.description}</p>
 
                   <div className="flex items-center gap-4 mb-4 text-sm text-gray-500">
-                    <span className="flex items-center gap-1">
+                    {/* <span className="flex items-center gap-1">
                       <svg
                         className="w-4 h-4"
                         fill="none"
@@ -221,8 +222,8 @@ export default function Practice() {
                           d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                         />
                       </svg>
-                      {/* {test.duration} */}0
-                    </span>
+                      0
+                    </span> */}
                     <span className="flex items-center gap-1">
                       <svg
                         className="w-4 h-4"
@@ -237,8 +238,7 @@ export default function Practice() {
                           d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                         />
                       </svg>
-                      {/* {test.questions} */}
-                      0 Questions
+                      {test.total_stages} Stages
                     </span>
                   </div>
 
@@ -262,7 +262,7 @@ export default function Practice() {
 
                   <Link href={`/practice/${test.slug}`}>
                     <button
-                      className={`w-full bg-blue-500 text-white py-3 rounded-xl font-semibold hover:opacity-90 transition-all shadow-md hover:shadow-lg`}
+                      className={`w-full bg-blue-500 text-white py-3 rounded-xl font-semibold hover:opacity-90 transition-all shadow-md hover:shadow-lg cursor-pointer`}
                     >
                       View Roadmap
                     </button>

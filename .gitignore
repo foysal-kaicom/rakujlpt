@@ -48,3 +48,4 @@ docker-compose.yml
 /vendor
 
 /storage/logs
+/vendor*
