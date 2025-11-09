@@ -47,5 +47,5 @@ docker-compose.yml
 
 /vendor
 
-/storage/logs
+/storage/logs/
 /vendor*
