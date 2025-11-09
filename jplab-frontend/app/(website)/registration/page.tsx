@@ -60,8 +60,7 @@ export default function SignUpPage() {
   const handleGoogleLogin = async () => {
     const useraData = await googleLoginUtils()
       if(useraData){
-        console.log(useraData , "yoo")
-        router.push('/dashboard')
+        console.log(useraData , "register to backend")
       }
   };
 
@@ -256,7 +255,7 @@ export default function SignUpPage() {
             {/* Google Sign Up */}
             <button
               type="button"
-              onClick={handleGoogleLogin}
+              onClick={()=>handleGoogleLogin()}
               className="w-full flex items-center justify-center gap-3 bg-white border border-pink-300 hover:bg-pink-50 text-gray-700 font-semibold rounded-full py-2.5 transition-all duration-300 shadow-[0_0_10px_rgba(255,105,180,0.3)] hover:shadow-[0_0_20px_rgba(255,105,180,0.4)]"
             >
               <img

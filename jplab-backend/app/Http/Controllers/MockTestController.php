@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Throwable;
-use App\Models\Exam;
+use App\Http\Requests\StoreMockTestRequest;
 use App\Models\Candidate;
-use Illuminate\Http\Request;
+use App\Models\Exam;
 use App\Models\MockTestModule;
-use App\Models\MockTestRecords;
-use App\Models\MockTestSection;
 use App\Models\MockTestQuestion;
-use Illuminate\Support\Facades\DB;
-use App\Services\FileStorageService;
-use Brian2694\Toastr\Facades\Toastr;
 use App\Models\MockTestQuestionGroup;
 use App\Models\MockTestQuestionOption;
-use Yajra\DataTables\Facades\DataTables;
+use App\Models\MockTestRecords;
+use App\Models\MockTestSection;
+use App\Services\FileStorageService;
+use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Requests\StoreMockTestRequest;
+use Throwable;
 
 class MockTestController extends Controller
 {
@@ -35,14 +34,21 @@ class MockTestController extends Controller
         return view('mock-tests.module_section_list', compact('modules'));
     }
 
-    public function questionList()
+    public function questionList(Request $request)
     {
-
-        // $modules = MockTestModule::with(['sections','sections.mockTestQuestionGroup','sections.mockTestQuestionGroup.mockTestQuestion','sections.mockTestQuestionGroup.mockTestQuestion.mockTestQuestionOption'])->get();
-        $questions = MockTestQuestion::with('section', 'mockTestQuestionGroup')->paginate(10);
-
-        return view('mock-tests.question-list', compact('questions'));
+        $query = MockTestQuestion::with('section', 'mockTestQuestionGroup');
+    
+        if ($request->has('section_id') && $request->section_id != 'all') {
+            $query->where('mock_test_section_id', $request->section_id);
+        }
+    
+        $questions = $query->paginate(10);
+        
+        $sections = MockTestSection::all();
+    
+        return view('mock-tests.question-list', compact('questions', 'sections'));
     }
+    
 
 
     public function questionSetupForm()
@@ -61,7 +67,7 @@ class MockTestController extends Controller
     public function updateSection(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string',
             'sample_question' => 'required|string',
         ]);
 
@@ -104,6 +110,7 @@ class MockTestController extends Controller
                 'group_type' => $request->group_by, //i.e: group by : passages/audio
                 'content' => $content,
                 'question_quantity' => $request->question_quantity,
+                'set_no' => $request->set_no,
             ]);
 
             //store question into mockTestQuestion table
@@ -149,23 +156,78 @@ class MockTestController extends Controller
 
     public function editQuestion($id)
     {
-        $question = MockTestQuestion::with('mockTestQuestionOption')->findOrFail($id);
+        $question = MockTestQuestion::with('mockTestQuestionOption', 'mockTestQuestionGroup')->findOrFail($id);
+        $mockTestSections = MockTestSection::with('mockTestModule')->get();
     
-        return view('mock-tests.edit-question', compact('question'));
+        return view('mock-tests.edit-question', compact('question', 'mockTestSections'));
+    }
+
+    public function updateQuestionGroup(Request $request, $id)
+    {
+
+        $validate=Validator::make($request->all(),[
+            'mock_test_section_id' => 'required|exists:mock_test_sections,id',
+            'group_type' => 'nullable|in:passage,audio',
+            'set_no' => 'required|integer',
+            'content' => 'nullable|string',
+            'audio-content' => 'nullable|file|mimes:mp3,ogg,wav',
+        ]);
+        
+        if($validate->fails())
+        {
+            Toastr::error($validate->getMessageBag());
+            return redirect()->back();
+        }
+        
+        $questionGroup = MockTestQuestionGroup::findOrFail($id);
+    
+        $questionGroup->mock_test_section_id = $request->mock_test_section_id;
+        $questionGroup->group_type = $request->group_type;
+    
+        if ($request->hasFile('audio-content')) {
+            $file = $request->file('audio-content');
+            $fileUploadResponse = $this->fileStorageService->uploadPdfFileToCloud($file, 'mock-question','audio');
+
+            if ($fileUploadResponse) {
+                $questionGroup->content = $fileUploadResponse['public_path'];
+            } else {
+                return back()->with('error', 'File upload failed.');
+            }
+        } elseif ($request->group_type == 'passage' && $request->input('content')) {
+            $questionGroup->content = $request->input('content');
+        }
+
+        $questionGroup->set_no = $request->set_no;
+        $questionGroup->save();
+
+        $questionGroup->mockTestQuestion()->update([
+            'mock_test_section_id' => $request->mock_test_section_id
+        ]);
+    
+        Toastr::success("Question group information updated Successfully.");
+        return back();
     }
     
 
     public function updateQuestion(Request $request, $id)
     {
-        $validated = $request->validate([
-            'question' => 'required|string|max:255',
-            'proficiency_level' => 'required|in:n4,n5',
+      
+         $validate=Validator::make($request->all(),[
+            'question' => 'required|string',
+            'proficiency_level' => 'required|in:N4,N5',
             'question_type' => 'required|in:text,image',
             'answer' => 'required|integer|in:1,2,3,4',
             'options' => 'required|array|min:4|max:4',
-            'options.*' => 'required|string|max:255',
-            'question_image' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048',
+            'options.*' => 'required|string',
+            'question_image' => 'nullable|file|mimes:jpeg,jpg,png,gif|max:2048',
         ]);
+        
+        if($validate->fails())
+        {
+            Toastr::error($validate->getMessageBag());
+            return redirect()->back();
+        }
+        
     
         try {
             DB::beginTransaction();
@@ -176,7 +238,7 @@ class MockTestController extends Controller
 
             if ($request->question_type == 'image' && $request->hasFile('question_image')) {
                 $imageUploadResponse = $this->fileStorageService->uploadImageToCloud($request->file('question_image'), 'questions');
-                $question->title = $imageUploadResponse['public_path']; // Store the image URL/path in the 'title' field
+                $question->title = strip_tags($imageUploadResponse['public_path']); // Store the image URL/path in the 'title' field
             }
     
             $question->proficiency_level = strtoupper($request->proficiency_level);
@@ -211,6 +273,10 @@ class MockTestController extends Controller
                 $question->mockTestQuestionOption->delete();
             }
 
+            if ($question->mockTestQuestionGroup) {
+                $question->mockTestQuestionGroup->delete();
+            }
+
             $question->delete();
 
             Toastr::success("Question deleted successfully.");
@@ -240,6 +306,7 @@ class MockTestController extends Controller
 
         return view('mock-tests.reports.list', compact('records', 'candidates', 'exams'));
     }
+
 
     
 

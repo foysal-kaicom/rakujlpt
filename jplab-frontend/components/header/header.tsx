@@ -4,7 +4,9 @@ import { IoMdArrowDropright, IoMdArrowDropdown } from "react-icons/io";
 import { IoLogIn, IoLogOut } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RxCross2 } from "react-icons/rx";
-import { signOut } from "next-auth/react";
+import { FaUser } from "react-icons/fa";
+import { HiViewGridAdd } from "react-icons/hi";
+
 
 import { toast } from "sonner";
 import axiosInstance from "@/utils/axios";
@@ -24,6 +26,7 @@ export default function Header() {
   const [scrollCount, setScrollCount] = useState(0);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+  const [hydrated, setHydrated] = useState(false);
 
   const { isAuthenticated, token, logout, user } = useAuthStore();
 
@@ -50,8 +53,8 @@ export default function Header() {
     try {
       const response = await axiosInstance.get("/candidate/logout");
       if (response.status == 200) {
-        signOut().then(() => logout())
         router.push("/sign_in");
+        logout();
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -105,22 +108,34 @@ export default function Header() {
   };
 
   const NavCta = () => {
+    if (!hydrated) {
+      return null;
+    }
     return isAuthenticated && token && user ? (
       <>
         <Notification />
         <div className="flex gap-2 items-center relative group cursor-pointer">
-          {user.photo && (<Image
-            src={user.photo}
-            alt="profile pic"
-            height={40}
-            width={40}
-            className="size-8 rounded-full object-cover aspect-auto ring-2 ring-purple-400"
-          />)}
-          
-          <p className="line-clamp-1 capitalize font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-            {user?.first_name?.slice(0, 10)}
-            {user?.first_name.length > 10 && "..."}
-          </p>
+          {user?.photo ? (
+            <Image
+              src={user.photo}
+              alt="profile pic"
+              height={40}
+              width={40}
+              className="size-8 rounded-full object-cover aspect-auto ring-2 ring-purple-400"
+            />
+          ) : (
+            <FaUser className="size-8 rounded-full object-cover aspect-auto ring-3 ring-purple-400 text-white bg-purple-400" />
+          )}
+          <div>
+            <p className="line-clamp-1 capitalize font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              {user?.first_name?.slice(0, 10)}
+              {user?.first_name.length > 10 && "..."}
+            </p>
+            <p className="line-clamp-1 text-xs font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              {user?.email || user?.phone_number}
+            </p>
+          </div>
+
           <div className="bg-white grid grid-cols-1 rounded-md text-sm shadow absolute right-1/2 translate-x-1/2 top-[40px] scale-0 group-hover:scale-100 w-[200px] h-[180px] overflow-clip duration-400 origin-top outline outline-gray-200">
             {SidebarData.slice(0, 4).map((item, i) => (
               <Link
@@ -150,7 +165,7 @@ export default function Header() {
       <>
         <Link
           href="/registration"
-          className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-5 2xl:py-4 2xl:px-7 text-indigo-700 bg-white rounded-full border-4 border-indigo-300 hover:border-orange-400 duration-300 shadow-2xl transform hover:scale-110 hover:-rotate-2 font-bold group relative overflow-hidden"
+          className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-5 2xl:py-4 2xl:px-7 text-indigo-700 bg-white rounded-full border-4 border-indigo-300 hover:border-orange-400 duration-300 shadow-2xl transform hover:scale-110 hover:-rotate-2 font-bold group relative overflow-hidden max-w-42"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-30 group-hover:translate-x-full transition-all duration-700 -skew-x-12"></div>
           <span className="relative z-10 group-hover:text-orange-600 transition-colors duration-300">
@@ -161,7 +176,7 @@ export default function Header() {
 
         <Link
           href="/sign_in"
-          className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-5 2xl:py-4 2xl:px-7 rounded-full border-4 border-white/50 bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-pink-500 hover:to-rose-500 hover:border-pink-300 duration-300 shadow-2xl transform hover:scale-110 hover:rotate-2 font-bold group relative overflow-hidden"
+          className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-5 2xl:py-4 2xl:px-7 rounded-full border-4 border-white/50 bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-pink-500 hover:to-rose-500 hover:border-pink-300 duration-300 shadow-2xl transform hover:scale-110 hover:rotate-2 font-bold group relative overflow-hidden max-w-42"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 group-hover:translate-x-full transition-all duration-700 -skew-x-12"></div>
           <span className="relative z-10">🔑 Sign In</span>
@@ -175,32 +190,62 @@ export default function Header() {
     return (
       <>
         <div
-          className={`xl:hidden h-[calc(100vh-80px)] w-full fixed z-40 top-20 left-0 bg-gradient-to-r from-indigo-300 to-purple-200 duration-500 transform ${
+          className={`xl:hidden h-[calc(100vh-80px)] w-full fixed z-40 top-20 left-0 bg-gradient-to-r from-indigo-200 to-purple-200 duration-500 transform ${
             isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
           <div className="flex flex-col gap-5 h-full overflow-y-scroll pb-10 pt-5 px-6 lg:px-8 container mx-auto scrollbar-hide">
             <div className="space-y-5">
               {isAuthenticated && token && user && (
-                <div onClick={toggleSidebar} className="space-y-3 flex flex-col items-center border-b pb-3 border-white/70">
+                <>
+                <div
+                  onClick={toggleSidebar}
+                  className="space-y-3 flex flex-col items-center border-b pb-3 border-white/70"
+                >
                   <Link href="/dashboard">
-                  {user.photo && (<Image
-                      src={user.photo}
-                      alt="profile pic"
-                      height={100}
-                      width={100}
-                      className="size-30 rounded-full object-cover aspect-auto"
-                    />)}
-                    
+                    {user.photo ? (
+                      <Image
+                        src={user.photo || "#"}
+                        alt="profile pic"
+                        height={100}
+                        width={100}
+                        className="size-30 rounded-full object-cover aspect-auto border-3 border-white"
+                      />
+                    ) : (
+                      <FaUser className="size-30 rounded-full object-cover aspect-auto border-5 border-purple-400 bg-purple-400 text-white" />
+                    )}
                   </Link>
 
-                  <Link
-                    href="/dashboard"
-                    className="line-clamp-1 capitalize font-semibold text-lg mt-3"
-                  >
-                    {user?.first_name}
+                  <Link href="/dashboard" className="text-center mt-3">
+                    <p className="capitalize font-semibold text-xl">
+                      {user?.first_name} {user?.last_name}
+                    </p>
+
+                    <p className="text-sm">
+                      {user?.email || user?.phone_number}
+                    </p>
                   </Link>
                 </div>
+                <div className="space-y-5 border-b border-white/70 pb-5 text-indigo-800">
+                    {/* Sidebar Items */}
+                    {SidebarData.map((item, index) => (
+                      <Link
+                        key={index}
+                        href={item.to}
+                        onClick={toggleSidebar}
+                        className={`font-semibold text-sm 2xl:text-base hover:text-[#d400ff] transition flex items-center gap-2 ${
+                          path.startsWith(item.to) ? "text-[#d400ff]" : ""
+                        }`}
+                      >
+                        <span className="text-lg rounded-sm">
+                          {item.icon}
+                        </span>
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </>
+                
               )}
 
               {navdata.map((item, index) => {
@@ -216,8 +261,8 @@ export default function Header() {
                     {item.links ? (
                       <button
                         onClick={() => toggleDropdown(index)}
-                        className={`flex justify-between gap-2 w-full text-left font-semibold text-sm 2xl:text-base ${
-                          isActive ? "text-[#001aff]" : ""
+                        className={`flex justify-between gap-2 w-full text-left font-semibold text-sm 2xl:text-base hover:text-[#d400ff]  ${
+                          isActive ? "text-[#d400ff]" : "text-indigo-800"
                         }`}
                       >
                         <p className="w-[calc(100%-24px)]">{item.label}</p>
@@ -233,8 +278,8 @@ export default function Header() {
                       <Link
                         href={item.to}
                         onClick={toggleSidebar}
-                        className={`flex justify-between gap-2 w-full text-left font-semibold text-sm 2xl:text-base ${
-                          isActive ? "text-[#001aff]" : ""
+                        className={`flex justify-between gap-2 w-full text-left font-semibold text-sm 2xl:text-base hover:text-[#d400ff] ${
+                          isActive ? "text-[#d400ff]" : "text-indigo-800"
                         }`}
                       >
                         {item.label}
@@ -250,7 +295,7 @@ export default function Header() {
                             item.label == "Information"
                               ? "hidden"
                               : item.to == path
-                              ? "text-[#001aff]"
+                              ? "text-[#d400ff]"
                               : ""
                           }`}
                         >
@@ -261,8 +306,8 @@ export default function Header() {
                             onClick={toggleSidebar}
                             key={i}
                             href={link.to}
-                            className={`block hover:text-[#001aff] text-sm duration-300 font-medium ${
-                              link.to === path ? "text-[#001aff]" : ""
+                            className={`block hover:text-[#d400ff] text-sm duration-300 font-medium ${
+                              link.to === path ? "text-[#d400ff]" : "text-indigo-800"
                             }`}
                           >
                             {link.label}
@@ -310,6 +355,10 @@ export default function Header() {
     );
   };
 
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
   return (
     <>
       <div
@@ -317,29 +366,37 @@ export default function Header() {
           scrollCount > 10 ? "bg-purple-50" : "bg-white"
         }`}
       >
-        <div className="px-6 lg:px-8 container mx-auto flex items-center justify-between h-[80px] ">
+        <div className="px-6 lg:px-8 container mx-auto flex justify-between xl:grid grid-cols-3 items-center h-[80px] ">
           <div
-            className="p-1.5 bg-blue-50 rounded shadow-sm xl:hidden"
+            className="text-purple-600 drop-shadow-2xl drop-shadow-amber-500 xl:hidden"
             onClick={toggleSidebar}
           >
             {isSidebarOpen ? (
-              <RxCross2 className="size-4" />
+              <RxCross2 className="size-6" />
             ) : (
-              <GiHamburgerMenu className="size-4" />
+              // <HiViewGridAdd className="size-6" />
+              <Image src="/assets/icon/menu.png"
+              alt="menu"
+              width={64}
+              height={64} className="size-6"/>
             )}
           </div>
           <Link href="/">
             <Image
-              src="/assets/logo/logo.png"
+              src="/assets/test-logo4.png"
               alt="logo"
-              width={461}
-              height={74}
-              className="w-[130px] 2xl:w-[180px] h-[45px]"
+              width={600}
+              height={160}
+              className="w-36 drop-shadow-sm"
             />
           </Link>
           <MainHeader />
 
-          <div className="hidden xl:grid grid-cols-2 items-center gap-8">
+          <div
+            className={`hidden items-center gap-8 xl:flex justify-end
+               
+            `}
+          >
             <NavCta />
           </div>
           {isAuthenticated && token && user ? (

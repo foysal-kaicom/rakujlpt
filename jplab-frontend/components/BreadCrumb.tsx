@@ -30,9 +30,9 @@ export default function BreadCrumb({ breadCrumbData }: BreadCrumbProps) {
                 {b.name}
               </Link>
             ) : (
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-500 font-semibold">
+              <Link href={b.to} className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-500 font-semibold">
                 {b.name}
-              </span>
+              </Link>
             )}
 
             {!isLast && (

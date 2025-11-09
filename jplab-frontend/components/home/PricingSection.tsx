@@ -102,8 +102,8 @@ const PricingSection = () => {
         </div>
 
         <div className={`gap-8 ${plansData.length<3 ? "flex flex-col sm:flex-row justify-center items-center sm:items-stretch" : "grid md:grid-cols-2 lg:grid-cols-3 lg:max-w-5xl mx-auto justify-center"}`}>
-          {plansData.map((plan) => (
-            <PricingCard plan = {plan} subscribeModal={subscribeModal}/>
+          {plansData.map((plan , index) => (
+            <PricingCard key={index} plan = {plan} subscribeModal={subscribeModal}/>
           ))}
         </div>
 

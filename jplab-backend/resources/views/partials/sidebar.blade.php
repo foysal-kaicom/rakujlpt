@@ -46,14 +46,14 @@
                 <i class="fas fa-newspaper text-indigo-500 text-base"></i>
                 <p class="m-0 text-sm">News or Blogs</p>
             </a> --}}
-            {{-- <a href="{{ route('testimonials.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
+            <a href="{{ route('review.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                 <i class="fa-solid fa-comment text-indigo-500 text-base"></i>
-                <p class="m-0 text-sm">Testimonials</p>
-            </a> --}}
-            {{-- <a href="{{ route('faq.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
+                <p class="m-0 text-sm">Reviews</p>
+            </a>
+             <a href="{{ route('partner.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                 <i class="fas fa-question-circle text-indigo-500 text-base"></i>
-                <p class="m-0 text-sm">FAQ</p>
-            </a> --}}
+                <p class="m-0 text-sm">Partners</p>
+            </a>
         </div>
     </div>
 
