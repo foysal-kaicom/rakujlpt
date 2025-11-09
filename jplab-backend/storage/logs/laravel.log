@@ -3731,3 +3731,5 @@
 [2025-11-06 17:16:53] local.INFO: select * from `users` where `id` = ? limit 1 [1] 
 [2025-11-06 17:25:44] local.INFO: select exists (select 1 from information_schema.tables where table_schema = schema() and table_name = 'business_settings' and table_type in ('BASE TABLE', 'SYSTEM VERSIONED')) as `exists`  
 [2025-11-06 17:25:44] local.INFO: select * from `business_settings` limit 1  
+[2025-11-06 17:41:42] local.INFO: select exists (select 1 from information_schema.tables where table_schema = schema() and table_name = 'business_settings' and table_type in ('BASE TABLE', 'SYSTEM VERSIONED')) as `exists`  
+[2025-11-06 17:41:42] local.INFO: select * from `business_settings` limit 1  
