@@ -22,6 +22,8 @@ class UpdateBusinessSettingsRequest extends FormRequest
                     'business_name' => 'required|string|max:255',
                     'business_email' => 'required|email',
                     'business_phone' => 'required|string',
+                    'bkash_number' => 'required|string',
+                    'certificate_amount' => 'required|string',
                     'website_url' => 'nullable|url',
                     'address' => 'nullable|string',
                     'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',

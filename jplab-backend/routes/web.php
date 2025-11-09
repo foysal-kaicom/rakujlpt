@@ -29,6 +29,7 @@ use App\Http\Controllers\DemoQuestionController;
 use App\Http\Controllers\MockTestModuleController;
 use App\Http\Controllers\BusinessSettingController;
 use App\Http\Controllers\CertificateClaimContoller;
+use App\Http\Controllers\FeatureController;
 
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/do-login', [LoginController::class, 'doLogin'])->name('doLogin');
@@ -44,6 +45,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('edit')->middleware('checkPermission:user.roles.edit');
         Route::post('/update/{id}', [RoleController::class, 'update'])->name('update')->middleware('checkPermission:user.roles.update');
         Route::post('{id}/toggle-status', [RoleController::class, 'toggleStatus'])->name('toggleStatus')->middleware('checkPermission:user.roles.toggleStatus');
+    });
+
+    Route::group(['prefix' => 'business-settings', 'as' => 'business-settings.', 'module' => 'Business-Settings'], function () {
+        Route::get('/edit/{id}', [BusinessSettingController::class, 'showEditPage'])->name('edit');
+        Route::post('/general', [BusinessSettingController::class, 'updateGeneralInfo'])->name('general');
+        Route::post('/legal', [BusinessSettingController::class, 'updateLegalInfo'])->name('legal');
+        Route::post('/social', [BusinessSettingController::class, 'updateSocialLinks'])->name('social');
+        Route::post('/policies', [BusinessSettingController::class, 'updatePolicies'])->name('policies');
     });
 
     Route::group(['prefix' => 'users', 'as' => 'users.', 'module' => 'users'], function () {
@@ -117,6 +126,37 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/{id}', [PartnerController::class, 'destroy'])->name('destroy');
         Route::post('/{id}/toggle-status', [PartnerController::class, 'toggleStatus'])->name('toggleStatus');
 
+    });
+
+    Route::group(['prefix' => 'faq', 'as' => 'faq.', 'module' => 'FAQ'], function () {
+        Route::get('/', [FaqController::class, 'list'])->name('list');
+        Route::get('/create', [FaqController::class, 'showCreateFaq'])->name('create');
+        Route::post('/store', [FaqController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [FaqController::class, 'showEditPage'])->name('edit');
+        Route::post('/update/{id}', [FaqController::class, 'update'])->name('update');
+        Route::post('{id}/toggle-status', [FaqController::class, 'toggleStatus'])->name('toggleStatus');
+        Route::delete('/delete/{id}', [FaqController::class, 'destroy'])->name('delete');
+    });
+
+
+    Route::group(['prefix' => 'news', 'as' => 'news.', 'module' => 'news'], function () {
+        Route::get('/', [NewsController::class, 'list'])->name('list');
+        Route::get('/create', [NewsController::class, 'create'])->name('create');
+        Route::post('/store', [NewsController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [NewsController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [NewsController::class, 'update'])->name('update');
+        Route::get('/delete/{id}', [NewsController::class, 'delete'])->name('delete');
+        Route::post('{id}/toggle-status', [NewsController::class, 'toggleStatus'])->name('toggleStatus');
+    });
+
+    Route::group(['prefix' => 'features', 'as' => 'features.', 'module' => 'features'], function () {
+        Route::get('/', [FeatureController::class, 'list'])->name('list');
+        Route::get('/create', [FeatureController::class, 'create'])->name('create');
+        Route::post('/store', [FeatureController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [FeatureController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [FeatureController::class, 'update'])->name('update');
+        Route::get('/delete/{id}', [FeatureController::class, 'delete'])->name('destroy');
+        Route::post('{id}/toggle-status', [FeatureController::class, 'toggleStatus'])->name('toggleStatus');
     });
 
     Route::resource('packages', PackageController::class);

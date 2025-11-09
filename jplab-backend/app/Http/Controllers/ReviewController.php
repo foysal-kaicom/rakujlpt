@@ -59,7 +59,7 @@ class ReviewController extends Controller
     public function update(Request $request, $id)
     {
         $review = Review::findOrFail($id);
-
+    
         $validated = $request->validate([
             'body' => 'required|string',
             'reviewer_name' => 'required|string|max:255',
@@ -67,19 +67,23 @@ class ReviewController extends Controller
             'rating' => 'required|integer|min:1|max:5',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
-
+    
         if ($request->hasFile('image')) {
-            if ($review->image && Storage::disk('public')->exists($review->image)) {
-                Storage::disk('public')->delete($review->image);
+            if ($review->image) {
+                $this->fileStorageService->deleteFileFromCloud($review->image);
             }
-            $validated['image'] = $request->file('image')->store('reviews', 'public');
+    
+            $image = $request->file('image');
+            $imageUploadResponse = $this->fileStorageService->uploadImageToCloud($image, 'reviewer');
+            $validated['image'] = $imageUploadResponse['public_path'];
         }
-
+    
         $review->update($validated);
-
+    
         Toastr::success('Review updated successfully.');
         return redirect()->route('review.list');
     }
+    
 
     public function toggleStatus($id)
     {

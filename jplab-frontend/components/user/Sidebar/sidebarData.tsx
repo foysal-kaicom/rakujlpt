@@ -71,13 +71,13 @@ const SidebarData = [
     to: "/my_subscriptions",
     icon: <MdSubscriptions />,
   },
-  {
-    label: "Support",
-    to: "/support",
-    icon: <FaHeadset />,
-  },
+  // {
+  //   label: "Support",
+  //   to: "/support",
+  //   icon: <FaHeadset />,
+  // },
    {
-    label: "settings",
+    label: "Settings",
     to: "/settings",
     icon: <FaGear />,
   },

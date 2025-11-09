@@ -21,7 +21,7 @@
             <div class="col-md-3 text-center">
                 <div class="position-relative border rounded bg-light d-flex align-items-center justify-content-center shadow-sm h-[250px]">
                     <img id="imagePreview"
-                         src="{{ $review->image ? asset('storage/'.$review->image) : asset('imagePH.png') }}"
+                         src="{{ $review->image ? asset($review->image) : asset('imagePH.png') }}"
                          alt="Reviewer Image"
                          class="w-100 h-[250px] object-fit-cover rounded" />
                     <button type="button" id="removeImage"
