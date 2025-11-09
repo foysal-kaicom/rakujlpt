@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\SupportController;
 use App\Http\Controllers\Api\MockTestController;
 use App\Http\Controllers\Api\CandidateController;
+use App\Http\Controllers\Api\CMSController;
 use App\Http\Controllers\Api\GoogleAuthController;
 use App\Http\Controllers\Api\TestimonialController;
 use App\Http\Controllers\Api\DemoQuestionController;
@@ -37,10 +38,19 @@ Route::prefix('v1')->group(function () {
         Route::get('/view/{slug}', [ExamController::class, 'view']);
     });
 
-    Route::group(['prefix' => 'center', 'as' => 'center.'], function () {
-        Route::get('/list', [CenterController::class, 'list']);
-        Route::get('/view/{center_id}', [CenterController::class, 'view']);
-    });
+    Route::get('/faq/list', [CMSController::class, 'getFaqList']);
+
+    Route::get('/news/list', [CMSController::class, 'getNewsList']);
+    Route::get('/news/{slug}', [CMSController::class, 'viewSingleNews']);
+
+    Route::get('/review/list', [CMSController::class, 'getReviewList']);
+    Route::get('/partner/list', [CMSController::class, 'getPartnerList']);
+
+
+    // Route::group(['prefix' => 'center', 'as' => 'center.'], function () {
+    //     Route::get('/list', [CenterController::class, 'list']);
+    //     Route::get('/view/{center_id}', [CenterController::class, 'view']);
+    // });
 
 
     Route::group(['middleware' => 'auth:candidate'], function () {
@@ -56,9 +66,9 @@ Route::prefix('v1')->group(function () {
             Route::post('/post-verify-phone', [CandidateController::class, 'postVerifyPhoneNumber']);
         });
 
-        Route::group(['prefix' => 'exam', 'as' => 'exam.'], function () {
-            Route::post('/booking/store/{slug}', [BookingController::class, 'book']);
-        });
+        // Route::group(['prefix' => 'exam', 'as' => 'exam.'], function () {
+        //     Route::post('/booking/store/{slug}', [BookingController::class, 'book']);
+        // });
 
 
         Route::group(['prefix' => 'notifications', 'as' => 'notifications.'], function () {

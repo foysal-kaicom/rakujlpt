@@ -4,12 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PartnerRequest;
 use App\Models\Partner;
+use App\Services\FileStorageService;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class PartnerController extends Controller
 {
+    public $fileStorageService;
+
+    public function __construct(FileStorageService $fileStorageService)
+    {
+        $this->fileStorageService = $fileStorageService;
+    }
+
     public function list()
     {
         $partners = Partner::paginate(10);
@@ -21,12 +29,15 @@ class PartnerController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('logo')) {
-            $data['logo'] = $request->file('logo')->store('partners', 'public');
+            $image = $request->file('logo');
+            $upload = $this->fileStorageService->uploadImageToCloud($image, 'partner');
+            $data['logo'] = $upload['public_path'];
         }
 
         Partner::create($data);
 
-        return redirect()->route('partner.list')->with('success', 'Partner created.');
+        Toastr::success('Partner stored successfully.');
+        return redirect()->route('partner.list');
     }
 
     public function edit($id)
@@ -41,15 +52,19 @@ class PartnerController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('logo')) {
-            if ($partner->logo && Storage::disk('public')->exists($partner->logo)) {
-                Storage::disk('public')->delete($partner->logo);
+            if (!empty($partner->logo)) {
+                $this->fileStorageService->deleteFileFromCloud($partner->logo);
             }
-            $data['logo'] = $request->file('logo')->store('partners', 'public');
+
+            $image = $request->file('logo');
+            $upload = $this->fileStorageService->uploadImageToCloud($image, 'partner');
+            $data['logo'] = $upload['public_path'];
         }
 
         $partner->update($data);
 
-        return redirect()->route('partner.list')->with('success', 'Partner updated.');
+        Toastr::success('Partner updated successfully.');
+        return redirect()->route('partner.list');
     }
 
     public function destroy($id)
@@ -62,6 +77,7 @@ class PartnerController extends Controller
 
         $partner->delete();
 
+        Toastr::success('Partner deleted successfully.');
         return back()->with('success', 'Partner deleted.');
     }
 

@@ -68,7 +68,7 @@
 
                     <td class="d-none d-md-table-cell">
                         @if($review->image)
-                            <img class="avatar" src="{{ asset('storage/'.$review->image) }}" alt="review image">
+                            <img class="avatar" src="{{ asset($review->image) }}" alt="review image">
                         @else
                             <img class="avatar" src="{{ asset('imagePH.png') }}" alt="placeholder">
                         @endif
