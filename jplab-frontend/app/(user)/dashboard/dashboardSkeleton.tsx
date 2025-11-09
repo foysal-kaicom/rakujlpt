@@ -46,7 +46,7 @@ export default function DashboardSkeleton() {
   );
 
   return (
-    <div className="space-y-5 bg-white p-5 rounded-md absolute w-full inset-0 pt-20 left-0 top-0">
+    <div className="space-y-5 bg-white p-5 rounded-md absolute w-full inset-0 pt-20 left-0 top-0 z-20">
       {/* Header */}
       <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
         <div className="h-6 w-1/3 bg-gray-100 rounded animate-pulse"></div>

@@ -150,7 +150,7 @@ export default function Dashboard() {
                     cardBg: "bg-purple-200",
                   },
                 ].map((item, index) => (
-                  <div
+                  <div key={index}
                     className={`sm:bg-purple-200 flex flex-col gap-2 items-center p-2 rounded-md sm:shadow-md hover:shadow-xl transition duration-300 border border-transparent hover:border-gray-200 max-w-[300px]`}
                   >
                     <div className={`${item.iconBg} p-1 rounded-md text-white`}>
@@ -201,6 +201,7 @@ export default function Dashboard() {
                   },
                 ].map((item, index) => (
                   <div
+                  key={index}
                     className={`sm:bg-purple-200 flex flex-col gap-2 items-center p-2 rounded-md sm:shadow-md hover:shadow-xl transition duration-300 border border-transparent hover:border-gray-200 max-w-[300px]`}
                   >
                     <div className={`${item.iconBg} p-1 rounded-md text-white`}>
@@ -253,6 +254,7 @@ export default function Dashboard() {
                 },
               ].map((item, index) => (
                 <div
+                key={index}
                   className={`${item.cardBg} flex gap-2 items-center p-2 rounded-md shadow-md hover:shadow-xl transition duration-300 border border-transparent hover:border-gray-200`}
                 >
                   <div className={`${item.iconBg} p-3 rounded-full text-white`}>
