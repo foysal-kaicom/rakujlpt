@@ -82,8 +82,6 @@ export default function LoginPage() {
           first_name: data.first_name,
           last_name: data.last_name || "",
           email: data.email,
-          is_phone_verified: data.is_phone_verified,
-          is_email_verified: data.is_email_verified,
           phone_number: data.phone_number,
           photo: data.photo,
         };
