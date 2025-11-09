@@ -27,6 +27,7 @@ export default function ProfileNew() {
   const [editModal, setEditModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const updateUser = useAuthStore((state) => state.updateUser);
+  const user = useAuthStore().user
 
   const [profile, setProfile] = useState<{
     id: number | null;
@@ -141,12 +142,14 @@ export default function ProfileNew() {
     const payload = new FormData();
     payload.append("first_name", profile.first_name || "");
     payload.append("last_name", profile.last_name || "");
-    if (!profile.email) {
+    if (!user?.email) {
       payload.append("email", profile.email);
     }
-    if (!profile.phone_number) {
+    if (!user?.phone_number) {
       payload.append("phone_number", profile.phone_number || "");
     }
+    //  payload.append("email", profile.email);
+    //  payload.append("phone_number", profile.phone_number || "");
     payload.append("about", profile.about || "");
     payload.append("gender", profile.gender || "");
     payload.append("address", profile.address || "");
@@ -156,9 +159,7 @@ export default function ProfileNew() {
     if (profile.photo instanceof File) {
       payload.append("photo", profile.photo);
     }
-    // if (profile.cover_photo instanceof File) {
-    //   payload.append("cover_photo", profile.cover_photo);
-    // }
+   
     payload.append("_method", "put");
     try {
       const response = await axiosInstance.post("/candidate/update", payload, {
@@ -206,7 +207,7 @@ export default function ProfileNew() {
 
             {/* Profile Info */}
             <div className="px-5 pb-5">
-              <div className="flex justify-between -mt-15">
+              <div className="flex justify-between -mt-15 relative">
                 {profile?.photo ? (
                   <Image
                     src={
