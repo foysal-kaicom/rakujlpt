@@ -54,6 +54,14 @@
                 <i class="fas fa-question-circle text-indigo-500 text-base"></i>
                 <p class="m-0 text-sm">Partners</p>
             </a>
+            <a href="{{ route('faq.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
+                <i class="fas fa-info-circle text-indigo-500 text-base"></i>
+                <p class="m-0 text-sm">FAQ</p>
+            </a>
+            <a href="{{ route('news.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
+                <i class="fas fa-info-circle text-indigo-500 text-base"></i>
+                <p class="m-0 text-sm">News</p>
+            </a>
         </div>
     </div>
 

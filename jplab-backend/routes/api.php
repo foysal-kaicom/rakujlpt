@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\SupportController;
 use App\Http\Controllers\Api\MockTestController;
 use App\Http\Controllers\Api\CandidateController;
+use App\Http\Controllers\Api\CMSController;
 use App\Http\Controllers\Api\TestimonialController;
 use App\Http\Controllers\Api\DemoQuestionController;
 use App\Http\Controllers\Api\GoogleAuthController;
@@ -35,6 +36,15 @@ Route::prefix('v1')->group(function () {
         Route::get('/list', [ExamController::class, 'list']);
         Route::get('/view/{slug}', [ExamController::class, 'view']);
     });
+
+    Route::get('/faq/list', [CMSController::class, 'getFaqList']);
+
+    Route::get('/news/list', [CMSController::class, 'getNewsList']);
+    Route::get('/news/{slug}', [CMSController::class, 'viewSingleNews']);
+
+    Route::get('/review/list', [CMSController::class, 'getReviewList']);
+    Route::get('/partner/list', [CMSController::class, 'getPartnerList']);
+
 
     Route::group(['prefix' => 'center', 'as' => 'center.'], function () {
         Route::get('/list', [CenterController::class, 'list']);

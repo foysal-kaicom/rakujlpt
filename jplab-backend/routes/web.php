@@ -116,6 +116,27 @@ Route::group(['middleware' => 'auth'], function () {
 
     });
 
+    Route::group(['prefix' => 'faq', 'as' => 'faq.', 'module' => 'FAQ'], function () {
+        Route::get('/', [FaqController::class, 'list'])->name('list');
+        Route::get('/create', [FaqController::class, 'showCreateFaq'])->name('create');
+        Route::post('/store', [FaqController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [FaqController::class, 'showEditPage'])->name('edit');
+        Route::post('/update/{id}', [FaqController::class, 'update'])->name('update');
+        Route::post('{id}/toggle-status', [FaqController::class, 'toggleStatus'])->name('toggleStatus');
+        Route::delete('/delete/{id}', [FaqController::class, 'destroy'])->name('delete');
+    });
+
+
+    Route::group(['prefix' => 'news', 'as' => 'news.', 'module' => 'News'], function () {
+        Route::get('/', [NewsController::class, 'list'])->name('list')->middleware('checkPermission:news.list');
+        Route::get('/create', [NewsController::class, 'create'])->name('create')->middleware('checkPermission:news.create');
+        Route::post('/store', [NewsController::class, 'store'])->name('store')->middleware('checkPermission:news.store');
+        Route::get('/edit/{id}', [NewsController::class, 'edit'])->name('edit')->middleware('checkPermission:news.edit');
+        Route::put('/update/{id}', [NewsController::class, 'update'])->name('update')->middleware('checkPermission:news.update');
+        Route::get('/delete/{id}', [NewsController::class, 'delete'])->name('delete')->middleware('checkPermission:news.delete');
+        Route::post('{id}/toggle-status', [NewsController::class, 'toggleStatus'])->name('toggleStatus')->middleware('checkPermission:news.toggleStatus');
+    });
+
     Route::resource('packages', PackageController::class);
     Route::resource('mock-test-modules', MockTestModuleController::class);
     Route::post('mock-test-modules/{id}/toggle-status', [MockTestModuleController::class, 'toggleStatus'])
