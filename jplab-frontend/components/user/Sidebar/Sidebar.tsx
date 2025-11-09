@@ -20,12 +20,9 @@ export default function Sidebar() {
   const MainSidebar = () => {
     return (
       <div className="min-h-[75vh] bg-white w-[300px] sticky top-0 shadow-lg hidden xl:block">
-        {/* <h1 className="text-2xl font-semibold p-5 bg-blue-900 text-blue-50">
-          Candidate Dashboard
-        </h1> */}
         <Link href="/profile">
           <div className="p-5 flex flex-col items-center relative pt-8">
-            <div className="h-22 w-full bg-purple-300 absolute left-0 top-0"></div>
+            <div className="h-22 w-full bg-purple-400 absolute left-0 top-0"></div>
             {user?.photo ? (
               <Image
                 src={user?.photo || ""}
@@ -38,7 +35,7 @@ export default function Sidebar() {
               <FaUser className="rounded-full size-24 aspect-auto object-cover text-purple-400 relative z-10 ring-5 ring-white bg-white" />
             )}
 
-            <p className="text-2xl font-semibold px-5">
+            <p className="text-2xl font-semibold px-5 mt-2">
               {user?.first_name} {""} {user?.last_name}
             </p>
             <p className="font-medium text-gray-600 px-5">{user?.email}</p>
@@ -50,18 +47,18 @@ export default function Sidebar() {
             <Link
               key={index}
               href={data.to}
-              className={`p-1.5 rounded group hover:text-blue-500 hover:bg-slate-100 ${
+              className={`p-1.5 rounded group hover:text-purple-700 hover:bg-pink-50 ${
                 path.startsWith(data.to)
-                  ? "text-blue-500 bg-slate-100"
-                  : "text-gray-500"
+                  ? "text-purple-700 bg-pink-50"
+                  : "text-gray-600"
               }`}
             >
               <div className="flex gap-3 items-center">
                 <p
-                  className={`p-2 rounded border group-hover:bg-white group-hover:text-blue-500 group-hover:border-blue-200 ${
+                  className={`p-1.5 rounded border group-hover:bg-white group-hover:text-purple-600 group-hover:border-purple-400 text-xl ${
                     path.startsWith(data.to)
-                      ? " bg-white text-blue-500 border-blue-200"
-                      : "bg-slate-100 text-blue-400 drop-shadow border-slate-100 "
+                      ? " bg-white text-purple-600 border-purple-400"
+                      : "bg-white text-purple-600 border-purple-400 "
                   }`}
                 >
                   {data.icon}
@@ -72,11 +69,11 @@ export default function Sidebar() {
           ))}
           <button
             onClick={handleLogout}
-            className={`p-1.5 rounded text-gray-500 hover:bg-slate-100 hover:text-red-400 group`}
+            className={`p-1.5 rounded text-gray-600 hover:bg-pink-50 hover:text-red-500 group cursor-pointer`}
           >
             <div className="flex gap-3 items-center">
               <p
-                className={`p-2 rounded bg-slate-100 group-hover:bg-white text-red-400 drop-shadow border border-slate-100 group-hover:border-blue-200`}
+                className={`p-2 rounded bg-white group-hover:bg-white text-red-400 border border-pink-400 group-hover:border-pink-500`}
               >
                 <FaSignOutAlt />
               </p>
@@ -89,7 +86,6 @@ export default function Sidebar() {
   };
 
   const SmSidebar = () => {
-    const pathname = usePathname();
 
     return (
       <div className="fixed bottom-0 inset-x-0 z-30 bg-white shadow-t border-t border-gray-200 flex justify-evenly gap-3 items-center py-4 rounded-t-2xl xl:hidden">
