@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Throwable;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -137,30 +138,39 @@ class CandidateController extends Controller
 
     public function update(Request $request)
     {
+        $candidate = Candidate::findOrFail(auth('candidate')->user()->id);
 
         $validator = Validator::make($request->all(), [
-            'prefix'            => 'nullable|string|max:10',
-            'first_name'        => 'required|string|max:100',
-            'last_name'         => 'required|string|max:100',
-            'email'             => 'nullable|email|unique:candidates|required_without:phone_number|max:150',
-            'phone_number'      => 'nullable|string|unique:candidates|required_without:email|max:20',
-            'date_of_birth'     => 'nullable|date',
-            'nationality'       => 'nullable|string|max:100',
-            'national_id'       => 'nullable|string|max:50|',
-            'gender'            => 'nullable|in:male,female,other',
-            'photo'             => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'address'           => 'nullable|string|max:255',
-            'status'            => 'nullable|in:active,inactive,banned',
-            'otp'               => 'nullable|string|max:10',
-            'otp_expired_at'    => 'nullable|date',
-            'is_phone_verified' => 'boolean',
+            'first_name'    => 'required|string|max:100',
+            'last_name'     => 'required|string|max:100',
+            'email'         => [
+                'nullable',
+                'email',
+                'max:150',
+                Rule::unique('candidates')->ignore($candidate->id),
+                function ($attribute, $value, $fail) use ($candidate) {
+                    if ($candidate->email) {
+                        $fail('Email cannot be updated.');
+                    }
+                },
+            ],
+            'phone_number'  => [
+                'nullable',
+                'string',
+                'max:20',
+                Rule::unique('candidates')->ignore($candidate->id),
+                function ($attribute, $value, $fail) use ($candidate) {
+                    if ($candidate->phone_number) {
+                        $fail('Phone number cannot be updated.');
+                    }
+                },
+            ],
+            'date_of_birth' => 'nullable|date',
+            'gender'        => 'nullable|in:male,female',
+            'photo'         => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'address'       => 'nullable|string|max:255',
         ]);
 
-        if ($validator->fails()) {
-
-            toastr()->error($validator->getMessageBag());
-            return redirect()->back();
-        }
 
         $candidate = Candidate::findOrFail(auth('candidate')->user()->id);
 
@@ -178,6 +188,7 @@ class CandidateController extends Controller
             } else {
                 // Upload new image
                 $image = $request->file('photo');
+               
                 $imageUploadResponse = $this->fileStorageService->uploadImageToCloud($image, 'candidate');
                 $data['photo'] = $imageUploadResponse['public_path'];
             }

@@ -94,7 +94,7 @@ class FileStorageService
 
             return [
                 'storage_path' => $storagePath,
-                'public_path'  => "https://media.kaicombd.com/" . $storagePath,
+                'public_path'  => Storage::disk($this->disk)->url($storagePath),
                 'mime'         => $mime,
             ];
         } catch (\Throwable $e) {
