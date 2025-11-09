@@ -11,10 +11,11 @@ use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\SupportController;
 use App\Http\Controllers\Api\MockTestController;
 use App\Http\Controllers\Api\CandidateController;
+use App\Http\Controllers\Api\GoogleAuthController;
 use App\Http\Controllers\Api\TestimonialController;
 use App\Http\Controllers\Api\DemoQuestionController;
-use App\Http\Controllers\Api\GoogleAuthController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\CandidateProgressController;
 use App\Http\Controllers\Api\SslCommerzPaymentController;
 
 Route::prefix('v1')->group(function () {
@@ -73,7 +74,8 @@ Route::prefix('v1')->group(function () {
             Route::get('/results', [MockTestController::class, 'getTestResult']);
         });
 
-       
+        Route::get('/stages/{stageId}/start', [CandidateProgressController::class, 'showStage']);
+        Route::post('/stages/{stageId}/complete', [CandidateProgressController::class, 'completeStage']);
     });
 
     Route::post('/success', [SslCommerzPaymentController::class, 'success'])->name('ssl.success');
