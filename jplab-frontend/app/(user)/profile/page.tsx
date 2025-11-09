@@ -141,14 +141,12 @@ export default function ProfileNew() {
     const payload = new FormData();
     payload.append("first_name", profile.first_name || "");
     payload.append("last_name", profile.last_name || "");
-    payload.append("email", profile.email);
-    payload.append("phone_number", profile.phone_number || "");
-    // if (!profile.email) {
-    //   payload.append("email", profile.email);
-    // }
-    // if (!profile.phone_number) {
-    //   payload.append("phone_number", profile.phone_number || "");
-    // }
+    if (!profile.email) {
+      payload.append("email", profile.email);
+    }
+    if (!profile.phone_number) {
+      payload.append("phone_number", profile.phone_number || "");
+    }
     payload.append("about", profile.about || "");
     payload.append("gender", profile.gender || "");
     payload.append("address", profile.address || "");
@@ -222,13 +220,7 @@ export default function ProfileNew() {
                     className="size-30 rounded-full object-cover aspect-auto ring-6 ring-white shadow-md"
                   />
                 ) : (
-                  <Image
-                    src="/assets/japan/j.jpg"
-                    height={500}
-                    width={500}
-                    alt="profile image"
-                    className="size-30 rounded-full object-cover aspect-auto ring-6 ring-white shadow-md"
-                  />
+                  <FaUser className="size-30 rounded-full object-cover aspect-auto ring-6 text-purple-500 bg-pink-50 ring-white shadow-md" />
                 )}
 
                 <div className="flex justify-center items-end gap-4 text-2xl text-purple-600">
@@ -418,65 +410,6 @@ export default function ProfileNew() {
 
             {/* Form */}
             <div className="space-y-4 h-[70vh] overflow-y-auto scrollbar-thin">
-              {/* Profile Image */}
-              <div className="flex flex-col">
-                <label className="text-sm font-medium text-gray-600 mb-1">
-                  Profile Image
-                </label>
-                <input
-                  type="file"
-                  name="photo"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-
-                    if (file) {
-                      const validTypes = [
-                        "image/jpeg",
-                        "image/png",
-                        "image/jpg",
-                      ];
-                      const maxSize = 2 * 1024 * 1024; // 2MB
-
-                      // Check file type
-                      if (!validTypes.includes(file.type)) {
-                        toast.error(
-                          "Invalid file type. Please select a JPG, JPEG, or PNG image."
-                        );
-                        e.target.value = "";
-                        return;
-                      }
-
-                      // Check file size
-                      if (file.size > maxSize) {
-                        toast.error(
-                          "File size exceeds 2MB. Please choose a smaller image."
-                        );
-                        e.target.value = "";
-                        return;
-                      }
-
-                      // If valid → save to state
-                      setProfile((prev) => ({ ...prev, photo: file }));
-                    }
-                  }}
-                  className="w-full border border-gray-200 rounded-xl p-2 text-sm focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none transition"
-                />
-              </div>
-
-              {/* Cover Image */}
-              {/* <div className="flex flex-col">
-                  <label className="text-sm font-medium text-gray-600 mb-1">
-                    Cover Image
-                  </label>
-                  <input
-                    type="file"
-                    name="cover_photo"
-                    accept="image/*"
-                    className="w-full border border-gray-200 rounded-xl p-2 text-sm focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none transition"
-                  />
-                </div> */}
-
               {/* first name */}
               <div className="flex flex-col">
                 <label className="text-sm font-medium text-gray-600 mb-1">
@@ -531,8 +464,8 @@ export default function ProfileNew() {
                   onChange={handleEditChange}
                   className="w-full border border-gray-200 rounded-xl p-2 text-sm focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none transition"
                 >
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
                 </select>
               </div>
 
@@ -617,6 +550,80 @@ export default function ProfileNew() {
                   className="w-full border border-gray-200 rounded-xl p-2 text-sm focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none transition"
                 />
               </div>
+              {/* Profile Image */}
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-600 mb-1">
+                  Profile Image
+                </label>
+                <input
+                  type="file"
+                  name="photo"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+
+                    if (file) {
+                      const validTypes = [
+                        "image/jpeg",
+                        "image/png",
+                        "image/jpg",
+                      ];
+                      const maxSize = 2 * 1024 * 1024; // 2MB
+
+                      // Check file type
+                      if (!validTypes.includes(file.type)) {
+                        toast.error(
+                          "Invalid file type. Please select a JPG, JPEG, or PNG image."
+                        );
+                        e.target.value = "";
+                        return;
+                      }
+
+                      // Check file size
+                      if (file.size > maxSize) {
+                        toast.error(
+                          "File size exceeds 2MB. Please choose a smaller image."
+                        );
+                        e.target.value = "";
+                        return;
+                      }
+
+                      // If valid → save to state
+                      setProfile((prev) => ({ ...prev, photo: file }));
+                    }
+                  }}
+                  className="w-full border border-gray-200 rounded-xl p-2 text-sm focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none transition"
+                />
+              </div>
+
+              {profile?.photo && (
+                <div className="bg-pink-50 p-4 rounded-md">
+                  <Image
+                    src={
+                      typeof profile.photo === "string"
+                        ? profile.photo
+                        : URL.createObjectURL(profile.photo)
+                    }
+                    height={100}
+                    width={100}
+                    alt=""
+                    className="w-[70%] mx-auto"
+                  />
+                </div>
+              )}
+
+              {/* Cover Image */}
+              {/* <div className="flex flex-col">
+                  <label className="text-sm font-medium text-gray-600 mb-1">
+                    Cover Image
+                  </label>
+                  <input
+                    type="file"
+                    name="cover_photo"
+                    accept="image/*"
+                    className="w-full border border-gray-200 rounded-xl p-2 text-sm focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none transition"
+                  />
+                </div> */}
             </div>
 
             {/* Save Button */}
