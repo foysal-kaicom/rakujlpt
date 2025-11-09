@@ -169,6 +169,7 @@ class FileStorageService
     {
 
         $file_name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+       
 
         if (empty($file_name)) {
 
@@ -176,6 +177,7 @@ class FileStorageService
         }
 
         $generated_path = $this->generatePath($type, $file_name);
+ 
 
 
         if (empty($generated_path)) {

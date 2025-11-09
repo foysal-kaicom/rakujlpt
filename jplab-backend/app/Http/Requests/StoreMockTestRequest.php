@@ -47,7 +47,7 @@ class StoreMockTestRequest extends FormRequest
  
  
             'questions'                     => 'required|array|min:1',
-            'questions.*.proficiency_level' => 'required|in:n4,n5',
+            'questions.*.proficiency_level' => 'required|in:N4,N5',
             'questions.*.question_type'     => 'required|in:text,image,audio',
             'questions.*.question'          => [
                 'required',
@@ -68,8 +68,9 @@ class StoreMockTestRequest extends FormRequest
                 }
             ],
             'questions.*.options'   => 'required|array|size:4',
-            'questions.*.options.*' => 'required|string|max:255',
+            'questions.*.options.*' => 'required|string',
             'questions.*.answer'    => 'required|integer|between:1,4',
+            'set_no' => 'required|integer'
         ];
     }
  

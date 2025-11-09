@@ -68,7 +68,7 @@ return [
             'key' => env('R2_ACCESS_KEY_ID',"29a0f4eaaba76cd5851a8ff09b8741e1"),
             'secret' => env('R2_SECRET_ACCESS_KEY',"815b485a5926851009e3657461fc06ece74c45a8f6f24e7eb1ee95cb3cbd8b7c"),
             'region' => env('R2_REGION', 'auto'),
-            'bucket' => env('R2_BUCKET',"jptbd-bucket"),
+            'bucket' => env('R2_BUCKET',"raku"),
             'endpoint' => env('R2_ENDPOINT',"https://a05c9807a71d5df599e7a3a4742d1e24.r2.cloudflarestorage.com"),
             'use_path_style_endpoint' => true,
             'url' => 'https://media.kaicombd.com',
