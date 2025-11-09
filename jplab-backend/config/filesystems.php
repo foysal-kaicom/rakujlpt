@@ -71,7 +71,7 @@ return [
             'bucket' => env('R2_BUCKET',"raku"),
             'endpoint' => env('R2_ENDPOINT',"https://a05c9807a71d5df599e7a3a4742d1e24.r2.cloudflarestorage.com"),
             'use_path_style_endpoint' => true,
-            'url' => 'https://media.kaicombd.com',
+            'url' => 'https://pub-dd15f62cb7a3448fb10fc928a3738a9d.r2.dev',
         ],
 
         // 'r2' => [
