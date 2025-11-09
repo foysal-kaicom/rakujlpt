@@ -66,10 +66,10 @@ export default function Notification({ token }: any) {
   };
 
   return (
-    <div className=" flex justify-end relative group">
+    <div className="flex justify-end relative group size-8">
       <div
         onClick={toggleNotification}
-        className="p-1 rounded-full bg-white border border-purple-400 font-semibold relative cursor-pointer"
+        className="p-1 rounded-full bg-white border-2 border-blue-800 font-semibold relative cursor-pointer"
       >
         <GoBellFill className="size-5 text-purple-600" />
         {notifications?.unread_count > 0 && (

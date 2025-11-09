@@ -47,17 +47,6 @@ class AppServiceProvider extends ServiceProvider
             });
         }
 
-        $settings=[];
-        
-        if(Schema::hasTable('business_settings'))
-        {
-            $settings = BusinessSetting::first();
-        }
-       
-
-        // Share with all views
-        View::share('settings', $settings);
-
         Blade::directive('hasPermission', function ($permission) {
             return "<?php if (checkAdminPermission($permission)) : ?>";
         });

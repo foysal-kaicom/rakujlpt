@@ -7,45 +7,46 @@ import {
 import { PiExamFill } from "react-icons/pi";
 import { MdSubscriptions } from "react-icons/md";
 import { FaGear } from "react-icons/fa6";
+import { GiStairsGoal } from "react-icons/gi";
 
 
 
 const SidebarData = [
-  {
-    label: "Dashboard",
-    to: "/dashboard",
-    icon: <FaTachometerAlt />,
-  },
-  {
-    label: "My Profile",
-    to: "/profile",
-    icon: <FaUser />,
-  },
-  {
-    label: "Mock Test",
-    to: "/mock_test_result",
-    icon: <PiExamFill />,
-  },
-  {
-    label: "My Subscriptions",
-    to: "/my_subscriptions",
-    icon: <MdSubscriptions />,
-  },
-  {
-    label: "Support",
-    to: "/support",
-    icon: <FaHeadset />,
-  },
-  {
-    label: "Update Password",
-    to: "/update_password",
-    icon: <FaKey />,
-  },
-  {
-    label: "settings",
-    to: "/settings",
-    icon: <FaGear />,
-  },
+  // {
+  //   label: "Dashboard",
+  //   to: "/dashboard",
+  //   icon: <FaTachometerAlt />,
+  // },
+  // {
+  //   label: "My Profile",
+  //   to: "/profile",
+  //   icon: <FaUser />,
+  // },
+  // {
+  //   label: "Mock Test",
+  //   to: "/mock_test_result",
+  //   icon: <PiExamFill />,
+  // },
+  // {
+  //   label: "My Subscriptions",
+  //   to: "/my_subscriptions",
+  //   icon: <MdSubscriptions />,
+  // },
+  // {
+  //   label: "Support",
+  //   to: "/support",
+  //   icon: <FaHeadset />,
+  // },
+  // {
+  //   label: "Update Password",
+  //   to: "/update_password",
+  //   icon: <FaKey />,
+  // },
+  // {
+  //   label: "settings",
+  //   to: "/settings",
+  //   icon: <FaGear />,
+  // },
 
 
 
@@ -56,8 +57,8 @@ const SidebarData = [
   },
   {
     label: "Roadmap",
-    to: "/dashboard",
-    icon: <FaTachometerAlt />,
+    to: "/test",
+    icon: <GiStairsGoal />,
   },
   
   {
@@ -75,16 +76,22 @@ const SidebarData = [
     to: "/support",
     icon: <FaHeadset />,
   },
-  {
-    label: "Profile",
-    to: "/profile",
-    icon: <FaUser />,
+   {
+    label: "settings",
+    to: "/settings",
+    icon: <FaGear />,
   },
-  {
-    label: "Update Password",
-    to: "/update_password",
-    icon: <FaKey />,
-  },
+
+  // {
+  //   label: "Profile",
+  //   to: "/profile",
+  //   icon: <FaUser />,
+  // },
+  // {
+  //   label: "Update Password",
+  //   to: "/update_password",
+  //   icon: <FaKey />,
+  // },
 ];
 
 export { SidebarData };

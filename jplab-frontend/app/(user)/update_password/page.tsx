@@ -12,6 +12,7 @@ import SuspenseLoader from "@/components/SuspenseLoader";
 export default function UpdatePassword() {
   const breadCrumbData = [
     { name: "Dashboard", to: "/dashboard" },
+     { name: "Settings", to: "/settings" },
     { name: "Update Password", to: "/update_password" },
   ];
 

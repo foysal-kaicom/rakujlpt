@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CandidateRequest;
+use App\Http\Resources\CandidateResource;
 use App\Jobs\SendRegistrationEmail;
 use App\Jobs\SendRegistrationEmailJob;
 use App\Models\Booking;
@@ -117,12 +118,11 @@ class CandidateController extends Controller
     {
         $candidate = Candidate::find(auth('candidate')->user()->id);
 
-        return $this->responseWithSuccess($candidate, 'Candidate Profile.');
+        return $this->responseWithSuccess(CandidateResource::make($candidate), 'Candidate Profile.');
     }
 
     public function dashboard()
     {
-
 
         $data = [
             'total_bookings' => 0,
@@ -135,12 +135,37 @@ class CandidateController extends Controller
     }
 
 
-    public function update(CandidateRequest $request)
+    public function update(Request $request)
     {
+
+        $validator = Validator::make($request->all(), [
+            'prefix'            => 'nullable|string|max:10',
+            'first_name'        => 'required|string|max:100',
+            'last_name'         => 'required|string|max:100',
+            'email'             => 'nullable|email|unique:candidates|required_without:phone_number|max:150',
+            'phone_number'      => 'nullable|string|unique:candidates|required_without:email|max:20',
+            'date_of_birth'     => 'nullable|date',
+            'nationality'       => 'nullable|string|max:100',
+            'national_id'       => 'nullable|string|max:50|',
+            'gender'            => 'nullable|in:male,female,other',
+            'photo'             => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'address'           => 'nullable|string|max:255',
+            'status'            => 'nullable|in:active,inactive,banned',
+            'otp'               => 'nullable|string|max:10',
+            'otp_expired_at'    => 'nullable|date',
+            'is_phone_verified' => 'boolean',
+        ]);
+
+        if ($validator->fails()) {
+
+            toastr()->error($validator->getMessageBag());
+            return redirect()->back();
+        }
+
         $candidate = Candidate::findOrFail(auth('candidate')->user()->id);
 
         // Get validated data from CandidateRequest
-        $data = $request->validated();
+        $data = $validator->validated();
 
         // Handle photo upload/update
         if ($request->hasFile('photo')) {

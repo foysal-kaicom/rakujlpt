@@ -141,10 +141,10 @@ export default function MockExamResult() {
     <>
       <Suspense fallback={<SuspenseLoader />}>
         {loading && <Loader />}
-        <div className="min-h-[60vh] bg-gray-50/50 py-6">
+        <div className="min-h-[60vh] py-6">
           <BreadCrumb breadCrumbData={breadCrumbData} />
 
-          <div className="mt-5 lg:px-10 lg:pb-10">
+          <div className="mt-5 lg:pb-10">
             <UserHeadline mainText="Mock Exam Result" preText="" subText="" />
 
             {/* <div className="mt-6 flex flex-col lg:flex-row justify-center items-start gap-10">

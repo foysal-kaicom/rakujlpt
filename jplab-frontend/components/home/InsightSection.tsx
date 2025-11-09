@@ -53,7 +53,7 @@ export default function InsightSection() {
               Mock Test Pro
             </p>
 
-            <h2 className="text-6xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
               Premium{" "}
               <span className="bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 JPT & JLPT

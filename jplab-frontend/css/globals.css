@@ -47,6 +47,15 @@ body {
   display: none; /* Chrome, Safari */
 }
 
+.scrollbar-thin {
+  scrollbar-width: 3px; /* Firefox */
+  -ms-overflow-style: 3px; /* IE and Edge */
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  display: 3px; /* Chrome, Safari */
+}
+
 /* button{
   cursor: pointer;
 } */
