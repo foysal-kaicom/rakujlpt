@@ -241,6 +241,54 @@
         </div>
     </div>
 
+    <!-- Roadmaps -->
+    <div class="cursor-pointer" data-toggle="roadmap">
+        <div class="flex justify-between items-center py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
+            <div class="flex items-center gap-2 font-medium">
+                <i class="fas fa-route text-indigo-500 text-base"></i>
+                <p class="text-sm">Roadmaps</p>
+            </div>
+            <i class="fas fa-chevron-down text-gray-500 text-sm drop-arrow transition-transform duration-300 -rotate-90"></i>
+        </div>
+
+        <div class="mt-1 ml-3 pl-3 border-l border-gray-200 space-y-2 text-gray-600 hidden" data-target="roadmap">
+            <a href="{{ route('roadmaps.index') }}"
+            class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
+                <i class="fas fa-list text-indigo-500 text-base"></i>
+                <p class="m-0 text-sm">All Roadmaps</p>
+            </a>
+            <a href="{{ route('roadmaps.create') }}"
+            class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
+                <i class="fas fa-plus-circle text-indigo-500 text-base"></i>
+                <p class="m-0 text-sm">Create New</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- Stages -->
+    <div class="cursor-pointer" data-toggle="stage">
+        <div class="flex justify-between items-center py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
+            <div class="flex items-center gap-2 font-medium">
+                <i class="fas fa-route text-indigo-500 text-base"></i>
+                <p class="text-sm">Stage</p>
+            </div>
+            <i class="fas fa-chevron-down text-gray-500 text-sm drop-arrow transition-transform duration-300 -rotate-90"></i>
+        </div>
+
+        <div class="mt-1 ml-3 pl-3 border-l border-gray-200 space-y-2 text-gray-600 hidden" data-target="stage">
+            <a href="{{ route('stages.index') }}"
+            class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
+                <i class="fas fa-list text-indigo-500 text-base"></i>
+                <p class="m-0 text-sm">All Stages</p>
+            </a>
+            <a href="{{ route('stages.create') }}"
+            class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
+                <i class="fas fa-plus-circle text-indigo-500 text-base"></i>
+                <p class="m-0 text-sm">Create New</p>
+            </a>
+        </div>
+    </div>
+
     <div class="cursor-pointer">
 
         <a href="{{ route('logout') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-red-50 hover:text-red-700 transition-colors duration-200 w-full text-left">
