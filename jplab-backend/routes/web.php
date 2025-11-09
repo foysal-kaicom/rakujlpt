@@ -8,13 +8,18 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\StageController;
 use App\Http\Controllers\CenterController;
 use App\Http\Controllers\ImportController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\RoadmapController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\MockTestController;
+use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PromotionController;
@@ -24,8 +29,6 @@ use App\Http\Controllers\DemoQuestionController;
 use App\Http\Controllers\MockTestModuleController;
 use App\Http\Controllers\BusinessSettingController;
 use App\Http\Controllers\CertificateClaimContoller;
-use App\Http\Controllers\PartnerController;
-use App\Http\Controllers\ReviewController;
 
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/do-login', [LoginController::class, 'doLogin'])->name('doLogin');
@@ -124,5 +127,13 @@ Route::group(['middleware' => 'auth'], function () {
     // Extra routes
     Route::post('packages/{package}/buy', [PackageController::class, 'buy'])->name('packages.buy');
     Route::post('packages/attend/{detail}', [PackageController::class, 'attendExam'])->name('packages.attend');
+
+    Route::resource('roadmaps', RoadmapController::class);
+    Route::resource('practices', PracticeController::class);
+    Route::get('/practices/create/{stage_id}', [PracticeController::class, 'createPractice'])->name('practices.create.stage');
+
+
+    Route::resource('stages', StageController::class);
+    Route::post('/stages/{stage}/toggle-status', [StageController::class, 'toggleStatus'])->name('stages.toggleStatus');
 
 });
