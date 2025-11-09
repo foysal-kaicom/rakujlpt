@@ -8,10 +8,14 @@ import { toast } from "sonner";
 
 import { useAuthStore } from "@/stores/useAuthStore";
 import { usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
+
+import { FaUser } from "react-icons/fa";
 
 export default function Sidebar() {
   const path = usePathname();
   const router = useRouter();
+  const user = useAuthStore().user;
 
   const MainSidebar = () => {
     return (
@@ -19,13 +23,37 @@ export default function Sidebar() {
         {/* <h1 className="text-2xl font-semibold p-5 bg-blue-900 text-blue-50">
           Candidate Dashboard
         </h1> */}
+        <Link href="/profile">
+          <div className="p-5 flex flex-col items-center relative pt-8">
+            <div className="h-22 w-full bg-purple-300 absolute left-0 top-0"></div>
+            {user?.photo ? (
+              <Image
+                src={user?.photo || ""}
+                alt="profile picture"
+                height={100}
+                width={100}
+                className="rounded-full size-24 aspect-auto object-cover relative z-10 ring-5 ring-white bg-white"
+              />
+            ) : (
+              <FaUser className="rounded-full size-24 aspect-auto object-cover text-purple-400 relative z-10 ring-5 ring-white bg-white" />
+            )}
+
+            <p className="text-2xl font-semibold px-5">
+              {user?.first_name} {""} {user?.last_name}
+            </p>
+            <p className="font-medium text-gray-600 px-5">{user?.email}</p>
+          </div>
+        </Link>
+
         <div className="p-5 flex flex-col gap-4 font-semibold">
           {SidebarData.map((data, index) => (
             <Link
               key={index}
               href={data.to}
               className={`p-1.5 rounded group hover:text-blue-500 hover:bg-slate-100 ${
-                path.startsWith(data.to) ? "text-blue-500 bg-slate-100" : "text-gray-500"
+                path.startsWith(data.to)
+                  ? "text-blue-500 bg-slate-100"
+                  : "text-gray-500"
               }`}
             >
               <div className="flex gap-3 items-center">
@@ -61,27 +89,27 @@ export default function Sidebar() {
   };
 
   const SmSidebar = () => {
-  const pathname = usePathname();
+    const pathname = usePathname();
 
-  return (
-    <div className="fixed bottom-0 inset-x-0 z-30 bg-white shadow-t border-t border-gray-200 flex justify-evenly gap-3 items-center py-4 rounded-t-2xl xl:hidden">
-      {SidebarData.map((item, i) => (
-        <Link
+    return (
+      <div className="fixed bottom-0 inset-x-0 z-30 bg-white shadow-t border-t border-gray-200 flex justify-evenly gap-3 items-center py-4 rounded-t-2xl xl:hidden">
+        {SidebarData.slice(0, 4).map((item, i) => (
+          <Link
             key={i}
             href={item.to}
-            className={`flex flex-col items-center text-xs tracking-wide p-2 transition-colors duration-200 ${
-             path.startsWith(item.to)
-                ? "bg-blue-400 text-white rounded-lg" : " bg-white text-blue-400 "
-                
+            className={`flex flex-col items-center text-xs tracking-wide p-1 transition-colors duration-200 rounded-lg ${
+              path.startsWith(item.to)
+                ? "bg-gradient-to-tr from-purple-500 to-indigo-500 text-white "
+                : " bg-white text-purple-600 border"
             }`}
           >
-            <span className="text-xl">{item.icon}</span>
-            <span className="mt-1 hidden md:block">{item.label}</span>
+            <span className="text-3xl">{item.icon}</span>
+            <span className="mt-1 hidden md:block font-medium">{item.label}</span>
           </Link>
-      ))}
-    </div>
-  );
-};
+        ))}
+      </div>
+    );
+  };
 
   const handleLogout = async () => {
     try {

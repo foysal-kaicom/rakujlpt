@@ -4,12 +4,22 @@ import axiosInstance from "@/utils/axios";
 
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
-import { RiMoneyDollarCircleLine } from "react-icons/ri";
-import { TbCircleNumber9Filled } from "react-icons/tb";
-import { MdOutlinePieChart } from "react-icons/md";
-import Loader from "@/components/Loader";
-import SuspenseLoader from "@/components/SuspenseLoader";
+import { SiAudiobookshelf } from "react-icons/si";
+import { LuLetterText } from "react-icons/lu";
+import { RxLetterCaseCapitalize } from "react-icons/rx";
+import { IoIosBookmarks } from "react-icons/io";
+import { PiNotebookFill } from "react-icons/pi";
+import { GiStairsGoal } from "react-icons/gi";
+import { BiSolidBookBookmark } from "react-icons/bi";
+import { MdTipsAndUpdates } from "react-icons/md";
+import { IoIosAlarm } from "react-icons/io";
+import { GiRingingAlarm } from "react-icons/gi";
+import { LuComponent } from "react-icons/lu";
+
+import DashboardSkeleton from "./dashboardSkeleton";
+import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
 
 interface ExamItem {
   title: string;
@@ -29,14 +39,14 @@ interface DashboardItem {
 }
 
 export default function Dashboard() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [allExam, setAllExam] = useState<ExamItem[]>([]);
   const [dashboard, setDashboard] = useState<DashboardItem>(
     {} as DashboardItem
   );
 
   const getExamData = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
       const response = await axiosInstance.get(`/exam/list`);
       setAllExam(response?.data?.data);
@@ -48,7 +58,7 @@ export default function Dashboard() {
   };
 
   const getDashboard = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
       const response = await axiosInstance.get(`/candidate/dashboard`);
       setDashboard(response?.data?.data);
@@ -66,190 +76,211 @@ export default function Dashboard() {
 
   return (
     <>
-      <Suspense fallback={<SuspenseLoader />}>
-        {loading && <Loader />}
+      {/* <Suspense fallback={<DashboardSkeleton />}> */}
+      <div className="relative">
+        {loading && <DashboardSkeleton />}
         <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-          <h1 className="text-xl font-bold">Dashboard</h1>
+          <UserHeadline mainText="Dashboard" subText="" preText="" />
         </section>
-        <div className="space-y-5 bg-white p-5 rounded-md lg:mx-10">
-          <section className="grid grid-cols-2 xl:grid-cols-4 gap-6">
-            {[
-              {
-                title: "Applied to Exam",
-                value: dashboard?.total_bookings,
-                icon: <MdOutlinePieChart className="size-6" />,
-                iconBg: "bg-sky-600",
-                cardBg: "bg-sky-50",
-              },
-              {
-                title: "Completed Payment",
-                value: dashboard?.total_success_payments,
-                icon: <RiMoneyDollarCircleLine className="size-6" />,
-                iconBg: "bg-green-600",
-                cardBg: "bg-green-50",
-              },
-              {
-                title: "Pending Payment",
-                value: dashboard?.pending_booking,
-                icon: <RiMoneyDollarCircleLine className="size-6" />,
-                iconBg: "bg-yellow-500",
-                cardBg: "bg-yellow-50",
-              },
-              {
-                title: "Results Published",
-                value: dashboard?.total_results_published,
-                icon: <TbCircleNumber9Filled className="size-6" />,
-                iconBg: "bg-purple-600",
-                cardBg: "bg-purple-50",
-              },
-            ].map((item, index) => (
-              <div
-                key={index}
-                className={`${item.cardBg} p-5 rounded-xl shadow-md hover:shadow-xl transition duration-300 border border-transparent hover:border-gray-200`}
-              >
-                <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-start">
-                  <div
-                    className={`${item.iconBg} text-white p-3 rounded-full flex items-center justify-center shadow-inner`}
-                  >
-                    {item.icon}
-                  </div>
-                  <h2 className="text-lg font-semibold text-gray-700">
-                    {item.title}
-                  </h2>
-                </div>
-                <p className="text-3xl font-bold mt-4 text-gray-800 text-right">
-                  {item.value}
-                </p>
-              </div>
-            ))}
-          </section>
 
-          <div className="mt-8 space-y-3">
-            <h1 className="text-xl font-bold">All Available Exam Date</h1>
-            <div className="rounded-xl border border-gray-200 hidden lg:block">
-              <table className="min-w-full border border-gray-200 rounded-xl overflow-hidden text-xs md:text-sm text-left shadow-md">
-                <thead className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs md:text-sm">
-                  <tr>
-                    <th className="px-2 py-2 sm:px-6 sm:py-4 font-semibold border-r">
-                      Title
-                    </th>
-                    <th className="px-2 py-2 sm:px-6 sm:py-4 font-semibold border-r">
-                      Exam Date
-                    </th>
-                    <th className="px-2 py-2 sm:px-6 sm:py-4 font-semibold border-r">
-                      Exam Time
-                    </th>
-                    <th className="px-2 py-2 sm:px-6 sm:py-4 font-semibold border-r">
-                      Application Deadline
-                    </th>
-                    <th className="px-2 py-2 sm:px-6 sm:py-4 font-semibold">
-                      Apply
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {allExam.filter((exam) => exam.available_to_apply).length >
-                  0 ? (
-                    allExam
-                      .filter((exam) => exam.available_to_apply)
-                      .map((exam, i) => (
-                        <tr
-                          key={i}
-                          className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}
-                        >
-                          <td className="px-2 py-2 sm:px-6 sm:py-4 text-gray-800 border-r border-gray-200">
-                            {exam?.title}
-                          </td>
-                          <td className="px-2 py-2 sm:px-6 sm:py-4 text-gray-700 border-r border-gray-200">
-                            {exam?.exam_date}
-                          </td>
-                          <td className="px-2 py-2 sm:px-6 sm:py-4 text-gray-700 border-r border-gray-200">
-                            {exam?.start_time}{" "}
-                            <span className="text-blue-500">to</span>{" "}
-                            {exam?.end_time}
-                          </td>
-                          <td className="px-2 py-2 sm:px-6 sm:py-4 text-red-600 border-r border-gray-200">
-                            {exam?.application_deadline}
-                          </td>
-                          <td className="px-2 py-2 sm:px-6 sm:py-4">
-                            <Link
-                              href={`/registration_terms/${exam.slug}`}
-                              className="bg-blue-600 hover:bg-blue-800 text-white sm:font-semibold text-xs md:text-sm py-1 px-2 sm:py-2 sm:px-4 rounded-md shadow-sm transition-all"
-                            >
-                              Apply Now
-                            </Link>
-                          </td>
-                        </tr>
-                      ))
-                  ) : (
-                    <tr>
-                      <td
-                        colSpan={5}
-                        className="text-center text-gray-500 py-4"
-                      >
-                        No available exams
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+        <div className="relative bg-gradient-to-t from-purple-400 to-pink-400 text-white rounded-xl overflow-hidden px-8 py-4 lg:py-0 lg:px-16 flex justify-between items-center gap-8 shadow-md hover:shadow-lg transition-shadow duration-500 mb-5">
+          {/* Animated Floating Orbs */}
+          <div className="absolute -top-20 -left-20 w-56 h-56 rounded-full bg-purple-500 blur-3xl"></div>
+          <div className="absolute -bottom-24 -right-24 w-72 h-72 rounded-full bg-pink-400 blur-3xl"></div>
 
-            <div className="lg:hidden space-y-5">
-              {allExam.filter((exam) => exam.available_to_apply).length > 0 ? (
-                allExam
-                  .filter((exam) => exam.available_to_apply)
-                  .map((exam, i) => (
-                    <div
-                      key={i}
-                      className={`rounded-2xl border border-gray-200 p-6 shadow-md transition-all duration-300 ${
-                        i % 2 === 0
-                          ? "bg-gradient-to-br from-white via-gray-50 to-white"
-                          : "bg-white"
-                      } hover:shadow-lg`}
-                    >
-                      <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-2">
-                        {exam?.title}
-                      </h2>
+          <div className="relative z-10 w-2/3">
+            <h1 className="text-lg sm:text-3xl lg:text-4xl xl:text-5xl font-semibold mb-4">
+              📝 Boost Your Japanese Skills!
+            </h1>
+            <p className="text-sm sm:text-base mb-6 text-white font-medium hidden sm:block">
+              Take interactive mock tests for JPT (N5 & N4). Track your
+              progress, improve fast, and achieve your goals!
+            </p>
+            <Link
+              href="/mock_test_select"
+              className="px-5 sm:px-10 py-1.5 lg:py-2.5 rounded-lg text-white bg-purple-600 text-xs sm:text-sm md:text-base font-bold shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300 animate-pulse"
+            >
+              Take Mock Test
+            </Link>
+          </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm sm:text-base text-gray-700">
-                        <p>
-                          <span className="font-medium text-gray-900">
-                            📅 Date:
-                          </span>{" "}
-                          {exam?.exam_date}
-                        </p>
-                        <p>
-                          <span className="font-medium text-gray-900">
-                            ⏰ Time:
-                          </span>{" "}
-                          {exam?.start_time} - {exam?.end_time}
-                        </p>
-                        <p>
-                          <span className="font-medium text-gray-900">
-                            🕒 Deadline:
-                          </span>{" "}
-                          {exam?.application_deadline}
-                        </p>
-
-                        <Link
-                          href={`/registration_terms/${exam.slug}`}
-                          className="inline-block bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-xs sm:text-sm font-semibold py-2 px-5 rounded-full shadow-sm transition-all sm:w-30 text-center"
-                        >
-                          Apply Now
-                        </Link>
-                      </div>
-                    </div>
-                  ))
-              ) : (
-                <div className="text-center text-gray-500 py-6">
-                  No available exams
-                </div>
-              )}
-            </div>
+          <div className="w-1/3 drop-shadow-xl drop-shadow-amber-50/50 flex justify-end">
+            <Image
+              src="/assets/img/mocktest/t13.png"
+              alt="Mock Test Illustration"
+              height={400}
+              width={400}
+              className="w-full max-w-[300px]"
+            />
           </div>
         </div>
-      </Suspense>
+
+        <section className="space-y-4">
+          <div className="grid grid-cols-1 gap-4">
+            <section className="space-y-2 sm:bg-white sm:p-5 rounded-md sm:border border-gray-200 mt-3 sm:mt-0">
+              <h1 className="font-bold sm:text-xl">Learn & Practice</h1>
+              <section className="grid grid-cols-4 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-6">
+                {[
+                  {
+                    title: "Practice",
+                    value: dashboard?.total_bookings,
+                    icon: <BiSolidBookBookmark className="size-8 sm:size-14" />,
+                    iconBg: "bg-purple-600",
+                    cardBg: "bg-purple-200",
+                  },
+                  {
+                    title: "Learn",
+                    value: dashboard?.total_success_payments,
+                    icon: <GiStairsGoal className="size-8 sm:size-14" />,
+                    iconBg: "bg-purple-600",
+                    cardBg: "bg-purple-200",
+                  },
+                  {
+                    title: "Metarials",
+                    value: dashboard?.pending_booking,
+                    icon: <PiNotebookFill className="size-8 sm:size-14" />,
+                    iconBg: "bg-purple-600",
+                    cardBg: "bg-purple-200",
+                  },
+                  {
+                    title: "Tips",
+                    value: dashboard?.total_results_published,
+                    icon: <MdTipsAndUpdates className="size-8 sm:size-14" />,
+                    iconBg: "bg-purple-600",
+                    cardBg: "bg-purple-200",
+                  },
+                ].map((item, index) => (
+                  <div key={index}
+                    className={`sm:bg-purple-200 flex flex-col gap-2 items-center p-2 rounded-md sm:shadow-md hover:shadow-xl transition duration-300 border border-transparent hover:border-gray-200 max-w-[300px]`}
+                  >
+                    <div className={`${item.iconBg} p-1 rounded-md text-white`}>
+                      {item.icon}
+                    </div>
+                    <div className="space-y-2 sm:w-[calc(100%-74px)] text-center">
+                      <h1 className="text-xs sm:text-lg font-medium sm:font-semibold overflow-hidden">
+                        {item.title}
+                      </h1>
+                      {/* <p></p> */}
+                    </div>
+                  </div>
+                ))}
+              </section>
+            </section>
+
+            <section className="space-y-2 sm:bg-white sm:p-5 rounded-md sm:border border-gray-200">
+              <h1 className="font-bold sm:text-xl">Exam Solution</h1>
+              <section className="grid grid-cols-4 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-6">
+                {[
+                  {
+                    title: "JPT Exam",
+                    value: dashboard?.total_bookings,
+                    icon: <IoIosAlarm className="size-8 sm:size-14" />,
+                    iconBg: "bg-purple-600",
+                    cardBg: "bg-purple-200",
+                  },
+                  {
+                    title: "JLPT Exam",
+                    value: dashboard?.total_success_payments,
+                    icon: <IoIosAlarm className="size-8 sm:size-14" />,
+                    iconBg: "bg-purple-600",
+                    cardBg: "bg-purple-200",
+                  },
+                  {
+                    title: "Mock Test",
+                    value: dashboard?.pending_booking,
+                    icon: <GiRingingAlarm className="size-8 sm:size-14" />,
+                    iconBg: "bg-purple-600",
+                    cardBg: "bg-purple-200",
+                  },
+                  {
+                    title: "Exam Pattern",
+                    value: dashboard?.total_results_published,
+                    icon: <LuComponent className="size-8 sm:size-14" />,
+                    iconBg: "bg-purple-600",
+                    cardBg: "bg-purple-200",
+                  },
+                ].map((item, index) => (
+                  <div
+                  key={index}
+                    className={`sm:bg-purple-200 flex flex-col gap-2 items-center p-2 rounded-md sm:shadow-md hover:shadow-xl transition duration-300 border border-transparent hover:border-gray-200 max-w-[300px]`}
+                  >
+                    <div className={`${item.iconBg} p-1 rounded-md text-white`}>
+                      {item.icon}
+                    </div>
+                    <div className="space-y-2 sm:w-[calc(100%-74px)] text-center">
+                      <h1 className="text-xs sm:text-lg font-medium sm:font-semibold overflow-hidden">
+                        {item.title}
+                      </h1>
+                      {/* <p></p> */}
+                    </div>
+                  </div>
+                ))}
+              </section>
+            </section>
+          </div>
+          <div className="space-y-2 sm:bg-white sm:p-5 rounded-xl sm:border border-gray-200">
+            <h1 className="font-bold sm:text-xl">Daily Practice</h1>
+            <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+              {[
+                {
+                  title: "Vocabulary",
+                  value: dashboard?.total_bookings,
+                  icon: (
+                    <RxLetterCaseCapitalize className="size-6 2xl:size-10" />
+                  ),
+                  iconBg: "bg-sky-600",
+                  cardBg: "bg-sky-200",
+                },
+                {
+                  title: "Grammer",
+                  value: dashboard?.total_success_payments,
+                  icon: <LuLetterText className="size-6 2xl:size-10" />,
+                  iconBg: "bg-green-600",
+                  cardBg: "bg-green-200",
+                },
+                {
+                  title: "Listening",
+                  value: dashboard?.pending_booking,
+                  icon: <SiAudiobookshelf className="size-6 2xl:size-10" />,
+                  iconBg: "bg-yellow-500",
+                  cardBg: "bg-amber-100",
+                },
+                {
+                  title: "Reading",
+                  value: dashboard?.total_results_published,
+                  icon: <IoIosBookmarks className="size-6 2xl:size-10" />,
+                  iconBg: "bg-cyan-600",
+                  cardBg: "bg-cyan-200",
+                },
+              ].map((item, index) => (
+                <div
+                key={index}
+                  className={`${item.cardBg} flex gap-2 items-center p-2 rounded-md shadow-md hover:shadow-xl transition duration-300 border border-transparent hover:border-gray-200`}
+                >
+                  <div className={`${item.iconBg} p-3 rounded-full text-white`}>
+                    {item.icon}
+                  </div>
+                  <div className="space-y-2 w-[calc(100%-74px)]">
+                    <h1 className="text-sm md:text-base 2xl:text-lg font-semibold flex gap-1.5 justify-between items-center">
+                      <span>{item.title}</span> <span className="text-xs lg:text-sm font-medium">{item.value}/10</span>
+                    </h1>
+                    <div className="w-full bg-white rounded-full h-2">
+                      <div
+                        className={`bg-sky-400 h-2 rounded-full transition-all duration-1000`}
+                        style={{ width: `10%` }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </section>
+          </div>
+
+          
+        </section>
+      </div>
+
+      {/* </Suspense> */}
     </>
   );
 }
