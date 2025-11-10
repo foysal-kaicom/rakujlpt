@@ -34,7 +34,7 @@
                 <tr> 
                     {{-- <td class="px-4 py-1">{{ $package->id }}</td>  --}}
                     <td class="px-4 py-1">{{ $package->name }}</td> 
-                    <td class="px-4 py-1">{{ $package->price }}</td> 
+                    <td class="px-4 py-1">{{ $package->is_free == 1 ? 'FREE' : $package->price }}</td> 
                     <td class="px-4 py-1">{{ $package->short_description }}</td> 
                     <td class="px-4 py-1">{{ $package->order }}</td>
                     <td class="px-4 py-1"> 
