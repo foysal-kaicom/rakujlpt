@@ -1,17 +1,19 @@
 <?php
 
 use App\Models\Package;
+use App\Models\Roadmap;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PackageController;
+use App\Http\Controllers\Api\CMSController;
 use App\Http\Controllers\Api\ExamController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\CenterController;
 use App\Http\Controllers\Api\BookingController;
+use App\Http\Controllers\Api\PackageController;
+use App\Http\Controllers\Api\RoadmapController;
 use App\Http\Controllers\Api\SupportController;
 use App\Http\Controllers\Api\MockTestController;
 use App\Http\Controllers\Api\CandidateController;
-use App\Http\Controllers\Api\CMSController;
 use App\Http\Controllers\Api\GoogleAuthController;
 use App\Http\Controllers\Api\TestimonialController;
 use App\Http\Controllers\Api\DemoQuestionController;
@@ -64,6 +66,8 @@ Route::prefix('v1')->group(function () {
             Route::post('/update-password', [CandidateController::class, 'updatePassword']);
             Route::get('/verify-phone', [CandidateController::class, 'verifyPhoneNumber']);
             Route::post('/post-verify-phone', [CandidateController::class, 'postVerifyPhoneNumber']);
+
+            Route::post('/subscription-renew', [PackageController::class, 'renewSubscription']);
         });
 
         // Route::group(['prefix' => 'exam', 'as' => 'exam.'], function () {
@@ -82,8 +86,10 @@ Route::prefix('v1')->group(function () {
             
             Route::post('/submit-answer', [MockTestController::class, 'evaluateAnswers']);
             Route::get('/results', [MockTestController::class, 'getTestResult']);
+            Route::get('/active-user-subscription', [MockTestController::class, 'activeUserSubscriptionDetails']);
         });
 
+        Route::get('/roadmaps', [RoadmapController::class, 'getRoadmaps']);
         Route::get('/stages/{stageId}/start', [CandidateProgressController::class, 'showStage']);
         Route::post('/stages/{stageId}/complete', [CandidateProgressController::class, 'completeStage']);
     });
