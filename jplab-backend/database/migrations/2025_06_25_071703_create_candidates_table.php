@@ -39,7 +39,7 @@ return new class extends Migration
             $table->enum('status',['active','frozen'])->default('active');
 
             $table->text('address')->nullable();
-            $table->text('about')->nullable();
+            $table->longText('about')->nullable();
             $table->string('currently_living_country')->default('Bangladesh');
 
             $table->softDeletes();
