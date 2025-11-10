@@ -73,7 +73,7 @@ const PackagesComponent = () => {
 
   const subscribeModal = (plan: Plan) => {
     if (!isAuthenticated) {
-      router.push(`/sign_in?redirecturl=packages`);
+      router.push(`/sign_in?callbackUrl=${encodeURIComponent("/packages")}`);
       return;
     }
     setSelectedPlan(plan);

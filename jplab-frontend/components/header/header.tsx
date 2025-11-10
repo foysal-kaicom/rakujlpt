@@ -127,11 +127,11 @@ export default function Header() {
             <FaUser className="size-8 rounded-full object-cover aspect-auto ring-3 ring-purple-400 text-white bg-purple-400" />
           )}
           <div>
-            <p className="line-clamp-1 capitalize font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <p className="line-clamp-1 capitalize font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               {user?.first_name} {""}
               {user?.last_name}
             </p>
-            <p className="line-clamp-1 text-xs font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <p className="line-clamp-1 text-xs font-semibold bg-gradient-to-r from-blue-600  to-purple-600 bg-clip-text text-transparent">
               {user?.email || user?.phone_number}
             </p>
           </div>
@@ -383,11 +383,11 @@ export default function Header() {
           </div>
           <Link href="/">
             <Image
-              src="/assets/test-logo4.png"
+              src="/assets/logo/logo.png"
               alt="logo"
               width={600}
               height={160}
-              className="w-36 drop-shadow-sm"
+              className="w-30 md:w-36"
             />
           </Link>
           <MainHeader />
