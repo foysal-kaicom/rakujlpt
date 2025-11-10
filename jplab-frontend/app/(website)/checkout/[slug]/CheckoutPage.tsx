@@ -344,11 +344,11 @@ export default function CheckoutPage() {
         </div>
       </div>
 
-      {user?.is_phone_verified != 1 && (
+      {/* {user?.is_phone_verified != 1 && (
         <>
           <NumberVerifyModal />
         </>
-      )}
+      )} */}
     </WebpageWrapper>
     </>
   );
