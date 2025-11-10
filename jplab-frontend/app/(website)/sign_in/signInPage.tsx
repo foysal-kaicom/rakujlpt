@@ -47,13 +47,12 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email_or_phone: "",
-    email_or_phone: "",
     password: "",
   });
 
   useEffect(() => {
     if (isAuthenticated && token && user) {
-      router.replace("/dashboard");
+      router.replace(callbackUrl);
     } else {
       setRedirecting(false);
     }
@@ -88,6 +87,7 @@ export default function LoginPage() {
 
         login(user, token);
         router.push(callbackUrl);
+        console.log(callbackUrl)
       }
     } catch (error: any) {
       toast.error(

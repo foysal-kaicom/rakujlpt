@@ -298,7 +298,7 @@ export default function Dashboard() {
         </section>
 
         <section className="w-full overflow-x-auto mt-10">
-          <h2 className="text-3xl font-bold mb-12 text-center text-purple-600 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+          <h2 className="text-3xl font-bold mb-8 text-center text-purple-600 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
             🌈 Your Learning Roadmap
           </h2>
 
