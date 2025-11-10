@@ -1,6 +1,6 @@
 <div id="sidebar" class="sidebar p-4 bg-white text-gray-800 min-h-screen space-y-3 shadow-lg overflow-y-auto max-h-screen">
     <div class="flex items-center justify-center border-b pb-2 border-gray-200">
-        <img src="{{ asset('logo/logo.png') }}" alt="Logo" class="h-20 w-auto rounded-full">
+        <img src="{{ url($settings->logo) }}" alt="Logo" class="h-10 w-auto rounded-full">
         <button id="closeSidebar" class="bg-gray-100 rounded-lg p-1.5 hover:bg-gray-200 transition-colors duration-200 md:hidden">
             <i class="fas fa-times text-gray-600 text-sm"></i>
         </button>

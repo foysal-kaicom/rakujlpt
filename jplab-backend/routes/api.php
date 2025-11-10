@@ -44,7 +44,10 @@ Route::prefix('v1')->group(function () {
     Route::get('/news/{slug}', [CMSController::class, 'viewSingleNews']);
 
     Route::get('/review/list', [CMSController::class, 'getReviewList']);
+
     Route::get('/partner/list', [CMSController::class, 'getPartnerList']);
+
+    Route::get('/feature/list', [CMSController::class, 'getFeatureList']);
 
 
     // Route::group(['prefix' => 'center', 'as' => 'center.'], function () {
