@@ -148,7 +148,7 @@ export default function LoginPage() {
               </div>
             )}
 
-            <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl max-w-md w-full p-8 border-4 border-white/50 transform hover:scale-105 transition-all duration-300">
+            <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl max-w-md w-full p-8 border-4 border-white/50 transform transition-all duration-300">
               {/* Header */}
               <div className="text-center mb-8">
                 <div className="bg-gradient-to-r from-indigo-400 to-purple-400 rounded-3xl p-4 inline-block mb-4 shadow-lg transform -rotate-2">
