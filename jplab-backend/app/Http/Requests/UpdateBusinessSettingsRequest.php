@@ -26,7 +26,7 @@ class UpdateBusinessSettingsRequest extends FormRequest
                     'certificate_amount' => 'required|string',
                     'website_url' => 'nullable|url',
                     'address' => 'nullable|string',
-                    'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                    'logo' => 'nullable|image|mimes:jpeg,png,webp,jpg,gif|max:2048',
                 ];
 
             case 'business-settings.legal':

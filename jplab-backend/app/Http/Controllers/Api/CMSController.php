@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\NewsResource;
 use App\Models\BusinessSetting;
 use App\Models\Faq;
+use App\Models\Feature;
 use App\Models\News;
 use App\Models\Partner;
 use App\Models\Review;
@@ -36,8 +37,13 @@ class CMSController extends Controller
     }
 
     public function getPartnerList(){
-        $reviews = Partner::where('status', 1)->get();
-        return $this->responseWithSuccess($reviews, 'All partners fetched.');
+        $partners = Partner::where('status', 1)->get();
+        return $this->responseWithSuccess($partners, 'All partners fetched.');
+    }
+
+    public function getFeatureList(){
+        $features = Feature::where('status', 1)->get();
+        return $this->responseWithSuccess($features, 'All features fetched.');
     }
 
 }
