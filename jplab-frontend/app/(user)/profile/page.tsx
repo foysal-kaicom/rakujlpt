@@ -218,7 +218,7 @@ export default function ProfileNew() {
                     height={500}
                     width={500}
                     alt="profile image"
-                    className="size-30 rounded-full object-cover aspect-auto ring-6 ring-white shadow-md"
+                    className="size-30 rounded-full object-cover aspect-auto ring-6 ring-white shadow-md bg-white"
                   />
                 ) : (
                   <FaUser className="size-30 rounded-full object-cover aspect-auto ring-6 text-purple-500 bg-pink-50 ring-white shadow-md" />

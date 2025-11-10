@@ -128,8 +128,8 @@ export default function Header() {
           )}
           <div>
             <p className="line-clamp-1 capitalize font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-              {user?.first_name?.slice(0, 10)}
-              {user?.first_name.length > 10 && "..."}
+              {user?.first_name} {""}
+              {user?.last_name}
             </p>
             <p className="line-clamp-1 text-xs font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
               {user?.email || user?.phone_number}
