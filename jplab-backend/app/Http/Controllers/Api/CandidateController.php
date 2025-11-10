@@ -169,6 +169,9 @@ class CandidateController extends Controller
             'gender'        => 'nullable|in:male,female',
             'photo'         => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'address'       => 'nullable|string|max:255',
+            'social_facebook'       => 'nullable|string',
+            'social_linkedin'       => 'nullable|string',
+            'about'       => 'nullable|string',
         ]);
 
 
@@ -188,7 +191,7 @@ class CandidateController extends Controller
             } else {
                 // Upload new image
                 $image = $request->file('photo');
-               
+
                 $imageUploadResponse = $this->fileStorageService->uploadImageToCloud($image, 'candidate');
                 $data['photo'] = $imageUploadResponse['public_path'];
             }
