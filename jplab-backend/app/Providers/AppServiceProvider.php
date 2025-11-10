@@ -48,15 +48,6 @@ class AppServiceProvider extends ServiceProvider
             });
         }
 
-        $settings = null;
-
-        if (!app()->runningInConsole() && Schema::hasTable('business_settings')) {
-            $settings = Cache::rememberForever('business_settings:first', function () {
-                return BusinessSetting::query()->first();
-            });
-        }
-
-        View::share('settings', $settings);
 
         Blade::directive('hasPermission', function ($permission) {
             return "<?php if (checkAdminPermission($permission)) : ?>";
