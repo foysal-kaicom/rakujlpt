@@ -141,8 +141,8 @@ const PackagesComponent = () => {
                 : "grid md:grid-cols-2 lg:grid-cols-3 lg:max-w-5xl mx-auto justify-center"
             }`}
           >
-            {paginatedPlans.map((plan) => (
-              <PricingCard plan={plan} subscribeModal={subscribeModal} />
+            {paginatedPlans.map((plan ,index) => (
+              <PricingCard key={index} plan={plan} subscribeModal={subscribeModal} />
             ))}
           </div>
 
