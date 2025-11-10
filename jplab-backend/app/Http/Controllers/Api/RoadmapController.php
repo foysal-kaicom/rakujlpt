@@ -67,9 +67,6 @@ class RoadmapController extends Controller
 
                 $status = $progress->candidate_status ?? 'locked';
             }
-            if($index == 0 && !$candidate) {
-                $status = 'current';
-            }
 
             $stageData = [
                 'id' => $stage->id,

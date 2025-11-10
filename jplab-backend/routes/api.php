@@ -28,6 +28,8 @@ Route::prefix('v1')->group(function () {
 
     Route::post('/test', [HomeController::class, 'test']);
 
+    Route::get('/roadmaps', [RoadmapController::class, 'getRoadmaps']);
+    Route::get('/roadmaps/{slug}/stages', [RoadmapController::class, 'getStages']);
     Route::get('/subscriptions', [PackageController::class, 'show']);
     Route::post('/subscribe', [PackageController::class, 'subscribe']);
 
@@ -92,7 +94,8 @@ Route::prefix('v1')->group(function () {
             Route::get('/active-user-subscription', [MockTestController::class, 'activeUserSubscriptionDetails']);
         });
 
-        Route::get('/roadmaps', [RoadmapController::class, 'getRoadmaps']);
+        
+
         Route::get('/stages/{stageId}/start', [CandidateProgressController::class, 'showStage']);
         Route::post('/stages/{stageId}/complete', [CandidateProgressController::class, 'completeStage']);
     });
