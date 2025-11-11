@@ -91,8 +91,10 @@ Route::prefix('v1')->group(function () {
             Route::post('/submit-answer', [MockTestController::class, 'evaluateAnswers']);
         });
 
-        Route::get('/results', [MockTestController::class, 'getTestResult']);
-        Route::get('/active-user-subscription', [MockTestController::class, 'activeUserSubscriptionDetails']);
+        Route::group(['prefix' => 'mock-test', 'as' => 'mock-test.' ], function () {
+            Route::get('/results', [MockTestController::class, 'getTestResult']);
+            Route::get('/active-user-subscription', [MockTestController::class, 'activeUserSubscriptionDetails']);
+        });
 
         Route::get('/stages/{stageId}/start', [CandidateProgressController::class, 'showStage']);
         Route::post('/stages/{stageId}/complete', [CandidateProgressController::class, 'completeStage']);
