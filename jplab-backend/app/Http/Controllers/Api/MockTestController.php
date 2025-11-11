@@ -174,6 +174,9 @@ class MockTestController extends Controller
     public function getTestResult(){
         $id = Auth::guard('candidate')->id();
         $testResults = MockTestRecords::where('candidate_id', $id)->get();
+        if(!$testResults || $testResults->isEmpty()){
+            return $this->responseWithError("No mock test records found.");
+        }
         // $testResults = MockTestResultResource::collection(MockTestRecords::where('candidate_id', $id)->get());//need to use later
        
         return $this->responseWithSuccess($testResults, "Mock test results fetched.");
@@ -181,6 +184,7 @@ class MockTestController extends Controller
 
     public function activeUserSubscriptionDetails(){
         $candidateId = Auth::guard('candidate')->id();
+        // return $candidateId;
         $activeSubscriptions = UserSubscription::where('candidate_id', $candidateId)
             ->where('status', 'confirmed')
             ->where('payment_status', 'success')
