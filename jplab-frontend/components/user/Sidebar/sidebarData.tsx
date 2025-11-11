@@ -56,8 +56,8 @@ const SidebarData = [
     icon: <FaTachometerAlt />,
   },
   {
-    label: "Roadmap",
-    to: "/test",
+    label: "Practice",
+    to: "/practice",
     icon: <GiStairsGoal />,
   },
   

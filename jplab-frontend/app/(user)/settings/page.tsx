@@ -71,7 +71,7 @@ export default function SettingsPage() {
               <button
                 key={index}
                 onClick={() => router.push(option.path)}
-                className="flex items-start gap-4 p-5 rounded-xl border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all duration-300 text-left bg-white"
+                className="flex items-start gap-4 p-5 rounded-xl border border-gray-200 hover:border-purple-400 hover:shadow-md transition-all duration-300 text-left bg-white"
               >
                 <div className="mt-1">{option.icon}</div>
                 <div>
