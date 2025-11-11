@@ -11,67 +11,8 @@ use App\Models\CandidateStageProgress;
 
 class CandidateProgressController extends Controller
 {
-    // public function startRoadmap(Request $request, $roadmapId)
-    // {
-    //     $candidate = Auth::guard('candidate')->user(); // Candidate logged in
-    //     $roadmap = Roadmap::with(['stages' => function($q){
-    //         $q->orderBy('order', 'asc');
-    //     }, 'stages.practices'])->findOrFail($roadmapId);
-
-    //     // Only mark first stage as current in DB if not exists
-    //     $firstStage = $roadmap->stages->first();
-    //     if ($firstStage) {
-    //         CandidateStageProgress::updateOrCreate(
-    //             [
-    //                 'candidate_id' => $candidate->id,
-    //                 'roadmap_id' => $roadmap->id,
-    //                 'stage_id' => $firstStage->id,
-    //             ],
-    //             ['candidate_status' => 'current']
-    //         );
-    //     }
-
-    //     // Find current stage progress
-    //     $currentStageProgress = CandidateStageProgress::where('candidate_id', $candidate->id)
-    //         ->where('roadmap_id', $roadmap->id)
-    //         ->where('candidate_status', 'current')
-    //         ->first();
-
-    //     $stages = collect();
-
-    //     if ($currentStageProgress) {
-    //         $stage = $roadmap->stages->where('id', $currentStageProgress->stage_id)->first();
-    //         if ($stage) {
-    //             $practice = $stage->practices->first();
-    //             $questions = ($currentStageProgress->candidate_status !== 'locked' && $practice)
-    //                 ? json_decode($practice->questions, true) ?? []
-    //                 : [];
-
-    //             $stages->push([
-    //                 'title' => $stage->title,
-    //                 'slug'  => $stage->slug,
-    //                 'image' => $stage->image,
-    //                 'order' => $stage->order,
-    //                 'total_questions' => count($questions),
-    //                 'status' => $currentStageProgress->candidate_status,
-    //                 'questions' => $questions,
-    //             ]);
-    //         }
-    //     }
-
-    //     $data = [
-    //         'title' => $roadmap->title,
-    //         'slug'  => $roadmap->slug,
-    //         'stages'=> $stages,
-    //     ];
-
-    //     // return response()->json([$data]);
-    //     return $this->responseWithSuccess($data, "Stage Data shows successfully", 201);
-    // }
-
     public function showStage(Request $request, $stageId)
     {
-        
         $candidate = Auth::guard('candidate')->user();
 
         $stage = Stage::with(['practices', 'roadmap'])

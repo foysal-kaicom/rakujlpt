@@ -67,57 +67,11 @@ class StageController extends Controller
     }
 
 
-    // public function toggleStatus($id)
-    // {
-    //     try {
-    //         $exam = Exam::findOrFail($id);
-    
-    //         if ($exam->status) {
-    //             $exam->status = false;
-    //             $exam->save();
-    //         } else {
-    //             $exam->status = true;
-    //             $exam->save();
-    //         }
-    //         Toastr::success('Status changed successfully.');
-    //         return redirect()->route('exam.list');
-    //     } catch (\Exception $e) {
-    //         Toastr::success('Status not changed');
-    //         return redirect()->route('exam.list');
-    //     }
-    // }
-
-
     public function create()
     {
         $roadmaps = Roadmap::all();
         return view('stages.create', compact('roadmaps'));
     }
-
-
-    // public function store(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'roadmap_id' => 'required|exists:roadmaps,id',
-    //         'title' => 'required|string|max:255|unique:stages,title',
-    //         'slug' => 'required|string|max:255|unique:stages,slug',
-    //         'order' => 'nullable|integer',
-    //         'duration' => 'nullable|integer',
-    //         'description' => 'nullable|string',
-    //         'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-    //     ]);
-
-    //     if ($request->hasFile('image')) {
-    //         $validated['image'] = $request->file('image')->store('stages', 'public');
-    //     }
-
-    //     $stage = Stage::create($validated);
-
-    //     return redirect()
-    //         ->route('stages.index')
-    //         ->with('success', 'Stage created successfully!');
-    // }
-
 
     public function store(Request $request)
     {
