@@ -127,7 +127,7 @@ export default function MockExamResult() {
       setAllTimeHighestScores(highest);
     } catch (error: any) {
       console.error(error);
-      toast.error("Failed to get exam data");
+      toast.error(error?.response?.data?.message || "Failed to get exam data");
     } finally {
       setLoading(false);
     }
@@ -147,7 +147,7 @@ export default function MockExamResult() {
           <div className="mt-5 lg:pb-10">
             <UserHeadline mainText="Mock Exam Result" preText="" subText="" />
 
-            {/* <div className="mt-6 flex flex-col lg:flex-row justify-center items-start gap-10">
+            <div className="mt-6 flex flex-col lg:flex-row justify-center items-start gap-10">
         
               <div className="rounded-xl bg-white drop-shadow-xl p-6 border border-gray-200 relative overflow-hidden w-full lg:w-2/3">
                 <div className="flex justify-center 2xl:justify-between flex-wrap items-center gap-3 mb-4">
@@ -375,12 +375,12 @@ export default function MockExamResult() {
                   </p>
                 </div>
               </div>
-            </div> */}
+            </div>
 
             {/* Result Table/Card */}
             <div className="w-full flex flex-col gap-5 mt-6">
               {/* Exam Summary */}
-              {/* <div className="flex flex-wrap gap-5 font-semibold text-gray-700 text-sm md:text-base">
+              <div className="flex flex-wrap gap-5 font-semibold text-gray-700 text-sm md:text-base">
                 <span className="bg-white backdrop-blur-lg px-4 py-2 rounded-2xl shadow-md hover:shadow-xl transition cursor-pointer">
                   Total Exam: 10
                 </span>
@@ -390,7 +390,7 @@ export default function MockExamResult() {
                 <span className="bg-white backdrop-blur-lg px-4 py-2 rounded-2xl shadow-md hover:shadow-xl transition cursor-pointer">
                   Remaining Exam: 8
                 </span>
-              </div> */}
+              </div>
 
               {/* Desktop Table */}
               <div className="hidden md:block overflow-auto rounded-xl shadow-lg border border-gray-200 bg-white/50 backdrop-blur-lg">
