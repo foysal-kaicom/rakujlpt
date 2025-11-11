@@ -633,7 +633,7 @@ export default function PracticeQuestion() {
                         <Image
                           src="/assets/img/raku_sad.gif"
                           alt="Incorrect"
-                          width={80}
+                          width={89}
                           height={60}
                           className="flex-shrink-0 mt-0.5 absolute top-[-78px]"
                         />
