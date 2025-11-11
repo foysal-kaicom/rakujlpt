@@ -7,7 +7,7 @@
     <div class="p-2 px-4 d-flex justify-content-between align-items-center bg-indigo-300">
         <h3 class="text-lg font-semibold">Filters</h3>
     </div>
-    <form method="GET" action="{{ route('exam.list') }}">
+    <form method="GET" action="{{ route('mock-tests.exam.list') }}">
         <div class="py-3 px-4 d-flex justify-content-between border align-items-center">
             <div class="col-md-12">
                 <div class="row g-3">
@@ -50,7 +50,7 @@
                     </div>
 
                     <div class="flex justify-end items-center gap-3 mt-3">
-                        <a href="{{ route('exam.list') }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium border shadow-md transition">Reset Filters</a>
+                        <a href="{{ route('mock-tests.exam.list') }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium border shadow-md transition">Reset Filters</a>
                         <button type="submit" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-green-500 text-white hover:bg-green-600 shadow-md transition">Apply Filters</button>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
 <section class="w-100 bg-white rounded overflow-hidden" style="font-family: sans-serif;">
     <div class="py-3 px-4 d-flex justify-content-between align-items-center bg-indigo-300">
         <h3 class="text-lg font-semibold m-0">Exam List</h3>
-        <a href="{{ route('exam.create') }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-sky-500 text-white hover:bg-sky-600 transition">
+        <a href="{{ route('mock-tests.exam.create') }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-sky-500 text-white hover:bg-sky-600 transition">
             <i class="fa-solid fa-plus"></i> Create New Exam
         </a>
     </div>
@@ -75,32 +75,32 @@
             <thead class="">
                 <tr>
                     <th scope="col" class="text-uppercase text-secondary small px-4 py-3">
-                        <a href="{{ route('exam.list', ['order_by' => 'id', 'direction' => (request()->direction == 'asc' ? 'desc' : 'asc')]) }}" class="text-primary hover-effect">
+                        <a href="{{ route('mock-tests.exam.list', ['order_by' => 'id', 'direction' => (request()->direction == 'asc' ? 'desc' : 'asc')]) }}" class="text-primary hover-effect">
                             ID
                         </a>
                     </th>
                     <th scope="col" class="d-none d-sm-table-cell text-secondary small px-4 py-3">
-                        <a href="{{ route('exam.list', ['order_by' => 'title', 'direction' => (request()->direction == 'asc' ? 'desc' : 'asc')]) }}" class="text-primary hover-effect">
+                        <a href="{{ route('mock-tests.exam.list', ['order_by' => 'title', 'direction' => (request()->direction == 'asc' ? 'desc' : 'asc')]) }}" class="text-primary hover-effect">
                             Title
                         </a>
                     </th>
                     <th scope="col" class="d-none d-md-table-cell text-secondary small py-3">
-                        <a href="{{ route('exam.list', ['order_by' => 'exam_date', 'direction' => (request()->direction == 'asc' ? 'desc' : 'asc')]) }}" class="text-primary hover-effect">
+                        <a href="{{ route('mock-tests.exam.list', ['order_by' => 'exam_date', 'direction' => (request()->direction == 'asc' ? 'desc' : 'asc')]) }}" class="text-primary hover-effect">
                             Exam Date
                         </a>
                     </th>
                     <th scope="col" class="d-none d-md-table-cell text-secondary small py-3">
-                        <a href="{{ route('exam.list', ['order_by' => 'application_deadline', 'direction' => (request()->direction == 'asc' ? 'desc' : 'asc')]) }}" class="text-primary hover-effect">
+                        <a href="{{ route('mock-tests.exam.list', ['order_by' => 'application_deadline', 'direction' => (request()->direction == 'asc' ? 'desc' : 'asc')]) }}" class="text-primary hover-effect">
                             Deadline
                         </a>
                     </th>
                     <th scope="col" class="d-none d-md-table-cell text-secondary small py-3">
-                        <a href="{{ route('exam.list', ['order_by' => 'fee', 'direction' => (request()->direction == 'asc' ? 'desc' : 'asc')]) }}" class="text-primary hover-effect">
+                        <a href="{{ route('mock-tests.exam.list', ['order_by' => 'fee', 'direction' => (request()->direction == 'asc' ? 'desc' : 'asc')]) }}" class="text-primary hover-effect">
                             Fees (Tk)
                         </a>
                     </th>
                     <th scope="col" class="d-none d-md-table-cell text-secondary small py-3">
-                        <a href="{{ route('exam.list', ['order_by' => 'result_publish_date', 'direction' => (request()->direction == 'asc' ? 'desc' : 'asc')]) }}" class="text-primary hover-effect">
+                        <a href="{{ route('mock-tests.exam.list', ['order_by' => 'result_publish_date', 'direction' => (request()->direction == 'asc' ? 'desc' : 'asc')]) }}" class="text-primary hover-effect">
                             Result Date
                         </a>
                     </th>
@@ -124,7 +124,7 @@
                     <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->creator->name }}</td>
 
                     <td class="d-none d-sm-table-cell py-1">
-                        <form action="{{ route('exam.toggleStatus', $exam->id) }}" method="POST" class="d-flex pt-4 ">
+                        <form action="{{ route('mock-tests.exam.toggleStatus', $exam->id) }}" method="POST" class="d-flex pt-4 ">
                             @csrf
                             <div class="form-check form-switch toggle-switch-lg">
                                 <input class="form-check-input"
@@ -139,10 +139,10 @@
 
                     <td class="d-none d-sm-table-cell">
                         <div class="flex gap-2">
-                            <a href="{{ route('exam.edit', ['id' => $exam->id, 'isCopy' => true]) }}" onclick="return confirmAction(event, this.href)" class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-sky-500 text-white hover:bg-sky-600 shadow-md transition">
+                            <a href="{{ route('mock-tests.exam.edit', ['id' => $exam->id, 'isCopy' => true]) }}" onclick="return confirmAction(event, this.href)" class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-sky-500 text-white hover:bg-sky-600 shadow-md transition">
                                 <button>Copy</button>
                             </a>
-                            <a href="{{ route('exam.edit', $exam->id) }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-green-500 text-white hover:bg-green-600 shadow-md transition">
+                            <a href="{{ route('mock-tests.exam.edit', $exam->id) }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-green-500 text-white hover:bg-green-600 shadow-md transition">
                                 <button>Edit</button>
                             </a>
                         </div>

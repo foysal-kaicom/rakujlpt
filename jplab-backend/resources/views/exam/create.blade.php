@@ -11,7 +11,7 @@
     </div>
 
     <!-- Form -->
-    <form action="{{ route('exam.store') }}" method="POST" enctype="multipart/form-data" class="p-4">
+    <form action="{{ route('mock-tests.exam.store') }}" method="POST" enctype="multipart/form-data" class="p-4">
         @csrf
 
         <div class="row g-4">

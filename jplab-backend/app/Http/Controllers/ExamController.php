@@ -57,7 +57,7 @@ class ExamController extends Controller
         Exam::create($data);
 
         Toastr::success('Exam Registered Successfully.');
-        return redirect()->route('exam.list');
+        return redirect()->route('mock-tests.exam.list');
     }
 
     public function edit(Request $request, string $id)
@@ -86,7 +86,7 @@ class ExamController extends Controller
         $exam->update($data);
 
         Toastr::success('Exam Updated Successfully.');
-        return redirect()->route('exam.list');
+        return redirect()->route('mock-tests.exam.list');
     }
 
     public function toggleStatus($id)
@@ -102,10 +102,10 @@ class ExamController extends Controller
                 $exam->save();
             }
             Toastr::success('Status changed successfully.');
-            return redirect()->route('exam.list');
+            return redirect()->route('mock-tests.exam.list');
         } catch (\Exception $e) {
             Toastr::success('Status not changed');
-            return redirect()->route('exam.list');
+            return redirect()->route('mock-tests.exam.list');
         }
     }
 }

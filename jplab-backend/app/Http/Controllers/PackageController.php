@@ -33,17 +33,17 @@ class PackageController extends Controller
 
     public function store(Request $request)
     {
+        $price = ($request->boolean('is_free')) ? 0 : $request->price;
 
         $package = Package::create([
             'name' => $request->name,
-            'price' => $request->price,
+            'price' => $price,
             'is_popular' => $request->has('is_popular') ? 1 : 0,
             'short_description' => $request->short_description,
             'description' => $request->description,
             'is_home' => $request->has('is_home') ? 1 : 0,
             'is_free' => $request->has('is_free') ? 1 : 0,
             'order' => $request->order,
-
             // 'status' => $request->status,
         ]);
 
@@ -69,9 +69,11 @@ class PackageController extends Controller
 
     public function update(Request $request, Package $package)
     {
+        $price = $request->has('is_free') && $request->is_free == 1 ? 0 : $request->price;
+
         $package->update([
             'name' => $request->name,
-            'price' => $request->price,
+            'price' => $price,
             'is_popular' => $request->has('is_popular') ? 1 : 0,
             'short_description' => $request->short_description,
             'description' => $request->description,

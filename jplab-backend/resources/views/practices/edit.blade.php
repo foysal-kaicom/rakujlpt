@@ -44,8 +44,8 @@
                     <label class="block font-semibold">Question Type</label>
                     <select name="question[question_type]" class="questionType bg-white drop-shadow-md text-sm border rounded px-3 py-2" required>
                         <option value="text" {{ ($question['question_type'] ?? '') == 'text' ? 'selected' : '' }}>Text</option>
-                        <option value="image" {{ ($question['question_type'] ?? '') == 'image' ? 'selected' : '' }}>Image</option>
-                        <option value="audio" {{ ($question['question_type'] ?? '') == 'audio' ? 'selected' : '' }}>Audio</option>
+                        {{-- <option value="image" {{ ($question['question_type'] ?? '') == 'image' ? 'selected' : '' }}>Image</option> --}}
+                        <option value="audio" {{ ($question['question_type'] ?? '') == 'audio' ? 'selected' : '' }}>Image</option>
                     </select>
                 </div>
 
@@ -174,13 +174,13 @@ document.addEventListener("DOMContentLoaded", function() {
             questionInput.placeholder = "Enter question";
             questionInput.required = true;
         } 
-        else if (type === "image") {
-            questionInput.type = "file";
-            questionInput.accept = "image/*";
-            questionInput.placeholder = "";
-            questionInput.required = false; // Not required for edit (can keep existing)
-            if (currentImage) currentImage.classList.remove("hidden");
-        } 
+        // else if (type === "image") {
+        //     questionInput.type = "file";
+        //     questionInput.accept = "image/*";
+        //     questionInput.placeholder = "";
+        //     questionInput.required = false; // Not required for edit (can keep existing)
+        //     if (currentImage) currentImage.classList.remove("hidden");
+        // } 
         else if (type === "audio") {
             questionInput.type = "file";
             questionInput.accept = "image/*";
