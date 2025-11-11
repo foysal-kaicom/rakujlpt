@@ -8,7 +8,7 @@ import {
   AlertCircle,
   ChevronRight,
 } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import axiosInstance from "@/utils/axios";
@@ -93,6 +93,7 @@ export default function PracticeQuestion() {
   const params = useParams();
   const id = params.id;
   const slug = params.slug;
+  const router = useRouter();
   const [loader, setLoader] = useState(false);
   const [stageCompleted, setStageCompleted] = useState(false);
   const [correctAnswerCount, setCorrectAnswerCount] = useState<number>(0);
@@ -115,7 +116,10 @@ export default function PracticeQuestion() {
         const response = await axiosInstance.get(`/stages/${id}/start`);
         if (response?.data?.success) {
           console.log(response.data);
-
+          if(response?.data?.data?.questions.length === 0){
+            toast.error("No questions available for this stage.");
+            router.push(`/practice/${slug}`);
+          }
           setQuestionsData(response?.data?.data?.questions || []);
         }
         // toast.success(response?.data?.message || "Stages loaded!");
@@ -150,6 +154,13 @@ export default function PracticeQuestion() {
   };
 
   const handleAnswerSelect = (answer: string) => {
+    try {
+        const audio = new Audio("/assets/audio/click_sound.mp3");
+        audio.volume = 0.9;
+        void audio.play();
+      } catch (e) {
+        // ignore play errors
+      }
     if (isAnswered) return;
     setSelectedAnswer(answer);
   };
@@ -170,6 +181,21 @@ export default function PracticeQuestion() {
     }
     if (correct) {
       setCorrectAnswerCount((prev) => prev + 1);
+      try {
+        const audio = new Audio("/assets/audio/correct.mp3");
+        audio.volume = 0.9;
+        void audio.play();
+      } catch (e) {
+        // ignore play errors
+      }
+    } else {
+      try {
+        const audio = new Audio("/assets/audio/wrong.mp3");
+        audio.volume = 0.9;
+        void audio.play();
+      } catch (e) {
+        // ignore play errors
+      }
     }
     setIsCorrect(correct);
     setShowExplanation(true);
@@ -181,6 +207,13 @@ export default function PracticeQuestion() {
       setCurrentQuestionIndex((prev) => prev + 1);
       resetQuestion();
     } else {
+      try {
+        const audio = new Audio("/assets/audio/stage_complete.mp3");
+        audio.volume = 0.9;
+        void audio.play();
+      } catch (e) {
+        // ignore play errors
+      }
       const completeStage = async () => {
         try {
           const response = await axiosInstance.post(`/stages/${id}/complete`);
@@ -189,7 +222,7 @@ export default function PracticeQuestion() {
           }
         } catch (error: any) {
           toast.error(
-            error?.response?.data?.message || "Cannot fetch Questions right now"
+            error?.response?.data?.message || "Something went wrong"
           );
         } finally {
           setLoader(false);
@@ -570,7 +603,7 @@ export default function PracticeQuestion() {
               {/* Explanation Section */}
               {showExplanation && (
                 <div
-                  className={`mb-6 p-6 rounded-xl border-2 relative mt-[91px] ${
+                  className={`mb-6 p-6 rounded-xl border-2 relative mt-[78px] ${
                     isCorrect
                       ? "bg-green-50 border-green-200"
                       : "bg-red-50 border-red-200"
@@ -583,20 +616,20 @@ export default function PracticeQuestion() {
                         <Image
                           src="/assets/img/smiling_smile.gif"
                           alt="Correct"
-                          width={100}
+                          width={80}
                           height={60}
-                          className="flex-shrink-0 mt-0.5 absolute top-[-91px]"
+                          className="flex-shrink-0 mt-0.5 absolute top-[-78px]"
                         />
                       </>
                     ) : (
                       <>
                         <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
                         <Image
-                          src="/assets/img/smiling_smile.gif"
+                          src="/assets/img/raku_sad.gif"
                           alt="Incorrect"
-                          width={100}
+                          width={80}
                           height={60}
-                          className="flex-shrink-0 mt-0.5 absolute top-[-91px]"
+                          className="flex-shrink-0 mt-0.5 absolute top-[-78px]"
                         />
                       </>
                     )}
