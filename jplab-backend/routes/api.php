@@ -88,13 +88,11 @@ Route::prefix('v1')->group(function () {
 
         Route::group(['prefix' => 'mock-test', 'as' => 'mock-test.', 'middleware' => ['checkSubscription'] ], function () {
             Route::get('/get-questions', [MockTestController::class, 'getQuestions']);
-            
             Route::post('/submit-answer', [MockTestController::class, 'evaluateAnswers']);
-            Route::get('/results', [MockTestController::class, 'getTestResult']);
-            Route::get('/active-user-subscription', [MockTestController::class, 'activeUserSubscriptionDetails']);
         });
 
-        
+        Route::get('/results', [MockTestController::class, 'getTestResult']);
+        Route::get('/active-user-subscription', [MockTestController::class, 'activeUserSubscriptionDetails']);
 
         Route::get('/stages/{stageId}/start', [CandidateProgressController::class, 'showStage']);
         Route::post('/stages/{stageId}/complete', [CandidateProgressController::class, 'completeStage']);

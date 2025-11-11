@@ -110,7 +110,7 @@
                                 {{ $stage->status ? 'checked' : '' }}>
                         </div>
                     </td>
-                    <td class="d-none d-sm-table-cell py-1">
+                   
                     <td>
                         <div class="flex gap-2">
                             <a href="{{ route('stages.edit', $stage->id) }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-green-500 text-white hover:bg-green-600 shadow-md transition">Edit</a>
