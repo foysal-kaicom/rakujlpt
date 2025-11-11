@@ -34,7 +34,7 @@ const PricingSection = () => {
   const getPlansData = async () => {
     try {
       const response = await axiosInstance.get<{ success: boolean; data: Plan[] }>(
-        `/subscriptions?is_home=1`
+        `/subscriptions`
       );
       if (response?.data?.success) {
         setPlansData(response.data.data);

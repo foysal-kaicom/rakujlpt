@@ -187,6 +187,7 @@ export default function Roadmap() {
             {stagesData.map((stage, index) => {
               const isEven = index % 2 === 0;
               const isLast = index === stagesData.length - 1;
+              const stagStatus = index === 0 && stage.stage_status != "completed" ? "current" : stage.stage_status;
 
               return (
                 <div key={stage.id} className="relative mb-8">
@@ -196,9 +197,9 @@ export default function Roadmap() {
                       className={`absolute ${
                         isEven ? "left-1/2" : "right-1/2"
                       } top-32 w-1 h-20 bg-gradient-to-b ${
-                        stage.stage_status === "completed"
+                        stagStatus === "completed"
                           ? "from-green-400 to-green-300"
-                          : stage.stage_status === "current"
+                          : stagStatus === "current"
                           ? "from-yellow-400 to-yellow-300"
                           : "from-gray-300 to-gray-200"
                       } transform transition-all duration-500`}
@@ -227,13 +228,13 @@ export default function Roadmap() {
                       {/* Stage Card */}
                       <div
                         className={`relative bg-white rounded-2xl shadow-lg p-6 border-4 ${
-                          stage.stage_status === "current"
+                          stagStatus === "current"
                             ? "border-yellow-400 animate-pulse"
-                            : stage.stage_status === "completed"
+                            : stagStatus === "completed"
                             ? "border-green-400"
                             : "border-gray-200"
                         } cursor-pointer transition-all duration-300 ${
-                          stage.stage_status === "locked"
+                          stagStatus === "locked"
                             ? "opacity-60"
                             : "opacity-100"
                         }`}
@@ -241,21 +242,21 @@ export default function Roadmap() {
                         {/* Stage Number Badge */}
                         <Link
                           href={
-                            stage.stage_status !== "locked"
+                            stagStatus !== "locked"
                               ? `/practice/${slug}/${stage.slug}/${stage.id}`
                               : "#"
                           }
                         >
                           <div
                             className={`absolute -top-4 -right-4 w-14 h-14 rounded-full bg-gradient-to-br ${getStatusColor(
-                              stage.stage_status
+                              stagStatus
                             )} flex items-center justify-center text-white text-xl font-bold shadow-lg transform transition-transform duration-300 ${
                               hoveredStage === stage.id
                                 ? "rotate-12 scale-110"
                                 : "rotate-0 scale-100"
                             }`}
                           >
-                            {getStatusIcon(stage.stage_status)}
+                            {getStatusIcon(stagStatus)}
                           </div>
                         </Link>
 
@@ -263,12 +264,12 @@ export default function Roadmap() {
                           {/* Icon */}
                           <div
                             className={`w-16 h-16 rounded-xl bg-gradient-to-br ${getStatusColor(
-                              stage.stage_status
+                              stagStatus
                             )} flex items-center justify-center text-3xl shadow-md`}
                           >
-                            {stage.stage_status === "completed"
+                            {stagStatus === "completed"
                               ? "✨"
-                              : stage.stage_status === "current"
+                              : stagStatus === "current"
                               ? "📚"
                               : "🔐"}
                           </div>
@@ -308,7 +309,7 @@ export default function Roadmap() {
                         </div>
 
                         {/* Progress Bar for Current */}
-                        {stage.stage_status === "current" && (
+                        {stagStatus === "current" && (
                           <div className="mt-4 bg-gray-200 rounded-full h-2 overflow-hidden">
                             <div
                               className="h-full bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full transition-all duration-500"
