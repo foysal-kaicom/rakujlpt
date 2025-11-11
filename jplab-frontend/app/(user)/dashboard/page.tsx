@@ -298,7 +298,7 @@ export default function Dashboard() {
         </section>
 
         <section className="w-full overflow-x-auto mt-10">
-          <h2 className="text-3xl font-bold mb-8 text-center text-purple-600 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+          <h2 className="sm:text-xl font-bold mb-8 text-purple-600 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
             🌈 Your Learning Roadmap
           </h2>
 
@@ -333,7 +333,7 @@ export default function Dashboard() {
             <div className="relative p-8 rounded-2xl bg-violet-500 border border-violet-600 shadow-[0_0_25px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(96,165,250,0.4)] transition-all">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-2xl font-semibold flex items-center gap-2 text-white">
-                  <FaClock className="text-pink-300" /> Next Module
+                  <FaClock className="text-green-300" /> Next Module
                 </h3>
                 <span className="text-sm text-white font-medium">
                   Coming Up

@@ -141,7 +141,7 @@ export default function Header() {
               <Link
                 key={i}
                 href={item.to}
-                className="flex gap-1.5 items-center hover:bg-purple-50 duration-300 cursor-pointer line-clamp-1 p-1 px-4"
+                className="flex gap-1.5 items-center hover:bg-purple-100 duration-300 cursor-pointer line-clamp-1 p-1 px-4"
               >
                 <span className="p-1 bg-white rounded outline outline-purple-200 text-purple-500">
                   {item.icon}
@@ -151,7 +151,7 @@ export default function Header() {
             ))}
             <p
               onClick={handleLogout}
-              className="flex gap-1.5 items-center hover:bg-blue-50 duration-300 cursor-pointer line-clamp-1 p-1 px-4 text-red-500"
+              className="flex gap-1.5 items-center hover:bg-blue-100 duration-300 cursor-pointer line-clamp-1 p-1 px-4 text-red-500"
             >
               <span className="p-1 bg-white rounded outline outline-blue-100">
                 <IoLogOut className="text-red-500" />
@@ -292,7 +292,7 @@ export default function Header() {
                           onClick={toggleSidebar}
                           href={item.to}
                           className={`mb-3 text-sm ${
-                            item.label == "Information"
+                            item.label == "Information" || item.label == "Test"
                               ? "hidden"
                               : item.to == path
                               ? "text-[#d400ff]"
@@ -363,7 +363,7 @@ export default function Header() {
     <>
       <div
         className={`w-full sticky z-50 top-0 ${
-          scrollCount > 10 ? "bg-purple-50" : "bg-white"
+          scrollCount > 10 ? "bg-purple-50 shadow-md" : "bg-white"
         }`}
       >
         <div className="px-6 lg:px-8 container mx-auto flex justify-between xl:grid grid-cols-3 items-center h-[80px] ">

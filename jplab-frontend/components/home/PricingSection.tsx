@@ -156,7 +156,7 @@ const PricingSection = () => {
 
               <div className="flex justify-end space-x-3">
                 <button
-                  className="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  className="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 cursor-pointer"
                   onClick={() => {
                     setIsModalOpen(false);
                     setSelectedPlan(null);
@@ -167,7 +167,7 @@ const PricingSection = () => {
                 </button>
                 <button
                   disabled={!agreed}
-                  className={`px-4 py-2 rounded-lg font-semibold ${
+                  className={`px-4 py-2 rounded-lg font-semibold cursor-pointer ${
                     agreed
                       ? "bg-purple-600 text-white hover:bg-purple-700"
                       : "bg-purple-300 text-white cursor-not-allowed"

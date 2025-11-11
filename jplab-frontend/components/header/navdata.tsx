@@ -12,6 +12,21 @@ const navdata = [
     links: "",
   },
   {
+    id: "test",
+    label: "Test",
+    to: "/mock_test_select",
+    links: [
+      {
+        to: "/mock_test_select",
+        label: "Mock Test",
+      },
+      {
+        to: "/practice",
+        label: "Practice",
+      }
+    ],
+  },
+  {
     id: "aboutJpt",
     label: "Information",
     to: "/about_jpt",

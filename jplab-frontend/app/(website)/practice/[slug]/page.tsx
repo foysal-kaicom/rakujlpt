@@ -1,5 +1,6 @@
 "use client";
 
+import BreadCrumb from "@/components/BreadCrumb";
 import axiosInstance from "@/utils/axios";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -152,10 +153,12 @@ export default function Roadmap() {
         {/* Background Decorations */}
         <div className="absolute top-20 -left-20 w-64 h-64 bg-gradient-to-br from-cyan-200 to-blue-200 rounded-full opacity-20 blur-3xl"></div>
         <div className="absolute bottom-20 -right-20 w-96 h-96 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full opacity-20 blur-3xl"></div>
-
+        <div className="container mx-auto px-4 lg:px-8 relative mb-6">
+          <BreadCrumb breadCrumbData={breadCrumbData} />
+        </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-gray-600 mb-8">
+          {/* <div className="flex items-center gap-2 text-sm text-gray-600 mb-8">
             {breadCrumbData.map((item, index) => (
               <div key={index} className="flex items-center gap-2">
                 <Link
@@ -167,7 +170,7 @@ export default function Roadmap() {
                 {index < breadCrumbData.length - 1 && <span>/</span>}
               </div>
             ))}
-          </div>
+          </div> */}
 
           {/* Header */}
           <div className="text-center mb-16">

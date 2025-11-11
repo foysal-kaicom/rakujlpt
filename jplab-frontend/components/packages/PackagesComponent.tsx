@@ -251,7 +251,7 @@ const PackagesComponent = () => {
 
                 <div className="flex justify-end space-x-3">
                   <button
-                    className="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    className="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 cursor-pointer"
                     onClick={() => {
                       setIsModalOpen(false);
                       setSelectedPlan(null);
@@ -262,10 +262,10 @@ const PackagesComponent = () => {
                   </button>
                   <button
                     disabled={!agreed}
-                    className={`px-4 py-2 rounded-lg font-semibold ${
+                    className={`px-4 py-2 rounded-lg font-semibold cursor-pointer ${
                       agreed
-                        ? "bg-blue-600 text-white hover:bg-blue-700"
-                        : "bg-blue-300 text-white cursor-not-allowed"
+                        ? "bg-purple-600 text-white hover:bg-purple-700"
+                        : "bg-purple-300 text-white cursor-not-allowed"
                     }`}
                     onClick={() => {
                       if (selectedPlan) handleSubscribe(selectedPlan);
