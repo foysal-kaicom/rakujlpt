@@ -71,16 +71,34 @@ class CandidateProgressController extends Controller
 
     public function showStage(Request $request, $stageId)
     {
-        $candidate = Auth::guard('candidate')->user(); // Candidate logged in
-        // $stage = Stage::with('practices', 'roadmap')->findOrFail($stageId);
+        
+        $candidate = Auth::guard('candidate')->user();
+
         $stage = Stage::with(['practices', 'roadmap'])
             ->where('id', $stageId)
             ->where('status', 1)
             ->firstOrFail();
 
         $progress = CandidateStageProgress::where('candidate_id', $candidate->id)
-        ->where('stage_id', $stage->id)
-        ->first();
+            ->where('stage_id', $stage->id)
+            ->first();
+
+        // first visiting stage
+        if (!$progress) {
+            $firstStage = Stage::where('roadmap_id', $stage->roadmap_id)
+                ->where('status', 1)
+                ->orderBy('order', 'asc')
+                ->first();
+
+            if ($firstStage && $firstStage->id === $stage->id) {
+                $progress = CandidateStageProgress::create([
+                    'candidate_id' => $candidate->id,
+                    'roadmap_id'   => $stage->roadmap_id,
+                    'stage_id'     => $stage->id,
+                    'candidate_status' => 'current',
+                ]);
+            }
+        }
 
         $status = $progress->candidate_status ?? 'locked';
 
@@ -111,7 +129,7 @@ class CandidateProgressController extends Controller
                 $questions = array_merge($questions, $practiceQuestions);
             }
         }
-
+        // dd($questions);
         $data = [
             'stage_id' => $stage->id,
             'title' => $stage->title,

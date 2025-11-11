@@ -2,13 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdateBusinessSettingsRequest;
-use App\Models\BusinessSetting;
-use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
+use App\Models\BusinessSetting;
+use App\Services\FileStorageService;
+use Brian2694\Toastr\Facades\Toastr;
+use App\Http\Requests\UpdateBusinessSettingsRequest;
 
 class BusinessSettingController extends Controller
 {
+    protected $fileStorageService;
+
+    public function __construct(FileStorageService $fileStorageService)
+    {
+
+        $this->fileStorageService = $fileStorageService;
+    }
     public function showEditPage(){
         $bsData = BusinessSetting::where('id', 1)->first();
         return view('business-settings.edit', compact('bsData'));
@@ -23,14 +31,20 @@ class BusinessSettingController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('logo')) {
-            if ($setting->logo && file_exists(public_path($setting->logo))) {
-                unlink(public_path($setting->logo));
-            }
-
-            $photoName = time() . '_' . $request->file('logo')->getClientOriginalName();
-            $request->file('logo')->move(public_path('business-settings/logos'), $photoName);
-            $data['logo'] = 'business-settings/logos/' . $photoName;
+            $image = $request->file('logo');
+            $awsImageUploadResponse = $this->fileStorageService->uploadImageToCloud($image, 'business-settings');
+            $data['logo'] = $awsImageUploadResponse['public_path'];
         }
+
+        // if ($request->hasFile('logo')) {
+        //     if ($setting->logo && file_exists(public_path($setting->logo))) {
+        //         unlink(public_path($setting->logo));
+        //     }
+
+        //     $photoName = time() . '_' . $request->file('logo')->getClientOriginalName();
+        //     $request->file('logo')->move(public_path('business-settings/logos'), $photoName);
+        //     $data['logo'] = 'business-settings/logos/' . $photoName;
+        // }
 
         $setting->update($data);
 

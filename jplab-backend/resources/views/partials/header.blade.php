@@ -16,8 +16,11 @@
 
         <!-- User Profile Dropdown -->
         <div class="dropdown">
-            <img src="{{auth()->user()->image}}" alt="User" class="rounded-circle border dropdown-toggle"
-                data-bs-toggle="dropdown" aria-expanded="false" style="width: 40px; height: 40px; cursor: pointer;">
+            <img 
+            @if(auth()->user()->image == null) src="{{asset('user-logo.png')}}" @else
+            src="{{auth()->user()->image}}" alt="User" class="rounded-circle border dropdown-toggle"
+            @endif
+            data-bs-toggle="dropdown" aria-expanded="false" style="width: 40px; height: 40px; cursor: pointer;">
             <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="{{route('users.profile')}}">Profile</a></li>
                 <li>
