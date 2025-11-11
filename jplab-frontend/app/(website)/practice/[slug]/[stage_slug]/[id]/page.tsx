@@ -8,7 +8,7 @@ import {
   AlertCircle,
   ChevronRight,
 } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import axiosInstance from "@/utils/axios";
@@ -93,6 +93,7 @@ export default function PracticeQuestion() {
   const params = useParams();
   const id = params.id;
   const slug = params.slug;
+  const router = useRouter();
   const [loader, setLoader] = useState(false);
   const [stageCompleted, setStageCompleted] = useState(false);
   const [correctAnswerCount, setCorrectAnswerCount] = useState<number>(0);
@@ -115,7 +116,10 @@ export default function PracticeQuestion() {
         const response = await axiosInstance.get(`/stages/${id}/start`);
         if (response?.data?.success) {
           console.log(response.data);
-
+          if (response?.data?.data?.questions.length === 0) {
+            toast.error("No questions available for this stage.");
+            router.push(`/practice/${slug}`);
+          }
           setQuestionsData(response?.data?.data?.questions || []);
         }
         // toast.success(response?.data?.message || "Stages loaded!");
@@ -150,6 +154,13 @@ export default function PracticeQuestion() {
   };
 
   const handleAnswerSelect = (answer: string) => {
+    try {
+      const audio = new Audio("/assets/audio/click_sound.mp3");
+      audio.volume = 0.9;
+      void audio.play();
+    } catch (e) {
+      // ignore play errors
+    }
     if (isAnswered) return;
     setSelectedAnswer(answer);
   };
@@ -170,6 +181,21 @@ export default function PracticeQuestion() {
     }
     if (correct) {
       setCorrectAnswerCount((prev) => prev + 1);
+      try {
+        const audio = new Audio("/assets/audio/correct.mp3");
+        audio.volume = 0.9;
+        void audio.play();
+      } catch (e) {
+        // ignore play errors
+      }
+    } else {
+      try {
+        const audio = new Audio("/assets/audio/wrong.mp3");
+        audio.volume = 0.9;
+        void audio.play();
+      } catch (e) {
+        // ignore play errors
+      }
     }
     setIsCorrect(correct);
     setShowExplanation(true);
@@ -181,6 +207,13 @@ export default function PracticeQuestion() {
       setCurrentQuestionIndex((prev) => prev + 1);
       resetQuestion();
     } else {
+      try {
+        const audio = new Audio("/assets/audio/stage_complete.mp3");
+        audio.volume = 0.9;
+        void audio.play();
+      } catch (e) {
+        // ignore play errors
+      }
       const completeStage = async () => {
         try {
           const response = await axiosInstance.post(`/stages/${id}/complete`);
@@ -188,9 +221,7 @@ export default function PracticeQuestion() {
             toast.success(response?.data?.message || "Stage Completed!");
           }
         } catch (error: any) {
-          toast.error(
-            error?.response?.data?.message || "Cannot fetch Questions right now"
-          );
+          toast.error(error?.response?.data?.message || "Something went wrong");
         } finally {
           setLoader(false);
         }
@@ -328,6 +359,12 @@ export default function PracticeQuestion() {
                       {correctAnswerCount}/{totalQuestions}
                     </span>
                   </div>
+                </div>
+                <div className="w-full flex justify-center mt-4">
+                  <Link href={`/practice/${slug}`} className="px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:shadow-lg transition-all transform hover:scale-105 flex items-center gap-2 cursor-pointer">
+                    Continue practice
+                    <ChevronRight className="w-5 h-5" />
+                  </Link>
                 </div>
               </div>
             </div>
@@ -548,11 +585,11 @@ export default function PracticeQuestion() {
                 <div className="mb-6">
                   <button
                     onClick={() => setShowHint(!showHint)}
-                    className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors mx-auto"
+                    className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors mx-auto cursor-pointer"
                   >
                     <Lightbulb className="w-5 h-5" />
                     <span className="font-semibold">
-                      {showHint ? "Hide Hint" : "Show Hint"}
+                      {showHint ? "Hide Hints" : "Show Hints"}
                     </span>
                   </button>
 
@@ -560,7 +597,9 @@ export default function PracticeQuestion() {
                     <div className="mt-4 p-4 bg-yellow-50 border-2 border-yellow-200 rounded-xl">
                       <div className="flex gap-3">
                         <Lightbulb className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-                        <p className="text-gray-700">{currentQuestion.hints ?? "No hints available."}</p>
+                        <p className="text-gray-700">
+                          {currentQuestion.hints ?? "No hints available."}
+                        </p>
                       </div>
                     </div>
                   )}
@@ -570,7 +609,7 @@ export default function PracticeQuestion() {
               {/* Explanation Section */}
               {showExplanation && (
                 <div
-                  className={`mb-6 p-6 rounded-xl border-2 relative mt-[91px] ${
+                  className={`mb-6 p-6 rounded-xl border-2 relative mt-[78px] ${
                     isCorrect
                       ? "bg-green-50 border-green-200"
                       : "bg-red-50 border-red-200"
@@ -583,20 +622,20 @@ export default function PracticeQuestion() {
                         <Image
                           src="/assets/img/smiling_smile.gif"
                           alt="Correct"
-                          width={100}
+                          width={80}
                           height={60}
-                          className="flex-shrink-0 mt-0.5 absolute top-[-91px]"
+                          className="flex-shrink-0 mt-0.5 absolute top-[-78px]"
                         />
                       </>
                     ) : (
                       <>
                         <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
                         <Image
-                          src="/assets/img/smiling_smile.gif"
+                          src="/assets/img/raku_sad.gif"
                           alt="Incorrect"
-                          width={100}
+                          width={80}
                           height={60}
-                          className="flex-shrink-0 mt-0.5 absolute top-[-91px]"
+                          className="flex-shrink-0 mt-0.5 absolute top-[-78px]"
                         />
                       </>
                     )}
@@ -609,7 +648,8 @@ export default function PracticeQuestion() {
                         {isCorrect ? "Correct!" : "Incorrect"}
                       </h3>
                       <p className="text-gray-700">
-                        {currentQuestion.explanation ?? "No explanation available."}
+                        {currentQuestion.explanation ??
+                          "No explanation available."}
                       </p>
                     </div>
                   </div>
@@ -622,7 +662,7 @@ export default function PracticeQuestion() {
                   <button
                     onClick={checkAnswer}
                     disabled={!canSubmit()}
-                    className={`px-8 py-4 rounded-xl font-semibold text-white transition-all transform hover:scale-105 ${
+                    className={`px-8 py-4 rounded-xl font-semibold text-white transition-all transform hover:scale-105 cursor-pointer ${
                       canSubmit()
                         ? "bg-gradient-to-r from-blue-500 to-purple-500 hover:shadow-lg"
                         : "bg-gray-300 cursor-not-allowed"
@@ -633,7 +673,7 @@ export default function PracticeQuestion() {
                 ) : (
                   <button
                     onClick={nextQuestion}
-                    className="px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:shadow-lg transition-all transform hover:scale-105 flex items-center gap-2"
+                    className="px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:shadow-lg transition-all transform hover:scale-105 flex items-center gap-2 cursor-pointer"
                   >
                     {currentQuestionIndex < totalQuestions - 1
                       ? "Next Question"
