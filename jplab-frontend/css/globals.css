@@ -104,7 +104,7 @@ body {
 }
 
 .fade-slide-in-left {
-  animation: fadeSlideInFromLeft 0.7s ease-in-out forwards;
+  animation: fadeSlideInFromLeft 1.3s ease-in-out infinite;
 }
 
 @keyframes shakePause {
