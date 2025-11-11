@@ -4,6 +4,7 @@ import { BookOpen } from "lucide-react";
 import Link from "next/link";
 import axiosInstance from "@/utils/axios";
 import { toast } from "sonner";
+import BreadCrumb from "@/components/BreadCrumb";
 
 interface Roadmap {
   id: number;
@@ -99,27 +100,25 @@ export default function Practice() {
   const [practiceTestsData, setPracticeTestsData] = useState<Roadmap[]>([]);
 
   useEffect(() => {
-  
-      const fetchRoadmaps = async () => {
-        try {
-          setLoader(true);
-          const response = await axiosInstance.get(`/roadmaps`);
-          if(response?.data?.success){
-            setPracticeTestsData(response.data.data);
-          }
-          // toast.success(response?.data?.message || "Roadmaps loaded!");
-        } catch (error: any) {
-          toast.error(
-            error?.response?.data?.message ||
-              "Cannot fetch Roadmaps right now"
-          );
-        } finally {
-          setLoader(false);
+    const fetchRoadmaps = async () => {
+      try {
+        setLoader(true);
+        const response = await axiosInstance.get(`/roadmaps`);
+        if (response?.data?.success) {
+          setPracticeTestsData(response.data.data);
         }
-      };
-  
-      fetchRoadmaps();
-    }, []);
+        // toast.success(response?.data?.message || "Roadmaps loaded!");
+      } catch (error: any) {
+        toast.error(
+          error?.response?.data?.message || "Cannot fetch Roadmaps right now"
+        );
+      } finally {
+        setLoader(false);
+      }
+    };
+
+    fetchRoadmaps();
+  }, []);
 
   return (
     <>
@@ -133,23 +132,10 @@ export default function Practice() {
         {/* Background Decorations */}
         <div className="absolute top-20 -left-20 w-64 h-64 bg-gradient-to-br from-cyan-200 to-blue-200 rounded-full opacity-20 blur-3xl"></div>
         <div className="absolute bottom-20 -right-20 w-96 h-96 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full opacity-20 blur-3xl"></div>
-
+        <div className="container mx-auto px-4 lg:px-8 relative mb-6">
+          <BreadCrumb breadCrumbData={breadCrumbData} />
+        </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-gray-600 mb-8">
-            {breadCrumbData.map((item, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <Link
-                  href={item.to}
-                  className="hover:text-blue-600 transition-colors"
-                >
-                  {item.name}
-                </Link>
-                {index < breadCrumbData.length - 1 && <span>/</span>}
-              </div>
-            ))}
-          </div>
-
           {/* Header Section */}
           <div className="mb-12">
             <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-3xl p-8 md:p-12 shadow-xl relative overflow-hidden">

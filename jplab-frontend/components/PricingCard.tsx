@@ -39,7 +39,7 @@ export default function PricingCard({ plan, subscribeModal }: any) {
 
         <div className="w-full flex justify-center absolute bottom-5 left-0 px-8">
           <button
-            className={`w-full py-4 px-6 rounded-full font-semibold transition-all duration-300 ${
+            className={`w-full py-4 px-6 rounded-full font-semibold transition-all duration-300 cursor-pointer ${
               plan.is_popular
                 ? "bg-linear-to-r from-blue-600 to-purple-600 text-white hover:shadow-xl transform hover:scale-105"
                 : "bg-blue-600 text-white hover:bg-blue-700"

@@ -62,13 +62,13 @@ export default function PhoneVerificationPage() {
 
   // Auto-send OTP if not verified
   useEffect(() => {
-    if (user?.is_email_verified === 1 && user?.is_phone_verified === 1) {
-      const callbackUrl = decodeURIComponent(
-        searchParams.get("callbackUrl") || "/"
-      );
-      router.push(callbackUrl);
-      return;
-    }
+    // if (user?.is_email_verified === 1 && user?.is_phone_verified === 1) {
+    //   const callbackUrl = decodeURIComponent(
+    //     searchParams.get("callbackUrl") || "/"
+    //   );
+    //   router.push(callbackUrl);
+    //   return;
+    // }
 
     if (!hasRequestedCode) {
       handleCode();
@@ -166,10 +166,10 @@ export default function PhoneVerificationPage() {
         }
       );
 
-      updateUser({
-        is_phone_verified: 1,
-        is_email_verified: 1,
-      });
+      // updateUser({
+      //   is_phone_verified: 1,
+      //   is_email_verified: 1,
+      // });
 
       toast.success("Phone number verified successfully!");
       router.push("/profile");
