@@ -338,6 +338,7 @@
               <input
                 type="password"
                 class="form-control @error('password') is-invalid @enderror"
+                style="border-top-right-radius: 8px; border-bottom-right-radius: 8px;"
                 id="password"
                 name="password"
                 placeholder="Enter your password"

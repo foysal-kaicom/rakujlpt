@@ -5,7 +5,7 @@ const TestimonialsSection = () => {
       name: "Jisun Aurnob",
       role: "JLPT N2 Passer",
       image: "https://avatars.githubusercontent.com/u/66457643?v=4",
-      content: "Hashira mock test Pro helped me pass JLPT N2 on my first try! The mock tests were incredibly similar to the real exam.",
+      content: "Raku mock test Pro helped me pass JLPT N2 on my first try! The mock tests were incredibly similar to the real exam.",
       rating: 5
     },
     {

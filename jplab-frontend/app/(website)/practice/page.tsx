@@ -178,7 +178,7 @@ export default function Practice() {
               {practiceTestsData.map((test, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 group"
+                  className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 group relative"
                 >
                   {/* <div
                     className={`w-16 h-16 rounded-xl ${test.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
@@ -191,7 +191,7 @@ export default function Practice() {
                   <h3 className="text-2xl font-bold text-gray-800 mb-2">
                     {test.title}
                   </h3>
-                  <p className="text-gray-600 mb-4">{test.description}</p>
+                  <p className="text-gray-600 mb-4 min-h-20">{test.description}</p>
 
                   <div className="flex items-center gap-4 mb-4 text-sm text-gray-500">
                     {/* <span className="flex items-center gap-1">
@@ -246,7 +246,7 @@ export default function Practice() {
                     </div>
                   </div> */}
 
-                  <Link href={`/practice/${test.slug}`}>
+                  <Link href={`/practice/${test.slug}`} className="">
                     <button
                       className={`w-full bg-blue-500 text-white py-3 rounded-xl font-semibold hover:opacity-90 transition-all shadow-md hover:shadow-lg cursor-pointer`}
                     >
