@@ -5,27 +5,27 @@ import RouteLoader from "@/components/RouteLoader";
 import MessengerWrapper from "@/components/wrapper/MessengerWrapper";
 
 export const metadata: Metadata = {
-  title: "Hashira - Mock Test",
+  title: "Raku - Mock Test",
   description:
     "Register for the Japanese Proficiency Mock Test in Bangladesh. Find test dates, centers, application deadlines, and fees.",
   keywords: [
-    "Hashira Bangladesh",
+    "Raku Bangladesh",
     "Japanese Proficiency Test",
     "JPT registration",
     "Japanese mock exam",
     "JPT test dates",
     "study in Japan",
   ],
-  authors: [{ name: "Hashira Bangladesh", url: "https://yourdomain.com" }],
+  authors: [{ name: "Raku Bangladesh", url: "https://yourdomain.com" }],
   alternates: {
     canonical: "https://yourdomain.com/",
   },
   openGraph: {
-    title: "Hashira Bangladesh – Japanese Proficiency Mock Test Registration",
+    title: "Raku Bangladesh – Japanese Proficiency Mock Test Registration",
     description:
       "Get registered for mock test exams in Bangladesh. View all available test dates and center info.",
     url: "https://yourdomain.com",
-    siteName: "Hashira Bangladesh",
+    siteName: "Raku Bangladesh",
     // images: [
     //   {
     //     url: "https://yourdomain.com/og-banner.jpg",

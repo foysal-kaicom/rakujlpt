@@ -90,7 +90,7 @@ class RoadmapController extends Controller
                 'title' => $stage->title,
                 'slug' => $stage->slug,
                 // 'image' => $stage->image,
-                'image' => $stage->image ? url('storage/' . $stage->image) : null, // full path
+                'image' => $stage->image ? asset('storage/' . $stage->image) : null, // full path
                 'order' => $stage->order,
                 'duration' => $stage->duration,
                 'total_questions' => count($questions),
