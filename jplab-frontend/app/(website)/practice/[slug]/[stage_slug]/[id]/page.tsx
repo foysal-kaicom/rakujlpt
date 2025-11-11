@@ -616,7 +616,7 @@ export default function PracticeQuestion() {
                         <Image
                           src="/assets/img/smiling_smile.gif"
                           alt="Correct"
-                          width={100}
+                          width={80}
                           height={60}
                           className="flex-shrink-0 mt-0.5 absolute top-[-78px]"
                         />
@@ -625,9 +625,9 @@ export default function PracticeQuestion() {
                       <>
                         <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
                         <Image
-                          src="/assets/img/smiling_smile.gif"
+                          src="/assets/img/raku_sad.gif"
                           alt="Incorrect"
-                          width={100}
+                          width={80}
                           height={60}
                           className="flex-shrink-0 mt-0.5 absolute top-[-78px]"
                         />
