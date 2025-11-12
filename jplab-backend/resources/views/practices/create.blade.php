@@ -44,45 +44,14 @@
                     </select>
                 </div>
 
-                {{-- Question Input --}}
-                {{-- <div class="space-y-2 col-span-2">
-                    <label class="block font-semibold">Question</label>
-                    <input name="question[question]" type="text" placeholder="Enter question"
-                           class="questionInput bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-full" required />
-                    <img id="imagePreview" src="#" alt="Image Preview" class="hidden mt-2 max-h-48 border rounded" />
-
-                </div> --}}
-
-
-                {{-- <div class="space-y-2 col-span-2">
-                    <label class="block font-semibold">Question</label>
-
-                    <input name="question[question]" type="text" placeholder="Enter question"
-                        class="questionInput bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-full" required />
-
-                    <div id="audioImageContainer" class="hidden mt-2">
-                        <label class="block font-semibold">Question Image (for audio)</label>
-                        <input type="file" name="question[audio_image]" accept="image/*" class="audioImageInput bg-white drop-shadow-md border rounded px-3 py-2 w-full">
-                        <img id="audioImagePreview" class="hidden mt-2 max-h-48 border rounded" />
-                    </div>
-
-                    <img id="imagePreview" src="#" alt="Image Preview" class="hidden mt-2 max-h-48 border rounded" />
-
- 
-                    <audio id="audioPreview" controls class="hidden mt-2"></audio>
-
-
-                    <div id="audioInputContainer" class="hidden mt-2">
-                        <label class="block font-semibold">Upload Audio</label>
-                        <input type="file" name="question[audio_file]" accept="audio/*" class="audioInput bg-white drop-shadow-md border rounded px-3 py-2 w-full">
-                    </div>
-                </div> --}}
+               
                 <div class="space-y-2 col-span-2">
                     <label class="block font-semibold">Question</label>
 
                     {{-- Main Question Input --}}
-                    <input name="question[question]" type="text" placeholder="Enter question"
-                        class="questionInput bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-full" required />
+                
+                    <textarea id="content" name="question[question]" class="tinymce"></textarea>
+
 
                     {{-- Image Preview --}}
                     <img id="imagePreview" src="#" alt="Image Preview" class="hidden mt-2 max-h-48 border rounded" />
@@ -111,14 +80,15 @@
 
             {{-- Options --}}
             <div class="p-6 rounded-lg border bg-white mt-[30px] space-y-7">
-                <h3 class="font-semibold rounded text-black">Create Options (Choose the correct answer)</h3>
-                <div class="grid grid-cols-2 gap-4">
+            <h3 class="font-semibold rounded text-black">Create Options (Choose the correct answer)</h3>
+            <div class="grid lg:grid-cols-2 gap-4">
                     @for ($i = 1; $i <= 4; $i++)
-                        <div class="flex items-center gap-1">
-                            <input type="radio" name="question[answer]" value="{{ $i }}" class="size-5" required>
-                            <input type="text" name="question[options][{{ $i }}]" placeholder="Option {{ $i }}"
-                                   class="bg-white text-sm border rounded px-3 py-2 w-full" required>
-                        </div>
+                        
+
+                        <input type="radio" name="questions[answer]" value="{{ $i }}" class="size-5">
+                  <div class="optionWrapper w-full" data-q="${i}" data-opt="${opt}">
+                    <textarea id="content" name="question[options][{{ $i }}]" placeholder="Option {{ $i }}" class="tinymce"></textarea>
+                  </div>
                     @endfor
                 </div>
             </div>
