@@ -28,7 +28,7 @@ const navdata = [
   },
   {
     id: "aboutJpt",
-    label: "Information",
+    label: "About",
     to: "/about_jpt",
     links: [
       {

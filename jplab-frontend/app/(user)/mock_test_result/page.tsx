@@ -127,7 +127,7 @@ export default function MockExamResult() {
       setAllTimeHighestScores(highest);
     } catch (error: any) {
       console.error(error);
-      toast.error("Failed to get exam data");
+      toast.error(error?.response?.data?.message || "Failed to get exam data");
     } finally {
       setLoading(false);
     }
