@@ -354,7 +354,7 @@ export default function Roadmap() {
                     </div>
 
                     {/* Center Circle */}
-                    <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <div className="absolute left-1/2 top-0 md:top-1/2 transform -translate-x-1/2 -translate-y-1/2">
                       <div
                         className={`w-6 h-6 rounded-full bg-gradient-to-br ${getStatusColor(
                           stage.stage_status
