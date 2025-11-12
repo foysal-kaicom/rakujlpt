@@ -105,9 +105,11 @@ export default function PracticeQuestion() {
   const [showExplanation, setShowExplanation] = useState<boolean>(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [timeElapsed, setTimeElapsed] = useState<number>(0);
+  const [totalDuration, setTotalDuration] = useState<number>(0);
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
 
   const [questionsData, setQuestionsData] = useState<Question[]>([]);
+console.log(totalDuration);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -120,6 +122,7 @@ export default function PracticeQuestion() {
             toast.error("No questions available for this stage.");
             router.push(`/practice/${slug}`);
           }
+          setTotalDuration(response?.data?.data?.duration * 60);
           setQuestionsData(response?.data?.data?.questions || []);
         }
         // toast.success(response?.data?.message || "Stages loaded!");
@@ -141,11 +144,25 @@ export default function PracticeQuestion() {
 
   // Timer
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeElapsed((prev) => prev + 1);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [currentQuestionIndex]);
+  if (totalDuration <= 0) return;
+
+  setTimeElapsed(totalDuration); // Start from total seconds
+
+  const timer = setInterval(() => {
+    setTimeElapsed((prev) => {
+      if (prev <= 1) {
+        clearInterval(timer);
+        toast.info("Time’s up!");
+        // 👉 You can trigger auto-submit or redirect here
+        return 0;
+      }
+      return prev - 1;
+    });
+  }, 1000);
+
+  return () => clearInterval(timer);
+}, [totalDuration]);
+
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
@@ -244,7 +261,7 @@ export default function PracticeQuestion() {
     setShowExplanation(false);
     setIsCorrect(null);
     setIsAnswered(false);
-    setTimeElapsed(0);
+    // setTimeElapsed(0);
   };
 
   const canSubmit = (): boolean => {
