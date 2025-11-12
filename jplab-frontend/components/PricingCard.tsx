@@ -22,11 +22,13 @@ export default function PricingCard({ plan, subscribeModal }: any) {
       )}
       <div className="bg-white rounded-3xl p-8 size-full relative overflow-clip">
         {/* Current Plan Ribbon */}
-        <div className="absolute top-6 -left-18 rotate-[-45deg] bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-semibold px-20 py-1 text-center shadow-md">
-          {user?.current_package_id == plan.id
-            ? "Current Plan"
-            : "Upgrade Plan"}
-        </div>
+        {!plan.is_free && (
+          <div className="absolute top-6 -left-18 rotate-[-45deg] bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-semibold px-20 py-1 text-center shadow-md">
+            {user?.current_package_id == plan.id
+              ? "Current Plan"
+              : "Upgrade Plan"}
+          </div>
+        )}
 
         {/* Plan Info */}
         <div className="text-center mb-8 mt-4">
