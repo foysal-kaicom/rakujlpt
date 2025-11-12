@@ -271,7 +271,7 @@ export default function LoginPage() {
                   </div>
 
                   {/* Buttons */}
-                  <div className="mt-6 space-y-3 font-semibold">
+                  <div className="mt-6 space-y-3 font-semibold max-w-83 mx-auto">
                     <button
                       onClick={handleVerify}
                       className="px-5 py-2 w-full rounded-md bg-purple-600 text-white hover:bg-purple-700 duration-500 cursor-pointer"
