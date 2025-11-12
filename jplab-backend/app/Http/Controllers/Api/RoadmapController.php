@@ -109,6 +109,81 @@ class RoadmapController extends Controller
 
 
 
+
+
+    public function get_current_roadmap(Request $request)
+    {
+        $candidate = Auth::guard('candidate')->user();
+
+        $roadmaps = Roadmap::with('stages')->get();
+
+        $result = [];
+
+        foreach ($roadmaps as $roadmap) {
+            // Candidate's stage progress for this roadmap
+            $candidateProgress = CandidateStageProgress::where('candidate_id', $candidate->id)
+                ->where('roadmap_id', $roadmap->id)
+                ->get();
+
+
+            // Skip roadmap if no stage is completed
+            if (!$candidateProgress->contains('candidate_status', 'completed')) {
+                continue;
+            }
+
+            // Find the stage marked 'current'
+            $currentStage = $candidateProgress->firstWhere('candidate_status', 'current');
+
+            // Count total stages and completed stages
+            $totalStages = $roadmap->stages->count();
+            $completedStages = $candidateProgress->where('candidate_status', 'completed')->count();
+
+            $completePercentage = $totalStages > 0
+                ? round(($completedStages / $totalStages) * 100, 2) . '%'
+                : '0%';
+
+            $result[] = [
+                'current_module_name' => $roadmap->title,
+                'current_stage_id' => $currentStage ? $currentStage->stage->id : null,
+                'current_stage_name' => $currentStage ? $currentStage->stage->title : null,
+                'stage_slug' => $currentStage ? $currentStage->stage->slug : null,
+                'description' => $roadmap->description,
+                'complete' => $completePercentage,
+            ];
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $result,
+        ]);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // public function getStages($slug)
     // {
     //     $candidate = Auth::guard('candidate')->user();

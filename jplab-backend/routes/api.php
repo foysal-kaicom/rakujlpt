@@ -98,6 +98,8 @@ Route::prefix('v1')->group(function () {
 
         Route::get('/stages/{stageId}/start', [CandidateProgressController::class, 'showStage']);
         Route::post('/stages/{stageId}/complete', [CandidateProgressController::class, 'completeStage']);
+        Route::get('/candidate/current-roadmap', [RoadmapController::class, 'get_current_roadmap']);
+
     });
 
     Route::post('/success', [SslCommerzPaymentController::class, 'success'])->name('ssl.success');

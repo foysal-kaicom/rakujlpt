@@ -16,8 +16,6 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
-            // JSON for defining stage grouping (optional)
-            // Example: [{"stage":1,"count":3},{"stage":2,"count":4}, ...]
             $table->string('image')->nullable();
             $table->timestamps();
         });
