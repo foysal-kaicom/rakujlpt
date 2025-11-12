@@ -372,7 +372,7 @@ class CandidateController extends Controller
             }
 
             DB::commit();
-            return $this->responseWithSuccess([], 'OTP sent successfully.');
+            return $this->responseWithSuccess(['otp_expired_at'=>$candidate->otp_expired_at], 'OTP sent successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Failed to send OTP: ' . $e->getMessage());
