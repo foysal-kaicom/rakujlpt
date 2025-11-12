@@ -39,7 +39,8 @@ const ITEMS_PER_PAGE = 3;
 
 const PackagesComponent = () => {
   const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated , user } = useAuthStore();
+  const updateUser = useAuthStore((state) => state.updateUser);
 
   const [plansData, setPlansData] = useState<Plan[]>([]);
   const [loader, setLoader] = useState(true);
@@ -98,6 +99,10 @@ const PackagesComponent = () => {
       } else {
         toast.success(response?.data?.message || "Subscription successful");
       }
+      updateUser({
+        current_package_id: response.data.current_package_id,
+        is_subscribed: 1,
+      });
     } catch (error: any) {
       toast.error(
         error?.response?.data?.message || error.message || "Subscription failed"
@@ -285,11 +290,11 @@ const PackagesComponent = () => {
 
           <div className="text-center mt-12">
             <p className="text-gray-600 mb-4">
-              All plans include a 14-day free trial • No credit card required
+              No credit card required
             </p>
             <div className="flex justify-center items-center space-x-4 text-sm text-gray-500">
               <span>✓ Cancel anytime</span>
-              <span>✓ Money-back guarantee</span>
+              {/* <span>✓ Money-back guarantee</span> */}
               <span>✓ 24/7 support</span>
             </div>
           </div>

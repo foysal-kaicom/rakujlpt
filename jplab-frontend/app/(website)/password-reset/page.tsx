@@ -1,15 +1,16 @@
 "use client";
 
 // React & Next.js core
-import { Suspense, useState } from "react";
+import { Suspense, useState, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 // Third-party libraries
 import { toast } from "sonner";
 
 // Icons
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaPhone } from "react-icons/fa";
 import { MdEmail, MdErrorOutline } from "react-icons/md";
+import { MdVerifiedUser } from "react-icons/md";
 
 import axios from "axios";
 
@@ -31,15 +32,15 @@ export default function LoginPage() {
   const router = useRouter();
 
   const [reseting, setReseting] = useState(false);
-
+  const [method, setMethod] = useState("email");
+  const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
+  const [timer, setTimer] = useState<number>(180);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+ const [error, setError] = useState<string>("");
   const [resetToat, setResetToast] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
-  });
-  const [resetFormData, setRestFormData] = useState({
-    password: "",
-    password_confirmation: "",
-    token: token || null,
+    phone_number: "",
   });
 
   // Handle form input changes
@@ -48,18 +49,13 @@ export default function LoginPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleResetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setRestFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
   // Handle reset submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setReseting(true);
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/password-reset-link`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/send-password-reset-otp`,
         formData
       );
       if (response.status === 200) {
@@ -77,25 +73,80 @@ export default function LoginPage() {
     }
   };
 
-  const handleResetSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleOTPChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const value = e.target.value.replace(/\D/g, "").slice(0, 1);
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    if (value && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      const newOtp = [...otp];
+      newOtp[index - 1] = "";
+      setOtp(newOtp);
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
-    setReseting(true);
+
+    const pasted = e.clipboardData
+      .getData("Text")
+      .replace(/\D/g, "")
+      .slice(0, 6);
+    if (!pasted) return;
+
+    const newOtp = [...otp];
+    for (let i = 0; i < pasted.length; i++) {
+      newOtp[i] = pasted[i];
+    }
+
+    setOtp(newOtp);
+
+    // Focus next input after paste
+    const nextIndex = Math.min(pasted.length, 5);
+    inputRefs.current[nextIndex]?.focus();
+  };
+
+  // Format timer
+  const formatTime = (seconds: number) => {
+    const m = String(Math.floor(seconds / 60)).padStart(2, "0");
+    const s = String(seconds % 60).padStart(2, "0");
+    return `${m}:${s}`;
+  };
+
+
+   const handleVerify = async () => {
+
+    const fullCode = otp.join("");
+    if (fullCode.length !== 6) {
+      setError("Please enter all 6 digits.");
+      return;
+    }
+
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/password-reset`,
-        resetFormData
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/verify-password-reset-otp`,
+        {
+          otp: fullCode,
+        }
       );
-      if (response.status === 200) {
-        toast.success(response?.data?.message || "Password Reset successfully");
-        router.push("/sign_in");
-      }
+
+      toast.success("Phone number verified successfully!");
+      router.push("/profile");
     } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message || error.message || "Reset failed"
-      );
-      router.push("/password-reset");
-    } finally {
-      setReseting(false);
+      toast.error(error?.response?.data?.message || "Verification failed.");
     }
   };
 
@@ -106,82 +157,76 @@ export default function LoginPage() {
           <BreadCrumb breadCrumbData={breadCrumbData} />
 
           <div className="min-h-[60vh] flex flex-col gap-5 items-center justify-center mt-5">
-            {resetToat && (
-              <div className="flex items-start gap-3 p-4 border-l-6 border-blue-500 bg-white rounded-lg shadow-sm max-w-md w-full">
-                <MdErrorOutline className="size-[30px] text-blue-700" />
-                <div className="text-sm text-blue-700 w-[calc(100%-30px)]">
-                  <p className="font-semibold">Email Sent Successful!</p>
-                  <p>
-                    You will receive an email shortly with your reset link.
-                    Please use the link to reset your password.
+            {resetToat ? (
+              <div className="flex items-center justify-center">
+                <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+                  <div className="flex items-start gap-3 p-4 border-l-6 border-blue-500 bg-white w-full mb-2">
+                    <MdErrorOutline className="size-[30px] text-purple-700" />
+                    <div className="text-sm text-purple-700 w-[calc(100%-30px)]">
+                      <p className="font-semibold">Email Sent Successful!</p>
+                      <p>
+                        You will receive an OTP shortly to your registred email
+                        or phone number. Please use the OTP to reset your
+                        password.
+                      </p>
+                    </div>
+                  </div>
+                  <MdVerifiedUser className="size-20 text-purple-600 mx-auto rounded-full p-2 border-2" />
+                  <h1 className="text-center text-2xl font-semibold mt-3">
+                    Phone Number Verification
+                  </h1>
+                  <p className="text-center text-gray-500 mb-2">
+                    Enter the 6-digit verification code
                   </p>
+
+                  {/* OTP Inputs */}
+                  <div className="flex gap-2 justify-center mt-5">
+                    {otp.map((digit, index) => (
+                      <input
+                        key={index}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={1}
+                        value={digit}
+                        ref={(el) => {
+                          if (el) inputRefs.current[index] = el;
+                        }}
+                        onChange={(e) => handleOTPChange(e, index)}
+                        onKeyDown={(e) => handleKeyDown(e, index)}
+                        onPaste={(e) => handlePaste(e)}
+                        className="w-12 h-12 text-center text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:purple-blue-500"
+                      />
+                    ))}
+                  </div>
+
+                  {error && (
+                    <p className="text-center text-red-500 mt-3">{error}</p>
+                  )}
+
+                  {/* Buttons */}
+                  <div className="mt-6 space-y-3 font-semibold">
+                    <button
+                      onClick={handleVerify}
+                      className="px-5 py-2 w-full rounded-md bg-purple-600 text-white hover:bg-purple-700 duration-500 cursor-pointer"
+                    >
+                      Verify Code
+                    </button>
+
+                    <button
+                      // onClick={handleCode}
+                      disabled={timer > 0}
+                      className={`px-5 py-2 w-full rounded-md duration-300 ${
+                        timer > 0
+                          ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                          : "bg-white text-gray-700 hover:bg-gray-100 shadow-sm"
+                      }`}
+                    >
+                      {timer > 0
+                        ? `Resend in ${formatTime(timer)}`
+                        : "Resend Code"}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
-
-            {token ? (
-              <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-8">
-                <h2 className="text-3xl font-semibold primary-text-color mb-6 text-center">
-                  Reset Password ?
-                </h2>
-
-                <form onSubmit={handleResetSubmit} className="space-y-6">
-                  {/* password */}
-                  <div>
-                    <label
-                      htmlFor="password"
-                      className="block text-gray-500 font-medium mb-2"
-                    >
-                      New Password
-                    </label>
-                    <div className="flex border border-gray-300 rounded-md">
-                      <button className="px-3 flex items-center text-gray-600 hover:text-indigo-600 focus:outline-none bg-blue-100">
-                        <FaEye />
-                      </button>
-                      <input
-                        id="password"
-                        name="password"
-                        type="text"
-                        value={resetFormData.password}
-                        onChange={handleResetChange}
-                        required
-                        placeholder="New Password"
-                        className="w-full px-4 py-2 focus:outline-none"
-                      />
-                    </div>
-                  </div>
-                  {/* confirm password */}
-                  <div>
-                    <label
-                      htmlFor="password_confirmation"
-                      className="block text-gray-500 font-medium mb-2"
-                    >
-                      Confirm Password
-                    </label>
-                    <div className="flex border border-gray-300 rounded-md">
-                      <button className="px-3 flex items-center text-gray-600 hover:text-indigo-600 focus:outline-none bg-blue-100">
-                        <FaEye />
-                      </button>
-                      <input
-                        id="password_confirmation"
-                        name="password_confirmation"
-                        type="text"
-                        value={resetFormData.password_confirmation}
-                        onChange={handleResetChange}
-                        required
-                        placeholder="Confirm Password"
-                        className="w-full px-4 py-2 focus:outline-none"
-                      />
-                    </div>
-                  </div>
-                  {/* Submit */}
-                  <button
-                    type="submit"
-                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-md py-2 transition"
-                  >
-                    {reseting ? "Reseting ..." : "Reset"}
-                  </button>
-                </form>
               </div>
             ) : (
               <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-8">
@@ -192,33 +237,120 @@ export default function LoginPage() {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Email */}
-                  <div>
+                  <div className="flex gap-5 my-5">
                     <label
-                      htmlFor="email"
-                      className="block text-gray-700 font-bold mb-3 text-lg"
+                      className={`flex items-center gap-2 px-4 py-2 border rounded-xl cursor-pointer transition-all ${
+                        method === "email"
+                          ? "border-pink-500 bg-pink-50 text-pink-600"
+                          : "border-gray-300 hover:border-gray-400 text-gray-600"
+                      }`}
                     >
-                      📧 Email address
-                    </label>
-                    <div className="flex border-3 border-purple-300 rounded-2xl overflow-hidden shadow-lg bg-white transform hover:scale-105 transition-all duration-300 focus-within:border-purple-500 focus-within:shadow-xl">
-                      <button
-                        type="button"
-                        className="px-4 flex items-center text-white bg-gradient-to-br from-purple-400 to-indigo-500 hover:from-purple-500 hover:to-indigo-600 focus:outline-none transition-all duration-300"
-                      >
-                        <MdEmail className="size-6" />
-                      </button>
                       <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        placeholder="you@example.com"
-                        className="w-full px-4 py-3 focus:outline-none text-gray-700 font-medium"
+                        type="radio"
+                        name="contactMethod"
+                        value="email"
+                        checked={method === "email"}
+                        onChange={() => setMethod("email")}
+                        className="hidden"
                       />
-                    </div>
+                      <div
+                        className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                          method === "email"
+                            ? "border-pink-500"
+                            : "border-gray-400"
+                        }`}
+                      >
+                        {method === "email" && (
+                          <div className="w-2.5 h-2.5 bg-pink-500 rounded-full"></div>
+                        )}
+                      </div>
+                      <span className="text-sm font-medium">Email</span>
+                    </label>
+
+                    <label
+                      className={`flex items-center gap-2 px-4 py-2 border rounded-xl cursor-pointer transition-all ${
+                        method === "phone"
+                          ? "border-pink-500 bg-pink-50 text-pink-600"
+                          : "border-gray-300 hover:border-gray-400 text-gray-600"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="contactMethod"
+                        value="phone"
+                        checked={method === "phone"}
+                        onChange={() => setMethod("phone")}
+                        className="hidden"
+                      />
+                      <div
+                        className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                          method === "phone"
+                            ? "border-pink-500"
+                            : "border-gray-400"
+                        }`}
+                      >
+                        {method === "phone" && (
+                          <div className="w-2.5 h-2.5 bg-pink-500 rounded-full"></div>
+                        )}
+                      </div>
+                      <span className="text-sm font-medium">Phone</span>
+                    </label>
                   </div>
+                  {method === "email" ? (
+                    <div>
+                      <label
+                        htmlFor="email"
+                        className="block text-gray-700 font-bold mb-3 text-lg"
+                      >
+                        📧 Email address
+                      </label>
+                      <div className="flex border-3 border-purple-300 rounded-2xl overflow-hidden shadow-lg bg-white transform hover:scale-105 transition-all duration-300 focus-within:border-purple-500 focus-within:shadow-xl">
+                        <button
+                          type="button"
+                          className="px-4 flex items-center text-white bg-gradient-to-br from-purple-400 to-indigo-500 hover:from-purple-500 hover:to-indigo-600 focus:outline-none transition-all duration-300"
+                        >
+                          <MdEmail className="size-6" />
+                        </button>
+                        <input
+                          id="email"
+                          name="email"
+                          type="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          required
+                          placeholder="you@example.com"
+                          className="w-full px-4 py-3 focus:outline-none text-gray-700 font-medium"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <label
+                        htmlFor="phone_number"
+                        className="block text-gray-700 font-bold mb-3 text-lg"
+                      >
+                        📧 Phone Number
+                      </label>
+                      <div className="flex border-3 border-purple-300 rounded-2xl overflow-hidden shadow-lg bg-white transform hover:scale-105 transition-all duration-300 focus-within:border-purple-500 focus-within:shadow-xl">
+                        <button
+                          type="button"
+                          className="px-4 flex items-center text-white bg-gradient-to-br from-purple-400 to-indigo-500 hover:from-purple-500 hover:to-indigo-600 focus:outline-none transition-all duration-300"
+                        >
+                          <FaPhone className="size-6" />
+                        </button>
+                        <input
+                          id="phone_number"
+                          name="phone_number"
+                          type="tel"
+                          value={formData.phone_number}
+                          onChange={handleChange}
+                          required
+                          placeholder="017xxxxxxxx"
+                          className="w-full px-4 py-3 focus:outline-none text-gray-700 font-medium"
+                        />
+                      </div>
+                    </div>
+                  )}
 
                   {/* Submit Button */}
                   <button
