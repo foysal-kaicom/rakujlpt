@@ -1,14 +1,18 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import nookies from 'nookies';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import nookies from "nookies";
 
 interface User {
   id: string;
   first_name: string;
-  last_name:string;
+  last_name: string;
   email: string;
-  phone_number:string;
-  photo:string
+  phone_number: string;
+  photo: string;
+  user_subscriptions_id: number | null;
+  is_subscribed: number;
+  current_package_id: number | null;
+  current_package_name: string | null;
   // Add more fields as needed
 }
 
@@ -29,9 +33,9 @@ export const useAuthStore = create<AuthState>()(
       token: null,
 
       login: (user, token) => {
-        nookies.set(null, 'token', token, {
+        nookies.set(null, "token", token, {
           maxAge: 30 * 24 * 60 * 60, // 30 days
-          path: '/',
+          path: "/",
         });
 
         set({
@@ -43,7 +47,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: () => {
-        nookies.destroy(null, 'token');
+        nookies.destroy(null, "token");
         set({
           isAuthenticated: false,
           user: null,
@@ -57,7 +61,7 @@ export const useAuthStore = create<AuthState>()(
         })),
     }),
     {
-      name: 'auth-storage', // for localStorage fallback
+      name: "auth-storage", // for localStorage fallback
       skipHydration: false,
     }
   )

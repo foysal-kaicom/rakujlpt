@@ -69,11 +69,11 @@ export default function Header() {
         {navdata.map((item, index) => (
           <div
             key={index}
-            className={`group border-b-4 hover:border-b-[#173fa4] relative duration-300 h-full flex items-center ${
+            className={`group border-b-4 hover:border-b-purple-600 relative duration-300 h-full flex items-center ${
               item.to === path ||
               (Array.isArray(item.links) &&
                 item.links.some((link) => link.to === path))
-                ? "border-b-[#173fa4]"
+                ? "border-b-purple-600"
                 : "border-b-transparent"
             }`}
           >
@@ -91,8 +91,8 @@ export default function Header() {
                 {item.links.map((link, i) => (
                   <Link href={link.to} key={i}>
                     <div
-                      className={`w-[230px] px-5 py-1.5 hover:bg-blue-50/70 hover:text-[#173fa4] duration-300 text-sm font-semibold ${
-                        link.to === path ? "text-[#173fa4] bg-blue-50/70" : ""
+                      className={`w-[230px] px-5 py-1.5 hover:bg-purple-100 hover:text-[#570d69] duration-300 text-sm font-semibold ${
+                        link.to === path ? "text-[#570d69] bg-blue-50/70" : ""
                       }`}
                     >
                       {link.label}
@@ -151,10 +151,10 @@ export default function Header() {
             ))}
             <p
               onClick={handleLogout}
-              className="flex gap-1.5 items-center hover:bg-blue-100 duration-300 cursor-pointer line-clamp-1 p-1 px-4 text-red-500"
+              className="flex gap-1.5 items-center hover:bg-purple-100 duration-300 cursor-pointer line-clamp-1 p-1 px-4 text-red-500"
             >
-              <span className="p-1 bg-white rounded outline outline-blue-100">
-                <IoLogOut className="text-red-500" />
+              <span className="p-1 bg-white rounded outline outline-purple-200">
+                <IoLogOut/>
               </span>
               Logout
             </p>

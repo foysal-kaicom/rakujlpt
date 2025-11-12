@@ -7,7 +7,7 @@
   <h3 class="text-xl font-semibold p-[12px] rounded-t-lg text-black bg-indigo-300">Create Question Group</h3>
   <div class="p-8 rounded-b-lg bg-white border">
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4">
-      <div class="space-y-2">
+      {{-- <div class="space-y-2">
         <label for="sectionSelect" class="block font-semibold">Select Section</label>
         <select id="sectionSelect" name="section_id"
           class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
@@ -15,7 +15,43 @@
           <option value="{{$section->id}}">{{optional($section->mockTestModule)->name}} - {{$section->title}}</option>
           @endforeach
         </select>
-      </div>
+      </div> --}}
+
+
+      
+
+        <!-- Exam Dropdown -->
+        <div class="space-y-2">
+          <label for="examSelect" class="block font-semibold">Select Exam</label>
+          <select id="examSelect" name="exam_id"
+            class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
+            <option value="">Select Exam</option>
+            @foreach($exams as $exam)
+              <option value="{{ $exam->id }}">{{ $exam->title }}</option>
+            @endforeach
+          </select>
+        </div>
+
+        <!-- Module Dropdown -->
+        <div class="space-y-2">
+          <label for="moduleSelect" class="block font-semibold">Select Module</label>
+          <select id="moduleSelect" name="module_id"
+            class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
+            <option value="">Select Module</option>
+          </select>
+        </div>
+
+        <!-- Section Dropdown -->
+        <div class="space-y-2">
+          <label for="sectionSelect" class="block font-semibold">Select Section</label>
+          <select id="sectionSelect" name="section_id"
+            class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
+            <option value="">Select Section</option>
+          </select>
+        </div>
+
+     
+
 
       <div class="space-y-2">
         <label for="questionTypeSelect" class="block font-semibold">Group Type</label>
@@ -267,6 +303,48 @@
     // Init with 1 question
     generateQuestions(1);
   });
+</script>
+<script>
+  const examSelect = document.getElementById('examSelect');
+const moduleSelect = document.getElementById('moduleSelect');
+const sectionSelect = document.getElementById('sectionSelect');
+
+examSelect.addEventListener('change', function() {
+  const examId = this.value;
+  moduleSelect.innerHTML = '<option value="">Select Module</option>';
+  sectionSelect.innerHTML = '<option value="">Select Section</option>';
+
+  if (examId) {
+    fetch(`/mock-tests/modules/${examId}`)
+      .then(response => response.json())
+      .then(modules => {
+        modules.forEach(module => {
+          const option = document.createElement('option');
+          option.value = module.id;
+          option.textContent = module.name;
+          moduleSelect.appendChild(option);
+        });
+      });
+  }
+});
+
+moduleSelect.addEventListener('change', function() {
+  const moduleId = this.value;
+  sectionSelect.innerHTML = '<option value="">Select Section</option>';
+
+  if (moduleId) {
+    fetch(`/mock-tests/sections/${moduleId}`)
+      .then(response => response.json())
+      .then(sections => {
+        sections.forEach(section => {
+          const option = document.createElement('option');
+          option.value = section.id;
+          option.textContent = section.title;
+          sectionSelect.appendChild(option);
+        });
+      });
+  }
+});
 </script>
 
 @endsection

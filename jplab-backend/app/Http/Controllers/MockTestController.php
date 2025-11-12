@@ -31,7 +31,8 @@ class MockTestController extends Controller
     {
         $modules = MockTestModule::with('sections')->get();
 
-        return view('mock-tests.module_section_list', compact('modules'));
+        // return view('mock-tests.module_section_list', compact('modules'));
+        return view('mock-tests.sections.module_section_list', compact('modules'));
     }
 
     public function questionList(Request $request)
@@ -51,36 +52,112 @@ class MockTestController extends Controller
     
 
 
+    // public function questionSetupForm()
+    // {
+
+    //     $mockTestSections = MockTestSection::with('mockTestModule')->get();
+
+    //     return view('mock-tests.question-setup', compact('mockTestSections'));
+    // }
+
     public function questionSetupForm()
     {
-
-        $mockTestSections = MockTestSection::with('mockTestModule')->get();
-
-        return view('mock-tests.question-setup', compact('mockTestSections'));
+        $exams = Exam::with('mockTestModules.sections')->get();
+        return view('mock-tests.question-setup', compact('exams'));
     }
 
+    //Dropdown Data from question setup
+    public function getModulesByExam($examId)
+    {
+        $modules = MockTestModule::where('exam_id', $examId)->get();
+        
+        return response()->json($modules);
+    }
+
+    public function getSectionsByModule($moduleId)
+    {
+        $sections = MockTestSection::where('mock_test_module_id', $moduleId)->get();
+        return response()->json($sections);
+    }
+
+
+
+
+    public function createSection()
+    {
+        $modules = MockTestModule::all();
+        return view('mock-tests.sections.create-section', compact('modules'));
+    }
+
+    public function storeSection(Request $request)
+    {
+        $request->validate([
+            'mock_test_module_id' => 'required|exists:mock_test_modules,id',
+            'title' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:mock_test_sections,slug',
+            'sample_question' => 'required|string',
+        ]);
+
+        MockTestSection::create([
+            'mock_test_module_id' => $request->input('mock_test_module_id'),
+            'title' => $request->input('title'),
+            'slug' => $request->input('slug'),
+            'sample_question' => $request->input('sample_question'),
+        ]);
+
+        Toastr::success("Section created successfully.");
+        return redirect()->route('mock-tests.module-section.info');
+    }
+
+    // public function editSection($id){
+    //     $section = MockTestSection::findOrFail($id);
+    //     return view('mock-tests.edit-section', compact('section'));
+    // }
     public function editSection($id){
+        $modules = MockTestModule::all();
         $section = MockTestSection::findOrFail($id);
-        return view('mock-tests.edit-section', compact('section'));
+        return view('mock-tests.sections.edit-section', compact('section','modules'));
     }
 
     public function updateSection(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required|string',
+            'mock_test_module_id' => 'required|exists:mock_test_modules,id',
+            'title' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:mock_test_sections,slug,'.$id,
             'sample_question' => 'required|string',
         ]);
 
         $section = MockTestSection::findOrFail($id);
 
         $section->update([
+            'mock_test_module_id' => $request->input('mock_test_module_id'),
             'title' => $request->input('title'),
+            'slug' => $request->input('slug'),
             'sample_question' => $request->input('sample_question'),
         ]);
 
         Toastr::success("Question updated Successfully.");
         return redirect()->route('mock-tests.module-section.info');
     }
+
+    // public function updateSection(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'title' => 'required|string',
+    //         'sample_question' => 'required|string',
+    //     ]);
+
+    //     $section = MockTestSection::findOrFail($id);
+
+    //     $section->update([
+    //         'title' => $request->input('title'),
+    //         'sample_question' => $request->input('sample_question'),
+    //     ]);
+
+    //     Toastr::success("Question updated Successfully.");
+    //     return redirect()->route('mock-tests.module-section.info');
+    // }
 
 
     public function questionSetup(StoreMockTestRequest $request)
@@ -156,15 +233,25 @@ class MockTestController extends Controller
 
     public function editQuestion($id)
     {
-        $question = MockTestQuestion::with('mockTestQuestionOption', 'mockTestQuestionGroup')->findOrFail($id);
-        $mockTestSections = MockTestSection::with('mockTestModule')->get();
-    
+        $question = MockTestQuestion::with('mockTestQuestionGroup.mockTestSection.mockTestModule')->find($id);
+
+        $module = optional(optional($question->mockTestQuestionGroup)->mockTestSection)->mockTestModule;
+
+        $mockTestSections = MockTestSection::with('mockTestModule.exam')
+            ->when($module, function ($query, $module) {
+                $query->whereHas('mockTestModule', function ($q) use ($module) {
+                    $q->where('exam_id', $module->exam_id)
+                    ->where('id', $module->id);
+                });
+            })
+            ->get();
+
         return view('mock-tests.edit-question', compact('question', 'mockTestSections'));
     }
 
     public function updateQuestionGroup(Request $request, $id)
     {
-
+        
         $validate=Validator::make($request->all(),[
             'mock_test_section_id' => 'required|exists:mock_test_sections,id',
             'group_type' => 'nullable|in:passage,audio',
@@ -182,6 +269,7 @@ class MockTestController extends Controller
         $questionGroup = MockTestQuestionGroup::findOrFail($id);
     
         $questionGroup->mock_test_section_id = $request->mock_test_section_id;
+
         $questionGroup->group_type = $request->group_type;
     
         if ($request->hasFile('audio-content')) {

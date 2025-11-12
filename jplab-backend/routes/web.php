@@ -77,14 +77,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/{candidate_id}/applications', [CandidateController::class, 'candidateApplications'])->name('applications');
     });
 
-    Route::group(['prefix' => 'exam', 'as' => 'exam.', 'module' => 'Exam'], function () {
-        Route::get('/', [ExamController::class, 'list'])->name('list');
-        Route::get('/create', [ExamController::class, 'showCreateExam'])->name('create');
-        Route::post('/store', [ExamController::class, 'store'])->name('store');
-        Route::get('/edit/{id}', [ExamController::class, 'edit'])->name('edit');
-        Route::post('/update/{id}', [ExamController::class, 'update'])->name('update');
-        Route::post('{id}/toggle-status', [ExamController::class, 'toggleStatus'])->name('toggleStatus');
-    });
+    // Route::group(['prefix' => 'exam', 'as' => 'exam.', 'module' => 'Exam'], function () {
+
+    // });
 
 
     Route::group(['prefix' => 'payment', 'as' => 'payment.', 'module' => 'payment'], function () {
@@ -93,10 +88,30 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     Route::group(['prefix' => 'mock-tests', 'as' => 'mock-tests.', 'module' => 'mock-tests'], function () {
+        Route::get('/', [ExamController::class, 'list'])->name('exam.list');
+        Route::get('/create', [ExamController::class, 'showCreateExam'])->name('exam.create');
+        Route::post('/store', [ExamController::class, 'store'])->name('exam.store');
+        Route::get('/edit/{id}', [ExamController::class, 'edit'])->name('exam.edit');
+        Route::post('/update/{id}', [ExamController::class, 'update'])->name('exam.update');
+        Route::post('{id}/toggle-status', [ExamController::class, 'toggleStatus'])->name('exam.toggleStatus');
+
+
+
+
+
+
+
+
+
+
         Route::get('/question-list', [MockTestController::class, 'questionList'])->name('question.list');
         Route::get('/module-info', [MockTestController::class, 'index'])->name('module-section.info');
         Route::get('/question-setup-form', [MockTestController::class, 'questionSetupForm'])->name('question-setup.form');
         Route::post('/question-setup', [MockTestController::class, 'questionSetup'])->name('question-setup.post');
+
+        Route::get('/section-create', [MockTestController::class, 'createSection'])->name('section.create');
+        Route::post('/section-store', [MockTestController::class, 'storeSection'])->name('section.store');
+
         Route::get('/section-edit/{id}', [MockTestController::class, 'editSection'])->name('section.edit');
         Route::post('/section-update/{id}', [MockTestController::class, 'updateSection'])->name('section.update');
         Route::get('/edit-question/{id}', [MockTestController::class, 'editQuestion'])->name('edit.question');
@@ -104,6 +119,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/delete-question/{id}', [MockTestController::class, 'deleteQuestion'])->name('question.delete');
         Route::post('/update-question-group/{id}', [MockTestController::class, 'updateQuestionGroup'])->name('question-group.update');
         Route::get('/reports/list', [MockTestController::class, 'getReportsData'])->name('reports.list');
+
+
+        // ajax dependent dropdown routes
+        Route::get('/modules/{examId}', [MockTestController::class, 'getModulesByExam'])->name('modules.byExam');
+        Route::get('/sections/{moduleId}', [MockTestController::class, 'getSectionsByModule'])->name('sections.byModule');
 
     });
 

@@ -107,14 +107,28 @@ class CandidateProgressController extends Controller
             ->first();
 
         if ($nextStage) {
-            CandidateStageProgress::updateOrCreate(
-                [
+            $existingProgress = CandidateStageProgress::where('candidate_id', $candidate->id)
+                ->where('roadmap_id', $progress->roadmap_id)
+                ->where('stage_id', $nextStage->id)
+                ->first();
+
+            if ($existingProgress) {
+                // If already completed, skip updating
+                if ($existingProgress->candidate_status === 'completed') {
+                    // Do nothing — already completed
+                } else {
+                    // Update to current if not completed
+                    $existingProgress->update(['candidate_status' => 'current']);
+                }
+            } else {
+                // Create a new record for the next stage
+                CandidateStageProgress::create([
                     'candidate_id' => $candidate->id,
                     'roadmap_id' => $progress->roadmap_id,
                     'stage_id' => $nextStage->id,
-                ],
-                ['candidate_status' => 'current']
-            );
+                    'candidate_status' => 'current',
+                ]);
+            }
         }
 
         return response()->json(['message' => 'Stage completed!']);

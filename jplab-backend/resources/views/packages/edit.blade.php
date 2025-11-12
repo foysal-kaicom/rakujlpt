@@ -28,12 +28,12 @@
             </div>
 
             <!-- Price -->
-            <div class="col-md-3">
+            {{-- <div class="col-md-3">
                 <label class="form-label fw-semibold">Price</label>
                 <input type="number" name="price" value="{{ $package->price }}"
                     class="form-control form-control-lg shadow-sm rounded-2" placeholder="e.g. 1000" required />
                 @error('price') <div class="text-danger small">{{ $message }}</div> @enderror
-            </div>
+            </div> --}}
 
             <!-- Home -->
             <div class="col-md-12 d-flex align-items-center">
@@ -57,8 +57,18 @@
             <div class="col-md-12 d-flex align-items-center">
                 <div class="form-check mt-4">
                     <input class="form-check-input" type="checkbox" name="is_free" id="isFree"
-                        {{ $package->is_free ? 'checked' : '' }}>
+                        {{ $package->is_free ? 'checked' : '' }}
+                        onchange="document.querySelector('#priceDiv').style.display = this.checked ? 'none' : 'block'">
                     <label for="isFree" class="form-check-label fw-semibold">Free Package</label>
+                </div>
+            </div>
+
+            <div id="priceDiv" style="{{ $package->is_free ? 'display:none' : '' }}">
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Price</label>
+                    <input type="number" name="price" value="{{ $package->price }}"
+                        class="form-control form-control-lg shadow-sm rounded-2" placeholder="e.g. 1000" required />
+                    @error('price') <div class="text-danger small">{{ $message }}</div> @enderror
                 </div>
             </div>
 
@@ -101,7 +111,7 @@
                 <div id="exam-wrapper">
                     @foreach($package->package_details as $detail)
                         <div class="exam-row flex gap-2 mb-2">
-                            <select name="exam_id[]" class="form-control shadow-sm rounded-2" required>
+                            <select name="exam_id[]" class="form-control shadow-sm rounded-2 exam-select" required>
                                 <option value="">-- Select Exam --</option>
                                 @foreach($exams as $exam)
                                     <option value="{{ $exam->id }}" {{ $exam->id == $detail->exam_id ? 'selected' : '' }}>
@@ -112,11 +122,12 @@
 
                             <input type="number" name="max_exam_attempt[]" value="{{ $detail->max_exam_attempt }}"
                                 placeholder="Max Attempt" class="form-control shadow-sm rounded-2" required>
+
+                            {{-- <button type="button" class="btn btn-danger btn-sm remove-exam">×</button> --}}
                         </div>
                     @endforeach
                 </div>
-                <button type="button" id="add-exam"
-                    class="btn btn-outline-secondary btn-sm mt-2 rounded-pill px-3">
+                <button type="button" id="add-exam" class="btn btn-outline-secondary btn-sm mt-2 rounded-pill px-3">
                     + Add Exam
                 </button>
             </div>
@@ -137,24 +148,87 @@
 </div>
 
 <script>
-    document.getElementById('add-exam').addEventListener('click', function () {
-    let wrapper = document.getElementById('exam-wrapper');
+    const exams = @json($exams);
+    const wrapper = document.getElementById('exam-wrapper');
+    const addBtn = document.getElementById('add-exam');
 
-    let row = document.createElement('div');
-    row.classList.add('exam-row', 'flex', 'gap-2', 'mb-2');
+    // Get all selected exam IDs
+    function getSelectedExamIds() {
+        const selects = wrapper.querySelectorAll('.exam-select');
+        return Array.from(selects)
+            .map(s => s.value)
+            .filter(v => v !== '');
+    }
 
-    row.innerHTML = `
-        <select name="exam_id[]" class="form-control" required>
-            <option value="">-- Select Exam --</option>
-            @foreach($exams as $exam)
-                <option value="{{ $exam->id }}">{{ $exam->title }}</option>
-            @endforeach
-        </select>
-        <input type="number" name="max_exam_attempt[]" placeholder="Max Attempt" class="form-control" required>
-    `;
+    // Update all dropdowns to disable already-selected exams
+    function updateAllDropdowns() {
+        const selectedIds = getSelectedExamIds();
+        const selects = wrapper.querySelectorAll('.exam-select');
 
-    wrapper.appendChild(row);
-});
+        selects.forEach(select => {
+            const currentValue = select.value;
+            Array.from(select.options).forEach(option => {
+                if(option.value === "") return;
+                option.disabled = selectedIds.includes(option.value) && option.value !== currentValue;
+            });
+        });
+
+        // Disable add button if all exams are selected
+        addBtn.disabled = selectedIds.length >= exams.length;
+    }
+
+    // Create a new exam row
+    function createExamRow() {
+        const selectedIds = getSelectedExamIds();
+        if (selectedIds.length >= exams.length) {
+            return; // All exams selected
+        }
+
+        const newRow = document.createElement('div');
+        newRow.classList.add('exam-row', 'flex', 'gap-2', 'mb-2');
+
+        let optionsHtml = `<option value="">-- Select Exam --</option>`;
+        exams.forEach(exam => {
+            if (!selectedIds.includes(exam.id.toString())) {
+                optionsHtml += `<option value="${exam.id}">${exam.title}</option>`;
+            }
+        });
+
+        newRow.innerHTML = `
+            <select name="exam_id[]" class="form-control shadow-sm rounded-2 exam-select" required>
+                ${optionsHtml}
+            </select>
+
+            <input type="number" name="max_exam_attempt[]" placeholder="Max Attempt"
+                class="form-control shadow-sm rounded-2" required>
+
+            <button type="button" class="btn btn-danger btn-sm remove-exam">×</button>
+        `;
+
+        wrapper.appendChild(newRow);
+        updateAllDropdowns();
+    }
+
+    // Add new exam row
+    addBtn.addEventListener('click', createExamRow);
+
+    // Remove row and update dropdowns
+    // wrapper.addEventListener('click', function(e) {
+    //     if(e.target.classList.contains('remove-exam')) {
+    //         e.target.closest('.exam-row').remove();
+    //         updateAllDropdowns();
+    //     }
+    // });
+
+    // Update dropdowns on change
+    wrapper.addEventListener('change', function(e) {
+        if(e.target.classList.contains('exam-select')) {
+            updateAllDropdowns();
+        }
+    });
+
+    // Initial call
+    updateAllDropdowns();
 </script>
 <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 <script>
@@ -164,4 +238,5 @@
             console.error(error);
         });
 </script>
+
 @endsection

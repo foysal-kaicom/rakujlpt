@@ -422,6 +422,7 @@ class SslCommerzPaymentController extends Controller
 
                 $subscriptionData->candidate->update([
                     'user_subscriptions_id' => $subscriptionData->id,
+                    'is_subscribed' => true
                 ]);
 
                 //notify candidate
