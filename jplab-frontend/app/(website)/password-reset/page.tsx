@@ -1,16 +1,16 @@
 "use client";
 
 // React & Next.js core
-import { Suspense, useState, useRef } from "react";
+import { Suspense, useState, useRef, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 // Third-party libraries
 import { toast } from "sonner";
 
 // Icons
-import { FaPhone } from "react-icons/fa";
 import { MdEmail, MdErrorOutline } from "react-icons/md";
 import { MdVerifiedUser } from "react-icons/md";
+import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 
 import axios from "axios";
 
@@ -27,26 +27,43 @@ export default function LoginPage() {
   ];
 
   // Hooks
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
   const router = useRouter();
 
   const [reseting, setReseting] = useState(false);
-  const [method, setMethod] = useState("email");
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const [timer, setTimer] = useState<number>(180);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
- const [error, setError] = useState<string>("");
+  const [error, setError] = useState<string>("");
   const [resetToat, setResetToast] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
-    phone_number: "",
+    identifier: "",
   });
+  const [resetForm, setResetForm] = useState({
+    password: "",
+    password_confirmation: "",
+  });
+
+  useEffect(() => {
+    if (timer <= 0) return;
+
+    const interval = setInterval(() => {
+      setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timer]);
 
   // Handle form input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleResetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setResetForm((prev) => ({ ...prev, [name]: value }));
   };
 
   // Handle reset submission
@@ -63,6 +80,12 @@ export default function LoginPage() {
           response?.data?.message || "Reset link has been sent to your mail"
         );
         setResetToast(true);
+        // Convert expiry time to seconds remaining
+        const expiry = new Date(response.data.data.otp_expired_at).getTime();
+        const now = Date.now();
+        const remainingSeconds = Math.max(Math.floor((expiry - now) / 1000), 0);
+
+        setTimer(remainingSeconds);
       }
     } catch (error: any) {
       toast.error(
@@ -127,9 +150,7 @@ export default function LoginPage() {
     return `${m}:${s}`;
   };
 
-
-   const handleVerify = async () => {
-
+  const handleVerify = async () => {
     const fullCode = otp.join("");
     if (fullCode.length !== 6) {
       setError("Please enter all 6 digits.");
@@ -137,9 +158,13 @@ export default function LoginPage() {
     }
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/verify-password-reset-otp`,
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/verify-password-reset-otp`,
         {
+          identifier: formData.identifier,
           otp: fullCode,
+          password: resetForm.password,
+          password_confirmation: resetForm.password_confirmation,
         }
       );
 
@@ -160,7 +185,7 @@ export default function LoginPage() {
             {resetToat ? (
               <div className="flex items-center justify-center">
                 <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
-                  <div className="flex items-start gap-3 p-4 border-l-6 border-blue-500 bg-white w-full mb-2">
+                  <div className="flex items-start gap-3 p-4 border-l-6 border-purple-500 bg-white w-full mb-2">
                     <MdErrorOutline className="size-[30px] text-purple-700" />
                     <div className="text-sm text-purple-700 w-[calc(100%-30px)]">
                       <p className="font-semibold">Email Sent Successful!</p>
@@ -173,7 +198,7 @@ export default function LoginPage() {
                   </div>
                   <MdVerifiedUser className="size-20 text-purple-600 mx-auto rounded-full p-2 border-2" />
                   <h1 className="text-center text-2xl font-semibold mt-3">
-                    Phone Number Verification
+                    OTP Verification
                   </h1>
                   <p className="text-center text-gray-500 mb-2">
                     Enter the 6-digit verification code
@@ -203,6 +228,48 @@ export default function LoginPage() {
                     <p className="text-center text-red-500 mt-3">{error}</p>
                   )}
 
+                  {/* Password */}
+                  <div className="relative group my-5 max-w-83 mx-auto">
+                    <FaLock className="absolute top-3.5 left-3 text-yellow-400 group-focus-within:scale-110 transition-transform" />
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      value={resetForm.password}
+                      onChange={handleResetChange}
+                      required
+                      placeholder="Enter password"
+                      className="w-full pl-10 pr-10 py-2.5 rounded-xl border-2 border-transparent bg-gradient-to-r from-yellow-50 to-pink-50 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-300 outline-none text-gray-700 transition-all duration-300"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="absolute top-3 right-3 text-gray-500 hover:text-pink-600 transition-colors"
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
+
+                  {/* Confirm Password */}
+                  <div className="relative group max-w-83 mx-auto">
+                    <FaLock className="absolute top-3.5 left-3 text-green-400 group-focus-within:scale-110 transition-transform" />
+                    <input
+                      type={showConfirm ? "text" : "password"}
+                      name="password_confirmation"
+                      value={resetForm.password_confirmation}
+                      onChange={handleResetChange}
+                      required
+                      placeholder="Confirm password"
+                      className="w-full pl-10 pr-10 py-2.5 rounded-xl border-2 border-transparent bg-gradient-to-r from-green-50 to-indigo-50 focus:border-green-400 focus:ring-2 focus:ring-green-300 outline-none text-gray-700 transition-all duration-300"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirm((prev) => !prev)}
+                      className="absolute top-3 right-3 text-gray-500 hover:text-green-600 transition-colors"
+                    >
+                      {showConfirm ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
+
                   {/* Buttons */}
                   <div className="mt-6 space-y-3 font-semibold">
                     <button
@@ -229,128 +296,40 @@ export default function LoginPage() {
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-8">
+              <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-8 flex flex-col items-center">
                 <div className="bg-gradient-to-r from-pink-400 to-rose-400 rounded-3xl p-4 inline-block mb-4 shadow-lg transform -rotate-2">
-                  <h2 className="text-4xl font-bold text-white">
+                  <h2 className="text-lg lg:text-4xl font-bold text-white">
                     🔑 Reset Password
                   </h2>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="flex gap-5 my-5">
+                <form onSubmit={handleSubmit} className="space-y-6 w-full">
+                  <div>
                     <label
-                      className={`flex items-center gap-2 px-4 py-2 border rounded-xl cursor-pointer transition-all ${
-                        method === "email"
-                          ? "border-pink-500 bg-pink-50 text-pink-600"
-                          : "border-gray-300 hover:border-gray-400 text-gray-600"
-                      }`}
+                      htmlFor="identifier"
+                      className="block text-gray-700 font-bold mb-3 text-lg"
                     >
-                      <input
-                        type="radio"
-                        name="contactMethod"
-                        value="email"
-                        checked={method === "email"}
-                        onChange={() => setMethod("email")}
-                        className="hidden"
-                      />
-                      <div
-                        className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                          method === "email"
-                            ? "border-pink-500"
-                            : "border-gray-400"
-                        }`}
-                      >
-                        {method === "email" && (
-                          <div className="w-2.5 h-2.5 bg-pink-500 rounded-full"></div>
-                        )}
-                      </div>
-                      <span className="text-sm font-medium">Email</span>
+                      📧 Email or Phone number
                     </label>
-
-                    <label
-                      className={`flex items-center gap-2 px-4 py-2 border rounded-xl cursor-pointer transition-all ${
-                        method === "phone"
-                          ? "border-pink-500 bg-pink-50 text-pink-600"
-                          : "border-gray-300 hover:border-gray-400 text-gray-600"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="contactMethod"
-                        value="phone"
-                        checked={method === "phone"}
-                        onChange={() => setMethod("phone")}
-                        className="hidden"
-                      />
-                      <div
-                        className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                          method === "phone"
-                            ? "border-pink-500"
-                            : "border-gray-400"
-                        }`}
+                    <div className="flex border-3 border-purple-300 rounded-2xl overflow-hidden shadow-lg bg-white transform hover:scale-105 transition-all duration-300 focus-within:border-purple-500 focus-within:shadow-xl">
+                      <button
+                        type="button"
+                        className="px-4 flex items-center text-white bg-gradient-to-br from-purple-400 to-indigo-500 hover:from-purple-500 hover:to-indigo-600 focus:outline-none transition-all duration-300"
                       >
-                        {method === "phone" && (
-                          <div className="w-2.5 h-2.5 bg-pink-500 rounded-full"></div>
-                        )}
-                      </div>
-                      <span className="text-sm font-medium">Phone</span>
-                    </label>
+                        <MdEmail className="size-6" />
+                      </button>
+                      <input
+                        id="identifier"
+                        name="identifier"
+                        type="text"
+                        value={formData.identifier}
+                        onChange={handleChange}
+                        required
+                        placeholder="Enter registered email or phone"
+                        className="w-full px-4 py-3 focus:outline-none text-gray-700 font-medium"
+                      />
+                    </div>
                   </div>
-                  {method === "email" ? (
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-gray-700 font-bold mb-3 text-lg"
-                      >
-                        📧 Email address
-                      </label>
-                      <div className="flex border-3 border-purple-300 rounded-2xl overflow-hidden shadow-lg bg-white transform hover:scale-105 transition-all duration-300 focus-within:border-purple-500 focus-within:shadow-xl">
-                        <button
-                          type="button"
-                          className="px-4 flex items-center text-white bg-gradient-to-br from-purple-400 to-indigo-500 hover:from-purple-500 hover:to-indigo-600 focus:outline-none transition-all duration-300"
-                        >
-                          <MdEmail className="size-6" />
-                        </button>
-                        <input
-                          id="email"
-                          name="email"
-                          type="email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          required
-                          placeholder="you@example.com"
-                          className="w-full px-4 py-3 focus:outline-none text-gray-700 font-medium"
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <label
-                        htmlFor="phone_number"
-                        className="block text-gray-700 font-bold mb-3 text-lg"
-                      >
-                        📧 Phone Number
-                      </label>
-                      <div className="flex border-3 border-purple-300 rounded-2xl overflow-hidden shadow-lg bg-white transform hover:scale-105 transition-all duration-300 focus-within:border-purple-500 focus-within:shadow-xl">
-                        <button
-                          type="button"
-                          className="px-4 flex items-center text-white bg-gradient-to-br from-purple-400 to-indigo-500 hover:from-purple-500 hover:to-indigo-600 focus:outline-none transition-all duration-300"
-                        >
-                          <FaPhone className="size-6" />
-                        </button>
-                        <input
-                          id="phone_number"
-                          name="phone_number"
-                          type="tel"
-                          value={formData.phone_number}
-                          onChange={handleChange}
-                          required
-                          placeholder="017xxxxxxxx"
-                          className="w-full px-4 py-3 focus:outline-none text-gray-700 font-medium"
-                        />
-                      </div>
-                    </div>
-                  )}
 
                   {/* Submit Button */}
                   <button
@@ -359,7 +338,7 @@ export default function LoginPage() {
                     className={`w-full ${
                       reseting
                         ? "bg-gradient-to-r from-gray-400 to-gray-500 cursor-not-allowed"
-                        : "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600"
+                        : "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 cursor-pointer"
                     } text-white font-bold rounded-2xl py-4 transition-all duration-300 shadow-xl transform hover:scale-105 hover:-rotate-1 text-lg border-4 border-white/50 relative overflow-hidden group`}
                   >
                     {reseting ? (
