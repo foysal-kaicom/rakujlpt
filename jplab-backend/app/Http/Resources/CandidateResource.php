@@ -24,8 +24,8 @@ class CandidateResource extends JsonResource
                 'photo'=>$this->photo,
                 'cover_photo'=>$this->cover_photo,
                 'about'=>$this->about,
-                'facebook'=>$this->facebook,
-                'linkedin'=>$this->linkedin,
+                'facebook'=>$this->social_facebook,
+                'linkedin'=>$this->social_linkedin,
                 'gender'=>$this->gender,
                 'address'=>$this->address,
                 'skills'=>[
