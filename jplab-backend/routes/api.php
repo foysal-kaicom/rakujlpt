@@ -104,8 +104,8 @@ Route::prefix('v1')->group(function () {
     Route::post('/fail', [SslCommerzPaymentController::class, 'fail'])->name('ssl.fail');
     Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel'])->name('ssl.cancel');
     
-    Route::post('/password-reset-link', [CandidateController::class, 'sendPasswordResetLink']);
-    Route::post('/password-reset', [CandidateController::class, 'updatePasswordUsingResetLink']);
+    Route::post('/send-password-reset-otp', [CandidateController::class, 'sendPasswordResetOtp']);
+    Route::post('/verify-password-reset-otp', [CandidateController::class, 'verifyResetPasswordOtp']);
 
 
     Route::post('/pay', [SslCommerzPaymentController::class, 'index']);

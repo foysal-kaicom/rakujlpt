@@ -17,3 +17,48 @@ function checkAdminPermission($permission)
     
     return $user->roles->permissions->contains('slug', $permission);
 }
+
+function sanitizePhoneNumber(?string $number): ?string
+{
+    if (empty($number)) {
+        return null;
+    }
+
+    // 1) Remove any non-digit characters
+    $n = preg_replace('/\D+/', '', $number);
+
+    // 2) Normalize common prefixes:
+    // If starts with "00880" (some people use 00-prefix), remove leading "00" -> becomes "880..."
+    if (strpos($n, '00880') === 0) {
+        $n = substr($n, 2); // remove the leading '00'
+    }
+
+    // If starts with '+' was removed by preg_replace, so nothing to do for '+880'
+    // Now handle different plausible lengths and prefixes:
+
+    // Case A: already in desired international format: 880 + 10 digits => length 13
+    if (strlen($n) === 13 && substr($n, 0, 3) === '880') {
+        // Additional check: after '880' the next digit should be '1' (mobile)
+        if (substr($n, 3, 1) === '1') {
+            return $n;
+        }
+        return null;
+    }
+
+    // Case B: local format with leading zero: 0XXXXXXXXXX (11 digits) -> convert to 880 + substr(1)
+    // Example: 01616626211 (11 digits) -> '880' . '1616626211' => 13 digits
+    if (strlen($n) === 11 && substr($n, 0, 1) === '0') {
+        $converted = '880' . substr($n, 1); // remove leading 0 and prepend 880
+        return (substr($converted, 3, 1) === '1') ? $converted : null;
+    }
+
+    // Case C: number without leading zero but 10 digits (starts with '1'): e.g. 1712345678
+    // -> assume missing leading zero and add 880
+    if (strlen($n) === 10 && substr($n, 0, 1) === '1') {
+        $converted = '880' . $n; // makes 13 digits
+        return $converted;
+    }
+
+    // Anything else is invalid (too short/long or wrong prefix)
+    return null;
+}

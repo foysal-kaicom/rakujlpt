@@ -11,6 +11,7 @@ use App\Models\Booking;
 use App\Models\Candidate;
 use App\Notifications\CandidateNotification;
 use App\Services\FileStorageService;
+use App\Services\SMS\SmsService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,6 +27,8 @@ use Illuminate\Validation\Rule;
 use Throwable;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
+
+use function PHPUnit\Framework\throwException;
 
 class CandidateController extends Controller
 {
@@ -306,82 +309,111 @@ class CandidateController extends Controller
         return $this->responseWithError('Invalid OTP');
     }
 
-    public function sendPasswordResetLink(Request $request)
+    public function sendPasswordResetOtp(Request $request)
     {
         $request->validate([
-            'email' => 'required|email|exists:candidates,email',
+            'identifier' => 'required',
         ]);
 
-        $email = $request->input('email');
-        $candidate = Candidate::where('email', $email)->first();
+        $identifier = $request->input('identifier');
+        $isEmail = filter_var($identifier, FILTER_VALIDATE_EMAIL);
+
+        $candidate = $isEmail
+            ? Candidate::where('email', $identifier)->first()
+            : Candidate::where('phone_number', $identifier)->first();
+
         if (!$candidate) {
-            return $this->responseWithError('Account not found or Inactive', []);
+            return $this->responseWithError('Account not found or inactive.', []);
         }
 
+        // Check if OTP already sent and still valid
         if (
-            $candidate->token &&
-            $candidate->token_expired_at &&
-            Carbon::parse($candidate->token_expired_at)->isFuture()
+            $candidate->otp &&
+            $candidate->otp_expired_at &&
+            Carbon::parse($candidate->otp_expired_at)->isFuture()
         ) {
-            return $this->responseWithError('A reset link was already sent. Please wait before requesting again.', []);
+            return $this->responseWithError('OTP already sent. Please wait before requesting again.', []);
         }
 
-        $token = Str::random(120);
-        $expiry = Carbon::now()->addMinutes(3);
-        $resetLink = config('app.frontend.url') . '/password-reset?token=' . $token;
+        $otp = rand(100000, 999999);
+        $expiry = Carbon::now()->addMinutes(5);
 
         DB::beginTransaction();
 
         try {
-            $candidate->token = $token;
-            $candidate->token_expired_at = $expiry;
+            $candidate->otp = $otp;
+            $candidate->otp_expired_at = $expiry;
             $candidate->save();
 
-            //need to put job
+            // Send OTP
+            if ($isEmail) {
+                Mail::send('emails.forgot-password', [
+                    'otp' => $otp,
+                    'candidate_name' => $candidate->full_name,
+                ], function ($message) use ($candidate) {
+                    $message->to($candidate->email)
+                        ->subject('Your Password Reset OTP');
+                });
 
-            Mail::send('emails.forgot-password', [
-                'resetLink' => $resetLink,
-                'candidate_name' => $candidate->first_name
-            ], function ($message) use ($email) {
-                $message->to($email)
-                    ->subject('Password Reset Request');
-            });
+               
+            } else {
+                $sanitizeNumber = sanitizePhoneNumber($candidate->phone_number);
+                if (!$sanitizeNumber) {
+                    throw new \Exception("Invalid phone number");
+                }
+
+                $message = "Your password reset OTP is {$otp}";
+                $sms = new SmsService();
+
+                if (!$sms->send($sanitizeNumber, $message)) {
+                    Log::warning("Failed to send OTP to {$candidate->phone_number}");
+                    throw new \Exception("Failed to send OTP SMS");
+                }
+            }
 
             DB::commit();
-
-            return $this->responseWithSuccess([], 'Reset link sent to your email.');
+            return $this->responseWithSuccess(['otp_expired_at'=>$candidate->otp_expired_at], 'OTP sent successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Failed to send reset email: ' . $e->getMessage());
-            return $this->responseWithError('Failed to send reset email. Please try again later.', ['exception' => $e->getMessage()]);
+            Log::error('Failed to send OTP: ' . $e->getMessage());
+            return $this->responseWithError('Failed to send OTP. Please try again later.', []);
         }
     }
 
 
-    public function updatePasswordUsingResetLink(Request $request)
+
+    public function verifyResetPasswordOtp(Request $request)
     {
         $request->validate([
-            'token' => 'required|string|size:120',
-            'password' => 'required|string|min:6|confirmed',
+            'identifier' => 'required',
+            'otp' => 'required|digits:6',
+            'password' => 'required|min:6|confirmed',
         ]);
 
-        $token = $request->input('token');
+        $identifier = $request->input('identifier');
+        $isEmail = filter_var($identifier, FILTER_VALIDATE_EMAIL);
 
-        $candidate = Candidate::where('token', $token)
-            ->where('token_expired_at', '>', now())
-            ->first();
+        $candidate = $isEmail
+            ? Candidate::where('email', $identifier)->first()
+            : Candidate::where('phone_number', $identifier)->first();
 
         if (!$candidate) {
-            return response()->json(['message' => 'Invalid or expired token.'], 400);
+            return $this->responseWithError('Account not found.', []);
         }
 
-        $candidate->password = Hash::make($request->input('password'));
+        if (
+            !$candidate->otp ||
+            $candidate->otp !== $request->otp ||
+            Carbon::parse($candidate->otp_expired_at)->isPast()
+        ) {
+            return $this->responseWithError('Invalid or expired OTP.', []);
+        }
 
-        $candidate->token = null;
-        $candidate->token_expired_at = null;
-
+        $candidate->password = bcrypt($request->password);
+        $candidate->otp = null;
+        $candidate->otp_expired_at = null;
         $candidate->save();
 
-        return $this->responseWithSuccess(['message' => 'Password updated successfully.',]);
+        return $this->responseWithSuccess([], 'Password has been reset successfully.');
     }
 }
