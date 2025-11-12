@@ -53,14 +53,11 @@
 
         <h2>Hello, {{ $candidate_name }}!</h2>
 
-        <p>We received a request to reset your password. Click the button below to proceed. This link will expire in <strong>3 minutes</strong>.</p>
+        <p>Your One-Time Password (OTP) for password reset is:</p>
+        <h2>{{ $otp }}</h2>
+        <p>This OTP will expire in 5 minutes.</p>
+        <p>Best regards,<br>{{ config('app.name') }}</p>
 
-        <p style="text-align: center;">
-            <a href="{{ $resetLink }}" class="button">Reset Your Password</a>
-        </p>
-
-        <p>If you didn’t request this password reset, you can safely ignore this email.</p>
-        <p>Thank You.</p>
 
         <div class="footer">
             &copy; {{ date('Y') }} kaicomsolutions. All rights reserved.
