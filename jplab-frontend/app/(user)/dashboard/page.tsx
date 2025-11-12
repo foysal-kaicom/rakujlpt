@@ -17,8 +17,6 @@ import { MdTipsAndUpdates } from "react-icons/md";
 
 import { FaRocket, FaBook, FaBrain, FaTrophy } from "react-icons/fa";
 
-import { FaBookOpen, FaClock } from "react-icons/fa";
-
 import DashboardSkeleton from "./dashboardSkeleton";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
 
@@ -102,21 +100,6 @@ export default function Dashboard() {
     },
   ];
 
-  const modules = {
-    current: {
-      title: "Basics of JavaScript",
-      description:
-        "Learn the core concepts of JS — variables, loops, and functions.",
-      progress: 64,
-      color: "bg-purple-700",
-    },
-    next: {
-      title: "Intermediate Logic & Functions",
-      description:
-        "Explore ES6+, arrow functions, and modular programming patterns.",
-      color: "from-blue-500 to-yellow-400",
-    },
-  };
 
   return (
     <>
@@ -167,71 +150,80 @@ export default function Dashboard() {
                 {
                   title: "Practice",
                   value: dashboard?.total_bookings,
-                  icon: <BiSolidBookBookmark className="size-8 sm:size-14" />,
+                  icon: <GiStairsGoal className="size-8 sm:size-14" />,
                   iconBg: "bg-purple-600",
-                  cardBg: "bg-purple-200",
+                  link: "/my_practice",
+                  extranal:false
                 },
                 {
                   title: "Learn",
                   value: dashboard?.total_success_payments,
-                  icon: <GiStairsGoal className="size-8 sm:size-14" />,
+                  icon: <BiSolidBookBookmark className="size-8 sm:size-14" />,
                   iconBg: "bg-purple-600",
-                  cardBg: "bg-purple-200",
+                  link: "",
+                  extranal:false
                 },
                 {
                   title: "Metarials",
                   value: dashboard?.pending_booking,
                   icon: <PiNotebookFill className="size-8 sm:size-14" />,
                   iconBg: "bg-purple-600",
-                  cardBg: "bg-purple-200",
+                  link: "",
+                  extranal:false
                 },
                 {
                   title: "Tips",
                   value: dashboard?.total_results_published,
                   icon: <MdTipsAndUpdates className="size-8 sm:size-14" />,
                   iconBg: "bg-purple-600",
-                  cardBg: "bg-purple-200",
+                  link: "",
+                  extranal:false
                 },
                 {
                   title: "JPT Exam",
                   value: dashboard?.total_bookings,
                   icon: <IoIosAlarm className="size-8 sm:size-14" />,
                   iconBg: "bg-purple-600",
-                  cardBg: "bg-purple-200",
+                  link: "https://jptbd.com/",
+                  extranal:true
                 },
                 {
                   title: "JLPT Exam",
                   value: dashboard?.total_success_payments,
                   icon: <IoIosAlarm className="size-8 sm:size-14" />,
                   iconBg: "bg-purple-600",
-                  cardBg: "bg-purple-200",
+                  link: "https://jlpt.juaab-bd.org/jlpt_test_level",
+                  extranal:true
                 },
                 {
                   title: "Mock Test",
                   value: dashboard?.pending_booking,
                   icon: <GiRingingAlarm className="size-8 sm:size-14" />,
                   iconBg: "bg-purple-600",
-                  cardBg: "bg-purple-200",
+                  link: "/mock_test_select",
+                  extranal:false
                 },
                 {
                   title: "Exam Pattern",
                   value: dashboard?.total_results_published,
                   icon: <LuComponent className="size-8 sm:size-14" />,
                   iconBg: "bg-purple-600",
-                  cardBg: "bg-purple-200",
+                  link: "/question_composition",
+                  extranal:false
                 },
               ].map((item, index) => (
-                <div
-                  key={index}
-                  className={`flex flex-col gap-2 items-center p-2 lg:p-6 sm:bg-purple-300/50 rounded-xl hover:shadow-md shadow-purple-400 transition duration-300 border border-transparent hover:border-gray-200`}
-                >
-                  <div className={`${item.iconBg} p-1 rounded-md text-white`}>
-                    {item.icon}
+                <Link key={index} href={item.link} target={item.extranal ? "_blank" : "_self"}>
+                  <div
+                    className={`flex flex-col gap-2 items-center p-2 lg:p-6 sm:bg-purple-300/50 rounded-xl hover:shadow-md shadow-purple-400 transition duration-300 border border-transparent hover:border-gray-200`}
+                  >
+                    <div className={`${item.iconBg} p-1 rounded-md text-white`}>
+                      {item.icon}
+                    </div>
+                    <h1 className="text-xs sm:text-sm lg:text-base font-medium text-center">
+                      {item.title}
+                    </h1>
                   </div>
-                  <h1 className="text-xs sm:text-sm lg:text-base font-medium text-center">
-                    {item.title}
-                  </h1>
-                </div>
+                </Link>
               ))}
             </section>
           </section>
@@ -294,56 +286,6 @@ export default function Dashboard() {
                 </div>
               ))}
             </section>
-          </div>
-        </section>
-
-        <section className="w-full overflow-x-auto mt-10">
-          <h2 className="sm:text-xl font-bold mb-8 text-purple-600 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
-            🌈 Your Learning Roadmap
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            {/* Current Module */}
-            <div className="relative p-8 rounded-2xl bg-purple-500 border border-purple-600 shadow-[0_0_25px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(236,72,153,0.4)] transition-all">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-2xl font-semibold flex items-center gap-2 text-white">
-                  <FaBookOpen className="text-yellow-300" /> Current Module
-                </h3>
-                <span className="text-sm text-white font-medium">
-                  {modules.current.progress}% Complete
-                </span>
-              </div>
-              <h4 className="text-xl font-semibold mb-2 text-white">
-                {modules.current.title}
-              </h4>
-              <p className="text-gray-100 mb-6">
-                {modules.current.description}
-              </p>
-
-              {/* Progress Bar */}
-              <div className="w-full h-2 bg-purple-200 rounded-full overflow-hidden">
-                <div
-                  className={`h-full ${modules.current.color}`}
-                  style={{ width: `${modules.current.progress}%` }}
-                ></div>
-              </div>
-            </div>
-
-            {/* Next Module */}
-            <div className="relative p-8 rounded-2xl bg-violet-500 border border-violet-600 shadow-[0_0_25px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(96,165,250,0.4)] transition-all">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-2xl font-semibold flex items-center gap-2 text-white">
-                  <FaClock className="text-green-300" /> Next Module
-                </h3>
-                <span className="text-sm text-white font-medium">
-                  Coming Up
-                </span>
-              </div>
-              <h4 className="text-xl font-semibold mb-2 text-white">
-                {modules.next.title}
-              </h4>
-              <p className="text-gray-100">{modules.next.description}</p>
-            </div>
           </div>
         </section>
       </div>

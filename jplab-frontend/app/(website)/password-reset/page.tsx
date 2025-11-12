@@ -1,15 +1,16 @@
 "use client";
 
 // React & Next.js core
-import { Suspense, useState } from "react";
+import { Suspense, useState, useRef, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 // Third-party libraries
 import { toast } from "sonner";
 
 // Icons
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdEmail, MdErrorOutline } from "react-icons/md";
+import { MdVerifiedUser } from "react-icons/md";
+import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 
 import axios from "axios";
 
@@ -26,21 +27,33 @@ export default function LoginPage() {
   ];
 
   // Hooks
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
   const router = useRouter();
 
   const [reseting, setReseting] = useState(false);
-
+  const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
+  const [timer, setTimer] = useState<number>(180);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const [error, setError] = useState<string>("");
   const [resetToat, setResetToast] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
+    identifier: "",
   });
-  const [resetFormData, setRestFormData] = useState({
+  const [resetForm, setResetForm] = useState({
     password: "",
     password_confirmation: "",
-    token: token || null,
   });
+
+  useEffect(() => {
+    if (timer <= 0) return;
+
+    const interval = setInterval(() => {
+      setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timer]);
 
   // Handle form input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,7 +63,7 @@ export default function LoginPage() {
 
   const handleResetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setRestFormData((prev) => ({ ...prev, [name]: value }));
+    setResetForm((prev) => ({ ...prev, [name]: value }));
   };
 
   // Handle reset submission
@@ -59,7 +72,7 @@ export default function LoginPage() {
     setReseting(true);
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/password-reset-link`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/send-password-reset-otp`,
         formData
       );
       if (response.status === 200) {
@@ -67,6 +80,12 @@ export default function LoginPage() {
           response?.data?.message || "Reset link has been sent to your mail"
         );
         setResetToast(true);
+        // Convert expiry time to seconds remaining
+        const expiry = new Date(response.data.data.otp_expired_at).getTime();
+        const now = Date.now();
+        const remainingSeconds = Math.max(Math.floor((expiry - now) / 1000), 0);
+
+        setTimer(remainingSeconds);
       }
     } catch (error: any) {
       toast.error(
@@ -77,25 +96,82 @@ export default function LoginPage() {
     }
   };
 
-  const handleResetSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleOTPChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const value = e.target.value.replace(/\D/g, "").slice(0, 1);
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    if (value && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      const newOtp = [...otp];
+      newOtp[index - 1] = "";
+      setOtp(newOtp);
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
-    setReseting(true);
+
+    const pasted = e.clipboardData
+      .getData("Text")
+      .replace(/\D/g, "")
+      .slice(0, 6);
+    if (!pasted) return;
+
+    const newOtp = [...otp];
+    for (let i = 0; i < pasted.length; i++) {
+      newOtp[i] = pasted[i];
+    }
+
+    setOtp(newOtp);
+
+    // Focus next input after paste
+    const nextIndex = Math.min(pasted.length, 5);
+    inputRefs.current[nextIndex]?.focus();
+  };
+
+  // Format timer
+  const formatTime = (seconds: number) => {
+    const m = String(Math.floor(seconds / 60)).padStart(2, "0");
+    const s = String(seconds % 60).padStart(2, "0");
+    return `${m}:${s}`;
+  };
+
+  const handleVerify = async () => {
+    const fullCode = otp.join("");
+    if (fullCode.length !== 6) {
+      setError("Please enter all 6 digits.");
+      return;
+    }
+
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/password-reset`,
-        resetFormData
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/verify-password-reset-otp`,
+        {
+          identifier: formData.identifier,
+          otp: fullCode,
+          password: resetForm.password,
+          password_confirmation: resetForm.password_confirmation,
+        }
       );
-      if (response.status === 200) {
-        toast.success(response?.data?.message || "Password Reset successfully");
-        router.push("/sign_in");
-      }
+
+      toast.success("Phone number verified successfully!");
+      router.push("/profile");
     } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message || error.message || "Reset failed"
-      );
-      router.push("/password-reset");
-    } finally {
-      setReseting(false);
+      toast.error(error?.response?.data?.message || "Verification failed.");
     }
   };
 
@@ -106,99 +182,134 @@ export default function LoginPage() {
           <BreadCrumb breadCrumbData={breadCrumbData} />
 
           <div className="min-h-[60vh] flex flex-col gap-5 items-center justify-center mt-5">
-            {resetToat && (
-              <div className="flex items-start gap-3 p-4 border-l-6 border-blue-500 bg-white rounded-lg shadow-sm max-w-md w-full">
-                <MdErrorOutline className="size-[30px] text-blue-700" />
-                <div className="text-sm text-blue-700 w-[calc(100%-30px)]">
-                  <p className="font-semibold">Email Sent Successful!</p>
-                  <p>
-                    You will receive an email shortly with your reset link.
-                    Please use the link to reset your password.
+            {resetToat ? (
+              <div className="flex items-center justify-center">
+                <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+                  <div className="flex items-start gap-3 p-4 border-l-6 border-purple-500 bg-white w-full mb-2">
+                    <MdErrorOutline className="size-[30px] text-purple-700" />
+                    <div className="text-sm text-purple-700 w-[calc(100%-30px)]">
+                      <p className="font-semibold">Email Sent Successful!</p>
+                      <p>
+                        You will receive an OTP shortly to your registred email
+                        or phone number. Please use the OTP to reset your
+                        password.
+                      </p>
+                    </div>
+                  </div>
+                  <MdVerifiedUser className="size-20 text-purple-600 mx-auto rounded-full p-2 border-2" />
+                  <h1 className="text-center text-2xl font-semibold mt-3">
+                    OTP Verification
+                  </h1>
+                  <p className="text-center text-gray-500 mb-2">
+                    Enter the 6-digit verification code
                   </p>
+
+                  {/* OTP Inputs */}
+                  <div className="flex gap-2 justify-center mt-5">
+                    {otp.map((digit, index) => (
+                      <input
+                        key={index}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={1}
+                        value={digit}
+                        ref={(el) => {
+                          if (el) inputRefs.current[index] = el;
+                        }}
+                        onChange={(e) => handleOTPChange(e, index)}
+                        onKeyDown={(e) => handleKeyDown(e, index)}
+                        onPaste={(e) => handlePaste(e)}
+                        className="w-12 h-12 text-center text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:purple-blue-500"
+                      />
+                    ))}
+                  </div>
+
+                  {error && (
+                    <p className="text-center text-red-500 mt-3">{error}</p>
+                  )}
+
+                  {/* Password */}
+                  <div className="relative group my-5 max-w-83 mx-auto">
+                    <FaLock className="absolute top-3.5 left-3 text-yellow-400 group-focus-within:scale-110 transition-transform" />
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      value={resetForm.password}
+                      onChange={handleResetChange}
+                      required
+                      placeholder="Enter password"
+                      className="w-full pl-10 pr-10 py-2.5 rounded-xl border-2 border-transparent bg-gradient-to-r from-yellow-50 to-pink-50 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-300 outline-none text-gray-700 transition-all duration-300"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="absolute top-3 right-3 text-gray-500 hover:text-pink-600 transition-colors"
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
+
+                  {/* Confirm Password */}
+                  <div className="relative group max-w-83 mx-auto">
+                    <FaLock className="absolute top-3.5 left-3 text-green-400 group-focus-within:scale-110 transition-transform" />
+                    <input
+                      type={showConfirm ? "text" : "password"}
+                      name="password_confirmation"
+                      value={resetForm.password_confirmation}
+                      onChange={handleResetChange}
+                      required
+                      placeholder="Confirm password"
+                      className="w-full pl-10 pr-10 py-2.5 rounded-xl border-2 border-transparent bg-gradient-to-r from-green-50 to-indigo-50 focus:border-green-400 focus:ring-2 focus:ring-green-300 outline-none text-gray-700 transition-all duration-300"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirm((prev) => !prev)}
+                      className="absolute top-3 right-3 text-gray-500 hover:text-green-600 transition-colors"
+                    >
+                      {showConfirm ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
+
+                  {/* Buttons */}
+                  <div className="mt-6 space-y-3 font-semibold max-w-83 mx-auto">
+                    <button
+                      onClick={handleVerify}
+                      className="px-5 py-2 w-full rounded-md bg-purple-600 text-white hover:bg-purple-700 duration-500 cursor-pointer"
+                    >
+                      Verify Code
+                    </button>
+
+                    <button
+                      // onClick={handleCode}
+                      disabled={timer > 0}
+                      className={`px-5 py-2 w-full rounded-md duration-300 ${
+                        timer > 0
+                          ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                          : "bg-white text-gray-700 hover:bg-gray-100 shadow-sm"
+                      }`}
+                    >
+                      {timer > 0
+                        ? `Resend in ${formatTime(timer)}`
+                        : "Resend Code"}
+                    </button>
+                  </div>
                 </div>
               </div>
-            )}
-
-            {token ? (
-              <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-8">
-                <h2 className="text-3xl font-semibold primary-text-color mb-6 text-center">
-                  Reset Password ?
-                </h2>
-
-                <form onSubmit={handleResetSubmit} className="space-y-6">
-                  {/* password */}
-                  <div>
-                    <label
-                      htmlFor="password"
-                      className="block text-gray-500 font-medium mb-2"
-                    >
-                      New Password
-                    </label>
-                    <div className="flex border border-gray-300 rounded-md">
-                      <button className="px-3 flex items-center text-gray-600 hover:text-indigo-600 focus:outline-none bg-blue-100">
-                        <FaEye />
-                      </button>
-                      <input
-                        id="password"
-                        name="password"
-                        type="text"
-                        value={resetFormData.password}
-                        onChange={handleResetChange}
-                        required
-                        placeholder="New Password"
-                        className="w-full px-4 py-2 focus:outline-none"
-                      />
-                    </div>
-                  </div>
-                  {/* confirm password */}
-                  <div>
-                    <label
-                      htmlFor="password_confirmation"
-                      className="block text-gray-500 font-medium mb-2"
-                    >
-                      Confirm Password
-                    </label>
-                    <div className="flex border border-gray-300 rounded-md">
-                      <button className="px-3 flex items-center text-gray-600 hover:text-indigo-600 focus:outline-none bg-blue-100">
-                        <FaEye />
-                      </button>
-                      <input
-                        id="password_confirmation"
-                        name="password_confirmation"
-                        type="text"
-                        value={resetFormData.password_confirmation}
-                        onChange={handleResetChange}
-                        required
-                        placeholder="Confirm Password"
-                        className="w-full px-4 py-2 focus:outline-none"
-                      />
-                    </div>
-                  </div>
-                  {/* Submit */}
-                  <button
-                    type="submit"
-                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-md py-2 transition"
-                  >
-                    {reseting ? "Reseting ..." : "Reset"}
-                  </button>
-                </form>
-              </div>
             ) : (
-              <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-8">
+              <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-8 flex flex-col items-center">
                 <div className="bg-gradient-to-r from-pink-400 to-rose-400 rounded-3xl p-4 inline-block mb-4 shadow-lg transform -rotate-2">
-                  <h2 className="text-4xl font-bold text-white">
+                  <h2 className="text-lg lg:text-4xl font-bold text-white">
                     🔑 Reset Password
                   </h2>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Email */}
+                <form onSubmit={handleSubmit} className="space-y-6 w-full">
                   <div>
                     <label
-                      htmlFor="email"
+                      htmlFor="identifier"
                       className="block text-gray-700 font-bold mb-3 text-lg"
                     >
-                      📧 Email address
+                      📧 Email or Phone number
                     </label>
                     <div className="flex border-3 border-purple-300 rounded-2xl overflow-hidden shadow-lg bg-white transform hover:scale-105 transition-all duration-300 focus-within:border-purple-500 focus-within:shadow-xl">
                       <button
@@ -208,13 +319,13 @@ export default function LoginPage() {
                         <MdEmail className="size-6" />
                       </button>
                       <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
+                        id="identifier"
+                        name="identifier"
+                        type="text"
+                        value={formData.identifier}
                         onChange={handleChange}
                         required
-                        placeholder="you@example.com"
+                        placeholder="Enter registered email or phone"
                         className="w-full px-4 py-3 focus:outline-none text-gray-700 font-medium"
                       />
                     </div>
@@ -227,7 +338,7 @@ export default function LoginPage() {
                     className={`w-full ${
                       reseting
                         ? "bg-gradient-to-r from-gray-400 to-gray-500 cursor-not-allowed"
-                        : "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600"
+                        : "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 cursor-pointer"
                     } text-white font-bold rounded-2xl py-4 transition-all duration-300 shadow-xl transform hover:scale-105 hover:-rotate-1 text-lg border-4 border-white/50 relative overflow-hidden group`}
                   >
                     {reseting ? (

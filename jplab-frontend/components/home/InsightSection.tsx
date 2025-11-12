@@ -78,9 +78,9 @@ export default function InsightSection() {
 
               <Link
                 href="/packages"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-full border-3 border-gray-200 text-gray-800 bg-white hover:border-indigo-400 transition"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-full border-3 border-indigo-400 text-gray-800 bg-white hover:scale-105 duration-500 transition"
               >
-                View Plans
+                Start Practice
               </Link>
             </div>
 

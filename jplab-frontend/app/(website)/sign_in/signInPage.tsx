@@ -83,6 +83,10 @@ export default function LoginPage() {
           email: data.email,
           phone_number: data.phone_number,
           photo: data.photo,
+          user_subscriptions_id:data.user_subscriptions_id,
+          is_subscribed:data.is_subscribed,
+          current_package_id:data.current_package_id,
+          current_package_name:data.current_package_name
         };
 
         login(user, token);
