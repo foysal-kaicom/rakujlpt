@@ -635,7 +635,7 @@ export default function PracticeQuestion() {
                           alt="Incorrect"
                           width={89}
                           height={60}
-                          className="flex-shrink-0 mt-0.5 absolute top-[-78px]"
+                          className="flex-shrink-0 mt-0.5 absolute top-[-87px]"
                         />
                       </>
                     )}
