@@ -10,7 +10,7 @@
     </div>
 
     <!-- Form -->
-    <form action="{{ $isCopy ? route('exam.store') : route('exam.update', $exam->id) }}" 
+    <form action="{{ $isCopy ? route('mock-tests.exam.store') : route('mock-tests.exam.update', $exam->id) }}" 
           method="POST" enctype="multipart/form-data" class="p-4">
         @csrf
 

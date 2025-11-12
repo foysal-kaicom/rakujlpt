@@ -16,4 +16,8 @@ class MockTestQuestionGroup extends Model
     {
         return $this->hasMany(MockTestQuestion::class, 'mock_test_question_group_id');
     }
+    public function mockTestSection()
+    {
+        return $this->belongsTo(MockTestSection::class, 'mock_test_section_id');
+    }
 }

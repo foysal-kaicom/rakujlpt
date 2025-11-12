@@ -28,7 +28,6 @@ class ExamResource extends JsonResource
                 'end_time'=>date('h:i A',strtotime($this->end_time)),
                 'application_deadline'=>date('d-M-Y',strtotime($this->application_deadline)),
                 'result_publish_date'=>date('d-M-Y',strtotime($this->result_publish_date)),
-                'available_to_apply'=>Carbon::parse($this->application_deadline)->isFuture()
         ];
     }
 }

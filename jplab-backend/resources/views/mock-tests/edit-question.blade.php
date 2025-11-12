@@ -17,17 +17,35 @@
         </div>
 
         <div class="p-8 rounded-b-lg bg-white border">
-            <div class="grid grid-cols-4 gap-4">
-                <!-- Section, Group By, Set No, Audio / Passage fields -->
+            <div class="flex flex-wrap gap-4 items-center justify-between">
+
                 <div class="space-y-2">
-                    <label for="sectionSelect" class="block font-semibold">Select Section</label>
-                    <select id="sectionSelect" name="mock_test_section_id" class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-full">
-                        @foreach ($mockTestSections as $eachSection)
-                            <option value="{{ $eachSection->id }}" {{ $eachSection->id == $question->mockTestQuestionGroup->mock_test_section_id ? 'selected' : '' }}>
-                                {{ optional($eachSection->mockTestModule)->name }} - {{ $eachSection->title }}
-                            </option>
-                        @endforeach
-                    </select>
+                    <div class="flex items-center space-x-4">
+                        {{-- Exam --}}
+                        <span>
+                            <b> Exam: </b>{{ optional($mockTestSections->first()->mockTestModule->exam)->title ?? 'No Exam' }}
+                        </span>
+
+                        {{-- Module --}}
+                        <span class="font-medium">
+                            <b> Module:</b> {{ optional($mockTestSections->first()->mockTestModule)->name ?? 'No Module' }}
+                        </span>
+
+                        {{-- Dropdown --}}
+                        <div class="flex items-center space-x-4">
+                            <label for="sectionSelect" class="block font-semibold"><b>Section</b></label>
+
+                            <select id="sectionSelect" name="mock_test_section_id" class="bg-white drop-shadow-md text-sm border rounded px-3 py-2">
+                                @foreach ($mockTestSections as $section)
+                                    <option value="{{ $section->id }}" 
+                                        {{ optional($question->mockTestQuestionGroup)->mock_test_section_id == $section->id ? 'selected' : '' }}
+                                    >
+                                        {{ $section->title }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="space-y-2">
@@ -52,7 +70,8 @@
                     >
                 </div>
                 
-
+            </div>
+            <div>
                 <div class="space-y-2 col-span-4">
                     <div id="fileInputWrapper" class="space-y-2 hidden mt-3">
                         <label for="fileInput" class="block font-semibold">Audio file</label>
@@ -69,6 +88,10 @@
                     </div>
                 </div>
             </div>
+
+
+
+
             @hasPermission('mock-tests.question-group.update')
             <button type="submit" class="btn btn-primary mt-4">Update Question group</button>
             <div id="questionsContainer"></div>

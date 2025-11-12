@@ -39,8 +39,8 @@
                     <label class="block font-semibold">Question Type</label>
                     <select name="question[question_type]" class="questionType bg-white drop-shadow-md text-sm border rounded px-3 py-2" required>
                         <option value="text">Text</option>
-                        <option value="image">Image</option>
-                        <option value="audio">Audio</option>
+                        {{-- <option value="image">Image</option> --}}
+                        <option value="audio">Image</option>
                     </select>
                 </div>
 
@@ -176,11 +176,11 @@ document.addEventListener("DOMContentLoaded", function() {
             questionInput.type = "text";
             questionInput.required = true;
         } 
-        else if (type === "image") {
-            questionInput.type = "file";
-            questionInput.accept = "image/*";
-            questionInput.required = true;
-        } 
+        // else if (type === "image") {
+        //     questionInput.type = "file";
+        //     questionInput.accept = "image/*";
+        //     questionInput.required = true;
+        // } 
         else if (type === "audio") {
             // Main question becomes image input
             questionInput.type = "file";

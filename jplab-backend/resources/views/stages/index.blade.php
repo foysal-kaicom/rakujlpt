@@ -114,7 +114,7 @@
                     <td>
                         <div class="flex gap-2">
                             <a href="{{ route('stages.edit', $stage->id) }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-green-500 text-white hover:bg-green-600 shadow-md transition">Edit</a>
-                            <a href="{{ route('stages.show', $stage->id) }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-blue-500 text-white hover:bg-blue-600 shadow-md transition">View</a>
+                            <a href="{{ route('stages.show', $stage->id) }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-blue-500 text-white hover:bg-blue-600 shadow-md transition">Add Question</a>
                         </div>
                     </td>
                 </tr>

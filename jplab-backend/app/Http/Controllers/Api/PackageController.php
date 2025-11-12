@@ -89,7 +89,7 @@ class PackageController extends Controller
                 'title'          => 'subscription',
             ]);
 
-            $candidate->update(['user_subscriptions_id' => $userSubscription->id]);
+            $candidate->update(['user_subscriptions_id' => $userSubscription->id, 'is_subscribed' => true]);
 
             foreach ($package->package_details as $detail) {
                 UserSubscriptionDetails::create([
@@ -113,6 +113,7 @@ class PackageController extends Controller
             return response()->json([
                 'status'          => 'success',
                 'subscription_id' => $userSubscription->id,
+                'package_id'      => $package->id,
                 'package'         => $package->name,
                 'url'             => $successPath,
             ]);

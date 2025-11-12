@@ -70,10 +70,10 @@
     </div>
 
     <div class="cursor-pointer">
-        <a href="{{ route('exam.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
+        {{-- <a href="{{ route('exam.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
             <i class="fas fa-file-alt text-indigo-500 text-base"></i>
             <p class="font-medium text-sm">Exams</p>
-        </a>
+        </a> --}}
     </div>
 
     <div class="cursor-pointer">
@@ -84,14 +84,14 @@
     </div>
 
     <div class="cursor-pointer" data-toggle="import">
-        <div class="flex justify-between items-center py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-black transition-colors duration-200">
+        {{-- <div class="flex justify-between items-center py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-black transition-colors duration-200">
             <div class="flex items-center gap-2 font-medium">
                 <i class="fa fa-cloud-download text-indigo-500 text-base"></i>
                 <p class="text-sm">Import</p>
             </div>
             <i class="fas fa-chevron-down text-gray-500 text-sm drop-arrow transition-transform duration-300 -rotate-90"></i>
-        </div>
-        <div class="mt-1 ml-3 pl-3 border-l border-gray-200 space-y-2 text-gray-600 hidden" data-target="import">
+        </div> --}}
+        {{-- <div class="mt-1 ml-3 pl-3 border-l border-gray-200 space-y-2 text-gray-600 hidden" data-target="import"> --}}
             {{-- <a href="{{ route('booking.import') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
                 <i class="fa-solid fa-file-arrow-down text-indigo-500 text-base"></i>
                     <p class="font-medium text-sm">Import Booking</p>
@@ -110,7 +110,7 @@
         <i class="fa-solid fa-file-csv text-indigo-500 text-base"></i>
                 <p class="font-medium text-sm">Result</p>
             </a> --}}
-        </div>
+        {{-- </div> --}}
     </div>
 
     
@@ -162,6 +162,11 @@
         </div>
         
         <div class="mt-1 ml-3 pl-3 border-l border-gray-200 space-y-2 text-gray-600 hidden" data-target="mocktest">
+
+            <a href="{{ route('mock-tests.exam.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
+                <i class="fas fa-file-alt text-indigo-500 text-base"></i>
+                <p class="font-medium text-sm">Exams</p>
+            </a>
 
             <a href="{{ route('mock-test-modules.index') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
                 <i class="fa-solid fa-layer-group text-indigo-500 text-base"></i>
@@ -265,20 +270,27 @@
 
         <div class="mt-1 ml-3 pl-3 border-l border-gray-200 space-y-2 text-gray-600 hidden" data-target="roadmap">
             <a href="{{ route('roadmaps.index') }}"
-            class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
+                class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
                 <i class="fas fa-list text-indigo-500 text-base"></i>
                 <p class="m-0 text-sm">All Roadmaps</p>
             </a>
-            <a href="{{ route('roadmaps.create') }}"
+
+            <a href="{{ route('stages.index') }}"
+                class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
+                <i class="fas fa-list text-indigo-500 text-base"></i>
+                <p class="m-0 text-sm">All Stages</p>
+            </a>
+
+            {{-- <a href="{{ route('roadmaps.create') }}"
             class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
                 <i class="fas fa-plus-circle text-indigo-500 text-base"></i>
                 <p class="m-0 text-sm">Create New</p>
-            </a>
+            </a> --}}
         </div>
     </div>
 
     <!-- Stages -->
-    <div class="cursor-pointer" data-toggle="stage">
+    {{-- <div class="cursor-pointer" data-toggle="stage">
         <div class="flex justify-between items-center py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
             <div class="flex items-center gap-2 font-medium">
                 <i class="fas fa-route text-indigo-500 text-base"></i>
@@ -299,7 +311,7 @@
                 <p class="m-0 text-sm">Create New</p>
             </a>
         </div>
-    </div>
+    </div> --}}
 
     <div class="cursor-pointer">
 

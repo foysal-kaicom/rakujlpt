@@ -4,15 +4,19 @@
 
 <section class="w-100 bg-white rounded overflow-hidden mb-4" style="font-family: sans-serif;">
     <div class="p-4 d-flex justify-content-between align-items-center bg-indigo-300">
-        <h3 class="text-lg font-semibold">Stage: {{ $stage->title }}</h3>
-        <a href="{{ route('practices.create.stage', $stage->id) }}" 
+        {{-- <h3 class="text-lg font-semibold">Stage: {{ $stage->title }}</h3> --}}
+        <h3 class="text-lg font-semibold">Question List for {{ $stage->title }}</h3>
+        {{-- <a href="{{ route('practices.create.stage', $stage->id) }}" 
            class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium border shadow-md transition">
            Create New Practice
+        </a> --}}
+        <a href="{{ route('practices.create.stage', $stage->id) }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-sky-500 text-white hover:bg-sky-600 transition">
+            <i class="fa-solid fa-plus"></i> Create New Question
         </a>
     </div>
 
     <div class="p-4">
-        <h4 class="text-xl font-semibold mb-3">Practices & Questions</h4>
+        
 
         @php
             $allQuestions = [];
