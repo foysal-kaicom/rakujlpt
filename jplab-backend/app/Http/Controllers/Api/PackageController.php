@@ -113,6 +113,7 @@ class PackageController extends Controller
             return response()->json([
                 'status'          => 'success',
                 'subscription_id' => $userSubscription->id,
+                'package_id'      => $package->id,
                 'package'         => $package->name,
                 'url'             => $successPath,
             ]);

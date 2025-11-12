@@ -233,15 +233,25 @@ class MockTestController extends Controller
 
     public function editQuestion($id)
     {
-        $question = MockTestQuestion::with('mockTestQuestionOption', 'mockTestQuestionGroup')->findOrFail($id);
-        $mockTestSections = MockTestSection::with('mockTestModule')->get();
-    
+        $question = MockTestQuestion::with('mockTestQuestionGroup.mockTestSection.mockTestModule')->find($id);
+
+        $module = optional(optional($question->mockTestQuestionGroup)->mockTestSection)->mockTestModule;
+
+        $mockTestSections = MockTestSection::with('mockTestModule.exam')
+            ->when($module, function ($query, $module) {
+                $query->whereHas('mockTestModule', function ($q) use ($module) {
+                    $q->where('exam_id', $module->exam_id)
+                    ->where('id', $module->id);
+                });
+            })
+            ->get();
+
         return view('mock-tests.edit-question', compact('question', 'mockTestSections'));
     }
 
     public function updateQuestionGroup(Request $request, $id)
     {
-
+        
         $validate=Validator::make($request->all(),[
             'mock_test_section_id' => 'required|exists:mock_test_sections,id',
             'group_type' => 'nullable|in:passage,audio',
@@ -259,6 +269,7 @@ class MockTestController extends Controller
         $questionGroup = MockTestQuestionGroup::findOrFail($id);
     
         $questionGroup->mock_test_section_id = $request->mock_test_section_id;
+
         $questionGroup->group_type = $request->group_type;
     
         if ($request->hasFile('audio-content')) {
