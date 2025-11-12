@@ -355,9 +355,7 @@ class CandidateController extends Controller
                         ->subject('Your Password Reset OTP');
                 });
 
-                if (count(Mail::failures()) > 0) {
-                    throw new \Exception("Failed to send OTP email");
-                }
+               
             } else {
                 $sanitizeNumber = sanitizePhoneNumber($candidate->phone_number);
                 if (!$sanitizeNumber) {
