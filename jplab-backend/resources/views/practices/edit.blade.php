@@ -55,9 +55,9 @@
 
                     {{-- Show current value for text type --}}
                     @if(($question['question_type'] ?? '') === 'text')
-                        <input name="question[question]" type="text" placeholder="Enter question"
-                            value="{{ $question['question'] ?? '' }}"
-                            class="questionInput bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-full" required />
+
+                        <textarea id="content" name="question[question]" rows="2" placeholder="Enter explanation" 
+                          class="bg-white text-sm border rounded px-3 py-2 w-full resize-none" required>{{ $question['question'] ?? '' }}</textarea>
                     @else
                         {{-- For image/audio, show file input --}}
                         <input name="question[question]" type="file" accept="image/*"
@@ -106,9 +106,9 @@
                             <input type="radio" name="question[answer]" value="{{ $i }}" 
                                    {{ ($question['answer'] ?? 1) == $i ? 'checked' : '' }}
                                    class="size-5" required>
-                            <input type="text" name="question[options][{{ $i }}]" placeholder="Option {{ $i }}"
-                                   value="{{ $question['options'][$i] ?? '' }}"
-                                   class="bg-white text-sm border rounded px-3 py-2 w-full" required>
+                            
+
+                                   <textarea required id="content" name="question[options][{{ $i }}]" placeholder="Option {{ $i }}" class="px-3 py-2 w-full">{{ $question['options'][$i] ?? '' }}</textarea>
                         </div>
                     @endfor
                 </div>

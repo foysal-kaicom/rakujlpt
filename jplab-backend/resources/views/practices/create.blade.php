@@ -85,9 +85,9 @@
                     @for ($i = 1; $i <= 4; $i++)
                         
 
-                        <input type="radio" name="questions[answer]" value="{{ $i }}" class="size-5">
+                        <input type="radio" name="question[answer]" value="{{ $i }}" class="size-5">
                   <div class="optionWrapper w-full" data-q="${i}" data-opt="${opt}">
-                    <textarea id="content" name="question[options][{{ $i }}]" placeholder="Option {{ $i }}" class="tinymce"></textarea>
+                    <textarea id="content" name="question[options][{{ $i }}]" placeholder="Option {{ $i }}" class="px-3 py-2 w-full"></textarea>
                   </div>
                     @endfor
                 </div>

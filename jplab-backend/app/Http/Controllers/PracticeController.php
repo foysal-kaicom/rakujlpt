@@ -217,6 +217,7 @@ class PracticeController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'stage_id' => 'required|exists:stages,id',
             'question.proficiency_level' => 'required|in:N4,N5',
