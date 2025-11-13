@@ -6,21 +6,23 @@ interface QuestionCompositionProps {
   mainText: string;
   preText: string | "";
   subText: string | "";
+  type: string | "";
 }
 
 export default function QuestionCompositionComponent({
-  breadCrumbData,
+  breadCrumbData, type
 }: QuestionCompositionProps) {
   return (
     <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 overflow-hidden pb-20 pt-5">
       <WebpageWrapper>
         <BreadCrumb breadCrumbData={breadCrumbData} />
+        {type === "jlpt" && (
         <section className="relative pt-15">
           <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-300/30 rounded-full blur-3xl animate-bounce-slow"></div>
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-pink-300/30 rounded-full blur-3xl animate-pulse-slow"></div>
 
           <div className="relative z-10 max-w-5xl mx-auto text-center px-6">
-            <h2 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+            <h2 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 py-2">
               JLPT Question Composition
             </h2>
             <p className="mt-4 text-gray-700 text-lg">
@@ -73,18 +75,19 @@ export default function QuestionCompositionComponent({
             </div>
           </div>
         </section>
-        
+        )}
+        {type === "jpt" && (
         <section className="relative pt-15">
           <div className="absolute top-0 left-0 w-80 h-80 bg-pink-300/30 rounded-full blur-3xl animate-pulse-slow"></div>
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-300/30 rounded-full blur-3xl animate-bounce-slow"></div>
 
           <div className="relative z-10 max-w-5xl mx-auto text-center px-6">
-            <h2 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+            <h2 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 py-2">
               JPT Question Composition
             </h2>
             <p className="mt-4 text-gray-700 text-lg">
               The JPT evaluates your real-world Japanese ability with{" "}
-              <span className="font-semibold text-blue-600">200 questions</span>
+              <span className="font-semibold text-blue-600">200 questions </span>
               divided into Listening and Reading sections.
             </p>
 
@@ -126,6 +129,7 @@ export default function QuestionCompositionComponent({
             </div>
           </div>
         </section>
+        )}
       </WebpageWrapper>
     </div>
   );
