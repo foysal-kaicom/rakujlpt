@@ -139,8 +139,8 @@ class RoadmapController extends Controller
             $completedStages = $candidateProgress->where('candidate_status', 'completed')->count();
 
             $completePercentage = $totalStages > 0
-                ? round(($completedStages / $totalStages) * 100, 2) . '%'
-                : '0%';
+                ? round(($completedStages / $totalStages) * 100, 2)
+                : 0;
 
             $result[] = [
                 'current_module_name' => $roadmap->title,
