@@ -87,6 +87,7 @@ export default function ExamPage() {
 
   /* -------------------- State -------------------- */
   const [questions, setQuestions] = useState<ExamSection[]>([]);
+  const [examTitle, setExamTitle] = useState<string>("Japanese Language Proficiency Exam");
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -187,7 +188,8 @@ export default function ExamPage() {
       try {
         setLoading(true);
         const response = await axiosInstance.get(`/mock-test/get-questions?exam_id=${id}`);
-        setQuestions(response.data.data);
+        setQuestions(response.data.data.sections);
+        setExamTitle(response.data.data.exam_title);
         setCurrentSectionIndex(0);
 
         resetTime(50 * 60);
@@ -426,7 +428,7 @@ export default function ExamPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row gap-5 justify-between md:items-center">
           <div>
             <h1 className="text-2xl font-bold text-gray-800">
-              Japanese Language Proficiency Exam
+              {examTitle}
             </h1>
             <p className="text-sm text-gray-600 mt-1 capitalize">
               {currentSection?.module_name} part - {currentSection?.title}
@@ -493,7 +495,7 @@ export default function ExamPage() {
                       setCurrentSectionIndex(index),
                         window.scrollTo({ top: 0, behavior: "smooth" });
                     }}
-                    className={`flex flex-shrink-0 justify-center items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${btnClass}`}
+                    className={`flex flex-shrink-0 justify-center items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors cursor-pointer ${btnClass}`}
                   >
                     {stepIcons[section.slug]}
                     {section?.title}
@@ -650,7 +652,7 @@ export default function ExamPage() {
                       <div
                         className="mt-3"
                         dangerouslySetInnerHTML={{
-                          __html: currentSection.sample_question ?? "",
+                          __html: (currentSection.sample_question ?? "").replace(/\\n/g, "<br>"),
                         }}
                       />
                     </div>
