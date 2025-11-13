@@ -393,6 +393,7 @@ export default function MockExamResult() {
               </div> */}
 
               {/* Desktop Table */}
+              {/* Desktop Table */}
               <div className="hidden md:block overflow-auto rounded-xl shadow-lg border border-gray-200 bg-white/50 backdrop-blur-lg">
                 <table className="w-full text-sm relative">
                   <thead>
@@ -400,8 +401,11 @@ export default function MockExamResult() {
                       <th className="p-3 text-left font-bold border-r border-gray-200">
                         Date
                       </th>
-                      <th className="p-3 text-left font-bold border-gray-200">
-                        Details
+                      <th className="p-3 text-left font-bold border-r border-gray-200">
+                        Listening
+                      </th>
+                      <th className="p-3 text-left font-bold border-r border-gray-200">
+                        Reading
                       </th>
                       <th className="p-3 text-left font-bold border-gray-200">
                         Total Score
@@ -413,31 +417,52 @@ export default function MockExamResult() {
                       resultData.map((c, i) => (
                         <tr
                           key={i}
-                          className="bg-white/40 backdrop-blur-md hover:shadow-lg rounded-xl transition-all"
+                          className="bg-white/40 backdrop-blur-md hover:shadow-lg transition-all"
                         >
                           <td className="p-3 text-gray-700 border-t border-r border-gray-200">
                             {formatDate(c?.created_at)}
                           </td>
-                          <td className="p-3 border-t border-gray-200">
-                            <div className="grid grid-cols-1 gap-2 items-center">
-                              {c?.module_scores &&
-                                Object.entries(c.module_scores).map(([key, value]) => (
-                                  <span key={key} className="font-semibold text-xs">
-                                    {key} Score: {value}
-                                  </span>
-                                ))
-                              }
+                          <td className="p-3 border-t border-r border-gray-200">
+                            <div className="grid grid-cols-1 gap-1 text-xs">
+                              <span className="text-blue-600">
+                                Answered: {c?.listening_answered ?? 0}
+                              </span>
+                              <span className="text-green-600">
+                                Correct: {c?.correct_listening_answer ?? 0}
+                              </span>
+                              <span className="text-red-600">
+                                Wrong: {c?.wrong_listening_answer ?? 0}
+                              </span>
+                              <span className="text-purple-600 font-semibold">
+                                Score: {(c?.correct_listening_answer ?? 0) * 2.5}
+                              </span>
                             </div>
                           </td>
-                          <td className="p-3 border-t border-gray-200 capitalize font-semibold">
-                            {c?.total_marks}{" "}
+                          <td className="p-3 border-t border-r border-gray-200">
+                            <div className="grid grid-cols-1 gap-1 text-xs">
+                              <span className="text-blue-600">
+                                Answered: {c?.reading_answered ?? 0}
+                              </span>
+                              <span className="text-green-600">
+                                Correct: {c?.correct_reading_answer ?? 0}
+                              </span>
+                              <span className="text-red-600">
+                                Wrong: {c?.wrong_reading_answer ?? 0}
+                              </span>
+                              <span className="text-purple-600 font-semibold">
+                                Score: {(c?.correct_reading_answer ?? 0) * 2.5}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="p-3 border-t border-gray-200 capitalize font-bold text-purple-700 text-lg">
+                            {((c?.correct_listening_answer ?? 0) + (c?.correct_reading_answer ?? 0)) * 2.5}
                           </td>
                         </tr>
                       ))
                     ) : (
                       <tr>
                         <td
-                          colSpan={3}
+                          colSpan={4}
                           className="text-center py-6 text-gray-500"
                         >
                           No results found.

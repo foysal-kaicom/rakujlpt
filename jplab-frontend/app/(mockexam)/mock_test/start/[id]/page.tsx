@@ -493,7 +493,7 @@ export default function ExamPage() {
                       setCurrentSectionIndex(index),
                         window.scrollTo({ top: 0, behavior: "smooth" });
                     }}
-                    className={`flex flex-shrink-0 justify-center items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${btnClass}`}
+                    className={`flex flex-shrink-0 justify-center items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors cursor-pointer ${btnClass}`}
                   >
                     {stepIcons[section.slug]}
                     {section?.title}
@@ -650,7 +650,7 @@ export default function ExamPage() {
                       <div
                         className="mt-3"
                         dangerouslySetInnerHTML={{
-                          __html: currentSection.sample_question ?? "",
+                          __html: (currentSection.sample_question ?? "").replace(/\\n/g, "<br>"),
                         }}
                       />
                     </div>
