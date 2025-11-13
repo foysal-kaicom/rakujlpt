@@ -95,9 +95,15 @@ class CandidateProgressController extends Controller
         $progress = CandidateStageProgress::where('candidate_id', $candidate->id)
             ->where('stage_id', $stageId)
             ->firstOrFail();
+        
+        $score = $request->input('total_score', null);
 
         // Mark current stage as completed
-        $progress->update(['candidate_status' => 'completed']);
+        // $progress->update(['candidate_status' => 'completed']);
+        $progress->update([
+            'candidate_status' => 'completed',
+            'total_score' => $score ?? $progress->total_score, // update if provided
+        ]);
 
         // Unlock next stage by creating a new record (current)
         $nextStage = Stage::where('roadmap_id', $progress->roadmap_id)
@@ -132,6 +138,7 @@ class CandidateProgressController extends Controller
         }
 
         return response()->json(['message' => 'Stage completed!']);
+        // return response()->json(['message' => 'Stage completed successfully!', 'score' => $score]);
     }
 
 

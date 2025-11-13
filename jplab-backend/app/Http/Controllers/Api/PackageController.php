@@ -89,7 +89,11 @@ class PackageController extends Controller
                 'title'          => 'subscription',
             ]);
 
-            $candidate->update(['user_subscriptions_id' => $userSubscription->id, 'is_subscribed' => true]);
+            $candidate->update([
+                'user_subscriptions_id' => $userSubscription->id, 
+                'is_subscribed' => true,
+                'is_free' => true,
+            ]);
 
             foreach ($package->package_details as $detail) {
                 UserSubscriptionDetails::create([
