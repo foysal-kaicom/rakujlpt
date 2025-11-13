@@ -102,7 +102,7 @@ export default function MockTestSelect() {
                             </p>
 
                             <Link
-                              href={`/mock_test_select/${test.id}`}
+                              href={`/mock_test_select/${test.id}?type=${test.short_name}`}
                               className="px-6 py-3 inline-block rounded-full space-x-2 font-semibold text-white text-sm shadow-md bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400 hover:scale-105 transition-transform duration-300"
                             >
                               🎯 Choose Test

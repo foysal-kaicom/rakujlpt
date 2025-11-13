@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 import QuestionCompositionComponent from "@/components/QuestionCompositionComponent";
@@ -14,6 +14,8 @@ import { useRouter } from "next/navigation";
 export default function MockTestQuestionComposition() {
   const params = useParams();
   const id = params.id;
+  const searchParams = useSearchParams();
+  const type = (searchParams.get("type") || "").toLowerCase();
   const router = useRouter();
   const { examStarted, startExam } = useExamStore();
 
@@ -22,7 +24,7 @@ export default function MockTestQuestionComposition() {
     { name: "Select Mock test", to: "/mock_test_select" },
     {
       name: "Question Composition of Mock Test",
-      to: `/mock_test_select/${id}`,
+      to: `/mock_test_select/${id}?type=${type}`,
     },
   ];
 
@@ -30,6 +32,7 @@ export default function MockTestQuestionComposition() {
     <Suspense fallback={<QuestionCompositionSkeleton />}>
       <QuestionCompositionComponent
         breadCrumbData={breadCrumbData}
+        type={type || ""}
         mainText="Question Composition"
         preText="Mock test"
         subText="Read the question composition before starting the exam"
