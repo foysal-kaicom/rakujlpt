@@ -3,13 +3,13 @@
 @section('contents')
 
 @if ($errors->any())
-    <div class="bg-red-100 border border-red-300 rounded-lg p-4 text-white">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+<div class="bg-red-100 border border-red-300 rounded-lg p-4 text-white">
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
 @endif
 
 <form action="{{ route('practices.store') }}" method="POST" enctype="multipart/form-data" class="px-10">
@@ -24,33 +24,38 @@
             <div class="grid grid-cols-4 gap-4">
                 <input type="hidden" name="stage_id" value="{{ $stageId }}" />
 
-                {{-- Proficiency Level --}}
-                <div class="space-y-2">
-                    <label class="block font-semibold">Proficiency Level</label>
-                    <select name="question[proficiency_level]" class="bg-white drop-shadow-md text-sm border rounded px-3 py-2" required>
-                        <option value="">Select Level</option>
-                        <option value="N4">N4</option>
-                        <option value="N5">N5</option>
-                    </select>
+                <div class="space-y-5">
+                    {{-- Proficiency Level --}}
+                    <div class="space-y-2 w-full">
+                        <label class="block font-semibold">Proficiency Level</label>
+                        <select name="question[proficiency_level]" class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-full" required>
+                            <option value="">Select Level</option>
+                            <option value="N4">N4</option>
+                            <option value="N5">N5</option>
+                        </select>
+                    </div>
+
+                    {{-- Question Type --}}
+                    <div class="space-y-2">
+                        <label class="block font-semibold">Question Type</label>
+                        <select name="question[question_type]" class="questionType bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-full" required>
+                            <option value="text">Text</option>
+                            {{-- <option value="image">Image</option> --}}
+                            <option value="audio">Image</option>
+                        </select>
+                    </div>
                 </div>
 
-                {{-- Question Type --}}
-                <div class="space-y-2">
-                    <label class="block font-semibold">Question Type</label>
-                    <select name="question[question_type]" class="questionType bg-white drop-shadow-md text-sm border rounded px-3 py-2" required>
-                        <option value="text">Text</option>
-                        {{-- <option value="image">Image</option> --}}
-                        <option value="audio">Image</option>
-                    </select>
-                </div>
 
-               
-                <div class="space-y-2 col-span-2">
+
+                <div class="space-y-2 col-span-3">
                     <label class="block font-semibold">Question</label>
 
                     {{-- Main Question Input --}}
-                
-                    <textarea id="content" name="question[question]" class="tinymce"></textarea>
+                    <div class="questionInput">
+                        <textarea id="content" name="question[question]" class="tinymce"></textarea>
+                    </div>
+
 
 
                     {{-- Image Preview --}}
@@ -80,33 +85,35 @@
 
             {{-- Options --}}
             <div class="p-6 rounded-lg border bg-white mt-[30px] space-y-7">
-            <h3 class="font-semibold rounded text-black">Create Options (Choose the correct answer)</h3>
-            <div class="grid lg:grid-cols-2 gap-4">
+                <h3 class="font-semibold rounded text-black">Create Options (Choose the correct answer)</h3>
+                <div class="grid lg:grid-cols-2 gap-4">
                     @for ($i = 1; $i <= 4; $i++)
-                        
 
+                        <div class="flex gap-2">
                         <input type="radio" name="question[answer]" value="{{ $i }}" class="size-5">
-                  <div class="optionWrapper w-full" data-q="${i}" data-opt="${opt}">
-                    <textarea id="content" name="question[options][{{ $i }}]" placeholder="Option {{ $i }}" class="px-3 py-2 w-full"></textarea>
-                  </div>
-                    @endfor
+                        <div class="optionWrapper w-full" data-q="${i}" data-opt="${opt}">
+                            <textarea id="content" name="question[options][{{ $i }}]" placeholder="Option {{ $i }}" class="px-3 py-2 w-full"></textarea>
+                        </div>
                 </div>
-            </div>
 
-            {{-- Hints --}}
-            <div class="mt-4 space-y-2">
-                <label class="block font-semibold">Hints</label>
-                <input type="text" name="question[hints]" placeholder="Enter hints" 
-                       class="bg-white text-sm border rounded px-3 py-2 w-full">
-            </div>
-
-            {{-- Explanation --}}
-            <div class="mt-4 space-y-2">
-                <label class="block font-semibold">Explanation</label>
-                <textarea name="question[explanation]" rows="2" placeholder="Enter explanation" 
-                          class="bg-white text-sm border rounded px-3 py-2 w-full resize-none"></textarea>
+                @endfor
             </div>
         </div>
+
+        {{-- Hints --}}
+        <div class="mt-4 space-y-2">
+            <label class="block font-semibold">Hints</label>
+            <input type="text" name="question[hints]" placeholder="Enter hints"
+                class="bg-white text-sm border rounded px-3 py-2 w-full">
+        </div>
+
+        {{-- Explanation --}}
+        <div class="mt-4 space-y-2">
+            <label class="block font-semibold">Explanation</label>
+            <textarea name="question[explanation]" rows="2" placeholder="Enter explanation"
+                class="bg-white text-sm border rounded px-3 py-2 w-full resize-none"></textarea>
+        </div>
+    </div>
     </div>
 
     {{-- Submit Button --}}
@@ -120,72 +127,156 @@
 
 
 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const questionTypeSelect = document.querySelector(".questionType");
-    const questionInput = document.querySelector(".questionInput");
-    const imagePreview = document.getElementById("imagePreview");
+<!-- <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const questionTypeSelect = document.querySelector(".questionType");
+        const questionInput = document.querySelector(".questionInput");
+        const imagePreview = document.getElementById("imagePreview");
 
-    const audioInputContainer = document.getElementById("audioInputContainer");
-    const audioInput = document.querySelector(".audioInput");
-    const audioPreview = document.getElementById("audioPreview");
+        const audioInputContainer = document.getElementById("audioInputContainer");
+        const audioInput = document.querySelector(".audioInput");
+        const audioPreview = document.getElementById("audioPreview");
 
-    questionTypeSelect.addEventListener("change", function () {
-        const type = this.value;
+        questionTypeSelect.addEventListener("change", function() {
+            const type = this.value;
 
-        // Reset fields
-        questionInput.value = "";
-        questionInput.type = "text";
-        questionInput.placeholder = "Enter question";
-        questionInput.accept = "";
-        imagePreview.classList.add("hidden");
-        audioInputContainer.classList.add("hidden");
-        audioPreview.classList.add("hidden");
-
-        if (type === "text") {
+            // Reset fields
+            questionInput.value = "";
             questionInput.type = "text";
-            questionInput.required = true;
-        } 
-        // else if (type === "image") {
-        //     questionInput.type = "file";
-        //     questionInput.accept = "image/*";
-        //     questionInput.required = true;
-        // } 
-        else if (type === "audio") {
-            // Main question becomes image input
-            questionInput.type = "file";
-            questionInput.accept = "image/*";
-            questionInput.required = true;
+            questionInput.placeholder = "Enter question";
+            questionInput.accept = "";
+            imagePreview.classList.add("hidden");
+            audioInputContainer.classList.add("hidden");
+            audioPreview.classList.add("hidden");
 
-            // Show audio file input
-            audioInputContainer.classList.remove("hidden");
-        }
+            if (type === "text") {
+                questionInput.type = "text";
+                questionInput.required = true;
+            } else if (type === "image") {
+                questionInput.type = "file";
+                questionInput.accept = "image/*";
+                questionInput.required = true;
+            } else if (type === "audio") {
+                // Main question becomes image input
+                questionInput.type = "file";
+                questionInput.accept = "image/*";
+                questionInput.required = true;
+
+                // Show audio file input
+                audioInputContainer.classList.remove("hidden");
+            }
+        });
+
+        // Preview main image (for image or audio type)
+        questionInput.addEventListener("change", function() {
+            if (this.files && this.files[0] && (questionTypeSelect.value === "image" || questionTypeSelect.value === "audio")) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.classList.remove("hidden");
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        // Preview audio
+        audioInput.addEventListener("change", function() {
+            if (this.files && this.files[0]) {
+                const url = URL.createObjectURL(this.files[0]);
+                audioPreview.src = url;
+                audioPreview.classList.remove("hidden");
+            }
+        });
     });
+</script> -->
 
-    // Preview main image (for image or audio type)
-    questionInput.addEventListener("change", function() {
-        if (this.files && this.files[0] && (questionTypeSelect.value === "image" || questionTypeSelect.value === "audio")) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                imagePreview.src = e.target.result;
-                imagePreview.classList.remove("hidden");
-            };
-            reader.readAsDataURL(this.files[0]);
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const questionTypeSelect = document.querySelector(".questionType");
+        const questionInputDiv = document.querySelector(".questionInput"); // the div wrapping TinyMCE textarea
+        const imagePreview = document.getElementById("imagePreview");
+        const audioInputContainer = document.getElementById("audioInputContainer");
+        const audioInput = document.querySelector(".audioInput");
+        const audioPreview = document.getElementById("audioPreview");
+
+        // Dynamically create image input field
+        const imageInput = document.createElement("input");
+        imageInput.type = "file";
+        imageInput.name = "question[image_file]";
+        imageInput.accept = "image/*";
+        imageInput.className = "hidden bg-white drop-shadow-md border rounded px-3 py-2 w-full mt-2";
+        questionInputDiv.insertAdjacentElement("afterend", imageInput);
+
+        // TinyMCE show/hide helpers
+        function hideTinyMCE() {
+            if (window.tinymce) {
+                const editor = tinymce.get("content");
+                if (editor) editor.hide();
+            }
         }
-    });
 
-    // Preview audio
-    audioInput.addEventListener("change", function() {
-        if (this.files && this.files[0]) {
-            const url = URL.createObjectURL(this.files[0]);
-            audioPreview.src = url;
-            audioPreview.classList.remove("hidden");
+        function showTinyMCE() {
+            if (window.tinymce) {
+                const editor = tinymce.get("content");
+                if (editor) editor.show();
+            }
         }
-    });
-});
 
+        // Core toggle logic
+        function toggleFields(type) {
+            // Reset all previews and inputs
+            imagePreview.classList.add("hidden");
+            audioInputContainer.classList.add("hidden");
+            audioPreview.classList.add("hidden");
+            imageInput.classList.add("hidden");
+
+            if (type === "text") {
+                // show textarea, hide file inputs
+                questionInputDiv.classList.remove("hidden");
+                showTinyMCE();
+            } else if (type === "image" || type === "audio") {
+                // hide text editor
+                questionInputDiv.classList.add("hidden");
+                hideTinyMCE();
+
+                // show image + audio upload
+                imageInput.classList.remove("hidden");
+                audioInputContainer.classList.remove("hidden");
+            }
+        }
+
+        // Listen for change
+        questionTypeSelect.addEventListener("change", function () {
+            toggleFields(this.value);
+        });
+
+        // Image preview
+        imageInput.addEventListener("change", function () {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.classList.remove("hidden");
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        // Audio preview
+        audioInput.addEventListener("change", function () {
+            if (this.files && this.files[0]) {
+                const url = URL.createObjectURL(this.files[0]);
+                audioPreview.src = url;
+                audioPreview.classList.remove("hidden");
+            }
+        });
+
+        // ✅ Set default type to text and initialize
+        questionTypeSelect.value = "text";
+        toggleFields("text");
+    });
 </script>
-
 
 
 
