@@ -153,7 +153,7 @@ export default function Practice() {
                   Improve your language skills with our comprehensive practice
                   exercises
                 </p>
-                <button className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                <button className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 cursor-pointer">
                   PRACTICE FREE
                 </button>
               </div>

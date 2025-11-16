@@ -174,3 +174,33 @@ body {
 .animate-fade-in {
   animation: fade-in 0.6s ease-out forwards;
 }
+
+.no-tailwindcss {
+  all: revert;
+}
+
+.no-tailwindcss blockquote,
+.no-tailwindcss dl,
+.no-tailwindcss dd,
+.no-tailwindcss h1,
+.no-tailwindcss h2,
+.no-tailwindcss h3,
+.no-tailwindcss h4,
+.no-tailwindcss h5,
+.no-tailwindcss h6,
+.no-tailwindcss hr,
+.no-tailwindcss figure,
+.no-tailwindcss p,
+.no-tailwindcss pre {
+  font-size: revert;
+  font-weight: revert;
+  margin: revert;
+}
+
+.no-tailwindcss ol,
+.no-tailwindcss ul,
+.no-tailwindcss menu {
+  list-style: unset;
+  margin: revert;
+  padding: revert;
+}
