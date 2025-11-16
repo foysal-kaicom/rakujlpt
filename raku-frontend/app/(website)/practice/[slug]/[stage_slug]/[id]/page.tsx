@@ -40,55 +40,6 @@ interface Stage {
   questions: Question[];
 }
 
-// Sample questions data
-// const questionsData: Question[] = [
-//   {
-//     id: 1,
-//     type: "yes-no",
-//     question: "Is this a real English word?",
-//     word: "tuces",
-//     correctAnswer: "no",
-//     explanation:
-//       "'Tuces' is not a valid English word. You might be thinking of 'twice' or 'truces'.",
-//     hint: "Think about common English word patterns and spelling rules.",
-//   },
-//   {
-//     id: 2,
-//     type: "multiple-choice",
-//     question: "What is the correct meaning of 'benevolent'?",
-//     options: [
-//       "Angry and hostile",
-//       "Kind and generous",
-//       "Sad and depressed",
-//       "Confused and lost",
-//     ],
-//     correctAnswer: 1,
-//     explanation:
-//       "Benevolent means showing kindness and goodwill. It comes from Latin 'bene' (well) and 'volent' (wishing).",
-//     hint: "The prefix 'bene-' means 'good' or 'well', like in 'benefit' or 'beneficial'.",
-//   },
-//   {
-//     id: 3,
-//     type: "multiple-answer",
-//     question:
-//       "Which of the following are synonyms for 'happy'? (Select all that apply)",
-//     options: ["Joyful", "Melancholy", "Cheerful", "Sorrowful", "Delighted"],
-//     correctAnswers: [0, 2, 4],
-//     explanation:
-//       "Joyful, cheerful, and delighted are all synonyms for happy. Melancholy and sorrowful mean sad.",
-//     hint: "Think about words that describe positive emotions.",
-//   },
-//   {
-//     id: 4,
-//     type: "text-input",
-//     question: "Fill in the blank: The cat ____ on the mat.",
-//     correctAnswer: "sat",
-//     acceptableAnswers: ["sat", "sits", "was sitting"],
-//     explanation:
-//       "The most common answer is 'sat' (past tense). Other acceptable answers include 'sits' (present tense) or 'was sitting' (past continuous).",
-//     hint: "Think of a simple verb that describes what a cat does when it rests.",
-//   },
-// ];
 export default function PracticeQuestion() {
   const params = useParams();
   const id = params.id;
@@ -402,9 +353,7 @@ console.log(totalDuration);
                   </div>
                 )}
                 {currentQuestion?.question_type === "text" && (
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-8">
-                    {currentQuestion?.question}
-                  </h2>
+                  <div dangerouslySetInnerHTML={{ __html: currentQuestion?.question }} className="text-2xl md:text-3xl font-bold text-gray-800 mb-8"/>
                 )}
                 {currentQuestion?.question_type === "audio" && (
                   <div className="flex flex-col items-center gap-4 mb-6">
@@ -522,9 +471,7 @@ console.log(totalDuration);
                               <Check className="w-5 h-5 text-white" />
                             )}
                           </div>
-                          <span className="text-lg text-gray-800">
-                            {optionText}
-                          </span>
+                          <div dangerouslySetInnerHTML={{ __html: optionText }} className="text-lg text-gray-800"/>
                         </div>
                       </button>
                     );
