@@ -81,13 +81,13 @@ class CandidateController extends Controller
         $field = filter_var($email_or_phone, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone_number';
 
 
-        // $candidate = Candidate::where($field, $email_or_phone)->first();
-        $candidate = Candidate::where($field, $email_or_phone)
-            ->with(['latestSubscription.package'])
-            ->first();
+        $candidate = Candidate::where($field, $email_or_phone)->first();
+        // $candidate = Candidate::where($field, $email_or_phone)
+        //     ->with(['latestSubscription.package'])
+        //     ->first();
             
-        $candidate->current_package_id = $candidate->latestSubscription?->package_id;
-        $candidate->current_package_name = $candidate->latestSubscription?->package?->name;
+        // $candidate->current_package_id = $candidate->latestSubscription?->package_id;
+        // $candidate->current_package_name = $candidate->latestSubscription?->package?->name;
 
         if ($candidate && $candidate->status == 'active' && Hash::check($request->password, $candidate->password)) {
             try {
