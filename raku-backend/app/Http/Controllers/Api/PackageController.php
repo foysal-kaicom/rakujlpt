@@ -93,6 +93,8 @@ class PackageController extends Controller
                 'user_subscriptions_id' => $userSubscription->id, 
                 'is_subscribed' => true,
                 'is_free' => true,
+                'current_package_id' => $package->id,
+                'current_package_name' => $package->name,
             ]);
 
             foreach ($package->package_details as $detail) {
