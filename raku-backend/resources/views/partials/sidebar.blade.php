@@ -210,13 +210,13 @@
             <a href="{{ route('roadmaps.index') }}"
                 class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
                 <i class="fas fa-list text-base"></i>
-                <p class="m-0 text-sm">All Practices</p>
+                <p class="m-0 text-sm">Roadmaps</p>
             </a>
 
             <a href="{{ route('stages.index') }}"
                 class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
                 <i class="fas fa-list text-base"></i>
-                <p class="m-0 text-sm">All Stages</p>
+                <p class="m-0 text-sm">Stages</p>
             </a>
 
             {{-- <a href="{{ route('roadmaps.create') }}"
