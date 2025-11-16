@@ -23,11 +23,11 @@
 /public/storage
 /storage/*.key
 /storage/pail
-/storage/logs
-/storage/framework
+/storage/logs/*
+/storage/framework/*
 /storage/app/*
-/storage/debugbar/
-/storage/sessions
+/storage/debugbar/*
+/storage/sessions/*
 /storage/views
 /vendor
 Homestead.json
@@ -35,5 +35,4 @@ Homestead.yaml
 Thumbs.db
 docker-compose.yml
 Dockerfile
-/storage
 /vendor/composer
