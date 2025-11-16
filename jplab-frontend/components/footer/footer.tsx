@@ -58,8 +58,8 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Company</h3>
             <ul className="space-y-2 text-gray-500 text-sm">
               <li>
-                <Link href="/about_jpt" className="hover:text-purple-500 transition">
-                  About JPLAB
+                <Link href="/about_us" className="hover:text-purple-500 transition">
+                  About Raku
                 </Link>
               </li>
               <li>

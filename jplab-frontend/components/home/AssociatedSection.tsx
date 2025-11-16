@@ -1,27 +1,26 @@
-export default function AssociatedSection() {
-  const brands = [
-    {
-      name: "JPT",
-      img: "/assets/brands/jpt.png",
-    },
-    {
-      name: "JLPT",
-      img: "/assets/brands/jlpt.png",
-    },
-    {
-      name: "NAT",
-      img: "/assets/brands/nat.png",
-    },
-    {
-      name: "Dhaka University",
-      img: "/assets/brands/du.png",
-    },
+interface Partner {
+  id: null | number;
+  name: string;
+  logo: string;
+}
 
-    {
-      name: "Kaicom",
-      img: "/assets/brands/kaicom.png",
-    },
-  ];
+const partnersList = async (): Promise<Partner[]> => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/partner/list`,
+      {
+        cache: "no-store",
+      }
+    );
+    const data = await res.json();
+    return data?.data || [];
+  } catch (error) {
+    return [];
+  }
+};
+
+export default async function AssociatedSection() {
+  const partners = await partnersList();
   return (
     <>
       <section className="relative py-10 px-6 bg-linear-to-br from-blue-50 to-purple-50 overflow-hidden">
@@ -32,10 +31,10 @@ export default function AssociatedSection() {
 
         <div className="px-6 lg:px-8 relative container mx-auto text-center text-black">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8 items-center justify-center">
-            {brands.map((item, i) => (
+            {partners.map((item, i) => (
               <div key={i} className="hover:scale-105 transition-transform duration-300 ">
                 <img
-                  src={item.img}
+                  src={item.logo}
                   alt={item.name}
                   className="mx-auto h-12 object-contain grayscale-100"
                 />

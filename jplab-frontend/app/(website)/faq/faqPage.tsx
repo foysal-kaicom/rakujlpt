@@ -39,29 +39,6 @@ export default function FAQ({ faqs }: FAQProps) {
 
   const visibleFaqs = showAll ? faqs : faqs.slice(0, 9);
 
-  const faqs2 = [
-    {
-      question: "How do I start a mock test?",
-      answer:
-        "Simply sign up, choose your exam type (JPT, JLPT, or NAT), and hit ‘Start Test’. The system will auto-generate your mock exam instantly.",
-    },
-    {
-      question: "Are the mock tests similar to real exams?",
-      answer:
-        "Absolutely! All mock tests are structured to mimic real exam patterns, including timing, question difficulty, and scoring system.",
-    },
-    {
-      question: "Can I review my answers after completing a test?",
-      answer:
-        "Yes, you can review your answers, see detailed explanations, and track your improvement over time through your dashboard.",
-    },
-    {
-      question: "Do I need to pay for every mock test?2",
-      answer:
-        "You can try free mock tests, but premium users get unlimited access, performance analytics, and personalized recommendations.",
-    },
-  ];
-
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 overflow-hidden pt-5 pb-20 px-6">
       <div className="absolute inset-0 overflow-hidden">
@@ -81,7 +58,7 @@ export default function FAQ({ faqs }: FAQProps) {
 
           {/* FAQ Accordion */}
           <div className="space-y-6 text-left">
-            {faqs2.map((faq, index) => {
+            {faqs.map((faq, index) => {
               const isOpen = openIndex === index;
               return (
                 <div
@@ -125,7 +102,7 @@ export default function FAQ({ faqs }: FAQProps) {
           {/* CTA Button */}
           <div className="mt-20">
             <a
-              href="/contact"
+              href="/contact_us"
               className="relative inline-block px-10 py-4 text-lg font-bold text-white rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-pink-500 hover:to-indigo-500 transition-all duration-500 hover:scale-105 shadow-[0_0_25px_rgba(168,85,247,0.5)]"
             >
               Still Need Help? Contact Us 💬
