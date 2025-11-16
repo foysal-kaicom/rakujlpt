@@ -193,7 +193,7 @@ export default function InsightSection() {
                 <img
                   src="/assets/home/h1.png"
                   alt="mock test promo"
-                  className="w-[30%] object-cover rounded-md drop-shadow-md"
+                  className="w-[30%] object-cover rounded-md drop-shadow-2xl"
                 />
               </div>
             </div>
