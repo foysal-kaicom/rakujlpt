@@ -200,6 +200,7 @@ export default function ExamPage() {
           error?.response?.data?.message ||
             "Cannot fetch mock questions right now"
         );
+        router.push("/packages");
       } finally {
         setLoading(false);
       }
