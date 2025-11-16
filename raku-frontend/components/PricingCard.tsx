@@ -48,7 +48,7 @@ export default function PricingCard({ plan, subscribeModal }: any) {
 
         {/* Subscribe Button */}
         <div className="w-full flex justify-center absolute bottom-5 left-0 px-8">
-          {user?.current_package_id == plan.id ? (
+          {user?.current_package_id == plan.id  ? (
             <button
               className={`w-full py-4 px-6 rounded-full font-semibold transition-all duration-300 cursor-not-allowed bg-gradient-to-r from-blue-100 to-purple-100 border border-gray-200`}
             >
