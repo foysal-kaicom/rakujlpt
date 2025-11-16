@@ -14,6 +14,7 @@ import Loader from "@/components/Loader";
 import SuspenseLoader from "@/components/SuspenseLoader";
 
 interface Practice {
+  roadmap_slug:string
   current_module_name: string;
   current_stage_id: number;
   current_stage_name: string;
@@ -103,17 +104,18 @@ export default function MyPractice() {
                     </h4>
                     <p className="text-gray-100 mb-6">
                       {item?.description}
+                      {item.current_stage_id}
                     </p>
 
                     {/* Progress Bar */}
                     <div className="w-full h-2 bg-purple-200 rounded-full overflow-hidden">
                       <div
-                        className={`h-full bg-purple-700`}
+                        className={`h-full bg-green-300`}
                         style={{ width: `${item?.complete}%` }}
                       ></div>
                     </div>
                     <div className="flex justify-end mt-5">
-                      <button onClick={()=>router.push(`/practice/${item.stage_slug}/${item.current_stage_id}}`)} disabled={item?.complete == 100} className="px-8 py-2 bg-white rounded-md font-semibold drop-shadow-sm drop-shadow-purple-400 border border-purple-400 relative overflow-clip group">
+                      <button onClick={()=>router.push(`/practice/${item.roadmap_slug}/${item.stage_slug}/${item.current_stage_id}`)} disabled={item?.complete == 100} className="px-8 py-2 bg-white rounded-md font-semibold drop-shadow-sm drop-shadow-purple-400 border border-purple-400 relative overflow-clip group">
                         <span className="relative z-10 text-white group-hover:text-black duration-300">
                           {item.complete == 100 ? "Completed" : "Resume"}
                         </span>
