@@ -27,13 +27,13 @@ const navdata = [
     ],
   },
   {
-    id: "aboutJpt",
+    id: "aboutUs",
     label: "About",
-    to: "/about_jpt",
+    to: "/about_us",
     links: [
       {
-        to: "/about_jpt",
-        label: "About JPLAB",
+        to: "/about_us",
+        label: "About Raku",
       },
       {
         to: "/question_composition",

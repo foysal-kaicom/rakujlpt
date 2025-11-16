@@ -292,7 +292,7 @@ export default function Header() {
                           onClick={toggleSidebar}
                           href={item.to}
                           className={`mb-3 text-sm ${
-                            item.label == "Information" || item.label == "Test"
+                            item.label == "About" || item.label == "Test"
                               ? "hidden"
                               : item.to == path
                               ? "text-[#d400ff]"

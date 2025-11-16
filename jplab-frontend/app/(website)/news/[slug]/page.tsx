@@ -49,7 +49,7 @@ export default async function NewsDetailsPage({
   const { slug } = await params;
 
   const response = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/news/view/${slug}`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/news/${slug}`,
     {
       headers: {
         "User-Agent": "Mozilla/5.0",

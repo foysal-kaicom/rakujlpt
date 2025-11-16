@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roadmaps', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->string('slug')->unique();
-            $table->text('description')->nullable();
-            $table->string('image')->nullable();
-            $table->timestamps();
+        Schema::table('candidate_stage_progress', function (Blueprint $table) {
+            $table->integer('total_score')->nullable()->after('candidate_status');
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roadmaps');
+        Schema::table('candidate_stage_progress', function (Blueprint $table) {
+            //
+        });
     }
 };

@@ -3,17 +3,17 @@
 @section('contents')
 
 @if ($errors->any())
-    <div class="bg-red-100 border border-red-300 rounded-lg p-4 text-white">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+<div class="bg-red-100 border border-red-300 rounded-lg p-4 text-white">
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
 @endif
 
 @php
-    $question = $practice->questions_array[0] ?? [];
+$question = $practice->questions_array[0] ?? [];
 @endphp
 
 <form action="{{ route('practices.update', $practice->id) }}" method="POST" enctype="multipart/form-data" class="px-10">
@@ -29,47 +29,53 @@
             <div class="grid grid-cols-4 gap-4">
                 <input type="hidden" name="stage_id" value="{{ $practice->stage_id }}" />
 
-                {{-- Proficiency Level --}}
-                <div class="space-y-2">
-                    <label class="block font-semibold">Proficiency Level</label>
-                    <select name="question[proficiency_level]" class="bg-white drop-shadow-md text-sm border rounded px-3 py-2" required>
-                        <option value="">Select Level</option>
-                        <option value="N4" {{ ($question['proficiency_level'] ?? '') == 'N4' ? 'selected' : '' }}>N4</option>
-                        <option value="N5" {{ ($question['proficiency_level'] ?? '') == 'N5' ? 'selected' : '' }}>N5</option>
-                    </select>
+                <div class="space-y-5">
+                    {{-- Proficiency Level --}}
+                    <div class="space-y-2">
+                        <label class="block font-semibold">Proficiency Level</label>
+                        <select name="question[proficiency_level]" class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-full" required>
+                            <option value="">Select Level</option>
+                            <option value="N4" {{ ($question['proficiency_level'] ?? '') == 'N4' ? 'selected' : '' }}>N4</option>
+                            <option value="N5" {{ ($question['proficiency_level'] ?? '') == 'N5' ? 'selected' : '' }}>N5</option>
+                        </select>
+                    </div>
+
+                    {{-- Question Type --}}
+                    <div class="space-y-2">
+                        <label class="block font-semibold">Question Type</label>
+                        <select name="question[question_type]" class="questionType bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-full" required>
+                            <option value="text" {{ ($question['question_type'] ?? '') == 'text' ? 'selected' : '' }}>Text</option>
+                            {{-- <option value="image" {{ ($question['question_type'] ?? '') == 'image' ? 'selected' : '' }}>Image</option> --}}
+                            <option value="audio" {{ ($question['question_type'] ?? '') == 'audio' ? 'selected' : '' }}>Image</option>
+                        </select>
+                    </div>
                 </div>
 
-                {{-- Question Type --}}
-                <div class="space-y-2">
-                    <label class="block font-semibold">Question Type</label>
-                    <select name="question[question_type]" class="questionType bg-white drop-shadow-md text-sm border rounded px-3 py-2" required>
-                        <option value="text" {{ ($question['question_type'] ?? '') == 'text' ? 'selected' : '' }}>Text</option>
-                        {{-- <option value="image" {{ ($question['question_type'] ?? '') == 'image' ? 'selected' : '' }}>Image</option> --}}
-                        <option value="audio" {{ ($question['question_type'] ?? '') == 'audio' ? 'selected' : '' }}>Image</option>
-                    </select>
-                </div>
 
                 {{-- Question Input --}}
-                <div class="space-y-2 col-span-2">
+                <div class="space-y-2 col-span-3 ">
                     <label class="block font-semibold">Question</label>
 
                     {{-- Show current value for text type --}}
                     @if(($question['question_type'] ?? '') === 'text')
 
-                        <textarea id="content" name="question[question]" rows="2" placeholder="Enter explanation" 
-                          class="bg-white text-sm border rounded px-3 py-2 w-full resize-none" required>{{ $question['question'] ?? '' }}</textarea>
+                    <div class="questionInput">
+                        <textarea id="content" name="question[question]" rows="2" placeholder="Enter explanation"
+                            class="bg-white text-sm border rounded px-3 py-2 w-full resize-none" required>{{ $question['question'] ?? '' }}</textarea>
+                    </div>
+
                     @else
-                        {{-- For image/audio, show file input --}}
-                        <input name="question[question]" type="file" accept="image/*"
-                            class="questionInput bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-full" />
-                        
-                        {{-- Show existing image if available --}}
-                        @if(!empty($question['question']) && in_array($question['question_type'] ?? '', ['image', 'audio']))
-                            <div class="mt-2">
-                                <p class="text-sm text-gray-600 mb-1">Current Image:</p>
-                                <img src="{{ asset('storage/' . $question['question']) }}" alt="Current Question" class="max-h-48 border rounded" id="currentImage" />
-                            </div>
-                        @endif
+                    {{-- For image/audio, show file input --}}
+                    <input name="question[question]" type="file" accept="image/*"
+                        class="questionInput bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-full" />
+
+                    {{-- Show existing image if available --}}
+                    @if(!empty($question['question']) && in_array($question['question_type'] ?? '', ['image', 'audio']))
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-600 mb-1">Current Image:</p>
+                        <img src="{{ asset('storage/' . $question['question']) }}" alt="Current Question" class="max-h-48 border rounded" id="currentImage" />
+                    </div>
+                    @endif
                     @endif
 
                     {{-- Image Preview for new uploads --}}
@@ -80,15 +86,15 @@
                         <label class="block font-semibold">Upload Audio</label>
                         <input type="file" name="question[audio_file]" accept="audio/*"
                             class="audioInput bg-white drop-shadow-md border rounded px-3 py-2 w-full">
-                        
+
                         {{-- Show existing audio if available --}}
                         @if(!empty($question['audio_file']))
-                            <div class="mt-2">
-                                <p class="text-sm text-gray-600 mb-1">Current Audio:</p>
-                                <audio controls class="mt-2" id="currentAudio">
-                                    <source src="{{ asset('storage/' . $question['audio_file']) }}" type="audio/mpeg">
-                                </audio>
-                            </div>
+                        <div class="mt-2">
+                            <p class="text-sm text-gray-600 mb-1">Current Audio:</p>
+                            <audio controls class="mt-2" id="currentAudio">
+                                <source src="{{ asset('storage/' . $question['audio_file']) }}" type="audio/mpeg">
+                            </audio>
+                        </div>
                         @endif
                     </div>
 
@@ -103,32 +109,32 @@
                 <div class="grid grid-cols-2 gap-4">
                     @for ($i = 1; $i <= 4; $i++)
                         <div class="flex items-center gap-1">
-                            <input type="radio" name="question[answer]" value="{{ $i }}" 
-                                   {{ ($question['answer'] ?? 1) == $i ? 'checked' : '' }}
-                                   class="size-5" required>
-                            
+                        <input type="radio" name="question[answer]" value="{{ $i }}"
+                            {{ ($question['answer'] ?? 1) == $i ? 'checked' : '' }}
+                            class="size-5" required>
 
-                                   <textarea required id="content" name="question[options][{{ $i }}]" placeholder="Option {{ $i }}" class="px-3 py-2 w-full">{{ $question['options'][$i] ?? '' }}</textarea>
-                        </div>
-                    @endfor
+
+                        <textarea required id="content" name="question[options][{{ $i }}]" placeholder="Option {{ $i }}" class="px-3 py-2 w-full">{{ $question['options'][$i] ?? '' }}</textarea>
                 </div>
-            </div>
-
-            {{-- Hints --}}
-            <div class="mt-4 space-y-2">
-                <label class="block font-semibold">Hints</label>
-                <input type="text" name="question[hints]" placeholder="Enter hints" 
-                       value="{{ $question['hints'] ?? '' }}"
-                       class="bg-white text-sm border rounded px-3 py-2 w-full">
-            </div>
-
-            {{-- Explanation --}}
-            <div class="mt-4 space-y-2">
-                <label class="block font-semibold">Explanation</label>
-                <textarea name="question[explanation]" rows="2" placeholder="Enter explanation" 
-                          class="bg-white text-sm border rounded px-3 py-2 w-full resize-none">{{ $question['explanation'] ?? '' }}</textarea>
+                @endfor
             </div>
         </div>
+
+        {{-- Hints --}}
+        <div class="mt-4 space-y-2">
+            <label class="block font-semibold">Hints</label>
+            <input type="text" name="question[hints]" placeholder="Enter hints"
+                value="{{ $question['hints'] ?? '' }}"
+                class="bg-white text-sm border rounded px-3 py-2 w-full">
+        </div>
+
+        {{-- Explanation --}}
+        <div class="mt-4 space-y-2">
+            <label class="block font-semibold">Explanation</label>
+            <textarea name="question[explanation]" rows="2" placeholder="Enter explanation"
+                class="bg-white text-sm border rounded px-3 py-2 w-full resize-none">{{ $question['explanation'] ?? '' }}</textarea>
+        </div>
+    </div>
     </div>
 
     {{-- Submit Button --}}
@@ -142,81 +148,172 @@
     </div>
 </form>
 
+<!-- <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const questionTypeSelect = document.querySelector(".questionType");
+        const questionInput = document.querySelector(".questionInput");
+        const imagePreview = document.getElementById("imagePreview");
+        const currentImage = document.getElementById("currentImage");
+        const audioInputContainer = document.getElementById("audioInputContainer");
+        const audioInput = document.querySelector(".audioInput");
+        const audioPreview = document.getElementById("audioPreview");
+        const currentAudio = document.getElementById("currentAudio");
+
+        // Get initial type
+        const initialType = questionTypeSelect.value;
+
+        questionTypeSelect.addEventListener("change", function() {
+            const type = this.value;
+
+            // Reset fields
+            questionInput.value = "";
+            imagePreview.classList.add("hidden");
+            audioInputContainer.classList.add("hidden");
+            audioPreview.classList.add("hidden");
+
+            if (currentImage) currentImage.classList.add("hidden");
+            if (currentAudio) currentAudio.parentElement.classList.add("hidden");
+
+            if (type === "text") {
+                questionInput.type = "text";
+                questionInput.accept = "";
+                questionInput.placeholder = "Enter question";
+                questionInput.required = true;
+            }
+            // else if (type === "image") {
+            //     questionInput.type = "file";
+            //     questionInput.accept = "image/*";
+            //     questionInput.placeholder = "";
+            //     questionInput.required = false; // Not required for edit (can keep existing)
+            //     if (currentImage) currentImage.classList.remove("hidden");
+            // } 
+            else if (type === "audio") {
+                questionInput.type = "file";
+                questionInput.accept = "image/*";
+                questionInput.placeholder = "";
+                questionInput.required = false;
+                audioInputContainer.classList.remove("hidden");
+                if (currentImage) currentImage.classList.remove("hidden");
+                if (currentAudio) currentAudio.parentElement.classList.remove("hidden");
+            }
+        });
+
+        // Preview main image (for image or audio type)
+        questionInput.addEventListener("change", function() {
+            if (this.files && this.files[0] && (questionTypeSelect.value === "image" || questionTypeSelect.value === "audio")) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.classList.remove("hidden");
+                    if (currentImage) currentImage.classList.add("hidden");
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        // Preview audio
+        if (audioInput) {
+            audioInput.addEventListener("change", function() {
+                if (this.files && this.files[0]) {
+                    const url = URL.createObjectURL(this.files[0]);
+                    audioPreview.src = url;
+                    audioPreview.classList.remove("hidden");
+                    if (currentAudio) currentAudio.parentElement.classList.add("hidden");
+                }
+            });
+        }
+    });
+</script> -->
+
+
+
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const questionTypeSelect = document.querySelector(".questionType");
-    const questionInput = document.querySelector(".questionInput");
-    const imagePreview = document.getElementById("imagePreview");
-    const currentImage = document.getElementById("currentImage");
-    const audioInputContainer = document.getElementById("audioInputContainer");
-    const audioInput = document.querySelector(".audioInput");
-    const audioPreview = document.getElementById("audioPreview");
-    const currentAudio = document.getElementById("currentAudio");
+    document.addEventListener("DOMContentLoaded", function() {
+        const questionTypeSelect = document.querySelector(".questionType");
+        const questionInputDiv = document.querySelector(".questionInput"); // the div wrapping TinyMCE textarea
+        const imagePreview = document.getElementById("imagePreview");
+        const audioInputContainer = document.getElementById("audioInputContainer");
+        const audioInput = document.querySelector(".audioInput");
+        const audioPreview = document.getElementById("audioPreview");
 
-    // Get initial type
-    const initialType = questionTypeSelect.value;
+        // Dynamically create image input field
+        const imageInput = document.createElement("input");
+        imageInput.type = "file";
+        imageInput.name = "question[image_file]";
+        imageInput.accept = "image/*";
+        imageInput.className = "hidden bg-white drop-shadow-md border rounded px-3 py-2 w-full mt-2";
+        questionInputDiv.insertAdjacentElement("afterend", imageInput);
 
-    questionTypeSelect.addEventListener("change", function () {
-        const type = this.value;
-
-        // Reset fields
-        questionInput.value = "";
-        imagePreview.classList.add("hidden");
-        audioInputContainer.classList.add("hidden");
-        audioPreview.classList.add("hidden");
-        
-        if (currentImage) currentImage.classList.add("hidden");
-        if (currentAudio) currentAudio.parentElement.classList.add("hidden");
-
-        if (type === "text") {
-            questionInput.type = "text";
-            questionInput.accept = "";
-            questionInput.placeholder = "Enter question";
-            questionInput.required = true;
-        } 
-        // else if (type === "image") {
-        //     questionInput.type = "file";
-        //     questionInput.accept = "image/*";
-        //     questionInput.placeholder = "";
-        //     questionInput.required = false; // Not required for edit (can keep existing)
-        //     if (currentImage) currentImage.classList.remove("hidden");
-        // } 
-        else if (type === "audio") {
-            questionInput.type = "file";
-            questionInput.accept = "image/*";
-            questionInput.placeholder = "";
-            questionInput.required = false;
-            audioInputContainer.classList.remove("hidden");
-            if (currentImage) currentImage.classList.remove("hidden");
-            if (currentAudio) currentAudio.parentElement.classList.remove("hidden");
+        // TinyMCE show/hide helpers
+        function hideTinyMCE() {
+            if (window.tinymce) {
+                const editor = tinymce.get("content");
+                if (editor) editor.hide();
+            }
         }
-    });
 
-    // Preview main image (for image or audio type)
-    questionInput.addEventListener("change", function() {
-        if (this.files && this.files[0] && (questionTypeSelect.value === "image" || questionTypeSelect.value === "audio")) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                imagePreview.src = e.target.result;
-                imagePreview.classList.remove("hidden");
-                if (currentImage) currentImage.classList.add("hidden");
-            };
-            reader.readAsDataURL(this.files[0]);
+        function showTinyMCE() {
+            if (window.tinymce) {
+                const editor = tinymce.get("content");
+                if (editor) editor.show();
+            }
         }
-    });
 
-    // Preview audio
-    if (audioInput) {
+        // Core toggle logic
+        function toggleFields(type) {
+            // Reset all previews and inputs
+            imagePreview.classList.add("hidden");
+            audioInputContainer.classList.add("hidden");
+            audioPreview.classList.add("hidden");
+            imageInput.classList.add("hidden");
+
+            if (type === "text") {
+                // show textarea, hide file inputs
+                questionInputDiv.classList.remove("hidden");
+                showTinyMCE();
+            } else if (type === "image" || type === "audio") {
+                // hide text editor
+                questionInputDiv.classList.add("hidden");
+                hideTinyMCE();
+
+                // show image + audio upload
+                imageInput.classList.remove("hidden");
+                audioInputContainer.classList.remove("hidden");
+            }
+        }
+
+        // Listen for change
+        questionTypeSelect.addEventListener("change", function() {
+            toggleFields(this.value);
+        });
+
+        // Image preview
+        imageInput.addEventListener("change", function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.classList.remove("hidden");
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        // Audio preview
         audioInput.addEventListener("change", function() {
             if (this.files && this.files[0]) {
                 const url = URL.createObjectURL(this.files[0]);
                 audioPreview.src = url;
                 audioPreview.classList.remove("hidden");
-                if (currentAudio) currentAudio.parentElement.classList.add("hidden");
             }
         });
-    }
-});
+
+        // ✅ Set default type to text and initialize
+        questionTypeSelect.value = "text";
+        toggleFields("text");
+    });
 </script>
+
+
 
 @endsection

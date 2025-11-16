@@ -7,14 +7,14 @@
     </div>
 
     <div class="cursor-pointer">
-        <a href="{{ route('user.dashboard') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-            <i class="fas fa-tachometer-alt text-indigo-500 text-base"></i>
+        <a href="{{ route('user.dashboard') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg text-indigo-500 hover:bg-indigo-800 hover:text-white transition-colors duration-200">
+            <i class="fas fa-tachometer-alt text-base"></i>
             <p class="font-medium text-sm">Dashboard</p>
         </a>
     </div>
 
     <div class="cursor-pointer" data-toggle="candidate">
-        <div class="flex justify-between items-center py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-black transition-colors duration-200">
+        <div class="flex justify-between items-center py-1.5 px-2 rounded-lg text-indigo-500 hover:bg-indigo-50 hover:text-black transition-colors duration-200">
             <div class="flex items-center gap-2 font-medium">
                 <i class="fas fa-users text-indigo-500 text-base"></i>
                 <p class="text-sm">Candidates</p>
@@ -23,18 +23,18 @@
         </div>
         <div class="mt-1 ml-3 pl-3 border-l border-gray-200 space-y-2 text-gray-600 hidden" data-target="candidate">
             <a href="{{ route('candidate.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fas fa-user-friends text-indigo-500 text-base"></i>
+                <i class="fas fa-user-friends text-base"></i>
                 <p class="m-0 text-sm">All Candidates</p>
             </a>
             <a href="{{ route('candidate.create') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fas fa-user-plus text-indigo-500 text-base"></i>
+                <i class="fas fa-user-plus text-base"></i>
                 <p class="m-0 text-sm">Create New</p>
             </a>
         </div>
     </div>
 
     <div class="cursor-pointer" data-toggle="cms">
-        <div class="flex justify-between items-center py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-black transition-colors duration-200">
+        <div class="flex justify-between items-center py-1.5 px-2 text-indigo-500 rounded-lg hover:bg-indigo-50 hover:text-black transition-colors duration-200">
             <div class="flex items-center gap-2 font-medium">
                 <i class="fas fa-broom text-indigo-500 text-base"></i>
                 <p class="text-sm">CMS</p>
@@ -47,23 +47,23 @@
                 <p class="m-0 text-sm">News or Blogs</p>
             </a> --}}
             <a href="{{ route('review.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fa-solid fa-comment text-indigo-500 text-base"></i>
+                <i class="fa-solid fa-comment text-base"></i>
                 <p class="m-0 text-sm">Reviews</p>
             </a>
              <a href="{{ route('partner.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fas fa-handshake text-indigo-500 text-base"></i>
+                <i class="fas fa-handshake text-base"></i>
                 <p class="m-0 text-sm">Partners</p>
             </a>
             <a href="{{ route('faq.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fas fa-info-circle text-indigo-500 text-base"></i>
+                <i class="fas fa-info-circle text-base"></i>
                 <p class="m-0 text-sm">FAQ</p>
             </a>
             <a href="{{ route('news.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fas fa-newspaper text-indigo-500 text-base"></i>
+                <i class="fas fa-newspaper text-base"></i>
                 <p class="m-0 text-sm">News</p>
             </a>
             <a href="{{ route('features.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fas fa-box-open text-indigo-500 text-base"></i>
+                <i class="fas fa-box-open text-base"></i>
                 <p class="m-0 text-sm">Features</p>
             </a>
         </div>
@@ -153,7 +153,7 @@
 
     <!-- mock test -->
     <div class="cursor-pointer" data-toggle="mocktest">
-        <div class="flex justify-between items-center py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-black transition-colors duration-200">
+        <div class="flex justify-between items-center py-1.5 px-2 rounded-lg text-indigo-500 hover:bg-indigo-50 hover:text-black transition-colors duration-200">
             <div class="flex items-center gap-2 font-medium">
                  <i class="fa-solid fa-headphones text-indigo-500 text-base"></i>
                 <p class="text-sm">Mock Test</p>
@@ -164,27 +164,27 @@
         <div class="mt-1 ml-3 pl-3 border-l border-gray-200 space-y-2 text-gray-600 hidden" data-target="mocktest">
 
             <a href="{{ route('mock-tests.exam.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fas fa-file-alt text-indigo-500 text-base"></i>
+                <i class="fas fa-file-alt text-base"></i>
                 <p class="font-medium text-sm">Exams</p>
             </a>
 
             <a href="{{ route('mock-test-modules.index') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fa-solid fa-layer-group text-indigo-500 text-base"></i>
+                <i class="fa-solid fa-layer-group text-base"></i>
                 <p class="font-medium text-sm">Modules</p>
             </a>
 
              <a href="{{ route('mock-tests.module-section.info') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fa-solid fa-cubes-stacked text-indigo-500 text-base"></i>
+                <i class="fa-solid fa-cubes-stacked text-base"></i>
                 <p class="font-medium text-sm">Modules & Sections</p>
             </a>
         
             <a href="{{ route('mock-tests.question.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fa-regular fa-circle-check text-indigo-500 text-base"></i>
+                <i class="fa-regular fa-circle-check text-base"></i>
                 <p class="font-medium text-sm">Questions Setup</p>
             </a>
 
             <a href="{{ route('mock-tests.reports.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fa-regular fa-circle-check text-indigo-500 text-base"></i>
+                <i class="fa-regular fa-circle-check text-base"></i>
                 <p class="font-medium text-sm">Mock Test Reports</p>
             </a>
 
@@ -195,6 +195,37 @@
         </div>
     </div>
 
+
+    <!-- Practices -->
+    <div class="cursor-pointer" data-toggle="roadmap">
+        <div class="flex justify-between items-center py-1.5 px-2 rounded-lg text-indigo-500 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
+            <div class="flex items-center gap-2 font-medium">
+                <i class="fas fa-road text-indigo-500 text-base"></i>
+                <p class="text-sm">Practices</p>
+            </div>
+            <i class="fas fa-chevron-down text-gray-500 text-sm drop-arrow transition-transform duration-300 -rotate-90"></i>
+        </div>
+
+        <div class="mt-1 ml-3 pl-3 border-l border-gray-200 space-y-2 text-gray-600 hidden" data-target="roadmap">
+            <a href="{{ route('roadmaps.index') }}"
+                class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
+                <i class="fas fa-list text-base"></i>
+                <p class="m-0 text-sm">All Practices</p>
+            </a>
+
+            <a href="{{ route('stages.index') }}"
+                class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
+                <i class="fas fa-list text-base"></i>
+                <p class="m-0 text-sm">All Stages</p>
+            </a>
+
+            {{-- <a href="{{ route('roadmaps.create') }}"
+            class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
+                <i class="fas fa-plus-circle text-indigo-500 text-base"></i>
+                <p class="m-0 text-sm">Create New</p>
+            </a> --}}
+        </div>
+    </div>
 
     <div class="cursor-pointer">
         {{-- <a href="{{ route('promotions.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
@@ -211,7 +242,7 @@
     </div>
 
     <div class="cursor-pointer" data-toggle="account-settings">
-        <div class="flex justify-between items-center py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-black transition-colors duration-200">
+        <div class="flex justify-between items-center py-1.5 px-2 rounded-lg text-indigo-500 hover:bg-indigo-50 hover:text-black transition-colors duration-200">
             <div class="flex items-center gap-2 font-medium">
                 <i class="fas fa-cog text-indigo-500 text-base"></i>
                 <p class="text-sm">Settings</p>
@@ -220,15 +251,15 @@
         </div>
         <div class="mt-1 ml-3 pl-3 border-l border-gray-200 space-y-2 text-gray-600 hidden" data-target="account-settings">
             <a href="{{ route('user.roles.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fas fa-user-shield text-indigo-500 text-base"></i>
+                <i class="fas fa-user-shield text-base"></i>
                 <p class="m-0 text-sm">Role</p>
             </a>
             <a href="{{ route('users.list') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fas fa-user text-indigo-500 text-base"></i>
+                <i class="fas fa-user text-base"></i>
                 <p class="m-0 text-sm">User</p>
             </a>
             <a href="{{ route('business-settings.edit', 1) }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fas fa-briefcase text-indigo-500 text-base"></i>
+                <i class="fas fa-briefcase text-base"></i>
                 <p class="m-0 text-sm">Business Setting</p>
             </a>
             <!-- <a href="/yo" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
@@ -239,7 +270,7 @@
     </div>
     <!-- Packages -->
     <div class="cursor-pointer" data-toggle="packages">
-        <div class="flex justify-between items-center py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-black transition-colors duration-200">
+        <div class="flex justify-between items-center py-1.5 px-2 rounded-lg text-indigo-500 hover:bg-indigo-50 hover:text-black transition-colors duration-200">
             <div class="flex items-center gap-2 font-medium">
                 <i class="fa-solid fa-box-open text-indigo-500"></i>
                 <p class="text-sm">Packages</p>
@@ -248,46 +279,16 @@
         </div>
         <div class="mt-1 ml-3 pl-3 border-l border-gray-200 space-y-2 text-gray-600 hidden" data-target="packages">
             <a href="{{ route('packages.index') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fa-solid fa-list text-indigo-500"></i>
+                <i class="fa-solid fa-list text-base"></i>
                 <p class="text-sm">All Packages</p>
             </a>
             <a href="{{ route('packages.create') }}" class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fa-solid fa-plus text-indigo-500"></i>
+                <i class="fa-solid fa-plus text-base"></i>
                 <p class="text-sm">Add Package</p>
             </a>
         </div>
     </div>
 
-    <!-- Roadmaps -->
-    <div class="cursor-pointer" data-toggle="roadmap">
-        <div class="flex justify-between items-center py-1.5 px-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
-            <div class="flex items-center gap-2 font-medium">
-                <i class="fas fa-road text-indigo-500 text-base"></i>
-                <p class="text-sm">Roadmaps</p>
-            </div>
-            <i class="fas fa-chevron-down text-gray-500 text-sm drop-arrow transition-transform duration-300 -rotate-90"></i>
-        </div>
-
-        <div class="mt-1 ml-3 pl-3 border-l border-gray-200 space-y-2 text-gray-600 hidden" data-target="roadmap">
-            <a href="{{ route('roadmaps.index') }}"
-                class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fas fa-list text-indigo-500 text-base"></i>
-                <p class="m-0 text-sm">All Roadmaps</p>
-            </a>
-
-            <a href="{{ route('stages.index') }}"
-                class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fas fa-list text-indigo-500 text-base"></i>
-                <p class="m-0 text-sm">All Stages</p>
-            </a>
-
-            {{-- <a href="{{ route('roadmaps.create') }}"
-            class="menu-link flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-indigo-800 hover:text-white transition-colors duration-200">
-                <i class="fas fa-plus-circle text-indigo-500 text-base"></i>
-                <p class="m-0 text-sm">Create New</p>
-            </a> --}}
-        </div>
-    </div>
 
     <!-- Stages -->
     {{-- <div class="cursor-pointer" data-toggle="stage">
