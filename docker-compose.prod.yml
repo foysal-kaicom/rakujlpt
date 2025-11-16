@@ -1,0 +1,75 @@
+services:
+  nginx-proxy:
+    image: nginx:stable-alpine
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/certs:/etc/nginx/certs:ro
+      - ./raku-frontend:/var/www/frontend:ro
+      - ./raku-backend:/var/www/backend:ro
+    depends_on:
+      - frontend
+      - backend
+    restart: always
+
+  frontend:
+    build:
+      context: ./raku-frontend
+    container_name: frontend
+    working_dir: /var/www/frontend
+    command: npm run start
+    environment:
+      - NODE_ENV=production
+    expose:
+      - "3000"
+    restart: always
+
+  backend:
+    build:
+      context: ./raku-backend
+    container_name: backend
+    working_dir: /var/www/backend
+    volumes:
+      - ./raku-backend:/var/www/backend
+      - ./raku-backend/docker/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+
+    command: php-fpm
+    expose:
+      - "9000"
+    depends_on:
+      - db
+    restart: always
+
+  queue:
+    build:
+      context: ./raku-backend
+    container_name: queue
+    working_dir: /var/www/backend
+    volumes:
+      - ./raku-backend:/var/www/backend
+    command: php artisan queue:work --verbose --tries=3 --timeout=90
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - QUEUE_CONNECTION=database
+
+  db:
+    image: mysql:8
+    container_name: mysql-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: raku_db
+      MYSQL_USER: raku
+      MYSQL_PASSWORD: 12345
+    volumes:
+      - dbdata:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+  dbdata:
