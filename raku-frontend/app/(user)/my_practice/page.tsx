@@ -14,7 +14,7 @@ import Loader from "@/components/Loader";
 import SuspenseLoader from "@/components/SuspenseLoader";
 
 interface Practice {
-  roadmap_slug:string
+  roadmap_slug: string;
   current_module_name: string;
   current_stage_id: number;
   current_stage_name: string;
@@ -33,7 +33,7 @@ export default function MyPractice() {
   const [loading, setLoading] = useState(true);
   const [practiceData, setPracticeData] = useState<Practice[]>([]);
 
-  const router = useRouter()
+  const router = useRouter();
 
   const modules = {
     current: {
@@ -86,45 +86,63 @@ export default function MyPractice() {
             </section>
 
             <section className="w-full mt-5">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                {/* Current Module */}
-                {practiceData.map((item, index) => (
-                  <div className="relative p-8 rounded-2xl bg-purple-500 border border-purple-600 shadow-[0_0_25px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(236,72,153,0.4)] transition-all">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-2xl font-semibold flex items-center gap-2 text-white">
-                        <FaBookOpen className="text-yellow-300" /> 
-                        {item?.current_module_name}
-                      </h3>
-                      <span className="text-sm text-white font-medium">
-                        {item?.complete}% Complete
-                      </span>
-                    </div>
-                    <h4 className="text-xl font-semibold mb-2 text-white">
-                      {item?.current_stage_name}
-                    </h4>
-                    <p className="text-gray-100 mb-6">
-                      {item?.description}
-                      {item.current_stage_id}
-                    </p>
-
-                    {/* Progress Bar */}
-                    <div className="w-full h-2 bg-purple-200 rounded-full overflow-hidden">
-                      <div
-                        className={`h-full bg-green-300`}
-                        style={{ width: `${item?.complete}%` }}
-                      ></div>
-                    </div>
-                    <div className="flex justify-end mt-5">
-                      <button onClick={()=>router.push(`/practice/${item.roadmap_slug}/${item.stage_slug}/${item.current_stage_id}`)} disabled={item?.complete == 100} className="px-8 py-2 bg-white rounded-md font-semibold drop-shadow-sm drop-shadow-purple-400 border border-purple-400 relative overflow-clip group">
-                        <span className="relative z-10 text-white group-hover:text-black duration-300">
-                          {item.complete == 100 ? "Completed" : "Resume"}
+              {practiceData.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                  {/* Current Module */}
+                  {practiceData.map((item, index) => (
+                    <div
+                      key={index}
+                      className="relative p-8 rounded-2xl bg-purple-500 border border-purple-600 shadow-[0_0_25px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(236,72,153,0.4)] transition-all"
+                    >
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-2xl font-semibold flex items-center gap-2 text-white">
+                          <FaBookOpen className="text-yellow-300" />
+                          {item?.current_module_name}
+                        </h3>
+                        <span className="text-sm text-white font-medium">
+                          {item?.complete}% Complete
                         </span>
-                        <div className="size-full absolute top-0 left-0 bg-violet-700 group-hover:translate-x-full duration-300"></div>
-                      </button>
+                      </div>
+                      <h4 className="text-xl font-semibold mb-2 text-white">
+                        {item?.current_stage_name}
+                      </h4>
+                      <p className="text-gray-50 font-medium mb-6">
+                        {item?.description}
+                      </p>
+
+                      {/* Progress Bar */}
+                      <div className="w-full h-2 bg-purple-200 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full bg-green-300`}
+                          style={{ width: `${item?.complete}%` }}
+                        ></div>
+                      </div>
+                      <div className="flex justify-end mt-5">
+                        <button
+                          onClick={() =>
+                            router.push(
+                              `/practice/${item.roadmap_slug}/${item.stage_slug}/${item.current_stage_id}`
+                            )
+                          }
+                          disabled={item?.complete == 100}
+                          className={`px-8 py-2 bg-white rounded-md font-semibold drop-shadow-sm drop-shadow-purple-400 border border-purple-400 relative overflow-clip group ${
+                            item.complete == 100
+                              ? "cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
+                        >
+                          <span className="relative z-10 text-white group-hover:text-black duration-300">
+                            {item.complete == 100 ? "Completed" : "Resume"}
+                          </span>
+                          <div className="size-full absolute top-0 left-0 bg-violet-700 group-hover:translate-x-full duration-300"></div>
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <div>No data found</div>
+              )}
             </section>
           </div>
         </div>

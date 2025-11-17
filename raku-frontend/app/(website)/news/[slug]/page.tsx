@@ -80,78 +80,88 @@ export default async function NewsDetailsPage({
   ];
 
   return (
-    <Suspense fallback={<SuspenseLoader/>}>
-      <WebpageWrapper>
-        <div className="pt-5">
-          <BreadCrumb breadCrumbData={breadCrumbData} />
-          <div className="w-1/2 mt-5">
-            <HeadLine2 preText="" subText="" mainText="News Details" />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 pt-10 pb-15">
-          {/* Main News */}
-          <article className="lg:col-span-2 bg-white shadow-md rounded-2xl overflow-hidden">
-            <div className="relative h-64 w-full">
-              <Image
-                src={newsDetails?.featured_image || "/"}
-                alt={newsDetails?.title?.slice(0, 10)}
-                fill
-                className="object-cover"
-              />
+    <Suspense fallback={<SuspenseLoader />}>
+      <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+        <WebpageWrapper>
+          <div className="pt-5">
+            <BreadCrumb breadCrumbData={breadCrumbData} />
+            <div className="w-1/2 mt-5">
+              <HeadLine2 preText="" subText="" mainText="News Details" />
             </div>
+          </div>
 
-            <div className="p-8">
-              <h1 className="text-2xl font-bold mb-4">{newsDetails?.title}</h1>
-              <div
-                className="mb-6 text-gray-600"
-                dangerouslySetInnerHTML={{ __html: newsDetails?.content ?? "" }}
-              />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 pt-10 pb-15">
+            {/* Main News */}
+            <article className="lg:col-span-2 bg-white shadow-md rounded-2xl overflow-hidden">
+              <div className="relative h-64 w-full">
+                <Image
+                  src={newsDetails?.featured_image || "/"}
+                  alt={newsDetails?.title?.slice(0, 10)}
+                  fill
+                  className="object-cover"
+                />
+              </div>
 
-              <div className="flex items-center gap-4 pt-6 border-t border-gray-200">
-                <div className="size-[50px] rounded-full bg-blue-300">
-                  <IoPersonCircleOutline className="size-[50px] text-white" />
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">
-                    {newsDetails?.author_name}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {newsDetails?.author_designation} —{" "}
-                    {formatDate(newsDetails?.published_at)}
-                  </p>
+              <div className="p-8">
+                <h1 className="text-2xl font-bold mb-4">
+                  {newsDetails?.title}
+                </h1>
+                <div
+                  className="mb-6 text-gray-600"
+                  dangerouslySetInnerHTML={{
+                    __html: newsDetails?.content ?? "",
+                  }}
+                />
+
+                <div className="flex items-center gap-4 pt-6 border-t border-gray-200">
+                  <div className="size-[50px] rounded-full bg-blue-300">
+                    <IoPersonCircleOutline className="size-[50px] text-white" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900">
+                      {newsDetails?.author_name}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {newsDetails?.author_designation} —{" "}
+                      {formatDate(newsDetails?.published_at)}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          {/* Sidebar */}
-          <aside className="space-y-6">
-            <h2 className="text-lg font-semibold mb-4">Other News</h2>
-            {allNews.slice(0, 5).map((item) => (
-              <Link
-                href={`/news/${item.slug}`}
-                key={item.id}
-                className={`flex items-center gap-4 p-4 rounded-lg shadow-sm hover:shadow-md duration-200 cursor-pointer hover:bg-white ${newsDetails?.id == item?.id ?"bg-white" :"bg-gray-100"}`}
-              >
-                <Image
-                  src={item?.featured_image || "/"}
-                  alt={item?.title?.slice(0, 3)}
-                  width={50}
-                  height={50}
-                  className="rounded-full border border-gray-200 size-[50px]"
-                />
-                <div className="w-[calc(100%-50px)]">
-                  <p className="font-semibold text-gray-800 line-clamp-1">
-                    {item?.title}
-                  </p>
-                  <p className="text-sm text-gray-500">— {item?.author_name}</p>
-                </div>
-              </Link>
-            ))}
-          </aside>
-        </div>
-      </WebpageWrapper>
+            {/* Sidebar */}
+            <aside className="space-y-6">
+              <h2 className="text-lg font-semibold mb-4">Other News</h2>
+              {allNews.slice(0, 5).map((item) => (
+                <Link
+                  href={`/news/${item.slug}`}
+                  key={item.id}
+                  className={`flex items-center gap-4 p-4 rounded-lg shadow-sm hover:shadow-md duration-200 cursor-pointer hover:bg-white ${
+                    newsDetails?.id == item?.id ? "bg-white" : "bg-gray-100"
+                  }`}
+                >
+                  <Image
+                    src={item?.featured_image || "/"}
+                    alt={item?.title?.slice(0, 3)}
+                    width={50}
+                    height={50}
+                    className="rounded-full border border-gray-200 size-[50px] object-cover"
+                  />
+                  <div className="w-[calc(100%-50px)]">
+                    <p className="font-semibold text-gray-800 line-clamp-1">
+                      {item?.title}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      — {item?.author_name}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </aside>
+          </div>
+        </WebpageWrapper>
+      </div>
     </Suspense>
   );
 }

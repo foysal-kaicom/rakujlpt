@@ -33,30 +33,6 @@ export default function SettingsPage() {
       description: "Change your password",
       path: "/update_password",
     },
-    // {
-    //   icon: <FaBell className="text-yellow-500 w-6 h-6" />,
-    //   title: "Notifications",
-    //   description: "Control push and email notifications",
-    //   path: "/settings/notifications",
-    // },
-    // {
-    //   icon: <FaLock className="text-red-500 w-6 h-6" />,
-    //   title: "Privacy & Security",
-    //   description: "Adjust privacy and security preferences",
-    //   path: "/settings/security",
-    // },
-    // {
-    //   icon: <FaLanguage className="text-green-500 w-6 h-6" />,
-    //   title: "Language",
-    //   description: "Change language and region settings",
-    //   path: "/settings/language",
-    // },
-    // {
-    //   icon: <FaInfoCircle className="text-indigo-500 w-6 h-6" />,
-    //   title: "About",
-    //   description: "Learn more about this app",
-    //   path: "/settings/about",
-    // },
   ];
 
   return (
@@ -71,7 +47,7 @@ export default function SettingsPage() {
               <button
                 key={index}
                 onClick={() => router.push(option.path)}
-                className="flex items-start gap-4 p-5 rounded-xl border border-gray-200 hover:border-purple-400 hover:shadow-md transition-all duration-300 text-left bg-white"
+                className="flex items-start gap-4 p-5 rounded-xl border border-gray-200 hover:border-purple-400 hover:shadow-md transition-all duration-300 text-left bg-white cursor-pointer"
               >
                 <div className="mt-1">{option.icon}</div>
                 <div>

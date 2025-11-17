@@ -48,7 +48,7 @@ export default function InsightSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           {/* LEFT CONTENT */}
           <div className="">
-            <p className="inline-flex items-center gap-2 text-sm font-semibold bg-linear-to-r from-blue-600 to-purple-600 text-white px-3 py-1 rounded-full mb-4">
+            <p className="inline-flex items-center gap-2 text-sm font-semibold bg-linear-to-r from-blue-600 to-purple-600 text-white px-3 py-1 rounded-full mb-4 drop-shadow-sm drop-shadow-violet-600 border-b border-white/50">
               <FaRegStar/>
               Mock Test Pro
             </p>
@@ -68,17 +68,17 @@ export default function InsightSection() {
             </p>
 
             <div className="flex flex-wrap gap-3">
-              <a
+              <Link
                 href="/mock_test_select"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-linear-to-r from-blue-600 to-purple-600 text-white font-medium shadow hover:opacity-85 transition"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-linear-to-r from-blue-600 to-purple-600 text-white font-medium shadow hover:opacity-85 transition drop-shadow-sm drop-shadow-violet-600 border-b border-white/50"
               >
                 Start Mock Test
                 <FaArrowRight/>
-              </a>
+              </Link>
 
               <Link
-                href="/packages"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-full border-3 border-indigo-400 text-gray-800 bg-white hover:scale-105 duration-500 transition"
+                href="/practice"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-full border ring ring-indigo-400 text-gray-800 bg-white hover:scale-105 duration-500 transition drop-shadow-sm drop-shadow-violet-400 border-b border-white/50"
               >
                 Start Practice
               </Link>

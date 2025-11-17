@@ -397,7 +397,7 @@ export default function MockExamResult() {
               <div className="hidden md:block overflow-auto rounded-xl shadow-lg border border-gray-200 bg-white/50 backdrop-blur-lg">
                 <table className="w-full text-sm relative">
                   <thead>
-                    <tr className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+                    <tr className="bg-gradient-to-r from-purple-700 via-violet-700 to-blue-700 text-white">
                       <th className="p-3 text-left font-bold border-r border-gray-200">
                         Date
                       </th>

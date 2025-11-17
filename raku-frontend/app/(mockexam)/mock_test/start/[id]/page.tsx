@@ -335,7 +335,7 @@ export default function ExamPage() {
   if (isSubmitted) {
     /* -------------------- Result Screen -------------------- */
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 flex items-center justify-center p-4">
         <div className="bg-white rounded-xl shadow-2xl p-8 text-center max-w-2xl w-full relative">
           <div className="size-10 sm:size-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
             <FaPaperPlane className="sm:size-8 text-white" />
@@ -355,14 +355,14 @@ export default function ExamPage() {
 
           <div className="grid sm:grid-cols-2 gap-5 mb-6">
             {/* Listening Section */}
-            <div className="bg-blue-50 rounded-lg p-6 flex flex-col items-center border border-blue-200">
+            <div className="bg-purple-50 rounded-lg p-6 flex flex-col items-center border border-purple-200">
               <h3 className="sm:text-lg font-semibold text-gray-800 mb-4">
                 Listening Section
               </h3>
               <CircularProgress
                 value={result?.correctListeningAnswer ?? 0}
                 total={moduleQuestionCounts?.Listening ?? 0}
-                color="text-blue-500"
+                color="text-purple-500"
               />
               <div className="mt-4 text-sm text-gray-600 space-y-1">
                 <p>
@@ -405,7 +405,7 @@ export default function ExamPage() {
 
           <Link
             href="/mock_test_result"
-            className="text-sm text-gray-500 hover:text-blue-500 hover:underline block mb-4"
+            className="text-sm text-gray-500 hover:text-purple-500 hover:underline block mb-4"
           >
             Go to your profile to see details
           </Link>
@@ -425,13 +425,13 @@ export default function ExamPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-slate-100">
       {/* Header */}
-      <div className="sticky top-0 z-20 bg-blue-200 pb-3">
+      <div className="sticky top-0 z-20 bg-gradient-to-r from-purple-300 to-violet-300 pb-3">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row gap-5 justify-between md:items-center">
           <div>
             <h1 className="text-2xl font-bold text-gray-800">
               {examTitle}
             </h1>
-            <p className="text-sm text-gray-600 mt-1 capitalize">
+            <p className="text-sm text-gray-700 mt-1 capitalize font-medium">
               {currentSection?.module_name} part - {currentSection?.title}
             </p>
           </div>
@@ -459,7 +459,7 @@ export default function ExamPage() {
             {/* Slider */}
             <div
               ref={sliderRef}
-              className="flex flex-nowrap space-x-3 p-2 justify-start items-center bg-white rounded-xl overflow-x-auto scroll-smooth scrollbar-hide"
+              className="flex flex-nowrap space-x-3 p-2 justify-start items-center font-medium bg-white rounded-xl overflow-x-auto scroll-smooth scrollbar-hide"
             >
               {questions.map((section, index) => {
                 const sectionQuestions =
@@ -480,13 +480,13 @@ export default function ExamPage() {
 
                 let btnClass = "";
                 if (currentSectionIndex === index) {
-                  btnClass = "bg-blue-500 text-white";
+                  btnClass = "bg-purple-500 text-white";
                 } else if (answeredInSection === sectionQuestions) {
                   btnClass = "bg-green-600 text-white hover:bg-green-700";
                 } else if (answeredInSection > 0) {
                   btnClass = "bg-green-100 text-green-700 hover:bg-green-200";
                 } else {
-                  btnClass = "bg-blue-100 text-gray-700 hover:bg-blue-200";
+                  btnClass = "bg-purple-100 text-gray-700 hover:bg-purple-200";
                 }
 
                 return (
@@ -500,7 +500,7 @@ export default function ExamPage() {
                   >
                     {stepIcons[section.slug]}
                     {section?.title}
-                    <span className="font-thin">({sectionQuestions}Q)</span>
+                    <span className="">({sectionQuestions}Q)</span>
                   </button>
                 );
               })}
@@ -522,11 +522,11 @@ export default function ExamPage() {
         {/* Sidebar */}
         <div className="lg:col-span-1">
           {currentSection && (
-            <div className="bg-white rounded-xl outline outline-blue-200 p-6 sticky top-40">
+            <div className="bg-white rounded-xl outline outline-purple-200 p-6 sticky top-40">
               <div className="text-lg font-semibold text-gray-800 flex justify-between">
                 Current Module
                 <IoIosArrowDropdownCircle
-                  className={`size-8 text-blue-600 lg:hidden duration-500 ${
+                  className={`size-8 text-purple-600 lg:hidden duration-500 ${
                     sidebarShow ? "rotate-180" : ""
                   }`}
                   onClick={() => {
@@ -535,7 +535,7 @@ export default function ExamPage() {
                 />
               </div>
               <div className={`${sidebarShow ? "" : "hidden lg:block"}`}>
-                <div className="p-4 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg text-white my-4">
+                <div className="p-4 bg-gradient-to-l from-purple-600 to-indigo-600 rounded-lg text-white my-4">
                   <div className="flex items-center space-x-2 mb-2">
                     {currentSection.module_name === "Listening" && (
                       <FaVolumeUp className="size-6" />
@@ -550,14 +550,14 @@ export default function ExamPage() {
                   <p className="text-xs opacity-90">25 min • 100 points</p>
                 </div>
 
-                <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                  <div className="flex items-center space-x-2 mb-1 text-blue-600">
+                <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
+                  <div className="flex items-center space-x-2 mb-1 text-purple-600">
                     {stepIcons[currentSection.slug]}
-                    <span className="font-medium text-blue-800">
+                    <span className="font-medium text-purple-800">
                       {currentSection.title}
                     </span>
                   </div>
-                  <p className="text-xs text-blue-600 mt-1">
+                  <p className="text-xs text-purple-600 mt-1 font-medium">
                     {currentSection.group?.reduce(
                       (sum, g) => sum + g.questions.length,
                       0
@@ -567,13 +567,13 @@ export default function ExamPage() {
                 </div>
 
                 {/* Progress */}
-                <div className="mt-6 p-3 bg-gray-50 rounded-lg">
+                <div className="mt-6 p-3 bg-gray-50 rounded-lg font-medium border border-purple-200">
                   <p className="text-sm font-medium text-gray-700">
                     Overall Progress
                   </p>
                   <div className="mt-2 bg-gray-200 rounded-full h-2">
                     <div
-                      className="bg-blue-600 h-2 rounded-full transition-all"
+                      className="bg-purple-600 h-2 rounded-full transition-all"
                       style={{
                         width: `${
                           (answeredQuestions / totalQuestions) * 100 || 0
@@ -587,7 +587,7 @@ export default function ExamPage() {
                 </div>
 
                 {/* Question Status */}
-                <div className="mt-6 bg-white rounded-xl outline outline-blue-200 p-4">
+                <div className="mt-6 bg-white rounded-xl outline outline-purple-200 p-4">
                   <h3 className="font-semibold text-gray-800 mb-4">
                     Questions
                   </h3>
@@ -610,9 +610,9 @@ export default function ExamPage() {
                             }}
                             className={`w-8 h-8 rounded-full text-xs flex items-center justify-center font-medium ${
                               isAnswered
-                                ? "bg-blue-500 text-white"
+                                ? "bg-purple-500 text-white"
                                 : "bg-gray-200 text-gray-700"
-                            } hover:ring-2 hover:ring-blue-500 transition`}
+                            } hover:ring-2 hover:ring-purple-500 transition`}
                           >
                             {getGlobalQuestionNumber(q.id)}
                           </button>
@@ -639,13 +639,13 @@ export default function ExamPage() {
                     ) ?? 0;
 
                   return (
-                    <div className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-6 rounded-xl">
+                    <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium p-6 rounded-xl">
                       <div className="flex flex-wrap items-center space-x-2 mb-1">
                         {stepHeadingIcons[currentSection.slug]}
                         <h2 className="text-xl font-bold">
                           {currentSection.title}
                         </h2>
-                        <p className="text-blue-100 text-sm">
+                        <p className="text-purple-100 text-sm">
                           ( {totalQuestions} questions )
                         </p>
                       </div>
@@ -668,14 +668,14 @@ export default function ExamPage() {
                   return (
                     <div
                       key={`${groupIndex}-${grp.content ?? ""}`}
-                      className="p-4 md:p-8 bg-white rounded-xl outline outline-blue-200"
+                      className="p-4 md:p-8 bg-white rounded-xl outline outline-purple-200"
                     >
                       {/* Group-level content */}
                       {grp.group_type === "audio" && grp.content && (
                         <div className="mb-8">
                           <audio
                             controls
-                            className="w-full h-8 [&::-webkit-media-controls-panel]:bg-blue-50 [&::-webkit-media-controls-panel]:h-8 [&::-webkit-media-controls-enclosure]:rounded-md"
+                            className="w-full h-8 [&::-webkit-media-controls-panel]:bg-purple-50 [&::-webkit-media-controls-panel]:h-8 [&::-webkit-media-controls-enclosure]:rounded-md"
                           >
                             <source src={grp.content} type="audio/mpeg" />
                             Your browser does not support the audio element.
@@ -687,7 +687,7 @@ export default function ExamPage() {
                       )}
 
                       {grp.group_type === "passage" && grp.content && (
-                        <div className="p-4 bg-gray-100 rounded-md mb-8">
+                        <div className="p-4 bg-purple-50/50 leading-10 tracking-widest rounded-md mb-8 text-lg">
                           <div
                             className="text-gray-800 whitespace-pre-line"
                             dangerouslySetInnerHTML={{
@@ -714,9 +714,9 @@ export default function ExamPage() {
                               className=""
                             >
                               {/* Question title */}
-                              <div className="text-lg text-gray-800 mb-2 flex gap-1">
+                              <div className="text-lg mb-2 flex gap-1">
                                 {question?.proficiency_level == "N5" && (
-                                  <FaStar className="mt-1" />
+                                  <FaStar className="mt-1 text-purple-700" />
                                 )}
                                 <span className="font-semibold">
                                   Q{getGlobalQuestionNumber(question.id)}:{" "}
@@ -744,7 +744,7 @@ export default function ExamPage() {
                                   ([key, option], index) => (
                                     <label
                                       key={key}
-                                      className="text-sm flex space-x-3 p-2 cursor-pointer"
+                                      className="flex space-x-3 p-2 cursor-pointer font-medium items-center"
                                     >
                                       <input
                                         type="radio"
@@ -758,9 +758,9 @@ export default function ExamPage() {
                                           );
                                           console.log(e.target);
                                         }}
-                                        className="size-6 text-blue-600"
+                                        className="size-6 text-purple-600"
                                       />
-                                      <div
+                                      <div className="leading-10 tracking-widest"
                                         dangerouslySetInnerHTML={{
                                           __html: option ?? "",
                                         }}
@@ -779,7 +779,7 @@ export default function ExamPage() {
               </div>
 
               {/* navigation */}
-              <div className="flex justify-between items-center text-sm bg-white rounded-xl px-8 py-4 outline outline-blue-200">
+              <div className="flex justify-between items-center text-sm bg-white rounded-xl px-8 py-4 outline outline-purple-200">
                 <button
                   onClick={handlePrevious}
                   disabled={isFirstStep()}
@@ -805,7 +805,7 @@ export default function ExamPage() {
                   ) : (
                     <button
                       onClick={handleNext}
-                      className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white p-2 sm:p-0 sm:px-6 sm:py-2 rounded-lg font-medium transition-colors cursor-pointer"
+                      className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white p-2 sm:p-0 sm:px-6 sm:py-2 rounded-lg font-medium transition-colors cursor-pointer"
                     >
                       <span className="hidden sm:flex">Next</span>
                       <FaChevronRight className="size-4" />
