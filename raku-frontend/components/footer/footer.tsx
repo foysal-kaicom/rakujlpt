@@ -34,19 +34,19 @@ export default function Footer() {
             <div className="mt-6 flex space-x-4">
               <Link
                 href="#"
-                className="bg-gradient-to-r from-indigo-300 to-purple-400 text-white rounded-full p-2"
+                className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full p-2 drop-shadow-sm drop-shadow-violet-400 border-b border-white/50 hover:scale-110 duration-300"
               >
                 <FaFacebookF className="size-4" />
               </Link>
               <Link
                 href="#"
-                className="bg-gradient-to-r from-indigo-300 to-purple-400 text-white rounded-full p-2"
+                className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full p-2 drop-shadow-sm drop-shadow-violet-400 border-b border-white/50 hover:scale-110 duration-300"
               >
                 <FaLinkedinIn className="size-4" />
               </Link>
               <Link
                 href="#"
-                className="bg-gradient-to-r from-indigo-300 to-purple-400 text-white rounded-full p-2"
+                className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full p-2 drop-shadow-sm drop-shadow-violet-400 border-b border-white/50 hover:scale-110 duration-300"
               >
                 <IoLogoYoutube className="size-4" />
               </Link>
@@ -117,7 +117,7 @@ export default function Footer() {
               />
               <button
                 type="submit"
-                className="mt-2 sm:mt-0 px-8 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold rounded-full hover:bg-yellow-500 transition  cursor-pointer"
+                className="mt-2 sm:mt-0 px-8 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold rounded-full hover:scale-105 transition drop-shadow-md drop-shadow-violet-400 border-b border-white/50 cursor-pointer"
               >
                 Subscribe
               </button>

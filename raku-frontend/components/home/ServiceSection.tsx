@@ -93,7 +93,7 @@ export default function ServiceSection() {
         </div>
 
         <div className="mt-12">
-          <Link href="/mock_test_select" className="px-8 py-3 rounded-full bg-linear-to-r from-blue-500 to-purple-500 text-white font-semibold hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] transition-all duration-300">
+          <Link href="/mock_test_select" className="px-8 py-3 rounded-full bg-linear-to-r from-blue-500 to-purple-500 text-white font-semibold hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] transition-all duration-300 drop-shadow-sm drop-shadow-violet-600 border-b border-white/50">
             Start Practicing Now
           </Link>
         </div>

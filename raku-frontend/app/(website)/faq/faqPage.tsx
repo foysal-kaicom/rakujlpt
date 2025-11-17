@@ -53,7 +53,7 @@ export default function FAQ({ faqs }: FAQProps) {
           </h1>
           <p className="text-gray-700 mb-16 text-lg">
             We’ve got answers! Check out the most common questions below —
-            clear, simple, and just a bit funky.
+            clear, simple.
           </p>
 
           {/* FAQ Accordion */}
