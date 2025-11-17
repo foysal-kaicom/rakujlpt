@@ -29,3 +29,6 @@ return [
     // 'cancel_url'  => env('APP_URL') . '/api/v1/cancel',
     // 'ipn_url'     => env('APP_URL') . '/api/v1/ipn',
 ];
+
+
+https://admin.kaicombd.com/payment-success/%7Bbooking_id%7D?subscription_id=16&amount=200&tran_id=PRE3458250
