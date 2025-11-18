@@ -218,7 +218,7 @@ class CandidateController extends Controller
     public function candidateApplications($candidateId)
     {
 
-        $bookings = Booking::where('candidate_id', $candidateId)->get();
+        $bookings = [];
 
         return view('candidate.applications', compact('bookings'));
     }
