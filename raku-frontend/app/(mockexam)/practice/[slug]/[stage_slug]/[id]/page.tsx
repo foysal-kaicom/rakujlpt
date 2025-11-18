@@ -60,7 +60,8 @@ export default function PracticeQuestion() {
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
 
   const [questionsData, setQuestionsData] = useState<Question[]>([]);
-console.log(totalDuration);
+  const [stageName, setStageName] = useState("");
+  // console.log(totalDuration);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -75,6 +76,7 @@ console.log(totalDuration);
           }
           setTotalDuration(response?.data?.data?.duration * 60);
           setQuestionsData(response?.data?.data?.questions || []);
+          setStageName(response?.data?.data?.title);
         }
         // toast.success(response?.data?.message || "Stages loaded!");
       } catch (error: any) {
@@ -95,25 +97,24 @@ console.log(totalDuration);
 
   // Timer
   useEffect(() => {
-  if (totalDuration <= 0) return;
+    if (totalDuration <= 0) return;
 
-  setTimeElapsed(totalDuration); // Start from total seconds
+    setTimeElapsed(totalDuration); // Start from total seconds
 
-  const timer = setInterval(() => {
-    setTimeElapsed((prev) => {
-      if (prev <= 1) {
-        clearInterval(timer);
-        toast.info("Time’s up!");
-        // 👉 You can trigger auto-submit or redirect here
-        return 0;
-      }
-      return prev - 1;
-    });
-  }, 1000);
+    const timer = setInterval(() => {
+      setTimeElapsed((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          toast.info("Time’s up!");
+          // 👉 You can trigger auto-submit or redirect here
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
 
-  return () => clearInterval(timer);
-}, [totalDuration]);
-
+    return () => clearInterval(timer);
+  }, [totalDuration]);
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
@@ -239,6 +240,9 @@ console.log(totalDuration);
         {/* Header */}
         <div className="bg-white shadow-sm border-b border-gray-200">
           <div className="max-w-4xl mx-auto px-4 py-4">
+            <h1 className="text-lg lg:text-4xl font-semibold text-purple-600 capitalize text-center mb-5 text-wrap">
+              you are practicing : {stageName}
+            </h1>
             <div className="flex items-center justify-between">
               <Link
                 href={`/practice/${slug}`}
@@ -329,7 +333,10 @@ console.log(totalDuration);
                   </div>
                 </div>
                 <div className="w-full flex justify-center mt-4">
-                  <Link href={`/practice/${slug}`} className="px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:shadow-lg transition-all transform hover:scale-105 flex items-center gap-2 cursor-pointer">
+                  <Link
+                    href={`/practice/${slug}`}
+                    className="px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:shadow-lg transition-all transform hover:scale-105 flex items-center gap-2 cursor-pointer"
+                  >
                     Continue practice
                     <ChevronRight className="w-5 h-5" />
                   </Link>
@@ -353,7 +360,12 @@ console.log(totalDuration);
                   </div>
                 )}
                 {currentQuestion?.question_type === "text" && (
-                  <div dangerouslySetInnerHTML={{ __html: currentQuestion?.question }} className="text-2xl md:text-3xl font-bold text-gray-800 mb-8"/>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: currentQuestion?.question,
+                    }}
+                    className="text-2xl md:text-3xl font-bold text-gray-800 mb-8"
+                  />
                 )}
                 {currentQuestion?.question_type === "audio" && (
                   <div className="flex flex-col items-center gap-4 mb-6">
@@ -387,45 +399,12 @@ console.log(totalDuration);
                     )}
                   </div>
                 )}
-                {/* {currentQuestion.question_type === "yes-no" && (
-              <div className="text-5xl md:text-6xl font-bold text-gray-700 my-12">
-                {currentQuestion.word}
-              </div>
-            )} */}
+                
               </div>
 
               {/* Answer Options */}
               <div className="mb-8">
                 {/* Yes/No Options */}
-                {/* {currentQuestion.question_type === "yes-no" && (
-              <div className="flex gap-4 justify-center">
-                {(["yes", "no"] as const).map((option) => (
-                  <button
-                    key={option}
-                    onClick={() => handleAnswerSelect(option)}
-                    disabled={isAnswered}
-                    className={`flex flex-col items-center gap-3 p-8 rounded-2xl border-3 transition-all transform hover:scale-105 ${
-                      selectedAnswer === option
-                        ? "border-blue-500 bg-blue-50 shadow-lg"
-                        : "border-gray-300 bg-white hover:border-blue-300"
-                    } ${
-                      isAnswered
-                        ? "cursor-not-allowed opacity-75"
-                        : "cursor-pointer"
-                    }`}
-                  >
-                    {option === "yes" ? (
-                      <Check className="w-12 h-12 text-blue-500" />
-                    ) : (
-                      <X className="w-12 h-12 text-blue-500" />
-                    )}
-                    <span className="text-xl font-semibold capitalize text-gray-700">
-                      {option}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            )} */}
 
                 {/* Multiple Choice Options */}
                 {/* {currentQuestion?.question_type === "text" && ( */}
@@ -471,77 +450,16 @@ console.log(totalDuration);
                               <Check className="w-5 h-5 text-white" />
                             )}
                           </div>
-                          <div dangerouslySetInnerHTML={{ __html: optionText }} className="text-lg text-gray-800"/>
+                          <div
+                            dangerouslySetInnerHTML={{ __html: optionText }}
+                            className="text-lg text-gray-800"
+                          />
                         </div>
                       </button>
                     );
                   })}
                 </div>
-                {/* )} */}
-
-                {/* Multiple Answer Options */}
-                {/* {currentQuestion.question_type === "multiple-answer" && (
-              <div className="space-y-3">
-                {currentQuestion.options.map((option, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleMultipleAnswerSelect(index)}
-                    disabled={isAnswered}
-                    className={`w-full p-5 rounded-xl border-2 text-left transition-all transform hover:scale-[1.02] ${
-                      selectedAnswers.includes(index)
-                        ? "border-blue-500 bg-blue-50 shadow-md"
-                        : "border-gray-300 bg-white hover:border-blue-300"
-                    } ${
-                      isAnswered &&
-                      currentQuestion.correctAnswers.includes(index)
-                        ? "border-green-500 bg-green-50"
-                        : ""
-                    } ${
-                      isAnswered &&
-                      selectedAnswers.includes(index) &&
-                      !currentQuestion.correctAnswers.includes(index)
-                        ? "border-red-500 bg-red-50"
-                        : ""
-                    } ${isAnswered ? "cursor-not-allowed" : "cursor-pointer"}`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div
-                        className={`w-8 h-8 rounded-lg border-2 flex items-center justify-center flex-shrink-0 ${
-                          selectedAnswers.includes(index)
-                            ? "border-blue-500 bg-blue-500"
-                            : "border-gray-400"
-                        }`}
-                      >
-                        {selectedAnswers.includes(index) && (
-                          <Check className="w-5 h-5 text-white" />
-                        )}
-                      </div>
-                      <span className="text-lg text-gray-800">{option}</span>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )} */}
-
-                {/* Text Input */}
-                {/* {currentQuestion.question_type === "text-input" && (
-              <div>
-                <input
-                  type="text"
-                  value={textAnswer}
-                  onChange={(e) => setTextAnswer(e.target.value)}
-                  disabled={isAnswered}
-                  placeholder="Type your answer here..."
-                  className={`w-full p-5 text-lg rounded-xl border-2 transition-all ${
-                    isAnswered
-                      ? isCorrect
-                        ? "border-green-500 bg-green-50"
-                        : "border-red-500 bg-red-50"
-                      : "border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                  } outline-none`}
-                />
-              </div>
-            )} */}
+               
               </div>
 
               {/* Hint Section */}
@@ -551,7 +469,7 @@ console.log(totalDuration);
                     onClick={() => setShowHint(!showHint)}
                     className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors mx-auto cursor-pointer"
                   >
-                    <Lightbulb className="w-5 h-5" />
+                    <Lightbulb className="w-5 h-5 shake-pause" />
                     <span className="font-semibold">
                       {showHint ? "Hide Hints" : "Show Hints"}
                     </span>

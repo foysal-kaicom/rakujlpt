@@ -1,8 +1,43 @@
 import parse from "html-react-parser";
+import { useEffect } from "react";
 import { useAuthStore } from "@/stores/useAuthStore";
+import axiosInstance from "@/utils/axios";
 
 export default function PricingCard({ plan, subscribeModal }: any) {
-  const user = useAuthStore().user;
+  const { isAuthenticated, token, user } = useAuthStore();
+  const updateUser = useAuthStore((state) => state.updateUser);
+
+  useEffect(() => {
+    if (token && isAuthenticated) {
+      getUserData();
+    }
+  }, []);
+
+  // API Calls
+  const getUserData = async () => {
+    try {
+      const response = await axiosInstance.get("/candidate/profile");
+      console.log(response.data.data);
+      const {
+        user_subscriptions_id,
+        current_package_id,
+        current_package_name,
+        is_subscribed,
+        is_free,
+      } = response?.data?.data;
+
+      updateUser({
+        user_subscriptions_id: user_subscriptions_id,
+        current_package_id: current_package_id,
+        current_package_name: current_package_name,
+        is_subscribed: is_subscribed,
+        is_free:is_free
+      });
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
   return (
     <div
       key={plan.id}
@@ -48,22 +83,22 @@ export default function PricingCard({ plan, subscribeModal }: any) {
 
         {/* Subscribe Button */}
         <div className="w-full flex justify-center absolute bottom-5 left-0 px-8">
-          {user?.current_package_id == plan.id  ? (
+          {user?.current_package_id == plan.id && user?.is_subscribed == 1 || plan.is_free == true && user?.is_free == 1   ? (
             <button
-              className={`w-full py-4 px-6 rounded-full font-semibold transition-all duration-300 cursor-not-allowed bg-gradient-to-r from-blue-100 to-purple-100 border border-gray-200`}
+              className={`w-full py-4 px-6 rounded-full font-semibold transition-all duration-300 cursor-not-allowed bg-gradient-to-r from-blue-100 to-purple-100 drop-shadow-sm drop-shadow-violet-600 border-b border-white/50`}
             >
               Subscribe
             </button>
           ) : (
             <button
-              className={`w-full py-4 px-6 rounded-full font-semibold transition-all duration-300 cursor-pointer ${
+              className={`w-full py-4 px-6 rounded-full font-semibold transition-all duration-200 cursor-pointer ${
                 plan.is_popular
-                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-xl transform hover:scale-105"
-                  : "bg-blue-600 text-white hover:bg-blue-700"
+                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white drop-shadow-sm drop-shadow-violet-600 border-b border-white/50"
+                  : "bg-gradient-to-r from-blue-500 to-blue-700 text-white drop-shadow-sm drop-shadow-violet-600 border-b border-white/50"
               }`}
               onClick={() => subscribeModal(plan)}
             >
-              Subscribe
+              {user?.current_package_id == plan.id ? "Renew" : "Subscribe"}
             </button>
           )}
         </div>

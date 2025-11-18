@@ -16,6 +16,7 @@ import {
   FaChevronLeft,
   FaChevronRight,
   FaStar,
+  FaCheck
 } from "react-icons/fa";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 
@@ -87,7 +88,9 @@ export default function ExamPage() {
 
   /* -------------------- State -------------------- */
   const [questions, setQuestions] = useState<ExamSection[]>([]);
-  const [examTitle, setExamTitle] = useState<string>("Japanese Language Proficiency Exam");
+  const [examTitle, setExamTitle] = useState<string>(
+    "Japanese Language Proficiency Exam"
+  );
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -187,7 +190,9 @@ export default function ExamPage() {
     const fetchQuestions = async () => {
       try {
         setLoading(true);
-        const response = await axiosInstance.get(`/mock-test/get-questions?exam_id=${id}`);
+        const response = await axiosInstance.get(
+          `/mock-test/get-questions?exam_id=${id}`
+        );
         setQuestions(response.data.data.sections);
         setExamTitle(response.data.data.exam_title);
         setCurrentSectionIndex(0);
@@ -428,9 +433,7 @@ export default function ExamPage() {
       <div className="sticky top-0 z-20 bg-gradient-to-r from-purple-300 to-violet-300 pb-3">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row gap-5 justify-between md:items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">
-              {examTitle}
-            </h1>
+            <h1 className="text-2xl font-bold text-gray-800">{examTitle}</h1>
             <p className="text-sm text-gray-700 mt-1 capitalize font-medium">
               {currentSection?.module_name} part - {currentSection?.title}
             </p>
@@ -653,7 +656,9 @@ export default function ExamPage() {
                       <div
                         className="mt-3"
                         dangerouslySetInnerHTML={{
-                          __html: (currentSection.sample_question ?? "").replace(/\\n/g, "<br>"),
+                          __html: (
+                            currentSection.sample_question ?? ""
+                          ).replace(/\\n/g, "<br>"),
                         }}
                       />
                     </div>
@@ -746,21 +751,34 @@ export default function ExamPage() {
                                       key={key}
                                       className="flex space-x-3 p-2 cursor-pointer font-medium items-center"
                                     >
-                                      <input
-                                        type="radio"
-                                        name={`question-${question.id}`}
-                                        value={key}
-                                        checked={answers[question.id] === key}
-                                        onChange={(e) => {
-                                          handleAnswerChange(
-                                            question.id,
-                                            e.target.value
-                                          );
-                                          console.log(e.target);
-                                        }}
-                                        className="size-6 text-purple-600"
-                                      />
-                                      <div className="leading-10 tracking-widest"
+                                      <div className="size-6 relative mt-1">
+                                        <input
+                                          type="radio"
+                                          name={`question-${question.id}`}
+                                          value={key}
+                                          checked={answers[question.id] === key}
+                                          onChange={(e) => {
+                                            handleAnswerChange(
+                                              question.id,
+                                              e.target.value
+                                            );
+                                          }}
+                                          className="absolute inset-0 size-6 opacity-0 peer cursor-pointer z-30"
+                                        />
+
+                                        {/* Default Circle */}
+                                        <span
+                                          className="absolute inset-0 w-5 h-5 border-2 border-purple-500 rounded-full flex items-center justify-center transition-all duration-200 peer-checked:opacity-0"
+                                        ></span>
+
+                                        {/* Star When Checked */}
+                                        <FaCheck
+                                          className="absolute inset-0 w-5 h-5 text-white bg-purple-500 rounded-full p-1 opacity-0 transition-all duration-200 peer-checked:opacity-100"
+                                        />
+                                      </div>
+
+                                      <div
+                                        className="leading-10 tracking-widest"
                                         dangerouslySetInnerHTML={{
                                           __html: option ?? "",
                                         }}

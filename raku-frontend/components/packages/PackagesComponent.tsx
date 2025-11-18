@@ -40,7 +40,6 @@ const ITEMS_PER_PAGE = 3;
 const PackagesComponent = () => {
   const router = useRouter();
   const { isAuthenticated , user } = useAuthStore();
-  const updateUser = useAuthStore((state) => state.updateUser);
 
   const [plansData, setPlansData] = useState<Plan[]>([]);
   const [loader, setLoader] = useState(true);
@@ -99,10 +98,6 @@ const PackagesComponent = () => {
       } else {
         toast.success(response?.data?.message || "Subscription successful");
       }
-      updateUser({
-        current_package_id: response.data.current_package_id,
-        is_subscribed: 1,
-      });
     } catch (error: any) {
       toast.error(
         error?.response?.data?.message || error.message || "Subscription failed"
