@@ -86,7 +86,7 @@
                     <th scope="col" class="text-uppercase text-secondary small px-4 py-3">#</th>
                     <th scope="col" class="text-secondary small px-4 py-3">Roadmap</th>
                     <th scope="col" class="text-secondary small px-4 py-3">Title</th>
-                    <th scope="col" class="text-secondary small py-3">Order</th>
+                    <th scope="col" class="text-secondary small py-3">Position</th>
                     <th scope="col" class="text-secondary small py-3">Duration (mins)</th>
                     <th scope="col" class="text-secondary small py-3">Total Questions</th>
                     <th scope="col" class="text-secondary small py-3">Action</th>
