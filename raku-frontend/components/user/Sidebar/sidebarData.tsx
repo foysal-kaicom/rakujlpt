@@ -24,7 +24,7 @@ const SidebarData = [
   },
   
   {
-    label: "Mock Test",
+    label: "My Mock Test",
     to: "/mock_test_result",
     icon: <PiExamFill />,
   },

@@ -29,11 +29,39 @@ class MockTestController extends Controller
 
     public function index()
     {
-        $modules = MockTestModule::with('sections')->get();
+        // $modules = MockTestModule::with(['exam', 'sections'])
+        //     ->orderBy('exam_id')
+        //     ->get()
+        //     ->groupBy('exam_id');
+        // // return view('mock-tests.module_section_list', compact('modules'));
 
-        // return view('mock-tests.module_section_list', compact('modules'));
-        return view('mock-tests.sections.module_section_list', compact('modules'));
+        return view('mock-tests.sections.module_section_list');
     }
+
+    public function sectionsWithModules()
+    {
+        $modules = MockTestModule::with(['exam', 'sections'])
+            ->orderBy('exam_id')
+            ->get();
+    
+
+        $data = [];
+
+        foreach ($modules as $module) {
+            foreach ($module->sections as $section) {
+                $data[] = [
+                    'exam' => $module->exam->title,
+                    'module' => $module->name,
+                    'section' => $section->title,
+                    'actions' => '<a href="'.route('mock-tests.section.edit', $section->id).'" class="items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-green-500 text-white hover:bg-green-600 shadow-md transition">Edit</a>'
+                ];
+            }
+        }
+
+        return response()->json(['data' => $data]);
+    }
+
+
 
     public function questionList(Request $request)
     {
@@ -85,7 +113,8 @@ class MockTestController extends Controller
 
     public function createSection()
     {
-        $modules = MockTestModule::all();
+        $modules = MockTestModule::with('exam')->get()
+        ->groupBy('exam.title');
         return view('mock-tests.sections.create-section', compact('modules'));
     }
 
@@ -113,10 +142,12 @@ class MockTestController extends Controller
     //     $section = MockTestSection::findOrFail($id);
     //     return view('mock-tests.edit-section', compact('section'));
     // }
-    public function editSection($id){
-        $modules = MockTestModule::all();
-        $section = MockTestSection::findOrFail($id);
-        return view('mock-tests.sections.edit-section', compact('section','modules'));
+    public function editSection($id)
+    {
+        $section = MockTestSection::with('mockTestModule.exam')->findOrFail($id);
+        $modules = MockTestModule::with('exam')->get()
+            ->groupBy('exam.title');
+        return view('mock-tests.sections.edit-section', compact('section', 'modules'));
     }
 
     public function updateSection(Request $request, $id)
@@ -124,7 +155,7 @@ class MockTestController extends Controller
         $request->validate([
             'mock_test_module_id' => 'required|exists:mock_test_modules,id',
             'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:mock_test_sections,slug,'.$id,
+            'slug' => 'required|string|max:255|unique:mock_test_sections,slug,' . $id,
             'sample_question' => 'required|string',
         ]);
 
@@ -137,7 +168,7 @@ class MockTestController extends Controller
             'sample_question' => $request->input('sample_question'),
         ]);
 
-        Toastr::success("Question updated Successfully.");
+        Toastr::success("Section updated successfully.");
         return redirect()->route('mock-tests.module-section.info');
     }
 

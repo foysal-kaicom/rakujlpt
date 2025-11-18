@@ -16,45 +16,34 @@
     <!-- Form -->
     <form action="{{ route('mock-tests.section.update', $section->id) }}" method="POST">
         @csrf
-
-        <!-- Mock Test Selection -->
+        @method('PUT')
         <div class="row g-4">
+            <!-- Mock Test Selection -->
             <div class="col-md-12">
                 <label class="form-label fw-semibold">Select Mock Test Modules</label>
                 <select name="mock_test_module_id" class="form-select form-select-lg shadow-sm rounded-2" required>
-                    <option value="" disabled>Select a Modules</option>
-                    @foreach($modules as $mockTestModule)
-                        <option value="{{ $mockTestModule->id }}" {{ old('mock_test_module_id', $section->mock_test_module_id) == $mockTestModule->id ? 'selected' : '' }}>
-                            {{ $mockTestModule->name }}
-                        </option>
+                    <option value="">-- Select a Module --</option>
+
+                    @foreach($modules as $examTitle => $group)
+                        <optgroup label="{{ $examTitle }}">
+                            @foreach($group as $module)
+                                <option value="{{ $module->id }}" 
+                                    {{ (old('mock_test_module_id', $section->mock_test_module_id) == $module->id) ? 'selected' : '' }}>
+                                    {{ $module->exam->title }} - {{ $module->name }}
+                                </option>
+                            @endforeach
+                        </optgroup>
                     @endforeach
                 </select>
+
                 @error('mock_test_module_id')
                 <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div>
         </div>
 
-        {{-- <!-- Mock Test Selection -->
-        <div class="row g-4">
-            <div class="col-md-12">
-                <label class="form-label fw-semibold">Select Mock Test Modules</label>
-                <select name="mock_test_module_id" class="form-select form-select-lg shadow-sm rounded-2" required>
-                    <option value="" disabled>Select a Modules</option>
-                    @foreach($modules as $mockTestModule)
-                        <option value="{{ $mockTestModule->id }}" {{ old('mock_test_module_id', $section->mock_test_module_id) == $mockTestModule->id ? 'selected' : '' }}>
-                            {{ $mockTestModule->name }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('mock_test_module_id')
-                <small class="text-danger">{{ $message }}</small>
-                @enderror
-            </div>
-        </div> --}}
-
         <!-- Section Title -->
-        <div class="row g-4">
+        <div class="row g-4 pt-4">
             <div class="col-md-12">
                 <label class="form-label fw-semibold">Section Title</label>
                 <input
@@ -84,9 +73,8 @@
                 @enderror
             </div>
         </div>
-
-        <!-- Sample Question (TinyMCE editor) -->
         
+        <!-- Sample Question (TinyMCE editor) -->
         <div class="mt-4">
             <label for="sample_question" class="form-label fw-semibold">Sample Question</label>
             <textarea
@@ -97,7 +85,6 @@
             @error('sample_question')
             <small class="text-danger">{{ $message }}</small>
             @enderror
-
         </div>
 
         <!-- Submit Button -->
@@ -105,19 +92,16 @@
             <button type="submit"
                 class="w-full md:w-auto px-6 py-2 bg-indigo-500 text-white font-semibold rounded-xl shadow hover:bg-indigo-600 transition flex items-center gap-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-4" fill="currentColor">
-                    <path d="M18 21V13H6V21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3H17L21 7V20C21 20.5523 20.5523 21 20 21H18ZM16 21H8V15H16V21Z"></path>
+                    <path d="M7 19V13H17V19H19V7.82843L12 0.828427L5 7.82843V19H7ZM9 21H3C2.44772 21 2 20.5523 2 20V7.82843C2 7.29799 2.21071 6.78929 2.58579 6.41421L9.58579 -0.585786C10.3668 -1.36684 11.6332 -1.36684 12.4142 -0.585786L19.4142 6.41421C19.7893 6.78929 20 7.29799 20 7.82843V20C20 20.5523 19.5523 21 19 21H13V15H11V21H9Z"></path>
                 </svg> Update Section
             </button>
         </div>
     </form>
 </div>
 
-
 @endsection
 
-
 @push('js')
-
 <script type="text/javascript">
 tinymce.init({
   selector: '#editor',
@@ -143,10 +127,7 @@ tinymce.init({
           ],
           onSubmit: function (api) {
             const data = api.getData();
-            // Insert ruby annotation
-            editor.insertContent(
-              `<ruby>${data.kanji}<rt>${data.reading}</rt></ruby>`
-            );
+            editor.insertContent(`<ruby>${data.kanji}<rt>${data.reading}</rt></ruby>`);
             api.close();
           }
         });
@@ -154,15 +135,13 @@ tinymce.init({
     });
   }
 });
-
-
 </script>
 <script>
-    //create slug from title
-    document.querySelector('input[name="title"]').addEventListener('input', function() {
-        const slugInput = document.querySelector('input[name="slug"]');
-        const slug = this.value.toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '');
-        slugInput.value = slug;
-    });
+// Auto-generate slug from title
+document.querySelector('input[name="title"]').addEventListener('input', function() {
+    const slugInput = document.querySelector('input[name="slug"]');
+    const slug = this.value.toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '');
+    slugInput.value = slug;
+});
 </script>
 @endpush

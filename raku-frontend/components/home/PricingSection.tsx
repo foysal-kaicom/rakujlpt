@@ -24,7 +24,6 @@ const defaultPlans: Plan[] = [];
 const PricingSection = () => {
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
-  const updateUser = useAuthStore((state) => state.updateUser);
   const [plansData, setPlansData] = useState<Plan[]>(defaultPlans);
 
   // modal state
@@ -79,10 +78,6 @@ const PricingSection = () => {
       } else {
         toast.success(response?.data?.message || "Subscription successful");
       }
-      updateUser({
-        current_package_id: response.data.current_package_id,
-        is_subscribed: 1,
-      });
     } catch (error: any) {
       toast.error(
         error?.response?.data?.message || error.message || "Subscription failed"
