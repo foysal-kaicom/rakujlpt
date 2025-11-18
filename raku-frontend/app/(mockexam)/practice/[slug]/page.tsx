@@ -84,15 +84,15 @@ export default function Roadmap() {
         </div>
       )}
       <div className=" px-4 lg:px-8 sticky top-0 z-20 py-5  bg-gradient-to-tr from-blue-50 via-white to-purple-50">
-        <div className="container mx-auto flex justify-between">
+        <div className="container mx-auto flex justify-between ">
           <Link href="/">
-            <button className="px-5 py-2 rounded-2xl font-medium text-sm lg:text-base bg-linear-to-r from-blue-600 to-purple-600 text-white drop-shadow-sm drop-shadow-violet-600 border-b border-white/50">
+            <button className="px-5 py-2 rounded-2xl font-medium text-sm lg:text-base bg-linear-to-r from-blue-600 to-purple-600 text-white drop-shadow-sm drop-shadow-violet-600 border-b border-white/50 hover:scale-110 duration-400 ease-linear cursor-pointer">
               Home
             </button>
           </Link>
 
           <Link href="/practice">
-            <button className="size-10 rounded-full font-medium text-sm lg:text-base bg-linear-to-r from-red-600 to-pink-600 text-white drop-shadow-sm drop-shadow-pink-600 border-b border-white/50">
+            <button className="size-10 rounded-full font-medium text-sm lg:text-base bg-linear-to-r from-red-600 to-pink-600 text-white drop-shadow-sm drop-shadow-pink-600 border-b border-white/50 hover:rotate-360 duration-700 ease-in-out cursor-pointer">
               X
             </button>
           </Link>

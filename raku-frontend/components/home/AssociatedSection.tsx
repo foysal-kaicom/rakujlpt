@@ -29,18 +29,26 @@ export default async function AssociatedSection() {
           <div className="absolute bottom-0 right-0 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl"></div>
         </div>
 
-        <div className="px-6 lg:px-8 relative container mx-auto text-center text-black">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8 items-center justify-center">
-            {partners.map((item, i) => (
-              <div key={i} className="hover:scale-105 transition-transform duration-300 ">
-                <img
-                  src={item.logo}
-                  alt={item.name}
-                  className="mx-auto h-12 object-contain grayscale-100"
-                />
-              </div>
-            ))}
+        <div className="px-6 lg:px-8 container mx-auto text-center text-black">
+          <div className="relative overflow-hidden">
+            <div
+              className={`flex items-center gap-12 whitespace-nowrap transition-transform duration-300 animate-partner-scroll`}
+            >
+              {partners.concat(partners).map((item, i) => (
+                <div
+                  key={i}
+                  className="inline-flex shrink-0 hover:scale-105 transition-transform duration-300 px-4"
+                >
+                  <img
+                    src={item.logo}
+                    alt={item.name}
+                    className="h-12 object-contain grayscale-100 mx-auto"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
+
         </div>
       </section>
     </>
