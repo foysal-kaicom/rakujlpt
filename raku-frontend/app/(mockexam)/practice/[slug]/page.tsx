@@ -28,73 +28,6 @@ export default function Roadmap() {
   const params = useParams();
   const slug = params.slug;
 
-  const roadmapData = [
-    {
-      id: 1,
-      title: "Hiragana Basics",
-      details: "Learn the fundamental Japanese syllabary - Hiragana characters",
-      lessons: 5,
-      xp: 100,
-      status: "completed",
-    },
-    {
-      id: 2,
-      title: "Katakana Basics",
-      details: "Master Katakana for foreign words and names",
-      lessons: 5,
-      xp: 100,
-      status: "completed",
-    },
-    {
-      id: 3,
-      title: "Basic Greetings",
-      details: "Essential phrases for daily conversations",
-      lessons: 8,
-      xp: 150,
-      status: "current",
-    },
-    {
-      id: 4,
-      title: "Numbers & Counting",
-      details: "Learn to count and use numbers in Japanese",
-      lessons: 6,
-      xp: 120,
-      status: "locked",
-    },
-    {
-      id: 5,
-      title: "Family & People",
-      details: "Vocabulary for family members and relationships",
-      lessons: 7,
-      xp: 140,
-      status: "locked",
-    },
-    {
-      id: 6,
-      title: "Basic Kanji",
-      details: "Introduction to common Chinese characters",
-      lessons: 10,
-      xp: 200,
-      status: "locked",
-    },
-    {
-      id: 7,
-      title: "Food & Dining",
-      details: "Order food and discuss meals in Japanese",
-      lessons: 8,
-      xp: 160,
-      status: "locked",
-    },
-    {
-      id: 8,
-      title: "Travel & Directions",
-      details: "Navigate and ask for directions",
-      lessons: 9,
-      xp: 180,
-      status: "locked",
-    },
-  ];
-
   const [loader, setLoader] = useState(false);
   const [hoveredStage, setHoveredStage] = useState<number | null>(null);
 
@@ -150,32 +83,30 @@ export default function Roadmap() {
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
         </div>
       )}
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 pb-20 pt-8 relative overflow-hidden">
+      <div className=" px-4 lg:px-8 sticky top-0 z-20 py-5  bg-gradient-to-tr from-blue-50 via-white to-purple-50">
+        <div className="container mx-auto flex justify-between">
+          <Link href="/">
+            <button className="px-5 py-2 rounded-2xl font-medium text-sm lg:text-base bg-linear-to-r from-blue-600 to-purple-600 text-white drop-shadow-sm drop-shadow-violet-600 border-b border-white/50">
+              Home
+            </button>
+          </Link>
+
+          <Link href="/practice">
+            <button className="size-10 rounded-full font-medium text-sm lg:text-base bg-linear-to-r from-red-600 to-pink-600 text-white drop-shadow-sm drop-shadow-pink-600 border-b border-white/50">
+              X
+            </button>
+          </Link>
+        </div>
+      </div>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 pb-20 pt-3 relative overflow-hidden">
         {/* Background Decorations */}
         <div className="absolute top-20 -left-20 w-64 h-64 bg-gradient-to-br from-cyan-200 to-blue-200 rounded-full opacity-20 blur-3xl"></div>
         <div className="absolute bottom-20 -right-20 w-96 h-96 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full opacity-20 blur-3xl"></div>
-        <div className="container mx-auto px-4 lg:px-8 relative mb-6">
-          <BreadCrumb breadCrumbData={breadCrumbData} />
-        </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* Breadcrumb */}
-          {/* <div className="flex items-center gap-2 text-sm text-gray-600 mb-8">
-            {breadCrumbData.map((item, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <Link
-                  href={item.to}
-                  className="hover:text-blue-600 transition-colors"
-                >
-                  {item.name}
-                </Link>
-                {index < breadCrumbData.length - 1 && <span>/</span>}
-              </div>
-            ))}
-          </div> */}
 
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Header */}
           <div className="text-center mb-16">
-            <h1 className="text-5xl font-bold text-gray-800 mb-4">
+            <h1 className="text-4xl xl:text-5xl font-bold text-gray-800 mb-4">
               Japanese Learning Path
             </h1>
             <p className="text-xl text-gray-600">
@@ -184,7 +115,7 @@ export default function Roadmap() {
           </div>
 
           {/* Roadmap */}
-          <div className="relative max-w-2xl mx-auto">
+          <div className="relative max-w-2xl mx-auto px-3 md:px-0">
             {stagesData.map((stage, index) => {
               const isEven = index % 2 === 0;
               const isLast = index === stagesData.length - 1;
@@ -240,26 +171,16 @@ export default function Roadmap() {
                       >
                         {/* Stage Card */}
                         <div
-                          className={`relative bg-white rounded-2xl shadow-lg p-6 border-4 ${
+                          className={`relative  rounded-2xl shadow-lg p-6 border-4 ${
                             stagStatus === "current"
                               ? "border-yellow-400"
                               : stagStatus === "completed"
                               ? "border-green-400"
                               : "border-gray-200"
                           } cursor-pointer transition-all duration-300 ${
-                            stagStatus === "locked"
-                              ? "opacity-60"
-                              : "opacity-100"
+                            stagStatus === "locked" ? "bg-zinc-50" : "bg-white"
                           }`}
                         >
-                          {/* Stage Number Badge */}
-                          {/* <Link
-                          href={
-                            stagStatus !== "locked"
-                              ? `/practice/${slug}/${stage.slug}/${stage.id}`
-                              : "#"
-                          }
-                        > */}
                           <div
                             className={`absolute -top-4 -right-4 w-14 h-14 rounded-full bg-gradient-to-br ${getStatusColor(
                               stagStatus
@@ -336,19 +257,6 @@ export default function Roadmap() {
                               </div>
                             </div>
                           </div>
-
-                          {/* Progress Bar for Current */}
-                          {/* {stagStatus === "current" && (
-                            <div className="mt-4 bg-gray-200 rounded-full h-2 overflow-hidden">
-                              <div
-                                className="h-full bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full transition-all duration-500"
-                                style={{
-                                  width: "60%",
-                                  animation: "shimmer 2s ease-in-out infinite",
-                                }}
-                              ></div>
-                            </div>
-                          )} */}
                         </div>
                       </div>
                     </div>
@@ -360,7 +268,7 @@ export default function Roadmap() {
                           stage.stage_status
                         )} shadow-lg border-4 border-white transition-all duration-300 ${
                           hoveredStage === stage.id ? "scale-150" : "scale-100"
-                        }`}
+                        } ${stage?.stage_status == 'current' ? "animate-ping" : ""}`}
                       ></div>
                     </div>
                   </div>

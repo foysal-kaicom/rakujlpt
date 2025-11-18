@@ -1,8 +1,75 @@
 import parse from "html-react-parser";
+import { useEffect } from "react";
 import { useAuthStore } from "@/stores/useAuthStore";
+import axiosInstance from "@/utils/axios";
 
 export default function PricingCard({ plan, subscribeModal }: any) {
   const user = useAuthStore().user;
+  const updateUser = useAuthStore((state) => state.updateUser);
+
+  useEffect(() => {
+    getUserData();
+  }, []);
+
+  // API Calls
+
+  const getUserData = async () => {
+    try {
+      const response = await axiosInstance.get("/candidate/profile");
+      console.log(response.data.data)
+      // const {
+      //   id,
+      //   first_name,
+      //   last_name,
+      //   email,
+      //   phone_number,
+      //   photo,
+      //   cover_photo,
+      //   about,
+      //   facebook,
+      //   linkedin,
+      //   gender,
+      //   address,
+      //   skills,
+      // } = response?.data?.data;
+
+      // setProfile((prev) => ({
+      //   ...prev,
+      //   id,
+      //   first_name,
+      //   last_name,
+      //   email,
+      //   phone_number,
+      //   photo,
+      //   cover_photo,
+      //   about,
+      //   facebook,
+      //   linkedin,
+      //   gender,
+      //   address,
+      //   vocabulary: skills?.vocabulary,
+      //   grammar: skills?.grammar,
+      //   listening: skills?.listening,
+      //   reading: skills?.reading,
+      // }));
+      // updateUser({
+      //   id: id,
+      //   first_name: first_name,
+      //   last_name: last_name,
+      //   email: email,
+      //   phone_number: phone_number || "",
+      //   photo: photo,
+      // });
+    } catch (error: any) {
+      console.log(error);
+      // toast.error("Failed to get user data");
+    } finally {
+      // setLoading(false);
+    }
+  };
+
+
+
   return (
     <div
       key={plan.id}
