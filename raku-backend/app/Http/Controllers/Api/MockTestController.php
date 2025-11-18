@@ -75,6 +75,7 @@ class MockTestController extends Controller
             })
             ->get();
 
+          
             $examTitle = $allSections->first()->mockTestModule->exam->title ?? null;
             $sectionWiseQuestions = [];
 
@@ -83,9 +84,9 @@ class MockTestController extends Controller
 
                 if ($data) {
                     $sectionWiseQuestions[] = $data;
+                   
                 }
             }
-
             // return $this->responseWithSuccess($sectionWiseQuestions, "Questions generated for Exam ID: {$examId}");
             return $this->responseWithSuccess([
                 'exam_title' => $examTitle,

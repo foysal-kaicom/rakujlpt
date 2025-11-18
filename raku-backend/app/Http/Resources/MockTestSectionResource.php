@@ -14,11 +14,29 @@ class MockTestSectionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        if ($this->slug == 'reading-comprehension') {
+       $groups = collect();
 
-            $groups = collect();
+        if ($this->mockTestModule->slug==='listening') { // for listening module - need to follow set no
+            // Find available set numbers for this section
+            $availableSets = $this->mockTestQuestionGroup()
+                ->where('mock_test_section_id', $this->id)
+                ->distinct()
+                ->pluck('set_no');
 
-            // 1st: take a group with question_quantity = 3
+            if ($availableSets->isNotEmpty()) {
+                // Pick one set randomly for this section
+                $randomSetNo = $availableSets->random();
+
+                // Fetch questions belonging to that set (respect limit)
+                $groups = $this->mockTestQuestionGroup()
+                    ->where('mock_test_section_id', $this->id)
+                    ->where('set_no', $randomSetNo)
+                    ->orderBy('id') // keep order
+                    ->take($this->question_limit)
+                    ->get();
+            }
+        } elseif ($this->slug === 'reading-comprehension') {
+            // Hardcoded pattern: 3 + 4 + 3
             $groups = $groups->merge(
                 $this->mockTestQuestionGroup()
                     ->where('question_quantity', 3)
@@ -27,7 +45,6 @@ class MockTestSectionResource extends JsonResource
                     ->get()
             );
 
-            // 2nd: take a group with question_quantity = 4
             $groups = $groups->merge(
                 $this->mockTestQuestionGroup()
                     ->where('question_quantity', 4)
@@ -36,25 +53,20 @@ class MockTestSectionResource extends JsonResource
                     ->get()
             );
 
-            // 3rd: again take a group with question_quantity = 3
             $groups = $groups->merge(
                 $this->mockTestQuestionGroup()
                     ->where('question_quantity', 3)
-                    ->inRandomOrder()
                     ->whereNotIn('id', $groups->pluck('id'))
+                    ->inRandomOrder()
                     ->take(1)
                     ->get()
             );
-
-            $resultGroups = MockTestGroupResource::collection($groups);
         } else {
-            // Default: just take $this->question_limit groups
-            $resultGroups = MockTestGroupResource::collection(
-                $this->mockTestQuestionGroup()
-                    ->inRandomOrder()
-                    ->take($this->question_limit)
-                    ->get()
-            );
+            // Fallback for other sections
+            $groups = $this->mockTestQuestionGroup()
+                ->inRandomOrder()
+                ->take($this->question_limit)
+                ->get();
         }
 
         return [
@@ -63,7 +75,7 @@ class MockTestSectionResource extends JsonResource
             'title'           => $this->title,
             'module_name'     => $this->mockTestModule->name ?? null,
             'sample_question' => $this->sample_question,
-            'group'           => $resultGroups,
+            'group'           => MockTestGroupResource::collection($groups),
         ];
     }
 }
