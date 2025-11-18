@@ -18,7 +18,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Exam Name</th>
-                    <th>Slug</th>
+                    {{-- <th>Slug</th> --}}
                     <th>Module Name</th>
                     <th>Status</th>
                     <th>Action</th>
@@ -30,7 +30,6 @@
                 <tr>
                     <td>{{ $module->id }}</td>
                     <td>{{ $module->exam?->title ?? '-' }}</td>
-                    <td>{{ $module->slug }}</td>
                     <td>{{ $module->name }}</td>
                     <td>
                         <form action="{{ route('mock-test-modules.toggleStatus', $module->id) }}" method="POST">

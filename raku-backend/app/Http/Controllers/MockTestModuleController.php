@@ -24,14 +24,25 @@ class MockTestModuleController extends Controller
     {
         $request->validate([
             'exam_id' => 'nullable|exists:exams,id',
-            'slug' => 'required|unique:mock_test_modules,slug',
+            'slug' => 'required|string',
             'name' => 'required|string',
-            'status' => 'required|in:active,disabled',
         ]);
 
-        MockTestModule::create($request->all());
-        return redirect()->route('mock-test-modules.index')->with('success', 'Module created successfully.');
+        $finalSlug = ($request->exam_id ? $request->exam_id . '_' : '') . $request->slug;
+
+        MockTestModule::create([
+            'exam_id' => $request->exam_id,
+            'slug' => $finalSlug,
+            'name' => $request->name,
+            'status' => 'active',
+        ]);
+
+        return redirect()->route('mock-test-modules.index')
+            ->with('success', 'Module created successfully.');
     }
+
+
+
 
     public function edit(MockTestModule $mockTestModule)
     {
