@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Throwable;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -136,7 +137,7 @@ class CandidateController extends Controller
      */
     public function edit(string $id)
     {
-        $candidate = Candidate::with('bookings')->findOrFail($id);
+        $candidate = Candidate::findOrFail($id);
         return view('candidate.edit', compact('candidate'));
     }
 
@@ -220,5 +221,34 @@ class CandidateController extends Controller
         $bookings = Booking::where('candidate_id', $candidateId)->get();
 
         return view('candidate.applications', compact('bookings'));
+    }
+
+
+
+    public function resetPassword(Request $request, $id)
+    {
+        $validate=Validator::make($request->all(),[
+            'new_password' => 'required|string|min:6',
+            'admin_password' => 'required|string',
+        ]);
+
+        if($validate->fails())
+        {
+            Toastr::error($validate->getMessageBag());
+            return redirect()->back();
+        }
+
+        if (!Hash::check($request->admin_password, auth()->user()->password)) {
+            
+            Toastr::error("Invalid admin password.");
+            return redirect()->back();
+        }
+
+        $candidate = Candidate::findOrFail($id);
+        $candidate->password = bcrypt($request->new_password);
+        $candidate->save();
+
+        Toastr::success("Password reset successfully.");
+        return redirect()->back();
     }
 }

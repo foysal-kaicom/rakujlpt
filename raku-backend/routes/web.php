@@ -70,6 +70,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/', [CandidateController::class, 'list'])->name('list');
         Route::get('/create', [CandidateController::class, 'showRegistration'])->name('create');
         Route::post('/store', [CandidateController::class, 'register'])->name('store');
+        Route::post('/reset-password/{candidate_id}', [CandidateController::class, 'resetPassword'])->name('reset.password');
+
         Route::get('/edit/{id}', [CandidateController::class, 'edit'])->name('edit');
         Route::put('/update/{id}', [CandidateController::class, 'update'])->name('update');
         Route::delete('/delete/{id}', [CandidateController::class, 'destroy'])->name('delete');
