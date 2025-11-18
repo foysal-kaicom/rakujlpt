@@ -108,6 +108,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/question-list', [MockTestController::class, 'questionList'])->name('question.list');
         Route::get('/module-info', [MockTestController::class, 'index'])->name('module-section.info');
+        Route::get('/sections/fetch-modules', [MockTestController::class, 'sectionsWithModules'])->name('sections-with-modules.fetch');
+
         Route::get('/question-setup-form', [MockTestController::class, 'questionSetupForm'])->name('question-setup.form');
         Route::post('/question-setup', [MockTestController::class, 'questionSetup'])->name('question-setup.post');
 

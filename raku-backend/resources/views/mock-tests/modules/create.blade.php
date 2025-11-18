@@ -20,7 +20,7 @@
                 <div class="row g-3">
 
                     <!-- Exam Selection -->
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label class="form-label fw-semibold">Select Exam</label>
                         <select name="exam_id" class="form-control form-control-lg shadow-sm rounded-2">
                             <option value="">-- Select Exam --</option>
@@ -33,29 +33,31 @@
                         @error('exam_id') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
 
-                    <!-- Slug -->
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold">Slug</label>
-                        <input type="text" name="slug" value="{{ old('slug') }}" class="form-control form-control-lg shadow-sm rounded-2" placeholder="Enter slug" />
-                        @error('slug') <div class="text-danger small">{{ $message }}</div> @enderror
-                    </div>
-
                     <!-- Name -->
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label class="form-label fw-semibold">Module Name</label>
                         <input type="text" name="name" value="{{ old('name') }}" class="form-control form-control-lg shadow-sm rounded-2" placeholder="Enter module name" />
                         @error('name') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
 
+                    <!-- Slug -->
+                    <div class="col-md-12">
+                        <label class="form-label fw-semibold">Slug</label>
+                        <input type="text" name="slug" value="{{ old('slug') }}" class="form-control form-control-lg shadow-sm rounded-2" placeholder="Enter slug" />
+                        @error('slug') <div class="text-danger small">{{ $message }}</div> @enderror
+                    </div>
+
+                    
+
                     <!-- Status -->
-                    <div class="col-md-6">
+                    {{-- <div class="col-md-6">
                         <label class="form-label fw-semibold">Status</label>
                         <select name="status" class="form-control form-control-lg shadow-sm rounded-2">
                             <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active</option>
                             <option value="disabled" {{ old('status') == 'disabled' ? 'selected' : '' }}>Disabled</option>
                         </select>
                         @error('status') <div class="text-danger small">{{ $message }}</div> @enderror
-                    </div>
+                    </div> --}}
 
                 </div>
             </div>
@@ -71,3 +73,31 @@
 </div>
 
 @endsection
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const nameInput = document.querySelector('input[name="name"]');
+    const slugInput = document.querySelector('input[name="slug"]');
+
+    if (!nameInput || !slugInput) return;
+
+    // Auto-generate slug while typing name
+    nameInput.addEventListener('input', function () {
+        if (!slugInput.dataset.modified) {
+            slugInput.value = this.value
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+        }
+    });
+
+    // When user manually edits slug, stop auto fill
+    slugInput.addEventListener('input', function () {
+        this.dataset.modified = true;
+    });
+
+});
+</script>

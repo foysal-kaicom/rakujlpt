@@ -21,13 +21,28 @@
             <div class="col-md-12">
                 <label class="form-label fw-semibold">Select Mock Test Modules</label>
                 <select name="mock_test_module_id" class="form-select form-select-lg shadow-sm rounded-2" required>
+                    <option value="">-- Select a Module --</option>
+
+                    @foreach($modules as $examTitle => $group)
+                        <optgroup label="{{ $examTitle }}">
+                            @foreach($group as $module)
+                                <option value="{{ $module->id }}">
+                                    {{-- {{ $module->name }} --}}
+                                    {{ $module->exam->title }} - {{ $module->name }}
+                                </option>
+                            @endforeach
+                        </optgroup>
+                    @endforeach
+                </select>
+
+                {{-- <select name="mock_test_module_id" class="form-select form-select-lg shadow-sm rounded-2" required>
                     <option value="" disabled selected>Select a Modules</option>
                     @foreach($modules as $mockTestModule)
                         <option value="{{ $mockTestModule->id }}" {{ old('mock_test_module_id') == $mockTestModule->id ? 'selected' : '' }}>
                             {{ $mockTestModule->name }}
                         </option>
                     @endforeach
-                </select>
+                </select> --}}
                 @error('mock_test_module_id')
                 <small class="text-danger">{{ $message }}</small>
                 @enderror
