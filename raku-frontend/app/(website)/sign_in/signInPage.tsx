@@ -86,7 +86,8 @@ export default function LoginPage() {
           user_subscriptions_id:data.user_subscriptions_id,
           is_subscribed:data.is_subscribed,
           current_package_id:data.current_package_id,
-          current_package_name:data.current_package_name
+          current_package_name:data.current_package_name,
+          is_free:data.is_free
         };
 
         login(user, token);

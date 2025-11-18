@@ -57,6 +57,7 @@ export const googleLoginUtils = async () => {
         current_package_id: data.current_package_id,
         current_package_name: data.current_package_name,
         user_subscriptions_id: data.user_subscriptions_id,
+        is_free:data.is_free
       };
       login(user, token);
 
