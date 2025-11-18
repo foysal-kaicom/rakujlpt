@@ -155,7 +155,7 @@ class SslCommerzPaymentController extends Controller
                 // dd($data);
                 $subscriptionData->candidate->notify(new CandidateNotification($data));
                 // dd($successPath);
-                return redirect()->away($successPath);
+                return redirect()->away($baseUrl . $successPath);
             } else {
                 #That means something wrong happened. You can redirect customer to your product page.
                 return redirect()->away($baseUrl . $failedPath);

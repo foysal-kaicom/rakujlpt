@@ -38,6 +38,13 @@
             @error('photo')
             <div class="text-danger"></div>
             @enderror
+
+
+<!-- Reset Password Button -->
+<button type="button" class="mt-3 w-full xl:w-[300px] text-black py-2 px-3 rounded cursor-pointer bg-yellow-400 hover:bg-yellow-300 transition" data-bs-toggle="modal" data-bs-target="#resetPasswordModal">
+    <i class="fa fa-key me-1"></i> Reset Password
+</button>
+
         </div>
 
         <!-- Form Fields -->
@@ -140,52 +147,44 @@
 
 </form>
 
-<h3 class="text-xl font-semibold p-[12px] mb-[50px] bg-indigo-300 rounded text-black mt-[50px]">Recent Booking</h3>
 
-<div class="overflow-x-auto mt-4">
-    <table class="min-w-full divide-y divide-gray-200 border" id="bookingTable">
-        <thead class="bg-indigo-300 text-gray-700">
-            <tr>
-                <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">#</th>
-                <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Booking ID</th>
-                <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Exam</th>
-                <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Center</th>
-                <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Total Payable</th>
-                <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
-                <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Payment Status</th>
-                <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Result</th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200">
-            @forelse($candidate->bookings as $key => $booking)
-            <tr class="hover:bg-gray-50">
-                <td class="px-4 py-2">{{ $key + 1 }}</td>
-                <td class="px-4 py-2">{{ $booking->id }}</td>
-                <td class="px-4 py-2">{{ $booking->exam->title ?? 'N/A' }}</td>
-                <td class="px-4 py-2">{{ $booking->center->name ?? 'N/A' }}</td>
-                <td class="px-4 py-2">{{ number_format($booking->total_payable, 2) }}</td>
-                <td class="px-4 py-2">
-                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                {{ $booking->status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
-                        {{ ucfirst($booking->status) }}
-                    </span>
-                </td>
-                <td class="px-4 py-2">
-                    <span class="px-3 inline-flex text-xs leading-5 font-semibold rounded-full
-                                {{ $booking->payment_status === 'success' ? 'bg-green-100 text-green-800' : ($booking->payment_status === 'pending'?'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
-                        {{ ucfirst($booking->payment_status) }}
-                    </span>
-                </td>
-                <td class="px-4 py-2">{{ $booking->result ?? 'Pending' }}</td>
-            </tr>
-            @empty
-            <tr>
-                <td colspan="8" class="px-4 py-3 text-center text-gray-500">No bookings found.</td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
+<div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{route('candidate.reset.password',$candidate->id)}}" method="post" id="resetPasswordForm">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="resetPasswordModalLabel">Reset Candidate Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3 position-relative">
+                        <label for="newPassword" class="form-label">New Password <span class="text-red-500">*</span></label>
+                        <div class="input-group">
+                            <input required type="text" class="form-control" id="newPassword" name="new_password" placeholder="Enter new password">
+                            <button type="button" class="btn btn-outline-secondary" id="copyPasswordBtn" title="Copy password">
+                                <i class="fa fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="adminPassword" class="form-label">Admin Password <span class="text-red-500">*</span></label>
+                        <input required type="password" class="form-control" id="adminPassword" name="admin_password" placeholder="Enter your admin password">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn bg-indigo-500 text-white hover:bg-indigo-400">Update Password</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
+
+
 
 <!-- JavaScript for Image Preview -->
 <script>

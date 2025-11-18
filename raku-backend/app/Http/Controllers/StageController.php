@@ -35,7 +35,7 @@ class StageController extends Controller
 
         // Sorting
         $order_by = $request->order_by ?? 'id';
-        $direction = $request->direction ?? 'desc';
+        $direction = $request->direction ?? 'asc';
         $query->orderBy($order_by, $direction);
 
         $stages = $query->paginate(10)->withQueryString();

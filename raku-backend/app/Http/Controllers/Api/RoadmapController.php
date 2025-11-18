@@ -14,10 +14,10 @@ class RoadmapController extends Controller
     public function getRoadmaps(Request $request)
     {
         $roadmaps = Roadmap::withCount([
-                'stages as total_stages' => function ($query) {
-                    $query->where('status', 1);
-                }
-            ])
+            'stages as total_stages' => function ($query) {
+                $query->where('status', 1);
+            }
+        ])
             ->get(['id', 'title', 'slug', 'description', 'image'])
             ->makeHidden(['created_at', 'updated_at']);
 
@@ -30,14 +30,11 @@ class RoadmapController extends Controller
         $candidate = Auth::guard('candidate')->user();
 
         $roadmap = Roadmap::with([
-            'stages' => function($q) {
-                $q->where('status', 1)
-                ->orderBy('order', 'asc');
-            },
+            'stages' => fn($q) => $q->where('status', 1),
             'stages.practices'
         ])
-        ->where('slug', $slug)
-        ->first();
+            ->where('slug', $slug)
+            ->first();
 
 
         if (!$roadmap) {
@@ -45,8 +42,8 @@ class RoadmapController extends Controller
         }
 
         // Get stages only, flatten not needed since it's a single roadmap
-        $data = $roadmap->stages->map(function($stage, $index) use ($candidate) {
-            
+        $data = $roadmap->stages->map(function ($stage, $index) use ($candidate) {
+
             $questions = [];
 
             foreach ($stage->practices as $practice) {
@@ -99,7 +96,7 @@ class RoadmapController extends Controller
                 'total_questions' => count($questions),
                 'stage_status' => $status,
             ];
-            
+
             if ($status === 'completed') {
                 $stageData['total_score'] = $totalScore;
             }
@@ -161,7 +158,4 @@ class RoadmapController extends Controller
             'data' => $result,
         ]);
     }
-
-
-
 }

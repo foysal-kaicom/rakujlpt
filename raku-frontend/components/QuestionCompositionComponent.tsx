@@ -16,7 +16,7 @@ export default function QuestionCompositionComponent({
     <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 overflow-hidden pb-20 pt-5">
       <WebpageWrapper>
         <BreadCrumb breadCrumbData={breadCrumbData} />
-        {type === "jlpt" && (
+        {(type === "jlpt" || type=="") && (
         <section className="relative pt-15">
           <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-300/30 rounded-full blur-3xl animate-bounce-slow"></div>
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-pink-300/30 rounded-full blur-3xl animate-pulse-slow"></div>
@@ -76,7 +76,7 @@ export default function QuestionCompositionComponent({
           </div>
         </section>
         )}
-        {type === "jpt" && (
+        {(type === "jpt" || type=="")&& (
         <section className="relative pt-15">
           <div className="absolute top-0 left-0 w-80 h-80 bg-pink-300/30 rounded-full blur-3xl animate-pulse-slow"></div>
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-300/30 rounded-full blur-3xl animate-bounce-slow"></div>

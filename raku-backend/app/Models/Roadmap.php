@@ -13,7 +13,7 @@ class Roadmap extends Model
     ];
     public function stages()
     {
-        return $this->hasMany(Stage::class)->orderBy('id');
+        return $this->hasMany(Stage::class)->orderBy('order');
     }
 
     // Relationships

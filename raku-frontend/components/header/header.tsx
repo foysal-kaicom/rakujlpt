@@ -87,12 +87,12 @@ export default function Header() {
               )}
             </Link>
             {Array.isArray(item.links) && (
-              <div className="bg-white absolute overflow-hidden scale-0 group-hover:scale-100 transform origin-top left-1/2 -translate-x-1/2 top-[80px] w-[230px] duration-400 rounded-md shadow ring-1 ring-purple-200 py-2 grid grid-cols-1 gap-1">
+              <div className="bg-white absolute overflow-hidden scale-0 group-hover:scale-100 transform origin-top left-1/2 -translate-x-1/2 top-[80px] w-[230px] duration-400 rounded-md shadow ring-1 ring-purple-200 py-2 grid grid-cols-1">
                 {item.links.map((link, i) => (
                   <Link href={link.to} key={i}>
                     <div
-                      className={`w-[230px] px-5 py-1.5 hover:bg-purple-100 hover:text-[#570d69] duration-300 text-sm font-semibold ${
-                        link.to === path ? "text-[#570d69] bg-blue-50/70" : ""
+                      className={`w-[230px] px-5 py-2 hover:bg-purple-100 hover:text-[#570d69] duration-300 text-sm font-semibold ${
+                        link.to === path ? "text-[#570d69] bg-purple-100" : ""
                       }`}
                     >
                       {link.label}
@@ -141,7 +141,7 @@ export default function Header() {
               <Link
                 key={i}
                 href={item.to}
-                className="flex gap-1.5 items-center hover:bg-purple-100 duration-300 cursor-pointer line-clamp-1 p-1 px-4"
+                className={`flex gap-1.5 items-center hover:bg-purple-100 duration-300 cursor-pointer line-clamp-1 p-1 px-4 ${path.startsWith(item.to) ? 'bg-purple-100' : ''}`}
               >
                 <span className="p-1 bg-white rounded outline outline-purple-200 text-purple-500">
                   {item.icon}

@@ -41,7 +41,7 @@ export default function PricingCard({ plan, subscribeModal }: any) {
 
         {/* Description */}
         <div className="space-y-4 mb-16">
-          <div className="text-gray-600 font-medium">
+          <div className="text-gray-600 font-medium no-tailwindcss">
             {plan.description && parse(plan.description)}
           </div>
         </div>

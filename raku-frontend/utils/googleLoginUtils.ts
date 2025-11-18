@@ -49,10 +49,14 @@ export const googleLoginUtils = async () => {
         first_name: data.first_name,
         last_name: data.last_name,
         email: data.email,
-        is_phone_verified: data.is_phone_verified,
-        is_email_verified: data.is_email_verified,
+        // is_phone_verified: data.is_phone_verified,
+        // is_email_verified: data.is_email_verified,
         phone_number: data.phone_number,
         photo: data.photo,
+        is_subscribed: data.is_subscribed,
+        current_package_id: data.current_package_id,
+        current_package_name: data.current_package_name,
+        user_subscriptions_id: data.user_subscriptions_id,
       };
       login(user, token);
 

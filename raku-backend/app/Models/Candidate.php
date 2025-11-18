@@ -60,11 +60,6 @@ class Candidate extends Authenticatable implements JWTSubject
     }
 
 
-    public function bookings() 
-    {
-        return $this->hasMany(Booking::class,'candidate_id');
-    }
-
     public function UserSubscriptions()
     {
         return $this->hasMany(UserSubscription::class, 'candidate_id');
