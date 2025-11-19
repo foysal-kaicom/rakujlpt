@@ -2,10 +2,8 @@
 
 import { IoMdArrowDropright, IoMdArrowDropdown } from "react-icons/io";
 import { IoLogIn, IoLogOut } from "react-icons/io5";
-import { GiHamburgerMenu } from "react-icons/gi";
 import { RxCross2 } from "react-icons/rx";
 import { FaUser } from "react-icons/fa";
-import { HiViewGridAdd } from "react-icons/hi";
 
 
 import { toast } from "sonner";

@@ -68,6 +68,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/contact_us" className="hover:text-purple-500 transition">
+                  Varify Certificate
+                </Link>
+              </li>
+              <li>
                 <Link href="/terms_condition" className="hover:text-purple-500 transition">
                   Terms & Condition
                 </Link>
