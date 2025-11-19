@@ -29,15 +29,13 @@ export default async function AssociatedSection() {
           <div className="absolute bottom-0 right-0 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl"></div>
         </div>
 
-        <div className="px-6 lg:px-8 container mx-auto text-center text-black">
+        <div className="px-2 lg:px-8 container mx-auto text-center text-black">
           <div className="relative overflow-hidden">
-            <div
-              className={`flex items-center gap-12 whitespace-nowrap transition-transform duration-300 animate-partner-scroll`}
-            >
+            <div className="flex items-center gap-10 whitespace-nowrap animate-partner-scroll w-max">
               {partners.concat(partners).map((item, i) => (
                 <div
                   key={i}
-                  className="inline-flex shrink-0 hover:scale-105 transition-transform duration-300 px-4"
+                  className="inline-flex shrink-0 hover:scale-105 transition-transform duration-300"
                 >
                   <img
                     src={item.logo}
@@ -48,7 +46,6 @@ export default async function AssociatedSection() {
               ))}
             </div>
           </div>
-
         </div>
       </section>
     </>

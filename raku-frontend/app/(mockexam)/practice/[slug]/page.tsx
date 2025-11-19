@@ -77,13 +77,13 @@ export default function Roadmap() {
   }, []);
 
   return (
-    <>
+    <div className="bg-[url('/assets/practice/bg-1.jpg')]">
       {loader && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50">
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
         </div>
       )}
-      <div className=" px-4 lg:px-8 sticky top-0 z-20 py-5  bg-gradient-to-tr from-blue-50 via-white to-purple-50">
+      <div className=" px-4 lg:px-8 sticky top-0 z-20 py-5  bg-gradient-to-tr from-blue-50/80 via-white/80 to-purple-50/80">
         <div className="container mx-auto flex justify-between ">
           <Link href="/">
             <button className="px-5 py-2 rounded-2xl font-medium text-sm lg:text-base bg-linear-to-r from-blue-600 to-purple-600 text-white drop-shadow-sm drop-shadow-violet-600 border-b border-white/50 hover:scale-110 duration-400 ease-linear cursor-pointer">
@@ -98,7 +98,7 @@ export default function Roadmap() {
           </Link>
         </div>
       </div>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 pb-20 pt-3 relative overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50/80 via-white/80 to-purple-50/80 pb-20 pt-3 relative overflow-hidden">
         {/* Background Decorations */}
         <div className="absolute top-20 -left-20 w-64 h-64 bg-gradient-to-br from-cyan-200 to-blue-200 rounded-full opacity-20 blur-3xl"></div>
         <div className="absolute bottom-20 -right-20 w-96 h-96 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full opacity-20 blur-3xl"></div>
@@ -298,6 +298,6 @@ export default function Roadmap() {
           }
         }
       `}</style>
-    </>
+    </div>
   );
 }

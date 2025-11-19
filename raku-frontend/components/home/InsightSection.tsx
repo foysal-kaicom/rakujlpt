@@ -8,6 +8,7 @@ import { TbAugmentedReality2 } from "react-icons/tb";
 import { FaRegStar } from "react-icons/fa";
 import { BsFileText } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa6";
+import { GiStairsGoal } from "react-icons/gi";
 
 
 interface CounterOptions {
@@ -70,7 +71,7 @@ export default function InsightSection() {
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/mock_test_select"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-linear-to-r from-blue-600 to-purple-600 text-white font-medium shadow hover:opacity-85 transition drop-shadow-sm drop-shadow-violet-600 border-b border-white/50"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-linear-to-r from-blue-600 to-purple-600 text-white font-semibold shadow hover:opacity-85 transition drop-shadow-sm drop-shadow-violet-600 border-b border-white/50"
               >
                 Start Mock Test
                 <FaArrowRight/>
@@ -78,8 +79,10 @@ export default function InsightSection() {
 
               <Link
                 href="/practice"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-full border ring ring-indigo-400 text-gray-800 bg-white hover:scale-105 duration-500 transition drop-shadow-sm drop-shadow-violet-400 border-b border-white/50"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-full border ring ring-indigo-400 font-semibold text-gray-800 bg-white hover:scale-105 duration-500 transition drop-shadow-sm drop-shadow-violet-400 border-b border-white/50"
               >
+                
+                <GiStairsGoal className="text-2xl text-purple-800"/>
                 Start Practice
               </Link>
             </div>

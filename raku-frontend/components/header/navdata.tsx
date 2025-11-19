@@ -23,6 +23,10 @@ const navdata = [
       {
         to: "/practice",
         label: "Practice",
+      },
+      {
+        to: "/certificate",
+        label: "Varify Certificate",
       }
     ],
   },
@@ -34,6 +38,10 @@ const navdata = [
       {
         to: "/about_us",
         label: "About Raku",
+      },
+      {
+        to: "/our_team",
+        label: "Our Team",
       },
       {
         to: "/question_composition",
