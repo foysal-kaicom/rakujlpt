@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import BreadCrumb from "@/components/BreadCrumb";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
+import { useRouter } from "next/navigation";
 
 export default function QRScannerPage() {
   const breadCrumbData = [
@@ -13,6 +14,8 @@ export default function QRScannerPage() {
 
   const scannerRef = useRef<HTMLDivElement>(null);
   const [scannedData, setScannedData] = useState("");
+
+  const router = useRouter();
 
   useEffect(() => {
     if (!scannerRef.current) return;
@@ -32,6 +35,7 @@ export default function QRScannerPage() {
     scanner.render(
       (decodedText: string) => {
         setScannedData(decodedText);
+        router.push(`/certificate/12?code=${encodeURIComponent(decodedText)}`);
       },
       (errorMessage: string) => {
         // optional: console.log(errorMessage);
@@ -65,7 +69,7 @@ export default function QRScannerPage() {
             <div
               id="qr-scanner"
               ref={scannerRef}
-              className="w-[90%] lg:w-[80%] h-auto aspect-square mx-auto rounded-2xl overflow-hidden border-2 border-dashed border-blue-200"
+              className="w-[98%] h-auto mx-auto rounded-2xl overflow-hidden border-2 border-dashed border-blue-200"
             ></div>
 
             {/* Scanned Result */}

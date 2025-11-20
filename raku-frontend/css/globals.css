@@ -218,4 +218,26 @@ body {
   animation: partner-scroll 20s linear infinite;
 }
 
+#html5-qrcode-select-camera {
+  border-radius: 6px;
+  padding: 3px 8px;
+  border: 1px solid var(--primary-color);
+}
 
+#html5-qrcode-button-camera-start {
+  background-color: var(--primary-color);
+  color: white;
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 3px 8px;
+  margin: 8px 0;
+}
+
+#html5-qrcode-button-camera-stop {
+  background-color: red;
+  color: white;
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 3px 8px;
+  margin: 8px 0;
+}
