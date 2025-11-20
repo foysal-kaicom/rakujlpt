@@ -117,7 +117,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/section-store', [MockTestController::class, 'storeSection'])->name('section.store');
 
         Route::get('/section-edit/{id}', [MockTestController::class, 'editSection'])->name('section.edit');
-        Route::post('/section-update/{id}', [MockTestController::class, 'updateSection'])->name('section.update');
+        Route::put('/section-update/{id}', [MockTestController::class, 'updateSection'])->name('section.update');
         Route::get('/edit-question/{id}', [MockTestController::class, 'editQuestion'])->name('edit.question');
         Route::post('/update-question/{id}', [MockTestController::class, 'updateQuestion'])->name('question.update');
         Route::delete('/delete-question/{id}', [MockTestController::class, 'deleteQuestion'])->name('question.delete');
