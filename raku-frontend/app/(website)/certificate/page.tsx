@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 export default function QRScannerPage() {
   const breadCrumbData = [
     { name: "Home", to: "/" },
-    { name: "Varify Certificate", to: "/certificate" },
+    { name: "Verify Certificate", to: "/certificate" },
   ];
 
   const scannerRef = useRef<HTMLDivElement>(null);
@@ -57,10 +57,10 @@ export default function QRScannerPage() {
           {/* Header */}
           <div className="text-center mb-10">
             <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent pb-2">
-              Varify Certificate !
+              Verify Certificate !
             </h1>
             <p className="text-gray-700 mt-2 max-w-md mx-auto">
-              Scan the Certificate's QR code to varify
+              Scan the Certificate's QR code to verify
             </p>
           </div>
 
