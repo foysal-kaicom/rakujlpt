@@ -41,12 +41,12 @@ return [
             'transport' => 'smtp',
             'scheme' => env('MAIL_SCHEME'),
             'url' => env('MAIL_URL'),
-            'host' => env('MAIL_HOST', ''),
+            'host' => env('MAIL_HOST', 'smtp-relay.brevo.com'),
             'port' => env('MAIL_PORT', 587),
-            'username' => env('MAIL_USERNAME',''),
-            'password' => env('MAIL_PASSWORD',''),
+            'username' => env('MAIL_USERNAME','9c0d69001@smtp-brevo.com'),
+            'password' => env('MAIL_PASSWORD','cmsbzhX7pN9V3dB4'),
             'timeout' => null,
-            'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
+            'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'http://rakujlpt.com'), PHP_URL_HOST)),
         ],
 
         'ses' => [
@@ -111,8 +111,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'info@kaicomsol.com'),
-        'name' => env('MAIL_FROM_NAME', 'JPT Bangladesh'),
+        'address' => env('MAIL_FROM_ADDRESS', 'info@rakujlpt.com'),
+        'name' => env('MAIL_FROM_NAME', 'Raku JLPT'),
     ],
 
 ];

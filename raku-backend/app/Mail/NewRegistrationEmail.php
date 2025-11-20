@@ -31,7 +31,7 @@ class NewRegistrationEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Welcome to JPT-BD',
+            subject: 'Welcome to RAKU JLPT',
         );
     }
 
