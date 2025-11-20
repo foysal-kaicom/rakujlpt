@@ -69,7 +69,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/contact_us" className="hover:text-purple-500 transition">
-                  Varify Certificate
+                  Verify Certificate
                 </Link>
               </li>
               <li>

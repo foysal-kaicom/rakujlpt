@@ -103,7 +103,7 @@ export default function Certificate() {
                     bgColor="#FFFFFF"
                     level="H"
                   />
-                  <p className="mt-2 text-gray-600 text-sm text-center">Scan To Varify</p>
+                  <p className="mt-2 text-gray-600 text-sm text-center">Scan To Verify</p>
                 </div>
 
                 {/* Administrator Section */}

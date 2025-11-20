@@ -26,7 +26,7 @@ const navdata = [
       },
       {
         to: "/certificate",
-        label: "Varify Certificate",
+        label: "Verify Certificate",
       }
     ],
   },
