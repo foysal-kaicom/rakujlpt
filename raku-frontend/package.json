@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google/genai": "^1.30.0",
     "@types/next-auth": "^3.13.0",
     "axios": "^1.10.0",
     "html-react-parser": "^5.2.6",

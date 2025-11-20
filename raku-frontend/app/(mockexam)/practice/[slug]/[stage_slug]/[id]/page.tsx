@@ -13,6 +13,7 @@ import Link from "next/link";
 import Image from "next/image";
 import axiosInstance from "@/utils/axios";
 import { toast } from "sonner";
+import AIHint from "./AiHint";
 
 // Types
 
@@ -61,6 +62,10 @@ export default function PracticeQuestion() {
 
   const [questionsData, setQuestionsData] = useState<Question[]>([]);
   const [stageName, setStageName] = useState("");
+
+  const [aiHint, setAiHint] = useState("");
+  const [loadingHint, setLoadingHint] = useState(false);
+
   // console.log(totalDuration);
 
   useEffect(() => {
@@ -205,6 +210,38 @@ export default function PracticeQuestion() {
     }
   };
 
+  const getHint = async (question: {
+    questionText?: string;
+    audioUrl?: string;
+    imageUrl?: string;
+  }) => {
+    if (aiHint) return;
+    setLoadingHint(true);
+    try {
+      const res = await fetch("/api/hint", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(question),
+      });
+
+      // if (!res.ok) {
+      //   throw new Error(`Server error: ${res.status}`);
+      // }
+
+      const data = await res.json();
+      setAiHint(data.hint || "No hints available.");
+      return data.hint;
+    } catch (err: any) {
+      console.error("Failed to get AI hint:", err);
+      setAiHint("Failed to get hint. Please try again.");
+      return null;
+    } finally {
+      setLoadingHint(false);
+    }
+  };
+
   const resetQuestion = () => {
     setSelectedAnswer(null);
     setSelectedAnswers([]);
@@ -213,6 +250,7 @@ export default function PracticeQuestion() {
     setShowExplanation(false);
     setIsCorrect(null);
     setIsAnswered(false);
+    setAiHint("");
     // setTimeElapsed(0);
   };
 
@@ -399,7 +437,6 @@ export default function PracticeQuestion() {
                     )}
                   </div>
                 )}
-                
               </div>
 
               {/* Answer Options */}
@@ -459,29 +496,50 @@ export default function PracticeQuestion() {
                     );
                   })}
                 </div>
-               
               </div>
 
               {/* Hint Section */}
               {!showExplanation && (
                 <div className="mb-6">
                   <button
-                    onClick={() => setShowHint(!showHint)}
+                    onClick={() => {
+                      setShowHint(!showHint);
+
+                      // Prepare payload dynamically
+                      const payload: any = {};
+                      if (currentQuestion?.question_type === "text") {
+                        payload.questionText = currentQuestion?.question;
+                      } else if (currentQuestion?.question_type === "audio") {
+                        payload.audioUrl = currentQuestion?.audio_file;
+                        payload.imageUrl = currentQuestion?.question;
+                      }
+
+                      getHint(payload);
+                    }}
                     className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors mx-auto cursor-pointer"
                   >
                     <Lightbulb className="w-5 h-5 shake-pause" />
-                    <span className="font-semibold">
-                      {showHint ? "Hide Hints" : "Show Hints"}
+                    <span
+                      className={`font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-400 tracking-wide drop-shadow-md cursor-pointer transition-transform duration-300`}
+                    >
+                      {showHint
+                        ? "Hide AI Hints"
+                        : "Get Hints from AI Assistant"}
                     </span>
                   </button>
 
                   {showHint && (
                     <div className="mt-4 p-4 bg-yellow-50 border-2 border-yellow-200 rounded-xl">
                       <div className="flex gap-3">
-                        <Lightbulb className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-                        <p className="text-gray-700">
-                          {currentQuestion.hints ?? "No hints available."}
-                        </p>
+                        <Lightbulb className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5 shake-pause" />
+                        {loadingHint ? (
+                          <p className="text-gray-800 font-medium">
+                            Thinking
+                            <span className="animate-dots ml-1">...</span>
+                          </p>
+                        ) : (
+                          <AIHint hint={aiHint} />
+                        )}
                       </div>
                     </div>
                   )}
