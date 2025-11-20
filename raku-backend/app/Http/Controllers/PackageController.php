@@ -12,22 +12,22 @@ use App\Models\UserSubscriptionDetails;
 use App\Notifications\CandidateNotification;
 use App\Http\Resources\PackageDetailResource;
 use App\Http\Controllers\Api\SslCommerzPaymentController;
-
+use Yajra\DataTables\Facades\DataTables;
 
 class PackageController extends Controller
 {
     public function index()
     {
         $packages = Package::with('package_details')
-        ->orderByRaw('ISNULL(`order`), `order` ASC')
-        // ->orderBy('order', 'asc')
-        ->get();
+            ->orderByRaw('ISNULL(`order`), `order` ASC')
+            // ->orderBy('order', 'asc')
+            ->get();
         return view('packages.index', compact('packages'));
     }
 
     public function create()
     {
-        $exams = Exam::all(); 
+        $exams = Exam::all();
         return view('packages.create', compact('exams'));
     }
 
@@ -62,9 +62,9 @@ class PackageController extends Controller
 
     public function edit(Package $package)
     {
-        $exams = Exam::all(); 
+        $exams = Exam::all();
         $package->load('package_details');
-        return view('packages.edit', compact('package','exams'));
+        return view('packages.edit', compact('package', 'exams'));
     }
 
     public function update(Request $request, Package $package)
@@ -104,8 +104,8 @@ class PackageController extends Controller
         $package->delete();
         return redirect()->route('packages.index')->with('success', 'Package deleted successfully');
     }
-    
-    
+
+
 
     // // Initiate package payment
     // public function subscribe(Request $request, SslCommerzPaymentController $sslController)
@@ -146,11 +146,11 @@ class PackageController extends Controller
     //     return $sslController->payNow($userSubscription);
     // }
 
-        //With renew & free package handling
-    
+    //With renew & free package handling
 
-    
-    
+
+
+
     // Attend exam
     public function attendExam(PackageDetail $detail)
     {
@@ -164,5 +164,102 @@ class PackageController extends Controller
 
         $subscription->increment('count');
         return redirect()->back()->with('success', 'Exam attended successfully');
+    }
+
+
+    public function userSubscriptions(Request $request)
+    {
+        // If request comes from DataTables AJAX
+        if ($request->ajax()) {
+
+            $query = UserSubscription::with([
+                'package:id,name',
+                'candidate:id,first_name'
+            ]);
+
+            // (Optional future filters)
+            if ($request->status && $request->status !== 'all') {
+                $query->where('status', $request->status);
+            }
+            if ($request->payment_status && $request->payment_status !== 'all') {
+                $query->where('payment_status', $request->payment_status);
+            }
+
+            $data = $query->orderBy('created_at', 'desc')->get();
+
+            return DataTables::of($data)
+
+                ->addColumn('candidate', function ($row) {
+                    if (! $row->candidate) {
+                        return '-';
+                    }
+                    $url = route('candidate.edit', $row->candidate->id);
+                    return '<a class="hover:underline" href="' . e($url) . '" style="color: #667eea; font-weight: 500;">'
+                        . e($row->candidate->first_name ?? 'N/A') .
+                        '</a>';
+                })
+
+                ->addColumn('package', function ($row) {
+                    if (! $row->package) {
+                        return '-';
+                    }
+                    $url = route('packages.edit', $row->package->id);
+                    return '<a class="hover:underline" href="' . e($url) . '" style="color: #667eea;">'
+                        . e($row->package->name ?? 'N/A') .
+                        '</a>';
+                })
+
+                ->addColumn('total_payable', function ($row) {
+                    return '৳' . number_format($row->total_payable, 2);
+                })
+
+                ->addColumn('status', function ($row) {
+                    $status = strtolower($row->status ?? 'unknown');
+                    $colors = [
+                        'confirmed' => 'green',
+                        'pending'   => 'orange',
+                        'cancelled' => 'red',
+                    ];
+                    $color = $colors[$status] ?? 'gray';
+                    $label = ucfirst($status);
+                    return '<span class="px-2 py-1 rounded text-white bg-' . $color . '-500 text-xs">' . e($label) . '</span>';
+                })
+                ->addColumn('payment_status', function ($row) {
+                    $status = strtolower($row->payment_status ?? 'unknown');
+                    $colors = [
+                        'success'   => 'green',
+                        'pending'   => 'orange',
+                        'failed'    => 'red',
+                        'cancelled' => 'gray',
+                    ];
+                    $color = $colors[$status] ?? 'gray';
+                    $label = ucfirst($status);
+                    return '<span class="px-2 py-1 rounded text-white bg-' . $color . '-500 text-xs">' . e($label) . '</span>';
+                })
+
+                ->addColumn('subscription_date', function ($row) {
+                    return $row->created_at->format('Y-m-d H:i:s');
+                })
+
+                ->rawColumns(['candidate', 'package', 'payment_status', 'status', 'action'])
+                ->make(true);
+        }
+
+
+        // KPIs (non-AJAX)
+        $userSubscriptions = UserSubscription::all();
+
+        $totalSubscriptions = $userSubscriptions->count();
+        $totalRevenue = $userSubscriptions->sum('total_payable');
+        $confirmed = $userSubscriptions->where('status', 'confirmed')->count();
+        $pending = $userSubscriptions->where('status', 'pending')->count();
+
+
+        return view('packages.user_subscriptions', compact(
+            'totalSubscriptions',
+            'totalRevenue',
+            'confirmed',
+            'pending'
+        ));
     }
 }

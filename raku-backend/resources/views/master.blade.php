@@ -198,7 +198,7 @@
             document.querySelectorAll(".menu-link").forEach(link => {
                 if (link.pathname === currentPath) {
                     // Highlight current link
-                    link.classList.add("bg-indigo-700", 'text-white');
+                    // link.classList.add("bg-indigo-700", 'text-white');
  
                     // Check if it's inside a collapsible dropdown
                     const dropdownWrapper = link.closest("[data-target]");
