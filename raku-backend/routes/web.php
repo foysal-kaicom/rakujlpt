@@ -200,4 +200,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('stages', StageController::class);
     Route::post('/stages/{stage}/toggle-status', [StageController::class, 'toggleStatus'])->name('stages.toggleStatus');
 
+    Route::get('user-payments', [PackageController::class, 'userSubscriptions'])->name('user-payments');
+
 });
