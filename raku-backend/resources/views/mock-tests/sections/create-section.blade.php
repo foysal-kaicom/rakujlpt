@@ -19,7 +19,7 @@
         <div class="row g-4">
             <!-- Mock Test Selection -->
             <div class="col-md-12">
-                <label class="form-label fw-semibold">Select Mock Test Modules</label>
+                <label class="form-label fw-semibold">Select Mock Test Modules <span class="text-red-600">*</span></label>
                 <select name="mock_test_module_id" class="form-select form-select-lg shadow-sm rounded-2" required>
                     <option value="">-- Select a Module --</option>
 
@@ -35,14 +35,6 @@
                     @endforeach
                 </select>
 
-                {{-- <select name="mock_test_module_id" class="form-select form-select-lg shadow-sm rounded-2" required>
-                    <option value="" disabled selected>Select a Modules</option>
-                    @foreach($modules as $mockTestModule)
-                        <option value="{{ $mockTestModule->id }}" {{ old('mock_test_module_id') == $mockTestModule->id ? 'selected' : '' }}>
-                            {{ $mockTestModule->name }}
-                        </option>
-                    @endforeach
-                </select> --}}
                 @error('mock_test_module_id')
                 <small class="text-danger">{{ $message }}</small>
                 @enderror
@@ -52,7 +44,7 @@
         <!-- Section Title -->
         <div class="row g-4 pt-4">
             <div class="col-md-12">
-                <label class="form-label fw-semibold">Section Title</label>
+                <label class="form-label fw-semibold">Section Title <span class="text-red-600">*</span></label>
                 <input
                     type="text"
                     name="title"
@@ -68,7 +60,7 @@
         <!-- Section Slug -->
         <div class="row g-4 pt-4">
             <div class="col-md-12">
-                <label class="form-label fw-semibold">Section Slug</label>
+                <label class="form-label fw-semibold">Section Slug <span class="text-red-600">*</span></label>
                 <input
                     type="text"
                     name="slug"
@@ -76,6 +68,21 @@
                     class="form-control form-control-lg shadow-sm rounded-2"
                     placeholder="e.g. photo-description" />
                 @error('slug')
+                <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+        </div>
+
+        <div class="row g-4 pt-4">
+            <div class="col-md-12">
+                <label class="form-label fw-semibold">Question Limit <span class="text-red-600">*</span></label>
+                <input
+                    type="number"
+                    name="question_limit"
+                    value="{{ old('question_limit') }}"
+                    class="form-control form-control-lg shadow-sm rounded-2"
+                    placeholder="e.g. 10" />
+                @error('question_limit')
                 <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div>

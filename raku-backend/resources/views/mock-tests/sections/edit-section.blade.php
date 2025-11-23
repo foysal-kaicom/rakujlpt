@@ -73,6 +73,21 @@
                 @enderror
             </div>
         </div>
+
+        <div class="row g-4 pt-4">
+            <div class="col-md-12">
+                <label class="form-label fw-semibold">Question Limit <span class="text-red-600">*</span></label>
+                <input
+                    type="number"
+                    name="question_limit"
+                    value="{{ old('question_limit',$section->question_limit) }}"
+                    class="form-control form-control-lg shadow-sm rounded-2"
+                    placeholder="e.g. 10" />
+                @error('question_limit')
+                <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+        </div>
         
         <!-- Sample Question (TinyMCE editor) -->
         <div class="mt-4">

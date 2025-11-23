@@ -20,6 +20,7 @@
                     <th>Exam</th>
                     <th>Module</th>
                     <th>Section</th>
+                    <th>Question Limit</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -48,6 +49,7 @@ $(document).ready(function() {
             { data: 'exam', name: 'exam' },
             { data: 'module', name: 'module' },
             { data: 'section', name: 'section' },
+            { data: 'question_limit', name: 'question_limit' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false },
         ]
     });

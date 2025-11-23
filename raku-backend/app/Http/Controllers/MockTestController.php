@@ -53,6 +53,7 @@ class MockTestController extends Controller
                     'exam' => $module->exam->title,
                     'module' => $module->name,
                     'section' => $section->title,
+                    'question_limit' => $section->question_limit,
                     'actions' => '<a href="'.route('mock-tests.section.edit', $section->id).'" class="items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-green-500 text-white hover:bg-green-600 shadow-md transition">Edit</a>'
                 ];
             }
@@ -124,6 +125,7 @@ class MockTestController extends Controller
             'mock_test_module_id' => 'required|exists:mock_test_modules,id',
             'title' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:mock_test_sections,slug',
+            'question_limit' => 'required|numeric|min:1',
             'sample_question' => 'required|string',
         ]);
 
@@ -131,6 +133,7 @@ class MockTestController extends Controller
             'mock_test_module_id' => $request->input('mock_test_module_id'),
             'title' => $request->input('title'),
             'slug' => $request->input('slug'),
+            'question_limit' => $request->input('question_limit'),
             'sample_question' => $request->input('sample_question'),
         ]);
 
@@ -157,6 +160,8 @@ class MockTestController extends Controller
             'title' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:mock_test_sections,slug,' . $id,
             'sample_question' => 'required|string',
+            'question_limit' => 'required|numeric|min:1',
+
         ]);
 
         $section = MockTestSection::findOrFail($id);
@@ -165,6 +170,7 @@ class MockTestController extends Controller
             'mock_test_module_id' => $request->input('mock_test_module_id'),
             'title' => $request->input('title'),
             'slug' => $request->input('slug'),
+            'question_limit' => $request->input('question_limit'),
             'sample_question' => $request->input('sample_question'),
         ]);
 
