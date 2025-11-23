@@ -24,14 +24,14 @@
                     <option value="">-- Select a Module --</option>
 
                     @foreach($modules as $examTitle => $group)
-                        <optgroup label="{{ $examTitle }}">
-                            @foreach($group as $module)
-                                <option value="{{ $module->id }}">
-                                    {{-- {{ $module->name }} --}}
-                                    {{ $module->exam->title }} - {{ $module->name }}
-                                </option>
-                            @endforeach
-                        </optgroup>
+                    <optgroup label="{{ $examTitle }}">
+                        @foreach($group as $module)
+                        <option value="{{ $module->id }}">
+                            {{-- {{ $module->name }} --}}
+                            {{ $module->exam->title }} - {{ $module->name }}
+                        </option>
+                        @endforeach
+                    </optgroup>
                     @endforeach
                 </select>
 
@@ -87,7 +87,7 @@
                 @enderror
             </div>
         </div>
-        
+
         <!-- Sample Question (TinyMCE editor) -->
         <div class="mt-4">
             <label for="sample_question" class="form-label fw-semibold">Sample Question</label>
@@ -101,32 +101,47 @@
             @enderror
         </div>
 
-        <div class="row ">
-            <div class="col-md-6 mt-6">
-                <label class="form-label fw-semibold">Sample Image </label>
-                <input
-                    type="file"
-                    name="sample_image"
-                    class="form-control form-control-lg shadow-sm rounded-2"
-                    placeholder="e.g. Samle Image" />
-                <!-- @error('title')
-                <small class="text-danger">{{ $message }}</small>
-                @enderror -->
-                <img src="" alt="" class="col-12">
-            </div>
-         <div class="col-md-6 mt-6">
-                <label class="form-label fw-semibold">Sample Audio</label>
-                <input
-                    type="file"
-                    name="sample_audio"
-                    class="form-control form-control-lg shadow-sm rounded-2"
-                    placeholder="e.g. Samle Audio" />
-                <!-- @error('title')
-                <small class="text-danger">{{ $message }}</small>
-                @enderror -->
-                <audio src="" class="col-12"></audio>
-            </div>
+       <div class="row ">
+    <div class="col-md-6 mt-6">
+        <label class="form-label fw-semibold">Sample Image</label>
+
+        <input
+            type="file"
+            id="sample_image"
+            name="sample_image"
+            class="form-control form-control-lg shadow-sm rounded-2"
+            accept="image/*"
+        />
+
+        <div class="position-relative mt-3 d-inline-block col-12" style="max-width: 300px;">
+            <img id="image_preview" src="" class="w-100 d-none rounded" />
+            <button id="remove_image" type="button"
+                class="btn btn-danger btn-sm position-absolute top-0 end-0 rounded-circle d-none"
+                style="transform: translate(40%, -40%);">✖</button>
         </div>
+    </div>
+
+    <div class="col-md-6 mt-6">
+        <label class="form-label fw-semibold">Sample Audio</label>
+
+        <input
+            type="file"
+            id="sample_audio"
+            name="sample_audio"
+            class="form-control form-control-lg shadow-sm rounded-2"
+            accept="audio/*"
+        />
+
+        <div class="position-relative mt-3 d-inline-block col-12" style="max-width: 300px;">
+            <audio id="audio_preview" controls class="w-100 d-none"></audio>
+            <button id="remove_audio" type="button"
+                class="btn btn-danger btn-sm position-absolute top-0 end-0 rounded-circle d-none"
+                style="transform: translate(40%, -40%);">✖</button>
+        </div>
+    </div>
+</div>
+
+
 
         <!-- Submit Button -->
         <div class="pt-4">
@@ -144,46 +159,104 @@
 
 @push('js')
 <script type="text/javascript">
-tinymce.init({
-  selector: '#editor',
-  menubar: false,
-  toolbar: 'bold italic furigana code',
-  extended_valid_elements: 'ruby,rt,rp',
-  setup: function (editor) {
-    editor.ui.registry.addButton('furigana', {
-      text: 'Furigana',
-      onAction: function () {
-        editor.windowManager.open({
-          title: 'Add Furigana',
-          body: {
-            type: 'panel',
-            items: [
-              { type: 'input', name: 'kanji', label: 'Kanji' },
-              { type: 'input', name: 'reading', label: 'Furigana' }
-            ]
-          },
-          buttons: [
-            { type: 'cancel', text: 'Close' },
-            { type: 'submit', text: 'Insert', primary: true }
-          ],
-          onSubmit: function (api) {
-            const data = api.getData();
-            editor.insertContent(`<ruby>${data.kanji}<rt>${data.reading}</rt></ruby>`);
-            api.close();
-          }
-        });
-      }
+    tinymce.init({
+        selector: '#editor',
+        menubar: false,
+        toolbar: 'bold italic furigana code',
+        extended_valid_elements: 'ruby,rt,rp',
+        setup: function(editor) {
+            editor.ui.registry.addButton('furigana', {
+                text: 'Furigana',
+                onAction: function() {
+                    editor.windowManager.open({
+                        title: 'Add Furigana',
+                        body: {
+                            type: 'panel',
+                            items: [{
+                                    type: 'input',
+                                    name: 'kanji',
+                                    label: 'Kanji'
+                                },
+                                {
+                                    type: 'input',
+                                    name: 'reading',
+                                    label: 'Furigana'
+                                }
+                            ]
+                        },
+                        buttons: [{
+                                type: 'cancel',
+                                text: 'Close'
+                            },
+                            {
+                                type: 'submit',
+                                text: 'Insert',
+                                primary: true
+                            }
+                        ],
+                        onSubmit: function(api) {
+                            const data = api.getData();
+                            editor.insertContent(`<ruby>${data.kanji}<rt>${data.reading}</rt></ruby>`);
+                            api.close();
+                        }
+                    });
+                }
+            });
+        }
     });
-  }
-});
 </script>
 <script>
-// Add any additional JavaScript if needed for slug generation based on title
-document.querySelector('input[name="title"]').addEventListener('input', function() {
-    const slugInput = document.querySelector('input[name="slug"]');
-    const slug = this.value.toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '');
-    slugInput.value = slug;
+    // Add any additional JavaScript if needed for slug generation based on title
+    document.querySelector('input[name="title"]').addEventListener('input', function() {
+        const slugInput = document.querySelector('input[name="slug"]');
+        const slug = this.value.toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '');
+        slugInput.value = slug;
+    });
+</script>
+
+<script>
+const imgInput = document.getElementById("sample_image");
+const imgPreview = document.getElementById("image_preview");
+const removeImage = document.getElementById("remove_image");
+
+imgInput.addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    if (file) {
+        imgPreview.src = URL.createObjectURL(file);
+        imgPreview.classList.remove("d-none");
+        removeImage.classList.remove("d-none");
+    }
 });
 
+removeImage.addEventListener("click", function () {
+    imgPreview.src = "";
+    imgPreview.classList.add("d-none");
+    removeImage.classList.add("d-none");
+    imgInput.value = "";
+});
+
+// AUDIO SECTION --------------------------
+
+const audioInput = document.getElementById("sample_audio");
+const audioPreview = document.getElementById("audio_preview");
+const removeAudio = document.getElementById("remove_audio");
+
+audioInput.addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    if (file) {
+        audioPreview.src = URL.createObjectURL(file);
+        audioPreview.classList.remove("d-none");
+        removeAudio.classList.remove("d-none");
+    }
+});
+
+removeAudio.addEventListener("click", function () {
+    audioPreview.src = "";
+    audioPreview.classList.add("d-none");
+    removeAudio.classList.add("d-none");
+    audioInput.value = "";
+});
 </script>
+
+
 @endpush

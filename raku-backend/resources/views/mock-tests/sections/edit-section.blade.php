@@ -113,7 +113,7 @@
                 <!-- @error('title')
                 <small class="text-danger">{{ $message }}</small>
                 @enderror -->
-                <img src="{{$section->sample_image}}" alt="" class="col-12">
+                <img src="{{$section->sample_image}}" alt="" class="col-3 mt-4">
             </div>
          <div class="col-md-6 mt-6">
                 <label class="form-label fw-semibold">Sample Audio</label>
@@ -125,7 +125,7 @@
                 <!-- @error('title')
                 <small class="text-danger">{{ $message }}</small>
                 @enderror -->
-                <audio src="{{$section->sample_audio}}" class="col-12"></audio>
+                <audio src="{{ $section->sample_audio }}" controls class="col-4 mt-4"></audio>
             </div>
         </div>
 
