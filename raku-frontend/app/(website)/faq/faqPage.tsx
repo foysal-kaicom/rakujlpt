@@ -48,7 +48,7 @@ export default function FAQ({ faqs }: FAQProps) {
       <WebpageWrapper>
         <BreadCrumb breadCrumbData={breadCrumbData}/>
         <div className="relative z-10 max-w-3xl mx-auto text-center pt-15">
-          <h1 className="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent drop-shadow-sm">
+          <h1 className="text-5xl md:text-6xl font-extrabold pb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent drop-shadow-sm">
             Got Questions?
           </h1>
           <p className="text-gray-700 mb-16 text-lg">

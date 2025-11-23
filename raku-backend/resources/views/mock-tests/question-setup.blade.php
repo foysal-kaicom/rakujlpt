@@ -13,105 +13,112 @@
           class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
           @foreach($mockTestSections as $section)
           <option value="{{$section->id}}">{{optional($section->mockTestModule)->name}} - {{$section->title}}</option>
-          @endforeach
-        </select>
-      </div> --}}
+      @endforeach
+      </select>
+    </div> --}}
 
 
-      
-
-        <!-- Exam Dropdown -->
-        <div class="space-y-2">
-          <label for="examSelect" class="block font-semibold">Select Exam</label>
-          <select id="examSelect" name="exam_id"
-            class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
-            <option value="">Select Exam</option>
-            @foreach($exams as $exam)
-              <option value="{{ $exam->id }}">{{ $exam->title }}</option>
-            @endforeach
-          </select>
-        </div>
-
-        <!-- Module Dropdown -->
-        <div class="space-y-2">
-          <label for="moduleSelect" class="block font-semibold">Select Module</label>
-          <select id="moduleSelect" name="module_id"
-            class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
-            <option value="">Select Module</option>
-          </select>
-        </div>
-
-        <!-- Section Dropdown -->
-        <div class="space-y-2">
-          <label for="sectionSelect" class="block font-semibold">Select Section</label>
-          <select id="sectionSelect" name="section_id"
-            class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
-            <option value="">Select Section</option>
-          </select>
-        </div>
-
-     
 
 
-      <div class="space-y-2">
-        <label for="questionTypeSelect" class="block font-semibold">Group Type</label>
-        <select id="questionTypeSelect" name="group_type"
-          class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
-          <option value="single" selected>Single</option>
-          <option value="multiple">Multiple</option>
-        </select>
-      </div>
-
-      <div class="space-y-2">
-        <label for="groupBySelect" class="block font-semibold">Group By </label>
-        <select id="groupBySelect" name="group_by"
-          class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
-          <option value="">Select Group</option>
-          <option value="passage">Passage</option>
-          <option value="audio">Audio</option>
-        </select>
-        <span class="text-xs text-gray-400"> (If multiple questions under a passage or audio) </span>
-      </div>
-
-      <div class="space-y-2">
-        <label class="block font-semibold">Set No</label>
-        <input 
-            type="number" 
-            name="set_no" 
-            min="0" 
-            max="10" 
-            class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
-            placeholder="Enter set number"
-        >
-    </div>
-    
-    
- 
-      <div id="questionQuantityWrapper" class="space-y-2 hidden">
-        <label for="questionQuantity" class="block font-semibold">Question Quantity</label>
-        <select id="questionQuantity" name="question_quantity"
-          class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-        </select>
-      </div>
+    <!-- Exam Dropdown -->
+    <div class="space-y-2">
+      <label for="examSelect" class="block font-semibold">Select Exam</label>
+      <select id="examSelect" name="exam_id"
+        class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
+        <option value="">Select Exam</option>
+        @foreach($exams as $exam)
+        <option value="{{ $exam->id }}">{{ $exam->title }}</option>
+        @endforeach
+      </select>
     </div>
 
-    <div class="flex gap-5">
-      <div id="fileInputWrapper" class="space-y-2 hidden mt-3">
-        <label for="fileInput" class="block font-semibold">Audio file</label>
-        <input type="file" id="fileInput" name="passage_or_file"
-          class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full" />
-      </div>
-      <div id="passageTextareaWrapper" class="space-y-2 hidden mt-3 w-full">
-        <label for="passageTextarea" class="block font-semibold">Write Passage</label>
-        <textarea  rows="8" name="passage_or_file"
-          class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 tinymce"
-          placeholder="Write passage ..."></textarea>
-      </div>
+    <!-- Module Dropdown -->
+    <div class="space-y-2">
+      <label for="moduleSelect" class="block font-semibold">Select Module</label>
+      <select id="moduleSelect" name="module_id"
+        class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
+        <option value="">Select Module</option>
+      </select>
     </div>
+
+    <!-- Section Dropdown -->
+    <div class="space-y-2">
+      <label for="sectionSelect" class="block font-semibold">Select Section</label>
+      <select id="sectionSelect" name="section_id"
+        class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
+        <option value="">Select Section</option>
+      </select>
+    </div>
+
+
+
+
+    <div class="space-y-2">
+      <label for="questionTypeSelect" class="block font-semibold">Group Type</label>
+      <select id="questionTypeSelect" name="group_type"
+        class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
+        <option value="single" selected>Single</option>
+        <option value="multiple">Multiple</option>
+      </select>
+    </div>
+
+    <div class="space-y-2">
+      <label for="groupBySelect" class="block font-semibold">Group By </label>
+      <select id="groupBySelect" name="group_by"
+        class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
+        <option value="">Select Group</option>
+        <option value="passage">Passage</option>
+        <option value="audio">Audio</option>
+      </select>
+      <span class="text-xs text-gray-400"> (If multiple questions under a passage or audio) </span>
+    </div>
+
+    <div class="space-y-2">
+      <label class="block font-semibold">Set No</label>
+      <input
+        type="number"
+        name="set_no"
+        min="0"
+        max="10"
+        class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
+        placeholder="Enter set number">
+    </div>
+    <div class="space-y-2 col-span-2">
+      <label class="block font-semibold">Remarks</label>
+      <input
+        type="text"
+        name="Remarks"
+        class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
+        placeholder="Enter remarks">
+    </div>
+
+
+
+    <div id="questionQuantityWrapper" class="space-y-2 hidden">
+      <label for="questionQuantity" class="block font-semibold">Question Quantity</label>
+      <select id="questionQuantity" name="question_quantity"
+        class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="flex gap-5">
+    <div id="fileInputWrapper" class="space-y-2 hidden mt-3">
+      <label for="fileInput" class="block font-semibold">Audio file</label>
+      <input type="file" id="fileInput" name="passage_or_file"
+        class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full" />
+    </div>
+    <div id="passageTextareaWrapper" class="space-y-2 hidden mt-3 w-full">
+      <label for="passageTextarea" class="block font-semibold">Write Passage</label>
+      <textarea rows="8" name="passage_or_file"
+        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 tinymce"
+        placeholder="Write passage ..."></textarea>
+    </div>
+  </div>
   </div>
 
   <!-- Container for questions -->
@@ -306,45 +313,45 @@
 </script>
 <script>
   const examSelect = document.getElementById('examSelect');
-const moduleSelect = document.getElementById('moduleSelect');
-const sectionSelect = document.getElementById('sectionSelect');
+  const moduleSelect = document.getElementById('moduleSelect');
+  const sectionSelect = document.getElementById('sectionSelect');
 
-examSelect.addEventListener('change', function() {
-  const examId = this.value;
-  moduleSelect.innerHTML = '<option value="">Select Module</option>';
-  sectionSelect.innerHTML = '<option value="">Select Section</option>';
+  examSelect.addEventListener('change', function() {
+    const examId = this.value;
+    moduleSelect.innerHTML = '<option value="">Select Module</option>';
+    sectionSelect.innerHTML = '<option value="">Select Section</option>';
 
-  if (examId) {
-    fetch(`/mock-tests/modules/${examId}`)
-      .then(response => response.json())
-      .then(modules => {
-        modules.forEach(module => {
-          const option = document.createElement('option');
-          option.value = module.id;
-          option.textContent = module.name;
-          moduleSelect.appendChild(option);
+    if (examId) {
+      fetch(`/mock-tests/modules/${examId}`)
+        .then(response => response.json())
+        .then(modules => {
+          modules.forEach(module => {
+            const option = document.createElement('option');
+            option.value = module.id;
+            option.textContent = module.name;
+            moduleSelect.appendChild(option);
+          });
         });
-      });
-  }
-});
+    }
+  });
 
-moduleSelect.addEventListener('change', function() {
-  const moduleId = this.value;
-  sectionSelect.innerHTML = '<option value="">Select Section</option>';
+  moduleSelect.addEventListener('change', function() {
+    const moduleId = this.value;
+    sectionSelect.innerHTML = '<option value="">Select Section</option>';
 
-  if (moduleId) {
-    fetch(`/mock-tests/sections/${moduleId}`)
-      .then(response => response.json())
-      .then(sections => {
-        sections.forEach(section => {
-          const option = document.createElement('option');
-          option.value = section.id;
-          option.textContent = section.title;
-          sectionSelect.appendChild(option);
+    if (moduleId) {
+      fetch(`/mock-tests/sections/${moduleId}`)
+        .then(response => response.json())
+        .then(sections => {
+          sections.forEach(section => {
+            const option = document.createElement('option');
+            option.value = section.id;
+            option.textContent = section.title;
+            sectionSelect.appendChild(option);
+          });
         });
-      });
-  }
-});
+    }
+  });
 </script>
 
 @endsection

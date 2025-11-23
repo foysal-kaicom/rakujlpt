@@ -17,34 +17,32 @@
         </div>
 
         <div class="p-8 rounded-b-lg bg-white border">
-            <div class="flex flex-wrap gap-4 items-center justify-between">
+            <div class="grid grid-cols-4 gap-x-4">
+                {{-- Exam --}}
+                <div class="font-semibold space-y-2 w-full">
+                    <p><b> Exam: </b></p>
+                    <p class="bg-gray-50 text-sm border rounded px-3 py-2 w-full"> {{ optional($mockTestSections->first()->mockTestModule->exam)->title ?? 'No Exam' }}</p>
 
-                <div class="space-y-2">
-                    <div class="flex items-center space-x-4">
-                        {{-- Exam --}}
-                        <span>
-                            <b> Exam: </b>{{ optional($mockTestSections->first()->mockTestModule->exam)->title ?? 'No Exam' }}
-                        </span>
+                </div>
+                {{-- Module --}}
+                <div class="font-semibold space-y-2 w-full">
+                    <p><b> Module: </b></p>
+                    <p class="bg-gray-50 text-sm border rounded px-3 py-2 w-full"> {{ optional($mockTestSections->first()->mockTestModule)->name ?? 'No Module' }}</p>
 
-                        {{-- Module --}}
-                        <span class="font-medium">
-                            <b> Module:</b> {{ optional($mockTestSections->first()->mockTestModule)->name ?? 'No Module' }}
-                        </span>
+                </div>
 
-                        {{-- Dropdown --}}
-                        <div class="flex items-center space-x-4">
-                            <label for="sectionSelect" class="block font-semibold"><b>Section</b></label>
+                {{-- Dropdown --}}
+                <div class="space-y-2 w-full">
+                    <label for="sectionSelect" class="block font-semibold"><b>Section</b></label>
 
-                            <select id="sectionSelect" name="mock_test_section_id" class="bg-white drop-shadow-md text-sm border rounded px-3 py-2">
-                                @foreach ($mockTestSections as $section)
-                                <option value="{{ $section->id }}"
-                                    {{ optional($question->mockTestQuestionGroup)->mock_test_section_id == $section->id ? 'selected' : '' }}>
-                                    {{ $section->title }}
-                                </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
+                    <select id="sectionSelect" name="mock_test_section_id" class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-full">
+                        @foreach ($mockTestSections as $section)
+                        <option value="{{ $section->id }}"
+                            {{ optional($question->mockTestQuestionGroup)->mock_test_section_id == $section->id ? 'selected' : '' }}>
+                            {{ $section->title }}
+                        </option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="space-y-2">
@@ -65,7 +63,16 @@
                         min="0"
                         max="10"
                         value="{{ $question->mockTestQuestionGroup->set_no }}"
-                        class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
+                </div>
+
+                <div class="space-y-2 col-span-2">
+                    <label class="block font-semibold">Remarks</label>
+                    <input
+                        type="text"
+                        name="Remarks"
+                        class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
+                        placeholder="Enter remarks">
                 </div>
 
             </div>

@@ -71,10 +71,10 @@ export default function MockTestSelect() {
               <WebpageWrapper>
                 <BreadCrumb breadCrumbData={breadCrumbData} />
                 <div className="md:w-2/3 xl:w-1/2 mt-15 text-center mx-auto">
-                  <h2 className="text-4xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-500 to-purple-500">
+                  <h2 className="text-4xl sm:text-5xl font-extrabold pb-3 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-500 to-purple-500">
                     Test Your Progress
                   </h2>
-                  <p className="text-gray-600 mt-3 text-lg">
+                  <p className="text-gray-600 text-lg">
                     Ready to level up your{" "}
                     <span className="font-semibold text-pink-500">
                       Japanese?
