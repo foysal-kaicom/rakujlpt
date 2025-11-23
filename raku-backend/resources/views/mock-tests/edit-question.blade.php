@@ -144,11 +144,15 @@
                 <!-- Image Question Input -->
                 <div class="space-y-2 col-span-3 hidden" id="question_image_div">
                     <label class="block font-semibold">Upload Image</label>
-                    <div class="flex items-center gap-4">
-                        <input type="file" name="question_image" class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-3/4" />
-                        <div id="image_preview" class="w-1/2">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex gap-4 flex-col">
+                            <input type="file" name="question_image" class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-full" />
+                            <textarea placeholder="Enter Question hints" class="border p-2"></textarea>
+                        </div>
+
+                        <div id="image_preview" class=" flex justify-end">
                             @if (filter_var($question->title, FILTER_VALIDATE_URL) && preg_match('/\.(jpeg|jpg|png|gif)$/', $question->title))
-                            <img src="{{ $question->title }}" alt="Question Image" class="max-w-full border h-auto">
+                            <img src="{{ $question->title }}" alt="Question Image" class="lg:w-1/2 border h-auto">
                             @endif
                         </div>
                     </div>
