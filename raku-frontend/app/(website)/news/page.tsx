@@ -69,7 +69,7 @@ export default async function AllNewsPage() {
           <div className="pt-5">
             <BreadCrumb breadCrumbData={breadCrumbData} />
             <div className="w-1/2 mt-5">
-              <HeadLine2 preText="" subText="" mainText="News" />
+              <HeadLine2 preText="" subText="" mainText="Blogs" />
             </div>
           </div>
 

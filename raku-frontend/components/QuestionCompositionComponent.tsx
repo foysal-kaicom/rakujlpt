@@ -37,7 +37,7 @@ export default function QuestionCompositionComponent({
                 sections.
               </p>
 
-              <div className="mt-8 grid sm:grid-cols-3 gap-6 text-left">
+              <div className="mt-8 grid md:grid-cols-3 gap-6 text-left">
                 <div className="p-8 bg-white/80 backdrop-blur-md rounded-2xl shadow-lg hover:-translate-y-2 transition-transform duration-300">
                   <h3 className="text-xl font-bold text-indigo-600 mb-3">
                     🈶 Language Knowledge
@@ -73,7 +73,7 @@ export default function QuestionCompositionComponent({
               </div>
 
               <div className="mt-10 text-sm text-gray-800 font-medium">
-                🏅 Levels: N5 → N1 | ⏰ Duration: 90–170 mins (varies by level)
+                🏅 Levels: N5 → N1 | ⏰ Duration: <b>90–170 mins</b> (varies by level)
               </div>
             </div>
           </section>
