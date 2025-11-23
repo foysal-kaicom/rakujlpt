@@ -36,13 +36,15 @@ export default function AboutJPT() {
               {/* Left content */}
               <div className="lg:w-1/2 space-y-6">
                 <h2 className="text-4xl sm:text-5xl font-extrabold leading-snug bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-400 to-purple-500 animate-gradient-x">
-                  Fun & Interactive Japanese Learning
+                  Your Exciting Journey to Japan Starts Here!
                 </h2>
                 <p className="text-lg sm:text-xl text-gray-700/90">
-                  Practice{" "}
-                  <span className="font-bold text-indigo-500">JPT & JLPT</span>{" "}
-                  exams, track your skills, and have a blast while learning! Our
-                  platform is perfect for anyone dreaming of going to Japan.
+                  Dreaming of Japan? Start here! Enjoy interactive lessons,
+                  track your progress, and prepare for{" "}
+                  <span className="font-bold text-indigo-500">
+                    JPT & JLPT with RakuJLPT
+                  </span>{" "}
+                  —your perfect study partner.
                 </p>
 
                 {/* Funky feature cards */}

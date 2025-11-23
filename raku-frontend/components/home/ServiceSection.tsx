@@ -7,14 +7,14 @@ export default function ServiceSection() {
       name: "JPT",
       img: "/assets/brands/jpt.png",
       background: "/assets/japan/j.jpg",
-      text: "Practice real-time JPT mock exams to improve your test-taking speed and confidence.",
+      text: "Practice real-time JPT mock exams to enhance your test-taking speed,accuracy, confidence & score.",
       status: 1,
     },
     {
       name: "JLPT",
       img: "/assets/brands/jlpt.png",
       background: "/assets/japan/j2.jpg",
-      text: "Prepare for all JLPT levels (N5–N1) with grammar, reading, and listening exercises.",
+      text: "Practice real-time JLPT mock exams and prepare for all levels (N5–N1) with focused grammar, reading, and listening exercises.",
       status: 1,
     },
     {
@@ -35,7 +35,7 @@ export default function ServiceSection() {
 
       <div className="px-6 lg:px-8 relative container mx-auto text-center text-black">
         <h2 className="text-4xl font-bold mb-6">
-          Practice for{" "}
+          Mock Test for{" "}
           <span className="bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
             JPT
           </span>
@@ -43,16 +43,16 @@ export default function ServiceSection() {
           <span className="bg-linear-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
             JLPT
           </span>{" "}
-          &
+          {/* &
           <span className="bg-linear-to-r from-pink-400 to-indigo-400 bg-clip-text text-transparent">
             {" "}
             NAT
-          </span>
+          </span> */}
         </h2>
         <p className="text-gray-600 max-w-2xl mx-auto mb-12">
-          Boost your Japanese language skills with our interactive mock tests
-          and real exam-style practice designed for every level — from beginners
-          to advanced learners.
+          Guarantee Your pass! Practice with our interactive mock tests like as
+          the real exam. Our system is built to boost your skills from N5
+          beginners to N1 experts.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -93,7 +93,10 @@ export default function ServiceSection() {
         </div>
 
         <div className="mt-12">
-          <Link href="/mock_test_select" className="px-8 py-3 rounded-full bg-linear-to-r from-blue-500 to-purple-500 text-white font-semibold hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] transition-all duration-300 drop-shadow-sm drop-shadow-violet-600 border-b border-white/50">
+          <Link
+            href="/mock_test_select"
+            className="px-8 py-3 rounded-full bg-linear-to-r from-blue-500 to-purple-500 text-white font-semibold hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] transition-all duration-300 drop-shadow-sm drop-shadow-violet-600 border-b border-white/50"
+          >
             Start Practicing Now
           </Link>
         </div>

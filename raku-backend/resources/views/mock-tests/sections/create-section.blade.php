@@ -101,6 +101,33 @@
             @enderror
         </div>
 
+        <div class="row ">
+            <div class="col-md-6 mt-6">
+                <label class="form-label fw-semibold">Sample Image </label>
+                <input
+                    type="file"
+                    name="image"
+                    class="form-control form-control-lg shadow-sm rounded-2"
+                    placeholder="e.g. Samle Image" />
+                <!-- @error('title')
+                <small class="text-danger">{{ $message }}</small>
+                @enderror -->
+                <img src="" alt="" class="col-12">
+            </div>
+         <div class="col-md-6 mt-6">
+                <label class="form-label fw-semibold">Sample Audio</label>
+                <input
+                    type="file"
+                    name="audio"
+                    class="form-control form-control-lg shadow-sm rounded-2"
+                    placeholder="e.g. Samle Audio" />
+                <!-- @error('title')
+                <small class="text-danger">{{ $message }}</small>
+                @enderror -->
+                <audio src="" class="col-12"></audio>
+            </div>
+        </div>
+
         <!-- Submit Button -->
         <div class="pt-4">
             <button type="submit"

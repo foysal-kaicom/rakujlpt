@@ -34,14 +34,14 @@ export default async function TestimonialsSection() {
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Success <span className="text-blue-600">Stories</span>
           </h2>
-          <p className="text-xl text-gray-600">
-            Join thousands of students who achieved their Japanese language
-            goals with us.
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Explore real stories of learners who advanced their Japanese
+            proficiency through our Mock Test platform.
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {testimonials.slice(0,3).map((testimonial, index) => (
+          {testimonials.slice(0, 3).map((testimonial, index) => (
             <div
               key={index}
               className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
