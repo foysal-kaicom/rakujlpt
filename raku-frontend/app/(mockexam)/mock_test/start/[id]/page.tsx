@@ -654,7 +654,7 @@ export default function ExamPage() {
                       </div>
 
                       <div
-                        className="mt-3"
+                        className="mt-3 text-white"
                         dangerouslySetInnerHTML={{
                           __html: (
                             currentSection.sample_question ?? ""

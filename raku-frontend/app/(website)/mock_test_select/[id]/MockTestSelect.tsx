@@ -75,7 +75,9 @@ export default function MockTestQuestionComposition() {
                   <li>
                     The exam duration is{" "}
                     <span className="font-semibold text-blue-600">
-                      50 minutes
+                      {" "}
+                      {type == "jpt" ? "50 " : "90 to 170 "}
+                      minutes
                     </span>
                     .
                   </li>
@@ -106,8 +108,7 @@ export default function MockTestQuestionComposition() {
                   </p>
                   <p className="text-xs text-gray-500 mt-2 font-medium">
                     All rights reserved by{" "}
-                    <span className="font-semibold text-blue-600">Raku</span>
-                    .
+                    <span className="font-semibold text-blue-600">Raku</span>.
                   </p>
                 </div>
               </div>

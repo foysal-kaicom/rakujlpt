@@ -75,15 +75,22 @@ export default function MockTestSelect() {
                     Test Your Progress
                   </h2>
                   <p className="text-gray-600 mt-3 text-lg">
-                    Select your mock test & start your{" "}
+                    Ready to level up your{" "}
                     <span className="font-semibold text-pink-500">
-                      Japanese journey
+                      Japanese?
                     </span>{" "}
-                    today!
+                    Pick your exam and start practicing with real exam- style
+                    mock tests—anytime, anywhere.
                   </p>
                 </div>
                 <div className="mt-16">
-                  <div className={`gap-6 sm:gap-10 ${mockTests.length>2 ? "grid grid-cols-1 lg:grid-cols-3" : "grid sm:grid-cols-2 max-w-4xl mx-auto"}`}>
+                  <div
+                    className={`gap-6 sm:gap-10 ${
+                      mockTests.length > 2
+                        ? "grid grid-cols-1 lg:grid-cols-3"
+                        : "grid sm:grid-cols-2 max-w-4xl mx-auto"
+                    }`}
+                  >
                     {mockTests &&
                       mockTests.map((test) => (
                         <div

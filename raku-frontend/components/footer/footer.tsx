@@ -29,7 +29,8 @@ export default function Footer() {
               />
             </Link>
             <p className="text-sm text-gray-500">
-              Empowering learners worldwide with modern e-learning courses.
+              Empowering Japanese learners with modern, high-quality e-learning
+              solutions and real-time mock tests.
             </p>
             <div className="mt-6 flex space-x-4">
               <Link
@@ -58,22 +59,34 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Company</h3>
             <ul className="space-y-2 text-gray-500 text-sm">
               <li>
-                <Link href="/about_us" className="hover:text-purple-500 transition">
+                <Link
+                  href="/about_us"
+                  className="hover:text-purple-500 transition"
+                >
                   About Raku
                 </Link>
               </li>
               <li>
-                <Link href="/contact_us" className="hover:text-purple-500 transition">
+                <Link
+                  href="/contact_us"
+                  className="hover:text-purple-500 transition"
+                >
                   Contact Us
                 </Link>
               </li>
               <li>
-                <Link href="/contact_us" className="hover:text-purple-500 transition">
+                <Link
+                  href="/contact_us"
+                  className="hover:text-purple-500 transition"
+                >
                   Verify Certificate
                 </Link>
               </li>
               <li>
-                <Link href="/terms_condition" className="hover:text-purple-500 transition">
+                <Link
+                  href="/terms_condition"
+                  className="hover:text-purple-500 transition"
+                >
                   Terms & Condition
                 </Link>
               </li>
@@ -84,7 +97,6 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Resources</h3>
             <ul className="space-y-2 text-gray-500 text-sm">
-             
               <li>
                 <Link href="/faq" className="hover:text-purple-500 transition">
                   FAQ
@@ -96,12 +108,18 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="/refund_and_cancellation" className="hover:text-purple-500 transition">
+                <a
+                  href="/refund_and_cancellation"
+                  className="hover:text-purple-500 transition"
+                >
                   Refund & Cancellation
                 </a>
               </li>
               <li>
-                <a href="/privacy_policy" className="hover:text-purple-500 transition">
+                <a
+                  href="/privacy_policy"
+                  className="hover:text-purple-500 transition"
+                >
                   Privacy Policy
                 </a>
               </li>
@@ -133,7 +151,7 @@ export default function Footer() {
         <div className="border-t border-purple-300 text-gray-500 text-sm py-6">
           <div className="flex flex-col md:flex-row justify-center items-center">
             <p>
-              © {new Date().getFullYear()} Your Company. All rights reserved.
+              © {new Date().getFullYear()} RAKU JLPT. All rights reserved.
             </p>
           </div>
         </div>
