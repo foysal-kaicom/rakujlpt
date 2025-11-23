@@ -34,10 +34,10 @@ class CandidateController extends Controller
             $livingCountry = $request->get('living_country', 'all'); // Get living_country filter
     
             if ($status === 'all') {
-                $query = Candidate::select(['id', 'first_name', 'last_name', 'email', 'status', 'phone_number', 'gender', 'photo', 'currently_living_country', 'deleted_at']);
+                $query = Candidate::select(['id', 'first_name', 'last_name', 'current_package_name','email', 'status', 'phone_number', 'gender', 'photo', 'currently_living_country', 'deleted_at']);
             } else {
                 $query = Candidate::where('status', 'active')
-                    ->select(['id', 'first_name', 'last_name', 'email', 'status', 'photo', 'phone_number', 'gender', 'currently_living_country', 'deleted_at']);
+                    ->select(['id', 'first_name', 'last_name', 'email','current_package_name', 'status', 'photo', 'phone_number', 'gender', 'currently_living_country', 'deleted_at']);
             }
     
             if ($livingCountry !== 'all') {
@@ -51,16 +51,35 @@ class CandidateController extends Controller
                     $editUrl = route('candidate.edit', $row->id);
                     return '<a href="' . $editUrl . '" class="text-blue-600 hover:underline">' . $row->first_name . ' ' . $row->last_name . '</a>';
                 })
-                ->addColumn('photo', function ($row) {
-                    $photoUrl = asset($row->photo ?: 'imagePH.png');
-                    return '<img src="' . $photoUrl . '" alt="Candidate Photo" style="width: 60px; height: 60px; border-radius: 50%;">';
-                })
+               ->addColumn('photo', function ($row) {
+    $photoUrl = asset($row->photo ?: 'imagePH.png');
+    $subscription = $row->current_package_name ?? 'Free';
+
+    return '
+        <div style="position: relative; width: 60px; height: 60px;">
+            <img src="'.$photoUrl.'" 
+                style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+            
+            <span style="
+                position: absolute;
+                bottom: -4px;
+                right: -4px;
+                background: #1e40af;
+                color: #fff;
+                font-size: 9px;
+                padding: 2px 5px;
+                border-radius: 10px;
+                ">
+                '.$subscription.'
+            </span>
+        </div>';
+})
+
                 ->addColumn('action', function ($row) {
                     if (!$row->deleted_at) {
-                        $viewApplicationUrl = route('candidate.applications', $row->id);
+                        // $viewApplicationUrl = route('candidate.applications', $row->id);
                         $deleteUrl = route('candidate.delete', $row->id);
-                        return '<a href="' . $viewApplicationUrl . '" class="px-3 py-2 rounded-lg text-xs font-medium bg-sky-500 text-white hover:bg-sky-600 shadow-md transition">View Application</a>
-                            <form action="' . $deleteUrl . '" method="POST" style="display:inline-block; margin-left:5px;" onsubmit="return confirm(\'Are you sure you want to delete this?\')">
+                        return '<form action="' . $deleteUrl . '" method="POST" style="display:inline-block; margin-left:5px;" onsubmit="return confirm(\'Are you sure you want to delete this?\')">
                                 ' . csrf_field() . '
                                 ' . method_field('DELETE') . '
                                 <button type="submit" class="px-3 py-2 rounded-lg text-xs font-medium bg-red-400 text-white hover:bg-red-500 shadow-md transition">Delete</button>

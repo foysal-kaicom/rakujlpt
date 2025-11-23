@@ -14,7 +14,7 @@
     </div>
 
     <!-- Form -->
-    <form action="{{ route('mock-tests.section.update', $section->id) }}" method="POST">
+    <form action="{{ route('mock-tests.section.update', $section->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="row g-4">
@@ -107,25 +107,25 @@
                 <label class="form-label fw-semibold">Sample Image </label>
                 <input
                     type="file"
-                    name="image"
+                    name="sample_image"
                     class="form-control form-control-lg shadow-sm rounded-2"
                     placeholder="e.g. Samle Image" />
                 <!-- @error('title')
                 <small class="text-danger">{{ $message }}</small>
                 @enderror -->
-                <img src="" alt="" class="col-12">
+                <img src="{{$section->sample_image}}" alt="" class="col-12">
             </div>
          <div class="col-md-6 mt-6">
                 <label class="form-label fw-semibold">Sample Audio</label>
                 <input
                     type="file"
-                    name="audio"
+                    name="sample_audio"
                     class="form-control form-control-lg shadow-sm rounded-2"
                     placeholder="e.g. Samle Audio" />
                 <!-- @error('title')
                 <small class="text-danger">{{ $message }}</small>
                 @enderror -->
-                <audio src="" class="col-12"></audio>
+                <audio src="{{$section->sample_audio}}" class="col-12"></audio>
             </div>
         </div>
 

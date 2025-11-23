@@ -14,7 +14,7 @@
     </div>
 
     <!-- Form -->
-    <form action="{{ route('mock-tests.section.store') }}" method="POST">
+    <form action="{{ route('mock-tests.section.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row g-4">
             <!-- Mock Test Selection -->
@@ -106,7 +106,7 @@
                 <label class="form-label fw-semibold">Sample Image </label>
                 <input
                     type="file"
-                    name="image"
+                    name="sample_image"
                     class="form-control form-control-lg shadow-sm rounded-2"
                     placeholder="e.g. Samle Image" />
                 <!-- @error('title')
@@ -118,7 +118,7 @@
                 <label class="form-label fw-semibold">Sample Audio</label>
                 <input
                     type="file"
-                    name="audio"
+                    name="sample_audio"
                     class="form-control form-control-lg shadow-sm rounded-2"
                     placeholder="e.g. Samle Audio" />
                 <!-- @error('title')
