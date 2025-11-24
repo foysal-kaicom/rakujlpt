@@ -75,7 +75,7 @@
         <label class="block font-semibold">Remarks</label>
         <input
           type="text"
-          name="Remarks"
+          name="remarks"
           class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
           placeholder="Enter remarks">
       </div>
@@ -259,7 +259,7 @@
             if (tinymce.get(`question-${index}`)) {
               tinymce.get(`question-${index}`).remove();
             }
-            wrapper.innerHTML = `<div class="flex gap-4 flex-col"> <input type="file" name="questions[${index}][question]" class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-[250px]" /> <textarea placeholder="Enter Question hints" class="border p-2"></textarea></div>`;
+            wrapper.innerHTML = `<div class="flex gap-4 flex-col"> <input type="file" name="questions[${index}][question]" class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-[250px]" /> <textarea name="questions[${index}][hints]" placeholder="Enter Question hints" class="border p-2"></textarea></div>`;
           } else {
             wrapper.innerHTML = `<textarea id="question-${index}" name="questions[${index}][question]" class="tinymce"></textarea>`;
             initTiny(`#question-${index}`);

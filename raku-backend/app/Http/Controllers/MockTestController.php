@@ -374,6 +374,7 @@ class MockTestController extends Controller
                 'content' => $content,
                 'question_quantity' => $request->question_quantity,
                 'set_no' => $request->set_no,
+                'remarks' => $request->remarks,
             ]);
 
             //store question into mockTestQuestion table
@@ -395,6 +396,7 @@ class MockTestController extends Controller
                     'mock_test_section_id' => $request->section_id,
                     'mock_test_question_group_id' => $questionGroup->id ?? null,
                     'type' => $q['question_type'],
+                    'hints' => $q['hints'] ?? null,
                 ]);
 
                 // Create Options
@@ -442,6 +444,7 @@ class MockTestController extends Controller
             'set_no' => 'required|integer',
             'content' => 'nullable|string',
             'audio-content' => 'nullable|file|mimes:mp3,ogg,wav',
+            'remarks' => 'nullable|string',
         ]);
 
         if ($validate->fails()) {
@@ -454,6 +457,7 @@ class MockTestController extends Controller
         $questionGroup->mock_test_section_id = $request->mock_test_section_id;
 
         $questionGroup->group_type = $request->group_type;
+        $questionGroup->remarks = $request->remarks;
 
         if ($request->hasFile('audio-content')) {
             $file = $request->file('audio-content');
@@ -491,6 +495,7 @@ class MockTestController extends Controller
             'options' => 'required|array|min:4|max:4',
             'options.*' => 'required|string',
             'question_image' => 'nullable|file|mimes:jpeg,jpg,png,gif|max:2048',
+            'hints' => 'nullable|string',
         ]);
 
         if ($validate->fails()) {
@@ -505,6 +510,7 @@ class MockTestController extends Controller
             $question = MockTestQuestion::findOrFail($id);
 
             $question->title = $request->question;
+            $question->hints = $request->hints;
 
             if ($request->question_type == 'image' && $request->hasFile('question_image')) {
                 $imageUploadResponse = $this->fileStorageService->uploadImageToCloud($request->file('question_image'), 'questions');
