@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('content')->nullable()->comment('It can be passage or audio file path.');
             $table->integer('question_quantity')->default(1);
             $table->enum('status', ['active', 'disabled'])->default('active');
+            $table->text('remarks')->nullable();
             $table->timestamps();
         });
     }
