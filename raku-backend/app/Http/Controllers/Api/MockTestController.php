@@ -103,7 +103,7 @@ class MockTestController extends Controller
         try {
             $data = $request->all();
 
-            // 🔹 Step 1: Validate exam_id
+            // Validate exam_id
             $request->validate([
                 'exam_id' => 'required|integer|exists:exams,id',
             ]);
@@ -116,7 +116,7 @@ class MockTestController extends Controller
                 'Listening' => ['answered' => 0, 'correct' => 0, 'wrong' => 0],
             ];
 
-            // 🔹 Step 2: Loop over numeric keys only
+            // Loop over numeric keys only
             foreach ($data as $key => $questionPayload) {
                 if ($key === 'exam_id') continue; // skip exam_id
                 if (!isset($questionPayload['id']) || !isset($questionPayload['answer'])) continue;
@@ -139,7 +139,7 @@ class MockTestController extends Controller
                 }
             }
 
-            // 🔹 Step 3: Create mock test record
+            // Create mock test record
             $mockTestRecord = MockTestRecords::create([
                 'candidate_id'              => $candidateId,
                 'exam_id'                   => $examId,
@@ -152,16 +152,16 @@ class MockTestController extends Controller
                 'wrong_listening_answer'    => $modulesScore['Listening']['wrong'],
             ]);
 
-            // 🔹 Step 4: Increment used_exam_attempt
+            // Increment used_exam_attempt
             $subscriptionId = UserSubscription::where('candidate_id', $candidateId)
                 ->where('status', 'confirmed')
+                ->orderBy('id', 'desc')
                 ->value('id'); // assuming one active subscription per user
             // dd($subscriptionId);
             if ($subscriptionId) {
                 $userSubscriptionDetail = UserSubscriptionDetails::where('user_subscription_id', $subscriptionId)
                     ->where('exam_id', $examId)
                     ->first();
-                // dd($userSubscriptionDetail);
 
                 if ($userSubscriptionDetail) {
                     $userSubscriptionDetail->increment('used_exam_attempt');
