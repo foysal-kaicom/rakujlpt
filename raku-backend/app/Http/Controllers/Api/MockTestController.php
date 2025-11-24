@@ -28,26 +28,27 @@ class MockTestController extends Controller
 
             $candidate = auth('candidate')->user();
 
-            // Step 1: Get all active subscriptions for this candidate
-            $activeSubscriptions = UserSubscription::where('candidate_id', $candidate->id)
+            // Get active subscriptions for this candidate
+            $latestSubscription = UserSubscription::where('candidate_id', $candidate->id)
                 ->where('status', 'confirmed')
                 ->where('payment_status', 'success')
-                ->pluck('id');
+                ->orderBy('id', 'desc')
+                ->first();
 
-            if ($activeSubscriptions->isEmpty()) {
+            if (!$latestSubscription) {
                 return $this->responseWithError("You do not have an active subscription for any exam.");
             }
 
-            // Step 2: Check if this exam exists in any active subscription
-            $subscriptionDetails = UserSubscriptionDetails::whereIn('user_subscription_id', $activeSubscriptions)
-                ->where('exam_id', $examId)
+            // Get all exams for this subscription
+            $subscriptionDetails = UserSubscriptionDetails::where('user_subscription_id', $latestSubscription->id)
+                ->where('exam_id', $examId) // you can remove this line if you want all exams
                 ->get();
 
             if ($subscriptionDetails->isEmpty()) {
-                return $this->responseWithError("This exam is not included in your active subscriptions.");
+                return $this->responseWithError("This exam is not included in your active subscription.");
             }
 
-            // Step 3: Verify remaining attempts
+            // Check remaining attempts for the requested exam
             $hasRemaining = $subscriptionDetails->contains(function ($detail) {
                 return $detail->used_exam_attempt < $detail->max_exam_attempt;
             });
@@ -56,15 +57,6 @@ class MockTestController extends Controller
                 return $this->responseWithError("You have reached the maximum attempt limit for this exam.");
             }
 
-            // Step 4: Fetch sections & questions
-            // $allSections = MockTestSection::with([
-            //         'mockTestQuestion',
-            //         'mockTestQuestionGroup',
-            //         'mockTestModule' => function ($query) use ($examId) {
-            //             $query->where('exam_id', $examId);
-            //         }
-            //     ])
-            //     ->get();
             $allSections = MockTestSection::with([
                 'mockTestQuestion',
                 'mockTestQuestionGroup',
