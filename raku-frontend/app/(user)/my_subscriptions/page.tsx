@@ -95,11 +95,16 @@ export default function SubscriptionPage() {
                   <CheckCircle className="w-10 h-10 text-white" />
                 </div>
                 <h2 className="text-2xl font-extrabold text-gray-800 tracking-tight">
-                  Current Plan: <span className="text-blue-600">{subscriptionData[0].package_name}</span>
+                  Current Plan:{" "}
+                  <span className="text-blue-600">
+                    {subscriptionData[0].package_name}
+                  </span>
                 </h2>
                 <p className="text-sm text-gray-500 max-w-sm">
                   You are currently enjoying the{" "}
-                  <span className="font-medium text-blue-600">{subscriptionData[0].package_name} plan</span>{" "}
+                  <span className="font-medium text-blue-600">
+                    {subscriptionData[0].package_name} plan
+                  </span>{" "}
                   with limited access to premium feature.
                 </p>
               </div>
@@ -149,35 +154,34 @@ export default function SubscriptionPage() {
           </div>
         )}
         {/* 📜 Subscription History */}
-        <div>
-          <h3 className="text-lg font-semibold mb-4 text-gray-800">
-            Subscription History
-          </h3>
-
-          <div className="overflow-clip rounded-2xl hidden md:block">
-            <table className="w-full border-separate border-spacing-0 rounded-xl bg-white border border-gray-200 shadow text-sm">
-              <thead>
-                <tr className="bg-gradient-to-r from-purple-700 via-violet-700 to-blue-700 text-white text-xs sm:text-sm">
-                  <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
-                    Package
-                  </th>
-                  <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200 hidden sm:table-cell">
-                    Price
-                  </th>
-                  <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
-                    Payment Status
-                  </th>
-                  <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
-                    Last Updated
-                  </th>
-                  <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {subscriptionData.length > 0 ? (
-                  subscriptionData.map((subscription, index) => (
+        {subscriptionData.length > 0 ? (
+          <>
+            <h3 className="text-lg font-semibold mb-4 text-gray-800">
+              Subscription History
+            </h3>
+            <div className="overflow-clip rounded-2xl hidden md:block">
+              <table className="w-full border-separate border-spacing-0 rounded-xl bg-white border border-gray-200 shadow text-sm">
+                <thead>
+                  <tr className="bg-gradient-to-r from-purple-700 via-violet-700 to-blue-700 text-white text-xs sm:text-sm">
+                    <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
+                      Package
+                    </th>
+                    <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200 hidden sm:table-cell">
+                      Price
+                    </th>
+                    <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
+                      Payment Status
+                    </th>
+                    <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
+                      Last Updated
+                    </th>
+                    <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {subscriptionData.map((subscription, index) => (
                     <tr
                       key={index}
                       className="bg-white hover:bg-blue-50 text-xs sm:text-sm transition"
@@ -217,22 +221,13 @@ export default function SubscriptionPage() {
                         )}
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={7} className="text-center text-gray-500 py-6">
-                      No subscription found.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-          {/* Mobile view */}
-          <div className="md:hidden mt-6 space-y-4">
-            {subscriptionData.length > 0 ? (
-              subscriptionData.map((subscription, index) => (
+            <div className="md:hidden mt-6 space-y-4">
+              {subscriptionData.map((subscription, index) => (
                 <div
                   key={index}
                   className="relative bg-gradient-to-br from-blue-50 to-pink-50 rounded-2xl p-6 border-2 border-purple-200 hover:border-purple-400 hover:shadow-2xl hover:shadow-purple-200/50 transition-all duration-300 hover:-translate-y-1 group overflow-hidden"
@@ -291,16 +286,41 @@ export default function SubscriptionPage() {
                         </div>
                       </div>
                     </div>
+                    {index === 0 && (
+                      <div className="flex justify-end">
+                        <button
+                          onClick={() => handleRenew(subscription.id)}
+                          className="text-sm inline-block px-6 py-1.5 bg-gradient-to-r from-purple-700 via-violet-700 to-blue-700 font-medium text-white rounded-full hover:opacity-80 transition"
+                        >
+                          Renew
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
-              ))
-            ) : (
-              <div className="text-center text-gray-500 py-6">
-                No subscriptions found.
-              </div>
-            )}
+              ))}
+            </div>
+          </>
+        ) : (
+          <div className="text-center text-gray-500 py-6 flex flex-col gap-3 justify-center items-center">
+            You have not purchased any subscription yet !!
+            <Link href={`/packages?callbackUrl=${encodeURIComponent("/my_subscriptions")}`}>
+              <button className="relative overflow-hidden text-sm md:text-base inline-block px-10 py-2 font-semibold text-white rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg shadow-purple-500/40 hover:shadow-purple-500/60 hover:scale-105 transition-all duration-300 ease-out">
+                <span className="relative z-10"> Buy Now</span>
+                <span className="absolute inset-0 bg-gradient-to-r from-purple-400/30 via-pink-400/30 to-blue-400/30 blur-xl opacity-60 transition-opacity duration-300 group-hover:opacity-90"></span>
+              </button>
+            </Link>
           </div>
-        </div>
+        )}
+        <div className="text-center text-gray-500 py-6 flex flex-col gap-3 justify-center items-center">
+            You have not purchased any subscription yet !!
+            <Link href={`/packages?callbackUrl=${encodeURIComponent("/my_subscriptions")}`}>
+              <button className="relative overflow-hidden text-sm md:text-base inline-block px-10 py-2 font-semibold text-white rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg shadow-purple-500/40 hover:shadow-purple-500/60 hover:scale-105 transition-all duration-300 ease-out">
+                <span className="relative z-10"> Buy Now</span>
+                <span className="absolute inset-0 bg-gradient-to-r from-purple-400/30 via-pink-400/30 to-blue-400/30 blur-xl opacity-60 transition-opacity duration-300 group-hover:opacity-90"></span>
+              </button>
+            </Link>
+          </div>
       </div>
     </>
   );
