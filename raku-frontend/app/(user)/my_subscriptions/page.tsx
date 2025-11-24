@@ -304,7 +304,7 @@ export default function SubscriptionPage() {
         ) : (
           <div className="text-center text-gray-500 py-6 flex flex-col gap-3 justify-center items-center">
             You have not purchased any subscription yet !!
-            <Link href={`/packages?callbackUrl=${encodeURIComponent("/my_subscriptions")}`}>
+            <Link href="/packages">
               <button className="relative overflow-hidden text-sm md:text-base inline-block px-10 py-2 font-semibold text-white rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg shadow-purple-500/40 hover:shadow-purple-500/60 hover:scale-105 transition-all duration-300 ease-out">
                 <span className="relative z-10"> Buy Now</span>
                 <span className="absolute inset-0 bg-gradient-to-r from-purple-400/30 via-pink-400/30 to-blue-400/30 blur-xl opacity-60 transition-opacity duration-300 group-hover:opacity-90"></span>
@@ -312,15 +312,6 @@ export default function SubscriptionPage() {
             </Link>
           </div>
         )}
-        <div className="text-center text-gray-500 py-6 flex flex-col gap-3 justify-center items-center">
-            You have not purchased any subscription yet !!
-            <Link href={`/packages?callbackUrl=${encodeURIComponent("/my_subscriptions")}`}>
-              <button className="relative overflow-hidden text-sm md:text-base inline-block px-10 py-2 font-semibold text-white rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg shadow-purple-500/40 hover:shadow-purple-500/60 hover:scale-105 transition-all duration-300 ease-out">
-                <span className="relative z-10"> Buy Now</span>
-                <span className="absolute inset-0 bg-gradient-to-r from-purple-400/30 via-pink-400/30 to-blue-400/30 blur-xl opacity-60 transition-opacity duration-300 group-hover:opacity-90"></span>
-              </button>
-            </Link>
-          </div>
       </div>
     </>
   );

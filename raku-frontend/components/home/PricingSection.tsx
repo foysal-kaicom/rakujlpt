@@ -17,6 +17,7 @@ interface Plan {
   description: string;
   short_description: string;
   is_popular?: boolean;
+  is_active:boolean
 }
 
 const defaultPlans: Plan[] = [];

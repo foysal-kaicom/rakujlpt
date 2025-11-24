@@ -22,6 +22,7 @@ interface Plan {
   description: string;
   short_description: string;
   is_popular?: boolean;
+  is_active:boolean
 }
 
 const breadCrumbData = [
@@ -99,7 +100,6 @@ const PackagesComponent = () => {
         /^https?:\/\/.+/.test(url)
       ) {
         window.location.href = url;
-        router.push(`url?callbackUrl`)
         toast.success(response?.data?.message || "Subscription successful");
       } else {
         toast.success(response?.data?.message || "Subscription successful");

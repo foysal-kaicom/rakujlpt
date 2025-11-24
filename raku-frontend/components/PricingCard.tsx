@@ -87,7 +87,7 @@ export default function PricingCard({ plan, subscribeModal }: any) {
             <button
               className={`w-full py-4 px-6 rounded-full font-semibold transition-all duration-300 cursor-not-allowed bg-gradient-to-r from-blue-100 to-purple-100 drop-shadow-sm drop-shadow-violet-600 border-b border-white/50`}
             >
-              Subscribe
+              {!plan.is_active ? 'Upcoming' : 'Subscribe'}
             </button>
           ) : (
             <button
