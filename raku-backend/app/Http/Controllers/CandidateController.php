@@ -52,28 +52,28 @@ class CandidateController extends Controller
                     return '<a href="' . $editUrl . '" class="text-blue-600 hover:underline">' . $row->first_name . ' ' . $row->last_name . '</a>';
                 })
                ->addColumn('photo', function ($row) {
-    $photoUrl = asset($row->photo ?: 'imagePH.png');
-    $subscription = $row->current_package_name ?? 'Free';
+                    $photoUrl = asset($row->photo ?: 'imagePH.png');
+                    $subscription = $row->current_package_name ?? 'Free';
 
-    return '
-        <div style="position: relative; width: 60px; height: 60px;">
-            <img src="'.$photoUrl.'" 
-                style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-            
-            <span style="
-                position: absolute;
-                bottom: -4px;
-                right: -4px;
-                background: #1e40af;
-                color: #fff;
-                font-size: 9px;
-                padding: 2px 5px;
-                border-radius: 10px;
-                ">
-                '.$subscription.'
-            </span>
-        </div>';
-})
+                    return '
+                        <div style="position: relative; width: 60px; height: 60px;">
+                            <img src="'.$photoUrl.'" 
+                                style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                            
+                            <span style="
+                                position: absolute;
+                                bottom: -4px;
+                                right: -4px;
+                                background: #1e40af;
+                                color: #fff;
+                                font-size: 9px;
+                                padding: 2px 5px;
+                                border-radius: 10px;
+                                ">
+                                '.$subscription.'
+                            </span>
+                        </div>';
+                })
 
                 ->addColumn('action', function ($row) {
                     if (!$row->deleted_at) {

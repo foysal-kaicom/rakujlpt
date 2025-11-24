@@ -66,17 +66,86 @@ class MockTestController extends Controller
 
     public function questionList(Request $request)
     {
-        $query = MockTestQuestion::with('section', 'mockTestQuestionGroup');
+        if ($request->ajax()) {
 
-        if ($request->has('section_id') && $request->section_id != 'all') {
-            $query->where('mock_test_section_id', $request->section_id);
+            $query = MockTestQuestion::with('section', 'mockTestQuestionGroup');
+
+            if ($request->section_id && $request->section_id != 'all') {
+                $query->where('mock_test_section_id', $request->section_id);
+            }
+
+            return datatables()->eloquent($query)
+                ->addColumn('question', function ($q) {
+
+                    $truncate = function ($text) {
+                        return strlen(strip_tags($text)) > 40
+                            ? mb_substr(strip_tags($text), 0, 40) . '...'
+                            : strip_tags($text);
+                    };
+                
+                    if ($q->mockTestQuestionGroup->group_type === 'audio') {
+                
+                        $audio = '
+                            <audio controls style="width:250px; height:25px;">
+                                <source src="' . e($q->mockTestQuestionGroup->content) . '" type="audio/mpeg">
+                            </audio>
+                        ';
+
+                        if ($q->type !== 'image') {
+                            return $audio . '<div>' . $truncate($q->title) . '</div>';
+                        }
+                        return $audio;
+                    }
+                    return $truncate($q->title);
+                })
+            
+
+                ->addColumn('section', function ($q) {
+                    $title = $q->section->title ?? '';
+                    $set = $q->mockTestQuestionGroup->set_no > 0 ? ' - S' . $q->mockTestQuestionGroup->set_no : '';
+                    return $title . $set;
+                })
+
+                ->addColumn('bundle_type', function ($q) {
+                    return $q->mockTestQuestionGroup->type ?? '';
+                })
+
+                ->addColumn('action', function ($row) {
+
+                    $editUrl = route('mock-tests.edit.question', $row->id);
+                    $deleteUrl = route('mock-tests.question.delete', $row->id);
+                
+                    $buttons = '';
+                
+                    // EDIT button
+                    $buttons .= '
+                        <a href="' . $editUrl . '" 
+                            class="px-3 py-2 rounded-lg text-xs font-medium bg-green-400 text-dark hover:bg-green-500 shadow-md transition me-2">
+                            Edit
+                        </a>
+                    ';
+                
+                    // DELETE button
+                    $buttons .= '
+                        <form action="' . $deleteUrl . '" method="POST" style="display:inline-block;"
+                            onsubmit="return confirm(\'Are you sure you want to delete this?\')">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button type="submit"
+                                class="px-3 py-2 rounded-lg text-xs font-medium bg-red-400 text-white hover:bg-red-500 shadow-md transition">
+                                Delete
+                            </button>
+                        </form>
+                    ';
+                
+                    return $buttons;
+                })
+
+                ->rawColumns(['question', 'action'])
+                ->make(true);
         }
 
-        $questions = $query->paginate(10);
-
         $sections = MockTestSection::all();
-
-        return view('mock-tests.question-list', compact('questions', 'sections'));
+        return view('mock-tests.question-list', compact('sections'));
     }
 
 

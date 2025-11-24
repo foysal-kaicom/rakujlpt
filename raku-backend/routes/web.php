@@ -30,6 +30,7 @@ use App\Http\Controllers\MockTestModuleController;
 use App\Http\Controllers\BusinessSettingController;
 use App\Http\Controllers\CertificateClaimContoller;
 use App\Http\Controllers\FeatureController;
+use App\Http\Controllers\OurTeamController;
 
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/do-login', [LoginController::class, 'doLogin'])->name('doLogin');
@@ -96,14 +97,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/edit/{id}', [ExamController::class, 'edit'])->name('exam.edit');
         Route::post('/update/{id}', [ExamController::class, 'update'])->name('exam.update');
         Route::post('{id}/toggle-status', [ExamController::class, 'toggleStatus'])->name('exam.toggleStatus');
-
-
-
-
-
-
-
-
 
 
         Route::get('/question-list', [MockTestController::class, 'questionList'])->name('question.list');
@@ -181,6 +174,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/update/{id}', [FeatureController::class, 'update'])->name('update');
         Route::get('/delete/{id}', [FeatureController::class, 'delete'])->name('destroy');
         Route::post('{id}/toggle-status', [FeatureController::class, 'toggleStatus'])->name('toggleStatus');
+    });
+
+    Route::group(['prefix' => 'our-team', 'as' => 'our-team.', 'module' => 'our-team'], function () {
+        Route::get('/', [OurTeamController::class, 'list'])->name('list');
+        Route::get('/create', [OurTeamController::class, 'create'])->name('create');
+        Route::post('/store', [OurTeamController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [OurTeamController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [OurTeamController::class, 'update'])->name('update');
     });
 
     Route::resource('packages', PackageController::class);
