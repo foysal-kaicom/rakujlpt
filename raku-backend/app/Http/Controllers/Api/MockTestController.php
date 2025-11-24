@@ -70,12 +70,12 @@ class MockTestController extends Controller
                 'mockTestQuestionGroup',
                 'mockTestModule'
             ])
-            ->whereHas('mockTestModule', function ($query) use ($examId) {
-                $query->where('exam_id', $examId);
-            })
-            ->get();
+                ->whereHas('mockTestModule', function ($query) use ($examId) {
+                    $query->where('exam_id', $examId);
+                })
+                ->get();
 
-          
+
             $examTitle = $allSections->first()->mockTestModule->exam->title ?? null;
             $sectionWiseQuestions = [];
 
@@ -84,7 +84,6 @@ class MockTestController extends Controller
 
                 if ($data) {
                     $sectionWiseQuestions[] = $data;
-                   
                 }
             }
             // return $this->responseWithSuccess($sectionWiseQuestions, "Questions generated for Exam ID: {$examId}");
@@ -92,7 +91,6 @@ class MockTestController extends Controller
                 'exam_title' => $examTitle,
                 'sections'   => $sectionWiseQuestions
             ], "Questions generated for Exam ID: {$examId}");
-            
         } catch (Throwable $ex) {
             return $this->responseWithError("Something went wrong.", $ex->getMessage());
         }
@@ -175,35 +173,44 @@ class MockTestController extends Controller
         }
     }
 
-    public function getTestResult(){
-        $id = Auth::guard('candidate')->id();
-        $testResults = MockTestRecords::where('candidate_id', $id)->get();
-        if(!$testResults || $testResults->isEmpty()){
-            return $this->responseWithError("No mock test records found.");
+    public function getTestResult()
+    {
+        try {
+            $id = Auth::guard('candidate')->id();
+            $testResults = MockTestRecords::where('candidate_id', $id)->get();
+            if (!$testResults || $testResults->isEmpty()) {
+                return $this->responseWithSuccess([], "No mock test records found.");
+            }
+            // $testResults = MockTestResultResource::collection(MockTestRecords::where('candidate_id', $id)->get());//need to use later
+
+            return $this->responseWithSuccess($testResults, "Mock test results fetched.");
+        } catch (Throwable $ex) {
+            return $this->responseWithError("Something went wrong", $ex->getMessage());
         }
-        // $testResults = MockTestResultResource::collection(MockTestRecords::where('candidate_id', $id)->get());//need to use later
-       
-        return $this->responseWithSuccess($testResults, "Mock test results fetched.");
     }
 
-    public function activeUserSubscriptionDetails(){
-        $candidateId = Auth::guard('candidate')->id();
-        // return $candidateId;
-        $activeSubscriptions = UserSubscription::where('candidate_id', $candidateId)
-            ->where('status', 'confirmed')
-            ->where('payment_status', 'success')
-            ->with('package')
-            ->orderBy('created_at', 'desc')
-            ->get();
+    public function activeUserSubscriptionDetails()
+    {
+        try {
+            $candidateId = Auth::guard('candidate')->id();
+            // return $candidateId;
+            $activeSubscriptions = UserSubscription::where('candidate_id', $candidateId)
+                ->where('status', 'confirmed')
+                ->where('payment_status', 'success')
+                ->with('package')
+                ->orderBy('created_at', 'desc')
+                ->get();
 
-        if ($activeSubscriptions->isEmpty()) {
-            return $this->responseWithError("You do not have an active subscription.");
+            if ($activeSubscriptions->isEmpty()) {
+                return $this->responseWithSuccess([], "You do not have an active subscription.");
+            }
+            // Use a resource for formatting the subscription details
+            return $this->responseWithSuccess(
+                UserSubscriptionResource::collection($activeSubscriptions),
+                "Active subscription details fetched."
+            );
+        } catch (Throwable $ex) {
+            return $this->responseWithError("Something went wrong", $ex->getMessage());
         }
-
-        // Use a resource for formatting the subscription details
-        return $this->responseWithSuccess(
-            UserSubscriptionResource::collection($activeSubscriptions),
-            "Active subscription details fetched."
-        );
     }
 }
