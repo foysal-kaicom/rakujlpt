@@ -3,11 +3,11 @@
 @section('contents')
 <div class="container">
     <!-- Question Group Edit Form -->
-    <form action="{{ route('mock-tests.question-group.update', $question->mockTestQuestionGroup->id) }}" class="mb-4" method="post" enctype="multipart/form-data">
+    <form action="{{ route('mock-tests.question-group.update', $question->mockTestQuestionGroup->id) . '?question_list_page=' . urlencode(request()->get('question_list_page', 1)) }}" class="mb-4" method="post" enctype="multipart/form-data">
         @csrf
         <div class="flex items-center justify-between p-[12px] rounded-t-lg bg-indigo-300">
             <h3 class="text-xl font-semibold text-black">Create Question Group</h3>
-            <a href="{{ route('mock-tests.question.list') }}"
+            <a href="{{ route('mock-tests.question.list', ['page' => request()->get('question_list_page', 1)]) }}"
                 class="inline-flex items-center px-4 py-2 text-indigo-700 border border-indigo-700 rounded hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-400">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -106,7 +106,7 @@
     </form>
 
     <!-- Edit Question Form -->
-    <form action="{{ route('mock-tests.question.update', $question->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('mock-tests.question.update', $question->id) . '?question_list_page=' . urlencode(request()->get('question_list_page', 1)) }}" method="POST" enctype="multipart/form-data">
         @csrf
         <h3 class="text-xl font-semibold p-[12px] rounded-t-lg text-black bg-indigo-300">Edit Question</h3>
         <div class="p-8 rounded-b-lg bg-white border mb-5">
