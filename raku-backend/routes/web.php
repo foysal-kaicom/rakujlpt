@@ -98,14 +98,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('{id}/toggle-status', [ExamController::class, 'toggleStatus'])->name('exam.toggleStatus');
 
 
-
-
-
-
-
-
-
-
         Route::get('/question-list', [MockTestController::class, 'questionList'])->name('question.list');
         Route::get('/module-info', [MockTestController::class, 'index'])->name('module-section.info');
         Route::get('/sections/fetch-modules', [MockTestController::class, 'sectionsWithModules'])->name('sections-with-modules.fetch');

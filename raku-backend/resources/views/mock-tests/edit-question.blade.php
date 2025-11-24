@@ -70,7 +70,8 @@
                     <label class="block font-semibold">Remarks</label>
                     <input
                         type="text"
-                        name="Remarks"
+                        name="remarks"
+                        value="{{$question->mockTestQuestionGroup->remarks}}"
                         class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
                         placeholder="Enter remarks">
                 </div>
@@ -147,7 +148,7 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div class="flex gap-4 flex-col">
                             <input type="file" name="question_image" class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-full" />
-                            <textarea placeholder="Enter Question hints" class="border p-2"></textarea>
+                            <textarea name="hints" placeholder="Enter Question hints" class="border p-2">{{$question->hints}}</textarea>
                         </div>
 
                         <div id="image_preview" class=" flex justify-end">

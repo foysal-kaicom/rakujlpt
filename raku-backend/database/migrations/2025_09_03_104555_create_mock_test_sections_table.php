@@ -17,9 +17,11 @@ return new class extends Migration
             // $table->foreignId('exam_id')->constrained('exams')->onDelete('cascade');
             $table->string('slug')->unique();
             $table->string('title');
-            $table->longText('sample_question')->nullable();
             $table->enum('status', ['active', 'disabled'])->default('active');
             $table->integer('question_limit')->default('1');
+            $table->longText('sample_question')->nullable();
+            $table->string('sample_audio')->nullable();
+            $table->string('sample_image')->nullable();
             $table->timestamps();
         });
     }
