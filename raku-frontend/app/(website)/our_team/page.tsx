@@ -1,50 +1,7 @@
+import { Metadata } from "next";
 import Image from "next/image";
-import { FaLinkedin, FaTwitter, FaGithub } from "react-icons/fa";
+import { FaLinkedin, FaFacebookSquare, FaGithub } from "react-icons/fa";
 import { IoPersonCircle } from "react-icons/io5";
-
-
-const teamMembers = [
-  {
-    name: "Arif Akib",
-    role: "Lead Developer",
-    image: "/team1.jpg",
-    social: {
-      linkedin: "#",
-      twitter: "#",
-      github: "#",
-    },
-  },
-  {
-    name: "Sarah Lee",
-    role: "UI/UX Designer",
-    image: "/team2.jpg",
-    social: {
-      linkedin: "#",
-      twitter: "#",
-      github: "#",
-    },
-  },
-  {
-    name: "David Kim",
-    role: "Project Manager",
-    image: "/team3.jpg",
-    social: {
-      linkedin: "#",
-      twitter: "#",
-      github: "#",
-    },
-  },
-  {
-    name: "Emily Clark",
-    role: "Marketing Strategist",
-    image: "/team4.jpg",
-    social: {
-      linkedin: "#",
-      twitter: "#",
-      github: "#",
-    },
-  },
-];
 
 interface Member {
   name:string,
@@ -56,6 +13,11 @@ interface Member {
   facebook_url:string,
   github_url:string,
 }
+
+export const metadata: Metadata = {
+  title: "Our Team",
+  description: "Explore Raku’s capable team",
+};
 
 const getTeamList = async (): Promise<Member[]> => {
   try {
@@ -92,7 +54,7 @@ export default async function OurTeamPage() {
               className="group relative bg-white rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 border border-blue-100 hover:-translate-y-2"
             >
               {/* Avatar */}
-              <div className="relative w-32 h-32 mx-auto mb-6">
+              <div className="relative w-32 h-32 mx-auto">
                 {member.photo ? 
                    <Image
                   src={member.photo}
@@ -104,10 +66,11 @@ export default async function OurTeamPage() {
                 < IoPersonCircle className="rounded-full size-32 object-cover group-hover:scale-110 transition-transform duration-300 text-purple-500 bg-purple-100"/>
                 }
                 
-                <span className="absolute min-w-30 bottom-0 translate-x-1/2 right-1/2 bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium">
-                  {member.designation}
-                </span>
+                
               </div>
+              <p className=" bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium mt-3 mb-4 w-40 mx-auto">
+                  {member.designation}
+                </p>
 
               {/* Name & Role */}
               <h3 className="text-xl font-bold text-gray-900">{member.name}</h3>
@@ -134,7 +97,7 @@ export default async function OurTeamPage() {
                     rel="noopener noreferrer"
                     className="hover:text-blue-700 transition-colors text-2xl"
                   >
-                    <FaTwitter />
+                    <FaFacebookSquare />
                   </a>
                 )}
                 {member.github_url && (

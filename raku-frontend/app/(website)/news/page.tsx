@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import BreadCrumb from "@/components/BreadCrumb";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import Image from "next/image";
@@ -19,6 +20,11 @@ interface NewsItem {
   author_name: string;
   author_designation: string;
 }
+
+export const metadata: Metadata = {
+  title: "Blogs",
+  description: "Discover blogs on Japanese language learning, exam preparation tips, study guides, and updates for JPT, JLPT, and NAT learners. Learn smarter with Raku’s expert content. Boost your Japanese proficiency with the Raku blog — packed with study tips, exam guidance, learning techniques, and insights for JPT, JLPT, and NAT success.",
+};
 
 async function getNewsData(): Promise<NewsItem[]> {
   try {
