@@ -83,7 +83,7 @@ export default function PricingCard({ plan, subscribeModal }: any) {
 
         {/* Subscribe Button */}
         <div className="w-full flex justify-center absolute bottom-5 left-0 px-8">
-          {user?.current_package_id == plan.id && user?.is_subscribed == 1 || plan.is_free == true && user?.is_free == 1 || !plan.is_active  ? (
+          {user?.current_package_id == plan.id && user?.is_subscribed == 1 || plan.is_free == true && user?.is_free == 1 || plan.is_active==0  ? (
             <button
               className={`w-full py-4 px-6 rounded-full font-semibold transition-all duration-300 cursor-not-allowed bg-gradient-to-r from-blue-100 to-purple-100 drop-shadow-sm drop-shadow-violet-600 border-b border-white/50`}
             >

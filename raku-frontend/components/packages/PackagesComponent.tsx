@@ -22,7 +22,7 @@ interface Plan {
   description: string;
   short_description: string;
   is_popular?: boolean;
-  is_active:boolean
+  is_active:number
 }
 
 const breadCrumbData = [
