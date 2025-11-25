@@ -66,10 +66,17 @@ class MockTestController extends Controller
 
     public function questionList(Request $request)
     {
+        // dd($request->section_id);
         if ($request->ajax()) {
 
             $query = MockTestQuestion::with('section', 'mockTestQuestionGroup');
-
+            
+            if ($request->exam_id && $request->exam_id != 'all') {
+                // $query->where('exam_id', $request->exam_id); //????
+            }
+            if ($request->module_id && $request->module_id != 'all') {
+                // $query->where('module_id', $request->module_id); //????
+            }
             if ($request->section_id && $request->section_id != 'all') {
                 $query->where('mock_test_section_id', $request->section_id);
             }
@@ -82,9 +89,9 @@ class MockTestController extends Controller
                             ? mb_substr(strip_tags($text), 0, 40) . '...'
                             : strip_tags($text);
                     };
-                
+
                     if ($q->mockTestQuestionGroup->group_type === 'audio') {
-                
+
                         $audio = '
                             <audio controls style="width:250px; height:25px;">
                                 <source src="' . e($q->mockTestQuestionGroup->content) . '" type="audio/mpeg">
@@ -98,7 +105,7 @@ class MockTestController extends Controller
                     }
                     return $truncate($q->title);
                 })
-            
+
 
                 ->addColumn('section', function ($q) {
                     $title = $q->section->title ?? '';
@@ -112,11 +119,11 @@ class MockTestController extends Controller
 
                 ->addColumn('action', function ($row) {
 
-                    $editUrl = route('mock-tests.edit.question', $row->id);
+                    $editUrl = route('mock-tests.edit.question', $row->id) . '?question_list_page=' . urlencode(request()->get('page', 1));
                     $deleteUrl = route('mock-tests.question.delete', $row->id);
-                
+
                     $buttons = '';
-                
+
                     // EDIT button
                     $buttons .= '
                         <a href="' . $editUrl . '" 
@@ -124,7 +131,7 @@ class MockTestController extends Controller
                             Edit
                         </a>
                     ';
-                
+
                     // DELETE button
                     $buttons .= '
                         <form action="' . $deleteUrl . '" method="POST" style="display:inline-block;"
@@ -136,7 +143,7 @@ class MockTestController extends Controller
                             </button>
                         </form>
                     ';
-                
+
                     return $buttons;
                 })
 
@@ -144,8 +151,9 @@ class MockTestController extends Controller
                 ->make(true);
         }
 
+        $exams = Exam::with('mockTestModules.sections')->get();
         $sections = MockTestSection::all();
-        return view('mock-tests.question-list', compact('sections'));
+        return view('mock-tests.question-list', compact('exams', 'sections'));
     }
 
 
@@ -532,7 +540,7 @@ class MockTestController extends Controller
             DB::commit();
 
             Toastr::success("Question Updated Successfully.");
-            return redirect()->route('mock-tests.question.list');
+            return redirect()->route('mock-tests.question.list', ['page' => request()->get('question_list_page', 1)]);
         } catch (Throwable $ex) {
             DB::rollBack();
             toastr()->error($ex->getMessage());
