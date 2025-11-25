@@ -4,7 +4,7 @@
 
 <div class="flex gap-3 text-xs sm:text-sm font-semibold text-gray-500 items-center w-full mb-[20px]">
     <div class="flex gap-3 items-center">
-        <a href="">
+        <a href="{{ route('our-team.list') }}">
             <p class="cursor-pointer line-clamp-1">Team Members</p>
         </a>
 
@@ -51,23 +51,24 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                <!-- Full Name (Long Field) -->
-                <div class="col-span-2">
+              
+            <!-- Full Name -->
+                <div>
                     <label class="block text-sm font-medium mb-1">Full Name</label>
                     <input type="text" name="name" value="{{ old('name') }}"
-                           class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                           placeholder="Enter full name..." required />
+                        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        placeholder="Enter full name..." required />
                     @error('name')
                     <div class="text-red-500 text-sm">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <!-- Email (Long Field) -->
-                <div class="col-span-2">
+                <!-- Email -->
+                <div>
                     <label class="block text-sm font-medium mb-1">Email</label>
                     <input type="email" name="email" value="{{ old('email') }}"
-                           class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                           placeholder="example@team.com" />
+                        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        placeholder="example@team.com" />
                     @error('email')
                     <div class="text-red-500 text-sm">{{ $message }}</div>
                     @enderror
@@ -122,6 +123,19 @@
                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                            placeholder="https://github.com/..." />
                     @error('github_url')
+                    <div class="text-red-500 text-sm">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">Serial No</label>
+                    <input type="number" name="serial_no" 
+                           value="{{ old('serial_no', 0) }}"
+                           min="0"
+                           class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                           placeholder="Enter serial number..." />
+                
+                    @error('serial_no')
                     <div class="text-red-500 text-sm">{{ $message }}</div>
                     @enderror
                 </div>

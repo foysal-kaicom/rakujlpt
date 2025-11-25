@@ -11,15 +11,18 @@ return new class extends Migration
         Schema::create('our_team', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('email')->nullable();
             $table->string('designation');
-            $table->string('email')->nullable()->unique();
             $table->text('description')->nullable();
-            $table->string('photo')->nullable(); // store file path or URL
+            $table->string('photo')->nullable();
             $table->string('linkedin_url')->nullable();
             $table->string('facebook_url')->nullable();
             $table->string('github_url')->nullable();
+            $table->integer('serial_no')->default(0);
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
+        
     }
 
     public function down()

@@ -53,6 +53,8 @@ Route::prefix('v1')->group(function () {
 
     Route::get('/feature/list', [CMSController::class, 'getFeatureList']);
 
+    Route::get('/our-member/list', [CMSController::class, 'getTeamMemberList']);
+
 
     // Route::group(['prefix' => 'center', 'as' => 'center.'], function () {
     //     Route::get('/list', [CenterController::class, 'list']);

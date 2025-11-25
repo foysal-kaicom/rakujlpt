@@ -123,6 +123,11 @@
                         <i class="fas fa-box-open text-xs"></i>
                         <span>Features</span>
                     </a>
+                    <a href="{{ route('our-team.list') }}"
+                        class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('our-team.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
+                        <i class="fa-solid fa-code"></i>
+                    <span>Our Team</span>
+                </a>
                 </div>
             </div>
 

@@ -19,6 +19,41 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
+    <style>
+        .statusbtn-active {
+            background-color: hsla(215, 94%, 42%, 0.879);
+            cursor: pointer;
+        }
+
+        .statusbtn-disabled {
+            background-color: hsla(358, 92%, 33%, 0.879);
+            cursor: pointer;
+        }
+
+        th a:hover {
+            color: #031a33;
+            text-decoration: underline;
+        }
+
+        .hover-effect:hover .badge {
+            background-color: rgb(29, 37, 43);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .toggle-switch-lg .form-check-input {
+            width: 3rem;
+            height: 1.5rem;
+            cursor: pointer;
+        }
+
+        .toggle-switch-lg .form-check-input:checked {
+            background-color: #28a745;
+            /* green for active */
+            border-color: #28a745;
+        }
+    </style>
+
     <!-- Table -->
     <div class="shadow-sm">
         <div class="p-0 min-w-[300px] overflow-x-auto">
@@ -30,10 +65,9 @@
                         <th class="px-4 py-3">Name</th>
                         <th class="px-4 py-3">Email</th>
                         <th class="px-4 py-3">Designation</th>
-                        <th class="px-4 py-3">LinkedIn</th>
-                        <th class="px-4 py-3">Facebook</th>
-                        <th class="px-4 py-3">Github</th>
-                        <th class="">Actions</th>
+                        <th class="px-4 py-3">Serial No.</th>
+                        <th class="px-4 py-3">Status</th>
+                        <th class="px-4 py-3">Actions</th>
                     </tr>
                 </thead>
 
@@ -57,41 +91,18 @@
                         <td class="px-4 py-3">{{ $member->name }}</td>
                         <td class="px-4 py-3">{{ $member->email ?? 'N/A' }}</td>
                         <td class="px-4 py-3">{{ $member->designation }}</td>
-
-                        <!-- LinkedIn -->
+                        <td class="px-4 py-3">{{ $member->serial_no }}</td>
                         <td class="px-4 py-3">
-                            @if($member->linkedin_url)
-                                <a href="{{ $member->linkedin_url }}" target="_blank"
-                                   class="text-blue-600 underline text-xs">
-                                    Visit Link
-                                </a>
-                            @else
-                                <span class="text-gray-400 text-xs">N/A</span>
-                            @endif
-                        </td>
-
-                        <!-- Facebook -->
-                        <td class="px-4 py-3">
-                            @if($member->facebook_url)
-                                <a href="{{ $member->facebook_url }}" target="_blank"
-                                   class="text-blue-600 underline text-xs">
-                                   Visit Link
-                                </a>
-                            @else
-                                <span class="text-gray-400 text-xs">N/A</span>
-                            @endif
-                        </td>
-
-                        <!-- Github -->
-                        <td class="px-4 py-3">
-                            @if($member->github_url)
-                                <a href="{{ $member->github_url }}" target="_blank"
-                                   class="text-blue-600 underline text-xs">
-                                   Visit Link
-                                </a>
-                            @else
-                                <span class="text-gray-400 text-xs">N/A</span>
-                            @endif
+                            <form action="{{ route('our-team.toggleStatus', $member->id) }}" method="POST" class="d-flex">
+                                @csrf
+                                <div class="form-check form-switch toggle-switch-lg">
+                                    <input class="form-check-input"
+                                        type="checkbox"
+                                        id="toggleExam{{ $member->id }}"
+                                        onchange="if(confirm('Are you sure you want to {{ $member->status ? 'disable' : 'enable' }} this exam?')) { this.form.submit(); } else { this.checked = !this.checked; }"
+                                        {{ $member->status ? 'checked' : '' }}>
+                                </div>
+                            </form>
                         </td>
 
                         <!-- Actions -->
@@ -103,14 +114,6 @@
                                 Edit
                             </a>
                             @endHasPermission
-
-                            {{-- @hasPermission('our-team.delete') --}}
-                            <a href=""
-                               onclick="return confirm('Are you sure you want to delete this member?')"
-                               class="ml-2 px-3 py-2 rounded-lg text-xs font-medium bg-red-400 text-white hover:bg-red-500 shadow-md transition">
-                                Delete
-                            </a>
-                            {{-- @endHasPermission --}}
 
                         </td>
                     </tr>
