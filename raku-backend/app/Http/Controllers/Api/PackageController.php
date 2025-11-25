@@ -169,6 +169,59 @@ class PackageController extends Controller
         return response()->json($paymentResponse);
     }
 
+    public function subscriptionDetails(Request $request)
+    {
+        try {
+
+            $request->validate([
+                'user_subscription_id' => 'required|exists:user_subscriptions,id'
+            ]);
+
+            $candidate = Auth::guard('candidate')->user();
+
+            // Fetch subscription with exam details
+            $subscription = UserSubscription::with('subscriptionDetails.exam')
+                ->where('candidate_id', $candidate->id)
+                ->where('id', $request->user_subscription_id)
+                ->first();
+
+            if (!$subscription) {
+                return $this->responseWithError('Not Found', 'Subscription not found.', 404);
+            }
+
+            // Format the details
+            $details = $subscription->subscriptionDetails->map(function ($detail) {
+
+                $remaining = (int) max(
+                    (int)$detail->max_exam_attempt - (int)$detail->used_exam_attempt,
+                    0
+                );
+
+                return [
+                    'exam_title'         => $detail->exam->title ?? 'Unknown',
+                    'max_attempts'       => (int) $detail->max_exam_attempt,
+                    'used_attempts'      => (int) $detail->used_exam_attempt,
+                    'remaining_attempts' => $remaining,
+                ];
+            });
+
+            return response()->json([
+                'status' => 'success',
+                'subscription_id' => (int) $subscription->id,
+                'details' => $details,
+            ]);
+
+        } catch (\Exception $e) {
+
+            // Catch any unexpected exception
+            return response()->json([
+                'status'  => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
 
     public function renewSubscription(Request $request, SslCommerzPaymentController $sslController)
     {
