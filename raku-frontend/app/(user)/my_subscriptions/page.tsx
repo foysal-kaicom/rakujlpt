@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import BreadCrumb from "@/components/BreadCrumb";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
 import Loader from "@/components/Loader";
+import PaginatedComponent from "@/components/PaginateComponent";
 
 interface SubscriptionItem {
   id: number;
@@ -33,6 +34,23 @@ export default function SubscriptionPage() {
     []
   );
   const [loading, setLoading] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  // Calculate pagination
+  const totalExams = subscriptionData.length;
+  const totalPages = Math.ceil(totalExams / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentSubcription = subscriptionData.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) setCurrentPage(page);
+  };
 
   const getSubscriptionData = async () => {
     setLoading(true);
@@ -181,7 +199,7 @@ export default function SubscriptionPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {subscriptionData.map((subscription, index) => (
+                  {currentSubcription.map((subscription, index) => (
                     <tr
                       key={index}
                       className="bg-white hover:bg-blue-50 text-xs sm:text-sm transition"
@@ -227,7 +245,7 @@ export default function SubscriptionPage() {
             </div>
 
             <div className="md:hidden mt-6 space-y-4">
-              {subscriptionData.map((subscription, index) => (
+              {currentSubcription.map((subscription, index) => (
                 <div
                   key={index}
                   className="relative bg-gradient-to-br from-blue-50 to-pink-50 rounded-2xl p-6 border-2 border-purple-200 hover:border-purple-400 hover:shadow-2xl hover:shadow-purple-200/50 transition-all duration-300 hover:-translate-y-1 group overflow-hidden"
@@ -300,6 +318,12 @@ export default function SubscriptionPage() {
                 </div>
               ))}
             </div>
+
+            <PaginatedComponent
+              handlePageChange={handlePageChange}
+              totalPages={totalPages}
+              currentPage={currentPage}
+            />
           </>
         ) : (
           <div className="text-center text-gray-500 py-6 flex flex-col gap-3 justify-center items-center">

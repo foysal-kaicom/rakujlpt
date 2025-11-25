@@ -8,6 +8,7 @@ import Loader from "@/components/Loader";
 import { toast } from "sonner";
 import axiosInstance from "@/utils/axios";
 import SuspenseLoader from "@/components/SuspenseLoader";
+import PaginatedComponent from "@/components/PaginateComponent";
 
 import {
   LineChart,
@@ -47,18 +48,32 @@ export default function MockExamResult() {
   ];
 
   const [resultData, setResultData] = useState<Exam[]>([]);
-  const [scoreData, setScoreData] = useState<ScoreData[]>([]);
-  const [highestScores, setHighestScores] = useState({
-    listening: 0,
-    reading: 0,
-    total: 0,
-  });
-  const [allTimeHighestScores, setAllTimeHighestScores] = useState({
-    listening: 0,
-    reading: 0,
-    total: 0,
-  });
+  // const [scoreData, setScoreData] = useState<ScoreData[]>([]);
+  // const [highestScores, setHighestScores] = useState({
+  //   listening: 0,
+  //   reading: 0,
+  //   total: 0,
+  // });
+  // const [allTimeHighestScores, setAllTimeHighestScores] = useState({
+  //   listening: 0,
+  //   reading: 0,
+  //   total: 0,
+  // });
   const [loading, setLoading] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  // Calculate pagination
+  const totalExams = resultData.length;
+  const totalPages = Math.ceil(totalExams / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentResult = resultData.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) setCurrentPage(page);
+  };
 
   const formatDate = (timestamp?: string | null): string => {
     if (!timestamp) return "N/A";
@@ -75,25 +90,25 @@ export default function MockExamResult() {
     return `${day}/${month}/${year}`;
   };
 
-  const getAllTimeHighest = (data: any[]) => {
-    return data.reduce(
-      (best, attempt) => {
-        const listeningScore = attempt.correct_listening_answer * 2.5;
-        const readingScore = attempt.correct_reading_answer * 2.5;
-        const totalScore = listeningScore + readingScore;
+  // const getAllTimeHighest = (data: any[]) => {
+  //   return data.reduce(
+  //     (best, attempt) => {
+  //       const listeningScore = attempt.correct_listening_answer * 2.5;
+  //       const readingScore = attempt.correct_reading_answer * 2.5;
+  //       const totalScore = listeningScore + readingScore;
 
-        if (totalScore > best.total) {
-          return {
-            listening: listeningScore,
-            reading: readingScore,
-            total: totalScore,
-          };
-        }
-        return best;
-      },
-      { listening: 0, reading: 0, total: 0 }
-    );
-  };
+  //       if (totalScore > best.total) {
+  //         return {
+  //           listening: listeningScore,
+  //           reading: readingScore,
+  //           total: totalScore,
+  //         };
+  //       }
+  //       return best;
+  //     },
+  //     { listening: 0, reading: 0, total: 0 }
+  //   );
+  // };
 
   const getMockTestResultData = async () => {
     setLoading(true);
@@ -102,32 +117,32 @@ export default function MockExamResult() {
       const data: Exam[] = response?.data?.data || [];
       setResultData(data);
 
-      // Transform API response -> chart-friendly data
-      const formatted = data.map((exam, index) => {
-        const listening = exam.correct_listening_answer * 2.5; // weighting
-        const reading = exam.correct_reading_answer * 2.5;
-        return {
-          test:
-            `${formatDate(exam.created_at)}-(T${index + 1})` ||
-            `Test ${index + 1}`,
-          listening,
-          reading,
-          total: listening + reading,
-        };
-      });
+      // // Transform API response -> chart-friendly data
+      // const formatted = data.map((exam, index) => {
+      //   const listening = exam.correct_listening_answer * 2.5; // weighting
+      //   const reading = exam.correct_reading_answer * 2.5;
+      //   return {
+      //     test:
+      //       `${formatDate(exam.created_at)}-(T${index + 1})` ||
+      //       `Test ${index + 1}`,
+      //     listening,
+      //     reading,
+      //     total: listening + reading,
+      //   };
+      // });
 
-      setScoreData(formatted);
-      const maxListening = Math.max(...formatted.map((d) => d.listening), 0);
-      const maxReading = Math.max(...formatted.map((d) => d.reading), 0);
-      const maxTotal = Math.max(...formatted.map((d) => d.total), 0);
+      // setScoreData(formatted);
+      // const maxListening = Math.max(...formatted.map((d) => d.listening), 0);
+      // const maxReading = Math.max(...formatted.map((d) => d.reading), 0);
+      // const maxTotal = Math.max(...formatted.map((d) => d.total), 0);
 
-      setHighestScores({
-        listening: maxListening,
-        reading: maxReading,
-        total: maxTotal,
-      });
-      const highest = getAllTimeHighest(data);
-      setAllTimeHighestScores(highest);
+      // setHighestScores({
+      //   listening: maxListening,
+      //   reading: maxReading,
+      //   total: maxTotal,
+      // });
+      // const highest = getAllTimeHighest(data);
+      // setAllTimeHighestScores(highest);
     } catch (error: any) {
       console.error(error);
       toast.error(error?.response?.data?.message || "Failed to get exam data");
@@ -395,7 +410,7 @@ export default function MockExamResult() {
                 </span>
               </div> */}
 
-              {resultData.length > 0 ? (
+              {currentResult.length > 0 ? (
                 <>
                   {/* Desktop Table */}
                   <div className="hidden md:block overflow-auto rounded-xl shadow-lg border border-gray-200 bg-white/50 backdrop-blur-lg">
@@ -417,7 +432,7 @@ export default function MockExamResult() {
                         </tr>
                       </thead>
                       <tbody>
-                        {resultData.map((c, i) => (
+                        {currentResult.map((c, i) => (
                           <tr
                             key={i}
                             className="bg-white/40 backdrop-blur-md hover:shadow-lg transition-all"
@@ -472,7 +487,7 @@ export default function MockExamResult() {
 
                   {/* Mobile Cards */}
                   <div className="md:hidden flex flex-col gap-4">
-                    {resultData.map((c, i) => (
+                    {currentResult.map((c, i) => (
                       <div
                         key={i}
                         className="bg-white shadow-sm rounded-lg p-4 hover:shadow-xl transition"
@@ -538,6 +553,13 @@ export default function MockExamResult() {
                       </div>
                     ))}
                   </div>
+
+                  {/* pagination  */}
+                  <PaginatedComponent
+                    handlePageChange={handlePageChange}
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                  />
                 </>
               ) : (
                 <div className="text-center text-gray-500 py-6 flex flex-col gap-3 justify-center items-center">
