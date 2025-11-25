@@ -80,6 +80,16 @@
                 @error('order') <div class="text-danger small">{{ $message }}</div> @enderror
             </div>
 
+
+
+            <div class="col-md-12 d-flex align-items-center">
+                <div class="form-check mt-4">
+                    <input class="form-check-input" type="checkbox" name="is_active" id="is_active"
+                        {{ $package->is_popular ? 'checked' : '' }}>
+                    <label for="is_active" class="form-check-label fw-semibold">Popular Package</label>
+                </div>
+            </div>
+
             <!-- Short Description -->
             <div class="col-md-12">
                 <label class="form-label fw-semibold">Short Description</label>

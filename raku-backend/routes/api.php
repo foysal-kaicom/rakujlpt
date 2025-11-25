@@ -31,7 +31,6 @@ Route::prefix('v1')->group(function () {
     Route::get('/roadmaps', [RoadmapController::class, 'getRoadmaps']);
     Route::get('/roadmaps/{slug}/stages', [RoadmapController::class, 'getStages']);
     Route::get('/subscriptions', [PackageController::class, 'show']);
-    Route::post('/subscribe', [PackageController::class, 'subscribe']);
 
 
     Route::get('/settings', [HomeController::class, 'settingsData']);
@@ -62,6 +61,7 @@ Route::prefix('v1')->group(function () {
 
     Route::group(['middleware' => 'auth:candidate'], function () {
 
+        Route::post('/subscribe', [PackageController::class, 'subscribe']);
 
         Route::group(['prefix' => 'candidate', 'as' => 'candidate.'], function () {
             Route::get('/dashboard', [CandidateController::class, 'dashboard']);

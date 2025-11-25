@@ -43,6 +43,7 @@ class PackageController extends Controller
             'description' => $request->description,
             'is_home' => $request->has('is_home') ? 1 : 0,
             'is_free' => $request->has('is_free') ? 1 : 0,
+            'is_active' => $request->has('is_active') ? 1 : 0,
             'order' => $request->order,
             // 'status' => $request->status,
         ]);
@@ -80,6 +81,7 @@ class PackageController extends Controller
             'status' => $request->status,
             'is_home' => $request->has('is_home') ? 1 : 0,
             'is_free' => $request->has('is_free') ? 1 : 0,
+            'is_active' => $request->has('is_active') ? 1 : 0,
             'order' => $request->order,
         ]);
 

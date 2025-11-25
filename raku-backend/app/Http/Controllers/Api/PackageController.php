@@ -57,10 +57,6 @@ class PackageController extends Controller
 
         $candidate = Auth::guard('candidate')->user();
 
-        if (!$candidate) {
-            return $this->responseWithError('Unauthorized', 'Please log in to subscribe to a package', 401);
-        }
-
         $package = Package::with('package_details.exam')->findOrFail($request->package_id);
 
         // Find previous successful subscription (if any)
