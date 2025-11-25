@@ -22,7 +22,7 @@ use App\Http\Controllers\Api\CandidateProgressController;
 use App\Http\Controllers\Api\SslCommerzPaymentController;
 
 Route::prefix('v1')->group(function () {
-
+        
     Route::post('/login', [CandidateController::class, 'doLogin']);
     Route::post('/google-login', [GoogleAuthController::class, 'googleLogin']);
 
@@ -75,6 +75,8 @@ Route::prefix('v1')->group(function () {
             Route::post('/post-verify-phone', [CandidateController::class, 'postVerifyPhoneNumber']);
 
             Route::post('/subscription-renew', [PackageController::class, 'renewSubscription']);
+            Route::get('/subscription-details', [PackageController::class, 'subscriptionDetails']);
+    
         });
 
         // Route::group(['prefix' => 'exam', 'as' => 'exam.'], function () {

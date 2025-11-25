@@ -29,14 +29,14 @@ class MockTestController extends Controller
             $candidate = auth('candidate')->user();
 
             // Get active subscriptions for this candidate
-            $latestSubscription = UserSubscription::where('candidate_id', $candidate->id)
-                ->where('status', 'confirmed')
-                ->where('payment_status', 'success')
-                ->orderBy('id', 'desc')
-                ->first();
+            $latestSubscription = UserSubscription::find($candidate->user_subscriptions_id);
 
             if (!$latestSubscription) {
-                return $this->responseWithError("You do not have an active subscription for any exam.");
+                return $this->responseWithSuccess(
+                    [],
+                    'You do not have an active subscription for any exam.',
+                    200
+                );
             }
 
             // Get all exams for this subscription

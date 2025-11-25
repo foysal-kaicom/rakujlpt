@@ -41,6 +41,7 @@ class PackageController extends Controller
                     'is_popular' => $package->is_popular,
                     'is_home' => $package->is_home,
                     'is_free' => $package->is_free,
+                    'is_active' => $package->is_active,
                     'sequence' => $package->order,
                     'package_details' => PackageDetailResource::collection($package->package_details),
                 ];
@@ -60,13 +61,9 @@ class PackageController extends Controller
         $package = Package::with('package_details.exam')->findOrFail($request->package_id);
 
         // Find previous successful subscription (if any)
-        $existingSubscription = UserSubscription::with('subscriptionDetails')
-            ->where('candidate_id', $candidate->id)
+        $existingSubscription = UserSubscription::where('id', $candidate->user_subscriptions_id)
             ->where('package_id', $package->id)
-            ->where('payment_status', 'success')
-            ->latest()
-            ->first();
-
+            ->exists();
 
         // ============================
         // FREE PACKAGE (Only once)
@@ -171,6 +168,59 @@ class PackageController extends Controller
 
         return response()->json($paymentResponse);
     }
+
+    public function subscriptionDetails(Request $request)
+    {
+        try {
+
+            $request->validate([
+                'user_subscription_id' => 'required|exists:user_subscriptions,id'
+            ]);
+
+            $candidate = Auth::guard('candidate')->user();
+
+            // Fetch subscription with exam details
+            $subscription = UserSubscription::with('subscriptionDetails.exam')
+                ->where('candidate_id', $candidate->id)
+                ->where('id', $request->user_subscription_id)
+                ->first();
+
+            if (!$subscription) {
+                return $this->responseWithError('Not Found', 'Subscription not found.', 404);
+            }
+
+            // Format the details
+            $details = $subscription->subscriptionDetails->map(function ($detail) {
+
+                $remaining = (int) max(
+                    (int)$detail->max_exam_attempt - (int)$detail->used_exam_attempt,
+                    0
+                );
+
+                return [
+                    'exam_title'         => $detail->exam->title ?? 'Unknown',
+                    'max_attempts'       => (int) $detail->max_exam_attempt,
+                    'used_attempts'      => (int) $detail->used_exam_attempt,
+                    'remaining_attempts' => $remaining,
+                ];
+            });
+
+            return response()->json([
+                'status' => 'success',
+                'subscription_id' => (int) $subscription->id,
+                'details' => $details,
+            ]);
+
+        } catch (\Exception $e) {
+
+            // Catch any unexpected exception
+            return response()->json([
+                'status'  => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
 
 
     public function renewSubscription(Request $request, SslCommerzPaymentController $sslController)

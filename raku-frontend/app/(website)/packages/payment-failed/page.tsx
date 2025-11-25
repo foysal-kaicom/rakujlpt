@@ -10,31 +10,12 @@ import axiosInstance from "@/utils/axios";
 
 export default function PaymentSuccessPage() {
   const router = useRouter();
-  const params = useParams();
-  const id = params.id;
-  const [bookingDetails, setBookingDetails] = useState({
-    total_payable: "",
-  });
+
   const breadCrumbData = [
     { name: "Home", to: "/" },
-    { name: "Payment failed", to: `/payment-failed/${id}` },
+    { name: "Payment failed", to: `/` },
   ];
 
-  useEffect(() => {
-    const bookingData = async () => {
-      try {
-        const response = await axiosInstance.get(`booking/view/${id}`);
-        const { total_payable } = response?.data?.data;
-        console.log(response);
-        setBookingDetails((prev) => ({
-          total_payable,
-        }));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    bookingData();
-  }, []);
 
   // Optional: Redirect after delay
   useEffect(() => {
@@ -62,9 +43,9 @@ export default function PaymentSuccessPage() {
             <p className="text-gray-500 text-sm md:text-base max-w-md">
               Your payment is failed
             </p>
-            <p className="text-gray-500 text-sm md:text-base max-w-md pb-2 border-b border-dashed border-gray-400">
+            {/* <p className="text-gray-500 text-sm md:text-base max-w-md pb-2 border-b border-dashed border-gray-400">
               Booking Number : {id}
-            </p>
+            </p> */}
             {/* <div className="flex gap-3 justify-between items-center text-gray-500">
               <p>Amount Paid : </p>
               <p>{bookingDetails?.total_payable} TK</p>

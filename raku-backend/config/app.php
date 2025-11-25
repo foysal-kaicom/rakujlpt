@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Raku Bangladesh'),
+    'name' => env('APP_NAME', 'Raku JLPT'),
 
     /*
     |--------------------------------------------------------------------------
@@ -30,7 +30,7 @@ return [
 
 
     'frontend' => [
-        'url' => env('FRONTEND_URL', 'https://kaicombd.com'),
+        'url' => env('FRONTEND_URL', 'https://rakujlpt.com'),
         'payment_success' => env('FRONTEND_PAYMENT_SUCCESS', '/packages/payment-success'),
         'payment_failed' => env('FRONTEND_PAYMENT_FAILED', '/payment-failed/{booking_id}'),
         'payment_cancel' => env('FRONTEND_PAYMENT_CANCEL', '/payment-cancel/{booking_id}'),
@@ -60,7 +60,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'https://admin.rakujlpt.com'),
 
     /*
     |--------------------------------------------------------------------------
@@ -105,7 +105,7 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
-    'key' => env('APP_KEY'),
+    'key' => env('APP_KEY','base64:Hd7O0yt5Df5wh2oMviKz7n9bNrr9olUQLhCfDoefZrg='),
 
     'previous_keys' => [
         ...array_filter(

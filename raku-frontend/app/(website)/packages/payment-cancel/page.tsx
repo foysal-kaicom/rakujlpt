@@ -10,41 +10,25 @@ import axiosInstance from "@/utils/axios";
 
 export default function PaymentSuccessPage() {
   const router = useRouter();
-  const params = useParams();
-  const id = params.id;
+
   const [bookingDetails, setBookingDetails] = useState({
     total_payable: "",
   });
   const breadCrumbData = [
     { name: "Home", to: "/" },
-    { name: "Payment Cancle", to: `/payment-cancle/${id}` },
+    { name: "Payment Cancle", to: `/` },
   ];
 
-  useEffect(() => {
-    const bookingData = async () => {
-      try {
-        const response = await axiosInstance.get(`booking/view/${id}`);
-        const { total_payable } = response?.data?.data;
-        console.log(response);
-        setBookingDetails((prev) => ({
-          total_payable,
-        }));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    bookingData();
-  }, []);
 
   // Optional: Redirect after delay
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      router.push("/"); 
-      // router.back()
-    }, 5000);
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     router.push("/"); 
+  //     // router.back()
+  //   }, 5000);
 
-    return () => clearTimeout(timeout);
-  }, [router]);
+  //   return () => clearTimeout(timeout);
+  // }, [router]);
 
   return (
     <div className="min-h-[80vh] pt-5 bg-blue-50">
@@ -62,9 +46,9 @@ export default function PaymentSuccessPage() {
             <p className="text-gray-500 text-sm md:text-base max-w-md">
               Your payment is cancled
             </p>
-            <p className="text-gray-500 text-sm md:text-base max-w-md pb-2 border-b border-dashed border-gray-400">
+            {/* <p className="text-gray-500 text-sm md:text-base max-w-md pb-2 border-b border-dashed border-gray-400">
               Booking Number : {id}
-            </p>
+            </p> */}
             {/* <div className="flex gap-3 justify-between items-center text-gray-500">
               <p>Amount Paid : </p>
               <p>{bookingDetails?.total_payable} TK</p>
@@ -81,13 +65,6 @@ export default function PaymentSuccessPage() {
             <p className="size-20 bg-blue-50 rounded-full absolute -left-10 top-1/2 -translate-y-1/2 z-10"></p>
             <p className="size-20 bg-blue-50 rounded-full absolute -right-10 top-1/2 -translate-y-1/2 z-10"></p>
           </div>
-          {/* <Image
-            src="/assets/img/payment3.png"
-            height={1333}
-            width={2000}
-            alt=""
-            className="w-1/2"
-          /> */}
         </div>
       </WebpageWrapper>
     </div>
