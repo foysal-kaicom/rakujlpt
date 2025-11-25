@@ -22,7 +22,7 @@ class OurTeamRequest extends FormRequest
             'linkedin_url'  => 'nullable|url',
             'facebook_url'  => 'nullable|url',
             'github_url'    => 'nullable|url',
+            'serial_no'     => 'required|integer|min:0'
         ];
     }
-    
 }

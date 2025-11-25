@@ -35,9 +35,7 @@ class OurTeamController extends Controller
     
         if ($request->hasFile('photo')) {
             $image = $request->file('photo');
-    
             $awsImageUploadResponse = $this->fileStorageService->uploadImageToCloud($image, 'our-team');
-    
             $validatedData['photo'] = $awsImageUploadResponse['public_path'];
         }
     
@@ -80,17 +78,23 @@ class OurTeamController extends Controller
         return redirect()->route('our-team.list');
     }
 
-    // Delete
-    public function delete($id)
+    public function toggleStatus($id)
     {
-        $member = OurTeam::findOrFail($id);
-
-        if ($member->photo && file_exists(public_path('storage/' . $member->photo))) {
-            unlink(public_path('storage/' . $member->photo));
+        try {
+            $teamMember = OurTeam::findOrFail($id);
+    
+            if ($teamMember->status) {
+                $teamMember->status = false;
+                $teamMember->save();
+            } else {
+                $teamMember->status = true;
+                $teamMember->save();
+            }
+            Toastr::success('Status changed successfully.');
+            return redirect()->route('our-team.list');
+        } catch (\Exception $e) {
+            Toastr::success('Status not changed');
+            return redirect()->route('our-team.list');
         }
-
-        $member->delete();
-
-        return back()->with('success', 'Team member deleted successfully.');
     }
 }

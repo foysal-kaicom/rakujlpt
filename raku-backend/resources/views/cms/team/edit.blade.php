@@ -54,7 +54,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                 <!-- Name -->
-                <div class="col-span-2">
+                <div>
                     <label class="block text-sm font-medium mb-1">Full Name</label>
                     <input type="text" name="name" value="{{ old('name', $member->name) }}"
                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -63,7 +63,7 @@
                 </div>
 
                 <!-- Email -->
-                <div class="col-span-2">
+                <div>
                     <label class="block text-sm font-medium mb-1">Email</label>
                     <input type="email" name="email" value="{{ old('email', $member->email) }}"
                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
@@ -106,6 +106,19 @@
                     <input type="url" name="github_url" value="{{ old('github_url', $member->github_url) }}"
                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                     @error('github_url') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">Serial No</label>
+                    <input type="number" name="serial_no" 
+                           value="{{ old('serial_no', $member->serial_no) }}"
+                           min="0"
+                           class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                           placeholder="Enter serial number..." />
+                
+                    @error('serial_no')
+                    <div class="text-red-500 text-sm">{{ $message }}</div>
+                    @enderror
                 </div>
 
             </div>

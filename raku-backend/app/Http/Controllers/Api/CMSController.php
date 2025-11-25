@@ -8,6 +8,7 @@ use App\Models\BusinessSetting;
 use App\Models\Faq;
 use App\Models\Feature;
 use App\Models\News;
+use App\Models\OurTeam;
 use App\Models\Partner;
 use App\Models\Review;
 
@@ -46,4 +47,8 @@ class CMSController extends Controller
         return $this->responseWithSuccess($features, 'All features fetched.');
     }
 
+    public function getTeamMemberList(){
+        $ourTeam = OurTeam::where('status', 1)->get();
+        return $this->responseWithSuccess($ourTeam, 'All members fetched.');
+    }
 }

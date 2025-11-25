@@ -182,6 +182,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/store', [OurTeamController::class, 'store'])->name('store');
         Route::get('/edit/{id}', [OurTeamController::class, 'edit'])->name('edit');
         Route::put('/update/{id}', [OurTeamController::class, 'update'])->name('update');
+        Route::post('{id}/toggle-status', [OurTeamController::class, 'toggleStatus'])->name('toggleStatus');
     });
 
     Route::resource('packages', PackageController::class);
