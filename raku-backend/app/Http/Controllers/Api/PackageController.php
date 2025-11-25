@@ -41,6 +41,7 @@ class PackageController extends Controller
                     'is_popular' => $package->is_popular,
                     'is_home' => $package->is_home,
                     'is_free' => $package->is_free,
+                    'is_active' => $package->is_active,
                     'sequence' => $package->order,
                     'package_details' => PackageDetailResource::collection($package->package_details),
                 ];
