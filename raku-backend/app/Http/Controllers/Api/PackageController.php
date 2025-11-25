@@ -60,13 +60,9 @@ class PackageController extends Controller
         $package = Package::with('package_details.exam')->findOrFail($request->package_id);
 
         // Find previous successful subscription (if any)
-        $existingSubscription = UserSubscription::with('subscriptionDetails')
-            ->where('candidate_id', $candidate->id)
+        $existingSubscription = UserSubscription::where('id', $candidate->user_subscriptions_id)
             ->where('package_id', $package->id)
-            ->where('payment_status', 'success')
-            ->latest()
-            ->first();
-
+            ->exists();
 
         // ============================
         // FREE PACKAGE (Only once)
