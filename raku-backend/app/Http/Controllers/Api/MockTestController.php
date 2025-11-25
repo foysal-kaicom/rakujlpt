@@ -28,26 +28,27 @@ class MockTestController extends Controller
 
             $candidate = auth('candidate')->user();
 
-            // Step 1: Get all active subscriptions for this candidate
-            $activeSubscriptions = UserSubscription::where('candidate_id', $candidate->id)
+            // Get active subscriptions for this candidate
+            $latestSubscription = UserSubscription::where('candidate_id', $candidate->id)
                 ->where('status', 'confirmed')
                 ->where('payment_status', 'success')
-                ->pluck('id');
+                ->orderBy('id', 'desc')
+                ->first();
 
-            if ($activeSubscriptions->isEmpty()) {
+            if (!$latestSubscription) {
                 return $this->responseWithError("You do not have an active subscription for any exam.");
             }
 
-            // Step 2: Check if this exam exists in any active subscription
-            $subscriptionDetails = UserSubscriptionDetails::whereIn('user_subscription_id', $activeSubscriptions)
-                ->where('exam_id', $examId)
+            // Get all exams for this subscription
+            $subscriptionDetails = UserSubscriptionDetails::where('user_subscription_id', $latestSubscription->id)
+                ->where('exam_id', $examId) // you can remove this line if you want all exams
                 ->get();
 
             if ($subscriptionDetails->isEmpty()) {
-                return $this->responseWithError("This exam is not included in your active subscriptions.");
+                return $this->responseWithError("This exam is not included in your active subscription.");
             }
 
-            // Step 3: Verify remaining attempts
+            // Check remaining attempts for the requested exam
             $hasRemaining = $subscriptionDetails->contains(function ($detail) {
                 return $detail->used_exam_attempt < $detail->max_exam_attempt;
             });
@@ -56,15 +57,6 @@ class MockTestController extends Controller
                 return $this->responseWithError("You have reached the maximum attempt limit for this exam.");
             }
 
-            // Step 4: Fetch sections & questions
-            // $allSections = MockTestSection::with([
-            //         'mockTestQuestion',
-            //         'mockTestQuestionGroup',
-            //         'mockTestModule' => function ($query) use ($examId) {
-            //             $query->where('exam_id', $examId);
-            //         }
-            //     ])
-            //     ->get();
             $allSections = MockTestSection::with([
                 'mockTestQuestion',
                 'mockTestQuestionGroup',
@@ -101,7 +93,7 @@ class MockTestController extends Controller
         try {
             $data = $request->all();
 
-            // 🔹 Step 1: Validate exam_id
+            // Validate exam_id
             $request->validate([
                 'exam_id' => 'required|integer|exists:exams,id',
             ]);
@@ -114,7 +106,7 @@ class MockTestController extends Controller
                 'Listening' => ['answered' => 0, 'correct' => 0, 'wrong' => 0],
             ];
 
-            // 🔹 Step 2: Loop over numeric keys only
+            // Loop over numeric keys only
             foreach ($data as $key => $questionPayload) {
                 if ($key === 'exam_id') continue; // skip exam_id
                 if (!isset($questionPayload['id']) || !isset($questionPayload['answer'])) continue;
@@ -137,7 +129,7 @@ class MockTestController extends Controller
                 }
             }
 
-            // 🔹 Step 3: Create mock test record
+            // Create mock test record
             $mockTestRecord = MockTestRecords::create([
                 'candidate_id'              => $candidateId,
                 'exam_id'                   => $examId,
@@ -150,16 +142,16 @@ class MockTestController extends Controller
                 'wrong_listening_answer'    => $modulesScore['Listening']['wrong'],
             ]);
 
-            // 🔹 Step 4: Increment used_exam_attempt
+            // Increment used_exam_attempt
             $subscriptionId = UserSubscription::where('candidate_id', $candidateId)
                 ->where('status', 'confirmed')
+                ->orderBy('id', 'desc')
                 ->value('id'); // assuming one active subscription per user
             // dd($subscriptionId);
             if ($subscriptionId) {
                 $userSubscriptionDetail = UserSubscriptionDetails::where('user_subscription_id', $subscriptionId)
                     ->where('exam_id', $examId)
                     ->first();
-                // dd($userSubscriptionDetail);
 
                 if ($userSubscriptionDetail) {
                     $userSubscriptionDetail->increment('used_exam_attempt');
