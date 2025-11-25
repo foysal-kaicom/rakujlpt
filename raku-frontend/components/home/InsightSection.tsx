@@ -50,7 +50,7 @@ export default function InsightSection() {
           <div className="">
             <p className="inline-flex items-center gap-2 text-sm font-semibold bg-linear-to-r from-blue-600 to-purple-600 text-white px-3 py-1 rounded-full mb-4 drop-shadow-sm drop-shadow-violet-600 border-b border-white/50">
               <FaRegStar />
-              Mock Test Pro
+              Raku JLPT
             </p>
 
             <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
