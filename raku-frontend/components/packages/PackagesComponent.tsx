@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 import axios from "@/utils/axios";
@@ -22,6 +22,7 @@ interface Plan {
   description: string;
   short_description: string;
   is_popular?: boolean;
+  is_active:number
 }
 
 const breadCrumbData = [
@@ -39,7 +40,12 @@ const ITEMS_PER_PAGE = 3;
 
 const PackagesComponent = () => {
   const router = useRouter();
-  const { isAuthenticated , user } = useAuthStore();
+  const searchParams = useSearchParams();
+  const callbackUrl = decodeURIComponent(
+    searchParams.get("callbackUrl") || "/packages"
+  );
+
+  const { isAuthenticated, user } = useAuthStore();
 
   const [plansData, setPlansData] = useState<Plan[]>([]);
   const [loader, setLoader] = useState(true);
@@ -141,8 +147,12 @@ const PackagesComponent = () => {
                 : "grid md:grid-cols-2 lg:grid-cols-3 lg:max-w-5xl mx-auto justify-center"
             }`}
           >
-            {paginatedPlans.map((plan ,index) => (
-              <PricingCard key={index} plan={plan} subscribeModal={subscribeModal} />
+            {paginatedPlans.map((plan, index) => (
+              <PricingCard
+                key={index}
+                plan={plan}
+                subscribeModal={subscribeModal}
+              />
             ))}
           </div>
 
@@ -284,9 +294,7 @@ const PackagesComponent = () => {
           {/* Modal End */}
 
           <div className="text-center mt-12">
-            <p className="text-gray-600 mb-4">
-              No credit card required
-            </p>
+            <p className="text-gray-600 mb-4">No credit card required</p>
             <div className="flex justify-center items-center space-x-4 text-sm text-gray-500">
               <span>✓ Cancel anytime</span>
               {/* <span>✓ Money-back guarantee</span> */}

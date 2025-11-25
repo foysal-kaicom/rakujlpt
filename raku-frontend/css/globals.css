@@ -29,7 +29,13 @@ body {
   font-style: normal;
   scroll-behavior: smooth;
   /* scroll-padding-top: 100px; */
+
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
+
 
 .primary-text-color {
   color: var(--primary-color);

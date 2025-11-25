@@ -80,7 +80,8 @@
                     request()->routeIs('partner.*') ||
                     request()->routeIs('faq.*') ||
                     request()->routeIs('news.*') ||
-                    request()->routeIs('features.*');
+                    request()->routeIs('features.*')||
+                    request()->routeIs('our-team.*');
             @endphp
             <div class="menu-section" data-toggle="cms">
                 <div class="cursor-pointer">
