@@ -71,10 +71,11 @@
                             </div>
                         </div>
                     </div>
-
+                    @hasPermission('partner.store')
                     <div class="pt-4 d-flex justify-content-end">
                         <button type="submit" class="btn btn-success rounded-pill px-4">Save Partner</button>
                     </div>
+                    @endHasPermission
                 </form>
             </div>
         </div>
@@ -110,6 +111,7 @@
                         @endif
                     </td>
                     <td>
+                        @hasPermission('partner.toggleStatus')
                         <form action="{{ route('partner.toggleStatus', $partner->id) }}" method="POST" class="d-inline-block">
                             @csrf
                             <div class="form-check form-switch toggle-switch-lg">
@@ -118,16 +120,21 @@
                                     {{ $partner->status == true ? 'checked' : '' }}>
                             </div>
                         </form>
+                        @endHasPermission
                     </td>
                     <td class="d-none d-md-table-cell">{{ $partner->created_at?->format('d M Y') }}</td>
                     <td>
                         <div class="d-flex gap-2">
+                            @hasPermission('partner.edit')
                             <a href="{{ route('partner.edit', $partner->id) }}" class="badge p-2 bg-success text-white" style="width:70px">Edit</a>
+                            @endHasPermission
+                            @hasPermission('partner.destroy')
                             <form action="{{ route('partner.destroy', $partner->id) }}" method="POST" onsubmit="return confirm('Delete this partner?')">
                                 @csrf
                                 @method('DELETE')
                                 <button class="badge p-2 bg-danger text-white border-0" style="width:70px">Delete</button>
                             </form>
+                            @endHasPermission
                         </div>
                     </td>
                 </tr>

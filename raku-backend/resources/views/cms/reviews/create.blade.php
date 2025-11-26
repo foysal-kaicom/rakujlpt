@@ -85,6 +85,7 @@
             </div>
         </div>
 
+        @hasPermission('review.store')
         <div class="pt-4 flex justify-end">
             <button type="submit"
                     class="w-full md:w-auto px-6 py-2 bg-indigo-500 text-white font-semibold rounded-xl shadow hover:bg-indigo-600 transition flex items-center gap-1">
@@ -94,6 +95,7 @@
                 Save Review
             </button>
         </div>
+        @endHasPermission
     </form>
 </div>
 

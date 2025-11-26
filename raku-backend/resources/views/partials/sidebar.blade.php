@@ -60,16 +60,20 @@
 
                 <div class="submenu mt-1 ml-12 space-y-1 {{ $candidateActive ? '' : 'hidden' }}"
                     data-target="candidate">
+                    @hasPermission('candidate.list')
                     <a href="{{ route('candidate.list') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('candidate.list') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fas fa-user-friends text-xs"></i>
                         <span>All Candidates</span>
                     </a>
+                    @endHasPermission
+                    @hasPermission('candidate.create')
                     <a href="{{ route('candidate.create') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('candidate.create') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fas fa-user-plus text-xs"></i>
                         <span>Create New</span>
                     </a>
+                    @endHasPermission
                 </div>
             </div>
 
@@ -98,36 +102,48 @@
                     </div>
                 </div>
                 <div class="submenu mt-1 ml-12 space-y-1 {{ $cmsActive ? '' : 'hidden' }}" data-target="cms">
+                    @hasPermission('review.list')
                     <a href="{{ route('review.list') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('review.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fa-solid fa-comment text-xs"></i>
                         <span>Reviews</span>
                     </a>
+                    @endHasPermission
+                    @hasPermission('partner.list')
                     <a href="{{ route('partner.list') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('partner.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fas fa-handshake text-xs"></i>
                         <span>Partners</span>
                     </a>
+                    @endHasPermission
+                    @hasPermission('faq.list')
                     <a href="{{ route('faq.list') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('faq.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fas fa-info-circle text-xs"></i>
                         <span>FAQ</span>
                     </a>
+                    @endHasPermission
+                    @hasPermission('news.list')
                     <a href="{{ route('news.list') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('news.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fas fa-newspaper text-xs"></i>
                         <span>News</span>
                     </a>
+                    @endHasPermission
+                    @hasPermission('features.list')
                     <a href="{{ route('features.list') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('features.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fas fa-box-open text-xs"></i>
                         <span>Features</span>
                     </a>
+                    @endHasPermission
+                    @hasPermission('our-team.list')
                     <a href="{{ route('our-team.list') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('our-team.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fa-solid fa-code"></i>
                     <span>Our Team</span>
                 </a>
+                @endHasPermission
                 </div>
             </div>
 
@@ -152,31 +168,41 @@
                 </div>
 
                 <div class="submenu mt-1 ml-12 space-y-1 {{ $mockActive ? '' : 'hidden' }}" data-target="mocktest">
+                    @hasPermission('mock-tests.exam.list')
                     <a href="{{ route('mock-tests.exam.list') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('mock-tests.exam.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fas fa-file-alt text-xs"></i>
                         <span>Exams</span>
                     </a>
+                    @endHasPermission
+                    @hasPermission('mock-test-modules.index')
                     <a href="{{ route('mock-test-modules.index') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('mock-test-modules.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fa-solid fa-layer-group text-xs"></i>
                         <span>Modules</span>
                     </a>
+                    @endHasPermission
+                    @hasPermission('mock-tests.module-section.info')
                     <a href="{{ route('mock-tests.module-section.info') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('mock-tests.module-section.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fa-solid fa-cubes-stacked text-xs"></i>
                         <span>Modules & Sections</span>
                     </a>
+                    @endHasPermission
+                    @hasPermission('mock-tests.question.list')
                     <a href="{{ route('mock-tests.question.list') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('mock-tests.question.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fa-regular fa-circle-check text-xs"></i>
                         <span>Questions Setup</span>
                     </a>
+                    @endHasPermission
+                    @hasPermission('mock-tests.reports.list')
                     <a href="{{ route('mock-tests.reports.list') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('mock-tests.reports.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fa-regular fa-circle-check text-xs"></i>
                         <span>Mock Test Reports</span>
                     </a>
+                    @endHasPermission
                 </div>
             </div>
 
@@ -201,16 +227,20 @@
                 </div>
                 <div class="submenu mt-1 ml-12 space-y-1 {{ $practicesActive ? '' : 'hidden' }}"
                     data-target="roadmap">
+                    @hasPermission('roadmaps.index')
                     <a href="{{ route('roadmaps.index') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('roadmaps.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fas fa-list text-xs"></i>
                         <span>Roadmaps</span>
                     </a>
+                    @endHasPermission
+                    @hasPermission('stages.index')
                     <a href="{{ route('stages.index') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('stages.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fas fa-list text-xs"></i>
                         <span>Stages</span>
                     </a>
+                    @endHasPermission
                 </div>
             </div>
 
@@ -238,21 +268,27 @@
                 </div>
                 <div class="submenu mt-1 ml-12 space-y-1 {{ $settingsActive ? '' : 'hidden' }}"
                     data-target="account-settings">
+                    @hasPermission('user.roles.list')
                     <a href="{{ route('user.roles.list') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('user.roles.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fas fa-user-shield text-xs"></i>
                         <span>Role</span>
                     </a>
+                    @endHasPermission 
+                    @hasPermission('users.list')
                     <a href="{{ route('users.list') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('users.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fas fa-user text-xs"></i>
                         <span>User</span>
                     </a>
+                    @endHasPermission 
+                    @hasPermission('business-settings.edit')
                     <a href="{{ route('business-settings.edit', 1) }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('business-settings.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fas fa-briefcase text-xs"></i>
                         <span>Business Setting</span>
                     </a>
+                    @endHasPermission
                 </div>
             </div>
 
@@ -277,16 +313,20 @@
                 </div>
                 <div class="submenu mt-1 ml-12 space-y-1 {{ $packagesActive ? '' : 'hidden' }}"
                     data-target="packages">
+                    @hasPermission('packages.index')
                     <a href="{{ route('packages.index') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('packages.index') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fa-solid fa-list text-xs"></i>
                         <span>All Packages</span>
                     </a>
+                    @endHasPermission
+                    @hasPermission('packages.create')
                     <a href="{{ route('packages.create') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('packages.create') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fa-solid fa-plus text-xs"></i>
                         <span>Add Package</span>
                     </a>
+                    @endHasPermission
                 </div>
             </div>
 

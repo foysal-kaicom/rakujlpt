@@ -62,9 +62,11 @@
 <section class="w-100 bg-white rounded overflow-hidden" style="font-family: sans-serif;">
     <div class="py-3 px-4 d-flex justify-content-between align-items-center bg-indigo-300">
         <h3 class="text-lg font-semibold m-0">Exam List</h3>
+        @hasPermission('mock-tests.exam.create')
         <a href="{{ route('mock-tests.exam.create') }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-sky-500 text-white hover:bg-sky-600 transition">
             <i class="fa-solid fa-plus"></i> Create New Exam
         </a>
+        @endHasPermission
     </div>
 
 
@@ -124,6 +126,7 @@
                     <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->creator->name }}</td>
 
                     <td class="d-none d-sm-table-cell py-1">
+                        @hasPermission('mock-tests.exam.toggleStatus')
                         <form action="{{ route('mock-tests.exam.toggleStatus', $exam->id) }}" method="POST" class="d-flex pt-4 ">
                             @csrf
                             <div class="form-check form-switch toggle-switch-lg">
@@ -134,17 +137,22 @@
                                     {{ $exam->status ? 'checked' : '' }}>
                             </div>
                         </form>
+                        @endHasPermission
                     </td>
 
 
                     <td class="d-none d-sm-table-cell">
                         <div class="flex gap-2">
+                            @hasPermission('mock-tests.exam.create')
                             <a href="{{ route('mock-tests.exam.edit', ['id' => $exam->id, 'isCopy' => true]) }}" onclick="return confirmAction(event, this.href)" class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-sky-500 text-white hover:bg-sky-600 shadow-md transition">
                                 <button>Copy</button>
                             </a>
+                            @endHasPermission
+                            @hasPermission('mock-tests.exam.edit')
                             <a href="{{ route('mock-tests.exam.edit', $exam->id) }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-green-500 text-white hover:bg-green-600 shadow-md transition">
                                 <button>Edit</button>
                             </a>
+                            @endHasPermission
                         </div>
                     </td>
 

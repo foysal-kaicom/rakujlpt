@@ -40,10 +40,11 @@
                 </div>
             </div>
         </div>
-
+        @hasPermission('partner.update')
         <div class="pt-4 d-flex justify-content-end">
             <button type="submit" class="btn btn-success rounded-pill px-4">Update Partner</button>
         </div>
+        @endHasPermission
     </form>
 </div>
 

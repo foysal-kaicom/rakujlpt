@@ -74,9 +74,9 @@ class RoadmapController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Roadmap $roadmap)
     {
-        $roadmap = Roadmap::with('practices')->findOrFail($id);
+        $roadmap = Roadmap::with('practices')->findOrFail($roadmap);
 
         // Decode stage pattern and group practices
         $pattern = $roadmap->stage_pattern ? json_decode($roadmap->stage_pattern, true) : [];
@@ -136,9 +136,9 @@ class RoadmapController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy($roadmap)
     {
-        $roadmap = Roadmap::findOrFail($id);
+        $roadmap = Roadmap::findOrFail($roadmap);
         $roadmap->delete();
 
         return redirect()->route('roadmaps.index')->with('success', 'Roadmap deleted successfully.');

@@ -32,6 +32,7 @@
                     <td>{{ $module->exam?->title ?? '-' }}</td>
                     <td>{{ $module->name }}</td>
                     <td>
+                        @hasPermission('mock-test-modules.toggleStatus')
                         <form action="{{ route('mock-test-modules.toggleStatus', $module->id) }}" method="POST">
                             @csrf
                             <div class="form-check form-switch toggle-switch-lg">
@@ -41,14 +42,19 @@
                                     {{ $module->status == 'active' ? 'checked' : '' }}>
                             </div>
                         </form>
+                        @endHasPermission
                     </td>
                     <td class="flex gap-2">
+                        @hasPermission('mock-test-modules.edit')
                         <a href="{{ route('mock-test-modules.edit', $module) }}" class="btn btn-sm btn-success">Edit</a>
+                        @endHasPermission
+                        @hasPermission('mock-test-modules.destroy')
                         <form action="{{ route('mock-test-modules.destroy', $module) }}" method="POST" onsubmit="return confirm('Are you sure?');">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-sm btn-danger">Delete</button>
                         </form>
+                        @endHasPermission
                     </td>
                 </tr>
                 @endforeach

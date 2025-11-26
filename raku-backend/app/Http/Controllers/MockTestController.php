@@ -66,16 +66,21 @@ class MockTestController extends Controller
 
     public function questionList(Request $request)
     {
-        // dd($request->section_id);
         if ($request->ajax()) {
 
             $query = MockTestQuestion::with('section', 'mockTestQuestionGroup');
+
             
             if ($request->exam_id && $request->exam_id != 'all') {
-                // $query->where('exam_id', $request->exam_id); //????
+                $query->whereHas('section.mockTestModule', function ($q) use ($request) {
+                    $q->where('exam_id', $request->exam_id);
+                });
             }
+
             if ($request->module_id && $request->module_id != 'all') {
-                // $query->where('module_id', $request->module_id); //????
+                $query->whereHas('section', function ($q) use ($request) {
+                    $q->where('mock_test_module_id', $request->module_id);
+                });
             }
             if ($request->section_id && $request->section_id != 'all') {
                 $query->where('mock_test_section_id', $request->section_id);
@@ -119,21 +124,24 @@ class MockTestController extends Controller
 
                 ->addColumn('action', function ($row) {
 
-                    $editUrl = route('mock-tests.edit.question', $row->id) . '?question_list_page=' . urlencode(request()->get('page', 1));
-                    $deleteUrl = route('mock-tests.question.delete', $row->id);
-
                     $buttons = '';
+                    if (checkAdminPermission('mock-tests.edit.question')) {
+                        $editUrl = route('mock-tests.edit.question', $row->id) . '?question_list_page=' . urlencode(request()->get('page', 1));
 
-                    // EDIT button
-                    $buttons .= '
+                        // EDIT button
+                        $buttons .= '
                         <a href="' . $editUrl . '" 
                             class="px-3 py-2 rounded-lg text-xs font-medium bg-green-400 text-dark hover:bg-green-500 shadow-md transition me-2">
                             Edit
                         </a>
-                    ';
+                        ';
+                    }
 
-                    // DELETE button
-                    $buttons .= '
+                    if (checkAdminPermission('mock-tests.question.delete')) {
+                        $deleteUrl = route('mock-tests.question.delete', $row->id);
+
+                        // DELETE button
+                        $buttons .= '
                         <form action="' . $deleteUrl . '" method="POST" style="display:inline-block;"
                             onsubmit="return confirm(\'Are you sure you want to delete this?\')">
                             ' . csrf_field() . method_field('DELETE') . '
@@ -142,7 +150,8 @@ class MockTestController extends Controller
                                 Delete
                             </button>
                         </form>
-                    ';
+                        ';
+                    }
 
                     return $buttons;
                 })
@@ -511,14 +520,13 @@ class MockTestController extends Controller
             return redirect()->back();
         }
 
-
         try {
             DB::beginTransaction();
 
             $question = MockTestQuestion::findOrFail($id);
 
-            $question->title = $request->question;
             $question->hints = $request->hints;
+            $question->title = $question->type === 'image' ? strip_tags($request->question) : $request->question;
 
             if ($request->question_type == 'image' && $request->hasFile('question_image')) {
                 $imageUploadResponse = $this->fileStorageService->uploadImageToCloud($request->file('question_image'), 'questions');
