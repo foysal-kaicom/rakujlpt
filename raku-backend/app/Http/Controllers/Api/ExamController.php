@@ -10,10 +10,7 @@ class ExamController extends Controller
 {
     public function list()
     {
-        $exams=Exam::where('status',1)
-            ->orderBy('exam_date')
-            ->take(12)
-            ->get();
+        $exams=Exam::where('status',1)->get();
 
         return $this->responseWithSuccess(ExamResource::collection($exams),'Exam List.');
     }
