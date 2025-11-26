@@ -10,6 +10,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import Loader from "@/components/Loader";
 import MockTestSelectSkeleton from "./mockSelectSkeleton";
+import CustomSelect from "@/components/CustomSelect";
 
 interface Exam {
   id: number;
@@ -26,14 +27,37 @@ interface Exam {
   available_to_apply?: string;
 }
 
+type Option = {
+  label: string;
+  value: string;
+};
+
 export default function MockTestSelect() {
   const breadCrumbData = [
     { name: "Home", to: "/" },
     { name: "Select Mock test", to: "/mock_test_select" },
   ];
   const [loader, setLoader] = useState(true);
-
   const [mockTests, setMockTests] = useState<Exam[]>([]);
+  const [exam, setExam] = useState<string | null>("all");
+  const [examOption, setExamOption] = useState<
+    { label: string; value: string }[]
+  >([]);
+
+  const getExamOptions = (data: { short_name: any }[]): Option[] => {
+    const uniqueShortNames = Array.from(
+      new Set(data.map((item) => item.short_name))
+    );
+
+    return [
+      { label: "All", value: "all" },
+      ...uniqueShortNames.map((name) => ({
+        label: String(name),
+        value: String(name),
+      })),
+    ];
+  };
+
   const getMockTestsData = async () => {
     setLoader(true);
     try {
@@ -43,6 +67,8 @@ export default function MockTestSelect() {
       if (response?.data?.success) {
         setLoader(false);
         setMockTests(response.data.data);
+        const options = getExamOptions(response.data.data);
+        setExamOption(options);
       }
     } catch (error: any) {
       setLoader(false);
@@ -83,7 +109,16 @@ export default function MockTestSelect() {
                     mock tests—anytime, anywhere.
                   </p>
                 </div>
-                <div className="mt-16">
+                <div className="flex justify-center mt-6">
+                  <CustomSelect
+                    options={examOption}
+                    value={exam}
+                    onChange={setExam}
+                    placeholder="Select an Exam"
+                  />
+                </div>
+
+                <div className="mt-10">
                   <div
                     className={`gap-6 sm:gap-10 ${
                       mockTests.length > 2
@@ -92,34 +127,38 @@ export default function MockTestSelect() {
                     }`}
                   >
                     {mockTests &&
-                      mockTests.map((test) => (
-                        <div
-                          key={test.id}
-                          className="relative group rounded-2xl bg-white border border-white shadow-lg overflow-hidden p-8 transition-all duration-500 hover:-translate-y-3"
-                        >
-                          <div className="relative z-10 text-center">
-                            <div className="w-20 h-20 mx-auto mb-5 rounded-2xl flex items-center justify-center text-white text-3xl shadow-md bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 transform rotate-3 group-hover:rotate-0 group-hover:scale-105 transition-transform duration-500">
-                              {test.short_name}
-                            </div>
-                            <h2 className="text-2xl font-bold text-gray-900 mb-2 tracking-tight group-hover:text-purple-600 transition-colors duration-300">
-                              {test.title}
-                            </h2>
-                            <p className="text-gray-600 text-sm mb-6 group-hover:text-black transition-colors">
-                              {test.description}
-                            </p>
+                      mockTests
+                        .filter((test) =>
+                          exam === "all" ? true : test.short_name === exam
+                        )
+                        .map((test) => (
+                          <div
+                            key={test.id}
+                            className="relative group rounded-2xl bg-white border border-white shadow-lg overflow-hidden p-8 transition-all duration-500 hover:-translate-y-3"
+                          >
+                            <div className="relative z-10 text-center">
+                              <div className="w-20 h-20 mx-auto mb-5 rounded-2xl flex items-center justify-center text-white text-3xl shadow-md bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 transform rotate-3 group-hover:rotate-0 group-hover:scale-105 transition-transform duration-500">
+                                {test.short_name}
+                              </div>
+                              <h2 className="text-2xl font-bold text-gray-900 mb-2 tracking-tight group-hover:text-purple-600 transition-colors duration-300">
+                                {test.title}
+                              </h2>
+                              <p className="text-gray-600 text-sm mb-6 group-hover:text-black transition-colors">
+                                {test.description}
+                              </p>
 
-                            <Link
-                              href={`/mock_test_select/${test.id}?type=${test.short_name}`}
-                              className="px-6 py-3 inline-block rounded-full space-x-2 font-semibold text-white text-sm shadow-md bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400 hover:scale-105 transition-transform duration-300"
-                            >
-                              🎯 Choose Test
-                            </Link>
+                              <Link
+                                href={`/mock_test_select/${test.id}?type=${test.short_name}`}
+                                className="px-6 py-3 inline-block rounded-full space-x-2 font-semibold text-white text-sm shadow-md bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400 hover:scale-105 transition-transform duration-300"
+                              >
+                                🎯 Choose Test
+                              </Link>
+                            </div>
+                            <div className="absolute top-2 right-2 text-4xl opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-2 group-hover:-translate-y-0">
+                              ✨
+                            </div>
                           </div>
-                          <div className="absolute top-2 right-2 text-4xl opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-2 group-hover:-translate-y-0">
-                            ✨
-                          </div>
-                        </div>
-                      ))}
+                        ))}
                   </div>
                 </div>
               </WebpageWrapper>

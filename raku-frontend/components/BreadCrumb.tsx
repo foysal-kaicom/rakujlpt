@@ -25,12 +25,12 @@ export default function BreadCrumb({ breadCrumbData }: BreadCrumbProps) {
             {!isLast ? (
               <Link
                 href={b.to}
-                className="transition-all duration-200 hover:text-blue-600"
+                className="transition-all duration-200 hover:text-blue-600 line-clamp-1"
               >
                 {b.name}
               </Link>
             ) : (
-              <Link href={b.to} className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-500 font-semibold">
+              <Link href={b.to} className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-500 font-semibold line-clamp-1">
                 {b.name}
               </Link>
             )}
