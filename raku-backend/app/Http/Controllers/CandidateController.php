@@ -77,6 +77,7 @@ class CandidateController extends Controller
 
                 ->addColumn('action', function ($row) {
                     if (!$row->deleted_at) {
+                        if (checkAdminPermission('candidate.delete')) {
                         // $viewApplicationUrl = route('candidate.applications', $row->id);
                         $deleteUrl = route('candidate.delete', $row->id);
                         return '<form action="' . $deleteUrl . '" method="POST" style="display:inline-block; margin-left:5px;" onsubmit="return confirm(\'Are you sure you want to delete this?\')">
@@ -84,26 +85,30 @@ class CandidateController extends Controller
                                 ' . method_field('DELETE') . '
                                 <button type="submit" class="px-3 py-2 rounded-lg text-xs font-medium bg-red-400 text-white hover:bg-red-500 shadow-md transition">Delete</button>
                             </form>';
+                        }    
                     }
                 })
                 ->addColumn('status', function ($row) {
                     $isChecked = $row->status === 'active' ? 'checked' : '';
-                    $toggleUrl = route('candidate.toggleStatus', $row->id);
                     $switchId  = 'toggle_' . $row->id;
-                    return '
-                        <form method="POST" action="'.$toggleUrl.'" class="m-0 p-0 d-inline toggle-form">
-                            '.csrf_field().'
-                            <div class="form-check form-switch ml-10 p-0">
-                                <input 
-                                    type="checkbox" 
-                                    class="form-check-input toggle-switch" 
-                                    id="'.$switchId.'" 
-                                    '.$isChecked.' 
-                                    aria-label="Toggle status"
-                                >
-                            </div>
-                        </form>
-                    ';
+
+                    if (checkAdminPermission('candidate.toggleStatus')) {
+                        $toggleUrl = route('candidate.toggleStatus', $row->id);
+
+                        return '
+                            <form method="POST" action="'.$toggleUrl.'" class="m-0 p-0 d-inline toggle-form">
+                                '.csrf_field().'
+                                <div class="form-check form-switch ml-10 p-0">
+                                    <input 
+                                        type="checkbox" 
+                                        class="form-check-input toggle-switch" 
+                                        id="'.$switchId.'" 
+                                        '.$isChecked.' 
+                                        aria-label="Toggle status"
+                                    >
+                                </div>
+                            </form>';
+                    }
                 })                
                 ->rawColumns(['photo', 'name', 'action', 'status'])
                 ->make(true);

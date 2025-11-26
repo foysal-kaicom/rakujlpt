@@ -145,6 +145,7 @@
 
         <!-- Submit -->
         <div class="pt-4 flex justify-end">
+            @hasPermission('packages.update')
             <button type="submit"
                 class="w-full md:w-auto px-6 py-2 bg-indigo-500 text-white font-semibold rounded-xl shadow hover:bg-indigo-600 transition flex items-center gap-1">
                 <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24" fill="currentColor">
@@ -152,6 +153,7 @@
                 </svg>
                 Update Package
             </button>
+            @endHasPermission
         </div>
     </form>
 

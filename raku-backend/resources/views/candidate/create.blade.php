@@ -128,7 +128,7 @@
                 </div>
             </div>
             <!-- Submit -->
-            @hasPermission('account.store')
+            @hasPermission('candidate.store')
             <div class="flex justify-end mt-6">
                 <button type="submit" class="w-[250px] bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-4 rounded transition">
                     Save
