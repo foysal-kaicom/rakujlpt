@@ -39,11 +39,12 @@
             <div class="text-danger"></div>
             @enderror
 
-
-<!-- Reset Password Button -->
-<button type="button" class="mt-3 w-full xl:w-[300px] text-black py-2 px-3 rounded cursor-pointer bg-yellow-400 hover:bg-yellow-300 transition" data-bs-toggle="modal" data-bs-target="#resetPasswordModal">
-    <i class="fa fa-key me-1"></i> Reset Password
-</button>
+        @hasPermission('candidate.reset.password')
+        <!-- Reset Password Button -->
+        <button type="button" class="mt-3 w-full xl:w-[300px] text-black py-2 px-3 rounded cursor-pointer bg-yellow-400 hover:bg-yellow-300 transition" data-bs-toggle="modal" data-bs-target="#resetPasswordModal">
+            <i class="fa fa-key me-1"></i> Reset Password
+        </button>
+        @endHasPermission
 
         </div>
 
@@ -134,7 +135,7 @@
 
 
                 <!-- Submit Button -->
-                @hasPermission('account.store')
+                @hasPermission('candidate.update')
                 <div class="w-full flex items-end justify-end">
                     <button type="submit" class="w-[250px] bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-4 rounded transition">Save</button>
                 </div>
@@ -153,6 +154,7 @@
         <form action="{{route('candidate.reset.password',$candidate->id)}}" method="post" id="resetPasswordForm">
             @csrf
             <div class="modal-content">
+
                 <div class="modal-header">
                     <h5 class="modal-title" id="resetPasswordModalLabel">Reset Candidate Password</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

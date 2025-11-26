@@ -76,6 +76,7 @@
 
                     <!-- ✅ Status Toggle -->
                     <td>
+                        @hasPermission('review.toggleStatus')
                         <form action="{{ route('review.toggleStatus', $review->id) }}" method="POST" class="d-inline-block">
                             @csrf
                             <div class="form-check form-switch toggle-switch-lg">
@@ -88,6 +89,7 @@
                                 >
                             </div>
                         </form>
+                        @endHasPermission
                     </td>
 
                     <td class="d-none d-md-table-cell">
@@ -96,9 +98,9 @@
 
                     <td>
                         <div class="d-flex gap-2">
+                            @hasPermission('review.edit')
                             <a href="{{ route('review.edit', $review->id) }}" class="badge p-2 bg-success text-white" style="width: 70px">Edit</a>
-
-                            <a href="" class="badge p-2 bg-danger text-white" style="width: 70px">Delete</a>
+                            @endHasPermission
 
                         </div>
                     </td>

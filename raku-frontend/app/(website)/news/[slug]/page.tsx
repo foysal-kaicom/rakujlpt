@@ -93,7 +93,7 @@ export default async function NewsDetailsPage({
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 pt-10 pb-15">
             {/* Main News */}
             <article className="lg:col-span-2 bg-white shadow-md rounded-2xl overflow-hidden">
-              <div className="relative h-64 w-full">
+              <div className="relative h-auto aspect-2/1 w-full">
                 <Image
                   src={newsDetails?.featured_image || "/"}
                   alt={newsDetails?.title?.slice(0, 10)}
@@ -102,8 +102,8 @@ export default async function NewsDetailsPage({
                 />
               </div>
 
-              <div className="p-8">
-                <h1 className="text-2xl font-bold mb-4">
+              <div className="p-3 md:p-5 lg:p-8">
+                <h1 className="text-lg md:text-2xl font-bold mb-4">
                   {newsDetails?.title}
                 </h1>
                 <div

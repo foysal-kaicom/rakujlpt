@@ -41,9 +41,11 @@
     <!-- Section Header -->
    <div class="p-2 px-4 d-flex justify-content-between align-items-center" style="background-color: hsla(197, 66%, 81%, 0.879);color:#04070a"> 
         <h3 class="text-md m-0">Users List</h3>
+        @hasPermission('users.create')
         <a href="{{route('users.create')}}" class="btn btn-primary btn-sm" style=" background-color: hsla(227, 64%, 37%, 0.879);">
             <i class="fa-solid fa-plus" style="font-family: &quot;Font Awesome 6 Free&quot;, Bangla965, sans-serif;"></i> Create New User
         </a>
+        @endHasPermission 
     </div>
     <!-- Table -->
     <div class="table-responsive">
@@ -79,6 +81,7 @@
                           {{ $admin->last_login ? \Carbon\Carbon::parse($admin->last_login)->format('d M, Y h:i A') : 'Never Logged In' }}
                       </td>
                       <td class="d-none d-sm-table-cell">
+                        @hasPermission('users.toggleStatus')
                         <form action="{{ route('users.toggleStatus', $admin->id) }}" method="POST" class="d-inline-block">
                             @csrf
                             <div class="form-check form-switch toggle-switch-lg">
@@ -91,13 +94,15 @@
                                 >
                             </div>
                         </form>
-                        
+                        @endHasPermission 
                     </td>
                       
                     <td class="d-none d-md-table-cell">
+                    @hasPermission('users.edit')
                     <a href="{{ route('users.edit', $admin->id) }}">
                         <button class="badge text-fs px-4 py-2 border-0 rounded bg-primary">Edit</button>
-                    </a>   
+                    </a> 
+                    @endHasPermission  
                 </td>            
                     </tr>
                 @endforeach
