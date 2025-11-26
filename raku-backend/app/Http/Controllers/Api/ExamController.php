@@ -18,8 +18,14 @@ class ExamController extends Controller
     public function view($slug)
     {
         $exam=Exam::where('slug', $slug)->first();
+        if (!$exam) {
+            return $this->responseWithError('Exam not found.');
+        }
 
-        return $this->responseWithSuccess($exam,'Single Exam View.');
+        $response = $exam->makeHidden('name')->toArray();
+        $response['short_name'] = $exam->name;
+
+        return $this->responseWithSuccess($response,'Single Exam View.');
     }
 
 }
