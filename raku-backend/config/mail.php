@@ -111,7 +111,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'info@rakujlpt.com'),
+        'address' => env('MAIL_FROM_ADDRESS', 'md.tohidulislam@kaicomsol.com'),
         'name' => env('MAIL_FROM_NAME', 'Raku JLPT'),
     ],
 

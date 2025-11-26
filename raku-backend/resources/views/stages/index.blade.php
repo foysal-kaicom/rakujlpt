@@ -73,9 +73,11 @@
 <section class="w-100 bg-white rounded overflow-hidden" style="font-family: sans-serif;">
     <div class="py-3 px-4 d-flex justify-content-between align-items-center bg-indigo-300">
         <h3 class="text-lg font-semibold m-0">Stage List</h3>
+        @hasPermission('stages.create')
         <a href="{{ route('stages.create') }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-sky-500 text-white hover:bg-sky-600 transition">
             <i class="fa-solid fa-plus"></i> Create New Stage
         </a>
+        @endHasPermission
     </div>
 
     <!-- Table -->
@@ -103,18 +105,24 @@
                     <td>{{ $stage->duration }}</td>
                     <td class="text-center">{{ $stage->question_count ?? 0 }}</td>
                     <td class="d-none d-sm-table-cell py-1">
+                        @hasPermission('stages.toggleStatus')
                         <div class="form-check form-switch toggle-switch-lg">
                             <input class="form-check-input toggle-stage"
                                 type="checkbox"
                                 data-id="{{ $stage->id }}"
                                 {{ $stage->status ? 'checked' : '' }}>
                         </div>
+                        @endHasPermission
                     </td>
                    
                     <td>
                         <div class="flex gap-2">
+                            @hasPermission('stages.edit')
                             <a href="{{ route('stages.edit', $stage->id) }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-green-500 text-white hover:bg-green-600 shadow-md transition">Edit</a>
+                            @endHasPermission
+                            @hasPermission('stages.show')
                             <a href="{{ route('stages.show', $stage->id) }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-blue-500 text-white hover:bg-blue-600 shadow-md transition">Add Question</a>
+                            @endHasPermission
                         </div>
                     </td>
                 </tr>

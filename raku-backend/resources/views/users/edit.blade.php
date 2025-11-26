@@ -102,7 +102,7 @@
                     </div>
                 </div>
 
-                @hasPermission('super-admin.update')
+                @hasPermission('users.update')
                 <!-- Submit Button -->
                 <div class="row g-3 mt-3">
                     <div class="col-12 text-end">

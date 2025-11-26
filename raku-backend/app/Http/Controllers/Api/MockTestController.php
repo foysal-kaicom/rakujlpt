@@ -69,6 +69,8 @@ class MockTestController extends Controller
 
 
             $examTitle = $allSections->first()->mockTestModule->exam->title ?? null;
+            $examDuration = $allSections->first()->mockTestModule->exam->duration ?? null;
+            $examTotalPoint = $allSections->first()->mockTestModule->exam->total_point ?? null;
             $sectionWiseQuestions = [];
 
             foreach ($allSections as $section) {
@@ -81,6 +83,8 @@ class MockTestController extends Controller
             // return $this->responseWithSuccess($sectionWiseQuestions, "Questions generated for Exam ID: {$examId}");
             return $this->responseWithSuccess([
                 'exam_title' => $examTitle,
+                'exam_duration' => $examDuration,
+                'exam_total_point' => $examTotalPoint,
                 'sections'   => $sectionWiseQuestions
             ], "Questions generated for Exam ID: {$examId}");
         } catch (Throwable $ex) {

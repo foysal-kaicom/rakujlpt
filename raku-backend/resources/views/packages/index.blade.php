@@ -10,9 +10,11 @@
 <section class="w-100 bg-white rounded overflow-hidden" style="font-family: sans-serif;">
     <div class="py-3 px-4 d-flex justify-content-between align-items-center bg-indigo-300">
         <h3 class="text-lg font-semibold m-0">Package List</h3>
+        @hasPermission('packages.create')
         <a href="{{ route('packages.create') }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-sky-500 text-white hover:bg-sky-600 transition">
             <i class="fa-solid fa-plus"></i> Packages
         </a>
+        @endHasPermission
     </div>
 
 
@@ -49,16 +51,20 @@
                             {{-- <a href="{{ route('packages.show', $package->id) }}" class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-blue-500 text-white hover:bg-blue-600 shadow-md transition"> 
                                 View 
                             </a>  --}}
+                            @hasPermission('packages.edit')
                             <a href="{{ route('packages.edit', $package->id) }}" class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-green-500 text-white hover:bg-green-600 shadow-md transition"> 
                                 Edit 
                             </a> 
+                            @endHasPermission
+                            @hasPermission('packages.destroy')
                             <form action="{{ route('packages.destroy', $package->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this package?')" class="inline"> 
                                 @csrf
                                 @method('DELETE') 
                                 <button class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-red-500 text-white hover:bg-red-600 shadow-md transition"> 
                                     Delete 
                                 </button> 
-                            </form> 
+                            </form>
+                            @endHasPermission 
                         </div> 
                     </td> 
                 </tr> 

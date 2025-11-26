@@ -65,10 +65,12 @@
 <section class="w-100 bg-white rounded overflow-hidden" style="font-family: sans-serif;">
     <div class="py-3 px-4 d-flex justify-content-between align-items-center bg-indigo-300">
         <h3 class="text-lg font-semibold m-0">Roadmap List</h3>
+        @hasPermission('roadmaps.create')
         <a href="{{ route('roadmaps.create') }}"
             class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-sky-500 text-white hover:bg-sky-600 transition">
             <i class="fa-solid fa-plus"></i> Create New Roadmap
         </a>
+        @endHasPermission
     </div>
 
     <div class="table-responsive">
@@ -98,12 +100,14 @@
                         <td>{{ $roadmap->slug }}</td>
                         <td>{{ $roadmap->created_at?->format('Y-m-d') }}</td>
                         <td>
+                            @hasPermission('roadmaps.edit')
                             <div class="flex gap-2">
                                 <a href="{{ route('roadmaps.edit', $roadmap->id) }}"
                                     class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-green-500 text-white hover:bg-green-600 shadow-md transition">
                                     Edit
                                 </a>
                             </div>
+                            @endHasPermission
                         </td>
                     </tr>
                 @empty

@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import BreadCrumb from "@/components/BreadCrumb";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import Image from "next/image";
@@ -19,6 +20,11 @@ interface NewsItem {
   author_name: string;
   author_designation: string;
 }
+
+export const metadata: Metadata = {
+  title: "Blogs",
+  description: "Discover blogs on Japanese language learning, exam preparation tips, study guides, and updates for JPT, JLPT, and NAT learners. Learn smarter with Raku’s expert content. Boost your Japanese proficiency with the Raku blog — packed with study tips, exam guidance, learning techniques, and insights for JPT, JLPT, and NAT success.",
+};
 
 async function getNewsData(): Promise<NewsItem[]> {
   try {
@@ -73,10 +79,10 @@ export default async function AllNewsPage() {
             </div>
           </div>
 
-          <div className="pb-15">
+          <div className="pb-15 pt-8">
             {/* Featured News */}
             <div className="mb-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-              <div className="relative h-72 w-full rounded-xl overflow-hidden shadow-lg">
+              <div className="relative aspect-2/1 h-auto w-full rounded-xl overflow-hidden shadow-lg">
                 <Image
                   src={featuredNews?.featured_image || "/"}
                   alt={featuredNews?.title.slice(0, 10) || ""}
@@ -116,7 +122,7 @@ export default async function AllNewsPage() {
                   key={item.id}
                   className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg duration-300"
                 >
-                  <div className="relative h-48 w-full">
+                  <div className="relative aspect-2/1 h-auto w-full">
                     <Image
                       src={item.featured_image || "/"}
                       alt={item.title.slice(0, 10)}

@@ -45,7 +45,7 @@ export default function MockTestQuestionComposition() {
 
           <div className="relative z-10 w-full max-w-5xl mx-auto">
             <div className="flex items-start gap-4 w-full">
-              <div className="flex-shrink-0 mt-1">
+              <div className="flex-shrink-0 mt-1 hidden sm:block">
                 <div className="p-2 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 shadow-md animate-pulse">
                   <svg
                     className="w-6 h-6 text-white"

@@ -16,18 +16,16 @@ class ExamResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-                'id'=>$this->id,
-                'slug'=>$this->slug,
-                'short_name'=>$this->name,
-                // 'image' => $this->image ? asset('storage/' . $this->image) : null,
-                'title'=>$this->title,
-                'description'=>$this->description,
-                'fee'=>(int)$this->fee .' BDT',
-                'exam_date'=>date('d-M-Y',strtotime($this->exam_date)),
-                'start_time'=>date('h:i A',strtotime($this->start_time)),
-                'end_time'=>date('h:i A',strtotime($this->end_time)),
-                'application_deadline'=>date('d-M-Y',strtotime($this->application_deadline)),
-                'result_publish_date'=>date('d-M-Y',strtotime($this->result_publish_date)),
+            'id'=>$this->id,
+            'slug'=>$this->slug,
+            'short_name'=>$this->name,
+            'image' => $this->image ? asset('storage/' . $this->image) : null,
+            'title'=>$this->title,
+            'description'=>$this->description,
+            'duration'=>$this->duration.' minutes',
+            'pass_point'=>$this->pass_point,
+            'total_point'=>$this->total_point,
+            'answer_value'=>$this->answer_value,
         ];
     }
 }

@@ -6,29 +6,19 @@ use App\Http\Controllers\ExamController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\AgentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StageController;
-use App\Http\Controllers\CenterController;
-use App\Http\Controllers\ImportController;
 use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RoadmapController;
-use App\Http\Controllers\SupportController;
 use App\Http\Controllers\MockTestController;
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\PromotionController;
-use App\Http\Controllers\AccountingController;
-use App\Http\Controllers\TestimonialController;
-use App\Http\Controllers\DemoQuestionController;
 use App\Http\Controllers\MockTestModuleController;
 use App\Http\Controllers\BusinessSettingController;
-use App\Http\Controllers\CertificateClaimContoller;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\OurTeamController;
 
@@ -36,7 +26,7 @@ Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/do-login', [LoginController::class, 'doLogin'])->name('doLogin');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'auth', 'checkPermission'], function () {
     Route::get('/', [DashboardController::class, 'showDashboard'])->name('user.dashboard');
 
     Route::group(['prefix' => 'roles', 'as' => 'user.roles.', 'module' => 'Role'], function () {
@@ -80,15 +70,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/{candidate_id}/applications', [CandidateController::class, 'candidateApplications'])->name('applications');
     });
 
-    // Route::group(['prefix' => 'exam', 'as' => 'exam.', 'module' => 'Exam'], function () {
-
-    // });
-
-
     Route::group(['prefix' => 'payment', 'as' => 'payment.', 'module' => 'payment'], function () {
         Route::get('/', [PaymentController::class, 'list'])->name('list');
     });
-
 
     Route::group(['prefix' => 'mock-tests', 'as' => 'mock-tests.', 'module' => 'mock-tests'], function () {
         Route::get('/', [ExamController::class, 'list'])->name('exam.list');
@@ -131,9 +115,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/edit/{id}', [ReviewController::class, 'edit'])->name('edit');
         Route::put('/update/{id}', [ReviewController::class, 'update'])->name('update');
         Route::post('{id}/toggle-status', [ReviewController::class, 'toggleStatus'])->name('toggleStatus');
-
     });
-
 
     Route::group(['prefix' => 'partner', 'as' => 'partner.', 'module' => 'partner'], function () {
         Route::get('/', [PartnerController::class, 'list'])->name('list');
@@ -142,7 +124,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/{id}', [PartnerController::class, 'update'])->name('update');
         Route::delete('/{id}', [PartnerController::class, 'destroy'])->name('destroy');
         Route::post('/{id}/toggle-status', [PartnerController::class, 'toggleStatus'])->name('toggleStatus');
-
     });
 
     Route::group(['prefix' => 'faq', 'as' => 'faq.', 'module' => 'FAQ'], function () {
@@ -154,7 +135,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('{id}/toggle-status', [FaqController::class, 'toggleStatus'])->name('toggleStatus');
         Route::delete('/delete/{id}', [FaqController::class, 'destroy'])->name('delete');
     });
-
 
     Route::group(['prefix' => 'news', 'as' => 'news.', 'module' => 'news'], function () {
         Route::get('/', [NewsController::class, 'list'])->name('list');
@@ -185,22 +165,30 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('{id}/toggle-status', [OurTeamController::class, 'toggleStatus'])->name('toggleStatus');
     });
 
-    Route::resource('packages', PackageController::class);
-    Route::resource('mock-test-modules', MockTestModuleController::class);
-    Route::post('mock-test-modules/{id}/toggle-status', [MockTestModuleController::class, 'toggleStatus'])
-    ->name('mock-test-modules.toggleStatus');
+    Route::group(['prefix' => 'mock-test-modules', 'as' => 'mock-test-modules.', 'module' => 'mock-test-modules'], function () {
+        Route::resource('/', MockTestModuleController::class);
+        Route::post('{id}/toggle-status', [MockTestModuleController::class, 'toggleStatus'])->name('toggleStatus');
+    });
 
-    // Extra routes
-    Route::post('packages/{package}/buy', [PackageController::class, 'buy'])->name('packages.buy');
-    Route::post('packages/attend/{detail}', [PackageController::class, 'attendExam'])->name('packages.attend');
+    Route::group(['prefix' => 'packages', 'as' => 'packages.', 'module' => 'packages'], function () {
+        Route::resource('', PackageController::class)->parameters(['' => 'package']);
+        Route::post('{package}/buy', [PackageController::class, 'buy'])->name('buy');
+        Route::post('/attend/{detail}', [PackageController::class, 'attendExam'])->name('attend');
+    });
 
-    Route::resource('roadmaps', RoadmapController::class);
-    Route::resource('practices', PracticeController::class);
-    Route::get('/practices/create/{stage_id}', [PracticeController::class, 'createPractice'])->name('practices.create.stage');
+    Route::group(['prefix' => 'roadmaps', 'as' => 'roadmaps.', 'module' => 'roadmaps'], function () {
+        Route::resource('', RoadmapController::class)->parameters(['' => 'roadmap']);
+    });
 
+    Route::group(['prefix' => 'practices', 'as' => 'practices.', 'module' => 'practices'], function () {
+        Route::resource('/', PracticeController::class);
+        Route::get('/create/{stage_id}', [PracticeController::class, 'createPractice'])->name('create.stage');
+    });
 
-    Route::resource('stages', StageController::class);
-    Route::post('/stages/{stage}/toggle-status', [StageController::class, 'toggleStatus'])->name('stages.toggleStatus');
+    Route::group(['prefix' => 'stages', 'as' => 'stages.', 'module' => 'stages'], function () {
+        Route::resource('', StageController::class)->parameters(['' => 'stage']);
+        Route::post('{stage}/toggle-status', [StageController::class, 'toggleStatus'])->name('toggleStatus');
+    });
 
     Route::get('user-payments', [PackageController::class, 'userSubscriptions'])->name('user-payments');
 

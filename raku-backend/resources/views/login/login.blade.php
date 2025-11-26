@@ -294,7 +294,7 @@
       <div class="login-card">
         <div class="logo-container">
 
-          <img src="{{ $settings->logo }}" alt="{{ $settings->business_name }} Logo" />
+          {{-- <img src="{{ $settings->logo }}" alt="{{ $settings->business_name }} Logo" /> --}}
         </div>
 
         <div class="welcome-text">
