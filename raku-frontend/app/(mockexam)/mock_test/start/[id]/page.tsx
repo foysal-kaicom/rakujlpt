@@ -91,6 +91,7 @@ export default function ExamPage() {
   const [examTitle, setExamTitle] = useState<string>(
     "Japanese Language Proficiency Exam"
   );
+  const [timeRemaining , setTimeRemaining] = useState<number>()
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -106,7 +107,6 @@ export default function ExamPage() {
     answers,
     setAnswer,
     clearAnswers,
-    timeRemaining,
     decrementTime,
     resetTime,
     examStarted,
@@ -195,6 +195,7 @@ export default function ExamPage() {
         );
         setQuestions(response.data.data.sections);
         setExamTitle(response.data.data.exam_title);
+        setTimeRemaining(response?.data?.data?.exam_duration)
         setCurrentSectionIndex(0);
 
         resetTime(50 * 60);
