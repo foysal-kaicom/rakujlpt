@@ -18,13 +18,12 @@ class Exam extends Model
         'title',
         'slug',
         'description',
-        'exam_date',
-        'application_deadline',
-        'fee',
+        'duration',
+        'pass_point',
+        'total_point',
         'image',
-        'result_publish_date',
+        'answer_value',
         'start_time',
-        'end_time',
         'created_by',
     ];
 

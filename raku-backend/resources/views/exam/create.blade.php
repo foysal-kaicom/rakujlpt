@@ -37,68 +37,58 @@
             <!-- Form Fields -->
             <div class="col-md-9">
                 <div class="row g-3">
-                    <!-- Exam Name -->
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold">Exam Short Name</label>
-                        <input type="text" name="name" value="{{ old('name') }}"
-                            class="form-control form-control-lg shadow-sm rounded-2" placeholder="Enter exam short name" />
-                        @error('name') <div class="text-danger small">{{ $message }}</div> @enderror
-                    </div>
 
                     <!-- Exam Title -->
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Exam Title</label>
+                        <label class="form-label fw-semibold">Exam Title <span class="text-danger">*</span></label>
                         <input type="text" name="title" value="{{ old('title') }}"
-                            class="form-control form-control-lg shadow-sm rounded-2" placeholder="Enter exam title" />
+                            class="form-control form-control-lg shadow-sm rounded-2" placeholder="Enter exam title" required />
                         @error('title') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
 
-                    <!-- Exam Date -->
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold">Exam Date</label>
-                        <input type="date" name="exam_date" value="{{ old('exam_date') }}"
-                            class="form-control form-control-lg shadow-sm rounded-2" />
-                        @error('exam_date') <div class="text-danger small">{{ $message }}</div> @enderror
+                    <!-- Exam Name -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Exam Short Name <span class="text-danger">*</span></label>
+                        <select name="name" class="form-control form-control-lg shadow-sm rounded-2" required>
+                            <option value="" disabled {{ old('name') ? '' : 'selected' }}>Select Short Name</option>
+                            <option value="JLPT" {{ old('name') === 'JLPT' ? 'selected' : '' }}>JLPT</option>
+                            <option value="JPT" {{ old('name') === 'JPT' ? 'selected' : '' }}>JPT</option>
+                            <option value="NAT" {{ old('name') === 'NAT' ? 'selected' : '' }}>NAT</option>
+                            <option value="JFT" {{ old('name') === 'JFT' ? 'selected' : '' }}>JFT</option>
+                        </select>
+                        @error('name') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
 
-                    <!-- Deadline -->
+                    <!-- Duration -->
                     <div class="col-md-3">
-                        <label class="form-label fw-semibold">Deadline</label>
-                        <input type="date" name="application_deadline" value="{{ old('application_deadline') }}"
-                            class="form-control form-control-lg shadow-sm rounded-2" />
-                        @error('application_deadline') <div class="text-danger small">{{ $message }}</div> @enderror
+                        <label class="form-label fw-semibold">Duration (minutes)</label>
+                        <input type="number" name="duration" min="1" value="{{ old('duration') }}"
+                            class="form-control form-control-lg shadow-sm rounded-2" placeholder="e.g. 90" />
+                        @error('duration') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
 
-                    <!-- Fee -->
+                    <!-- pass_point -->
                     <div class="col-md-3">
-                        <label class="form-label fw-semibold">Fee</label>
-                        <input type="number" name="fee" value="{{ old('fee') }}"
+                        <label class="form-label fw-semibold">Pass Point</label>
+                        <input type="number" min="1" name="pass_point" value="{{ old('pass_point') }}"
+                            class="form-control form-control-lg shadow-sm rounded-2" placeholder="e.g. 60" />
+                        @error('pass_point') <div class="text-danger small">{{ $message }}</div> @enderror
+                    </div>
+
+                    <!-- Total Point -->
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Total Point</label>
+                        <input type="number" min="1" name="total_point" value="{{ old('total_point') }}"
                             class="form-control form-control-lg shadow-sm rounded-2" placeholder="e.g. 100" />
-                        @error('fee') <div class="text-danger small">{{ $message }}</div> @enderror
+                        @error('total_point') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
 
-                    <!-- Result Publish Date -->
+                     <!-- Answer Value -->
                     <div class="col-md-3">
-                        <label class="form-label fw-semibold">Result Publish Date</label>
-                        <input type="date" name="result_publish_date" value="{{ old('result_publish_date') }}"
-                            class="form-control form-control-lg shadow-sm rounded-2" />
-                        @error('result_publish_date') <div class="text-danger small">{{ $message }}</div> @enderror
-                    </div>
-
-                    <!-- Start Time -->
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold">Start Time</label>
-                        <input type="time" name="start_time" value="{{ old('start_time') }}"
-                            class="form-control form-control-lg shadow-sm rounded-2" />
-                        @error('start_time') <div class="text-danger small">{{ $message }}</div> @enderror
-                    </div>
-
-                    <!-- End Time -->
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold">End Time</label>
-                        <input type="time" name="end_time" value="{{ old('end_time') }}"
-                            class="form-control form-control-lg shadow-sm rounded-2" />
-                        @error('end_time') <div class="text-danger small">{{ $message }}</div> @enderror
+                        <label class="form-label fw-semibold">Answer Value</label>
+                        <input type="number" min="1" name="answer_value" value="{{ old('answer_value') }}"
+                            class="form-control form-control-lg shadow-sm rounded-2" placeholder="e.g. 1" />
+                        @error('answer_value') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
 
                     <!-- Description -->

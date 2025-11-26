@@ -20,35 +20,6 @@
                         @enderror
                     </div>
 
-                    <!-- Date Filter -->
-                    <div class="col-md-3">
-                        <label class="form-label">Choose Date:</label>
-                        <select name="date_filter" class="form-select">
-                            <option value="">Select option...</option>
-                            <option value="exam_date" {{ old('date_filter', request()->date_filter) == 'exam_date' ? 'selected' : '' }}>Exam Date</option>
-                            <option value="application_deadline" {{ old('date_filter', request()->date_filter) == 'application_deadline' ? 'selected' : '' }}>Application Deadline</option>
-                            <option value="result_publish_date" {{ old('date_filter', request()->date_filter) == 'result_publish_date' ? 'selected' : '' }}>Result Publish Date</option>
-                        </select>
-                    </div>
-
-                    <!-- From Date Filter -->
-                    <div class="col-md-3">
-                        <label class="form-label">From</label>
-                        <input type="date" name="from_date" value="{{ old('from_date', request()->from_date) }}" class="form-control" />
-                        @error('from_date')
-                        <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <!-- To Date Filter -->
-                    <div class="col-md-3">
-                        <label class="form-label">To</label>
-                        <input type="date" name="to_date" value="{{ old('to_date', request()->to_date) }}" class="form-control" />
-                        @error('to_date')
-                        <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-
                     <div class="flex justify-end items-center gap-3 mt-3">
                         <a href="{{ route('mock-tests.exam.list') }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium border shadow-md transition">Reset Filters</a>
                         <button type="submit" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-green-500 text-white hover:bg-green-600 shadow-md transition">Apply Filters</button>
@@ -86,22 +57,22 @@
                     </th>
                     <th scope="col" class="d-none d-md-table-cell text-secondary small py-3">
                         <a href="{{ route('mock-tests.exam.list', ['order_by' => 'exam_date', 'direction' => (request()->direction == 'asc' ? 'desc' : 'asc')]) }}" class="text-primary hover-effect">
-                            Exam Date
+                            Short Name
                         </a>
                     </th>
                     <th scope="col" class="d-none d-md-table-cell text-secondary small py-3">
-                        <a href="{{ route('mock-tests.exam.list', ['order_by' => 'application_deadline', 'direction' => (request()->direction == 'asc' ? 'desc' : 'asc')]) }}" class="text-primary hover-effect">
-                            Deadline
+                        <a href="{{ route('mock-tests.exam.list', ['order_by' => 'duration', 'direction' => (request()->direction == 'asc' ? 'desc' : 'asc')]) }}" class="text-primary hover-effect">
+                            Duration
                         </a>
                     </th>
                     <th scope="col" class="d-none d-md-table-cell text-secondary small py-3">
-                        <a href="{{ route('mock-tests.exam.list', ['order_by' => 'fee', 'direction' => (request()->direction == 'asc' ? 'desc' : 'asc')]) }}" class="text-primary hover-effect">
-                            Fees (Tk)
+                        <a href="{{ route('mock-tests.exam.list', ['order_by' => 'total_point', 'direction' => (request()->direction == 'asc' ? 'desc' : 'asc')]) }}" class="text-primary hover-effect">
+                            Total Point
                         </a>
                     </th>
                     <th scope="col" class="d-none d-md-table-cell text-secondary small py-3">
-                        <a href="{{ route('mock-tests.exam.list', ['order_by' => 'result_publish_date', 'direction' => (request()->direction == 'asc' ? 'desc' : 'asc')]) }}" class="text-primary hover-effect">
-                            Result Date
+                        <a href="{{ route('mock-tests.exam.list', ['order_by' => 'answer_value', 'direction' => (request()->direction == 'asc' ? 'desc' : 'asc')]) }}" class="text-primary hover-effect">
+                            Answer Value
                         </a>
                     </th>
                     <th scope="col" class="d-none d-md-table-cell text-secondary small py-3">Created By</th>
@@ -117,10 +88,10 @@
                     <td class="d-none d-sm-table-cell px-4 py-1">
                         {{ $exam->title }}
                     </td>
-                    <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->exam_date }}</td>
-                    <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->application_deadline }}</td>
-                    <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->fee }}</td>
-                    <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->result_publish_date }}</td>
+                    <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->name }}</td>
+                    <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->duration }}</td>
+                    <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->total_point }}</td>
+                    <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->answer_value }}</td>
                     <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->creator->name }}</td>
 
                     <td class="d-none d-sm-table-cell py-1">
