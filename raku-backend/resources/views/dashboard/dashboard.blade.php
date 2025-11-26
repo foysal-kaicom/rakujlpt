@@ -101,7 +101,7 @@
                             d="M21 18H6C5.44772 18 5 18.4477 5 19C5 19.5523 5.44772 20 6 20H21V22H6C4.34315 22 3 20.6569 3 19V4C3 2.89543 3.89543 2 5 2H21V18ZM5 16.05C5.16156 16.0172 5.32877 16 5.5 16H19V4H5V16.05ZM16 9H8V7H16V9Z">
                         </path>
                     </svg>
-                    Quick Study Sections
+                    Latest Stats
                 </h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <!-- Reading Practice -->
@@ -117,8 +117,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="font-bold text-gray-800">Reading Practice</h3>
-                                <p class="text-xs text-gray-600">32 articles completed</p>
+                                <h3 class="font-bold text-gray-800">Total Mock Tests</h3>
+                                <p class="text-xs text-gray-600">{{ $exam_count }}</p>
                             </div>
                         </div>
                     </button>
@@ -136,8 +136,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="font-bold text-gray-800">Listening Practice</h3>
-                                <p class="text-xs text-gray-600">28 audio sessions</p>
+                                <h3 class="font-bold text-gray-800">Total Candidates</h3>
+                                <p class="text-xs text-gray-600">{{ $candidate_count }}</p>
                             </div>
                         </div>
                     </button>
@@ -156,8 +156,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="font-bold text-gray-800">Writing Practice</h3>
-                                <p class="text-xs text-gray-600">18 essays written</p>
+                                <h3 class="font-bold text-gray-800">Total Practices</h3>
+                                <p class="text-xs text-gray-600">{{ $practice_count }}</p>
                             </div>
                         </div>
                     </button>
@@ -175,8 +175,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="font-bold text-gray-800">Vocabulary Practice</h3>
-                                <p class="text-xs text-gray-600">1,200 words learned</p>
+                                <h3 class="font-bold text-gray-800">Total Active Packages</h3>
+                                <p class="text-xs text-gray-600">{{ $package_count }}</p>
                             </div>
                         </div>
                     </button>
@@ -192,32 +192,18 @@
                             d="M9 1V3H15V1H17V3H21C21.5523 3 22 3.44772 22 4V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H7V1H9ZM20 11H4V19H20V11ZM7 5H4V9H20V5H17V7H15V5H9V7H7V5Z">
                         </path>
                     </svg>
-                    Upcoming
+                    Upcoming Mock Tests
                 </h2>
                 <div class="space-y-3">
-                    <div class="p-3 bg-red-50 rounded-lg border border-red-200">
+                    @foreach($recent_mock_tests as $key => $test)
+                    <div data-index="{{ $key }}" class="p-3 {{$key==0 ? 'bg-red-50' : ''}}{{$key==1 ? 'bg-orange-50' : ''}}{{$key==2 ? 'bg-blue-50' : ''}} rounded-lg border border-red-200">
                         <div class="flex items-center gap-2 mb-1">
-                            <span class="px-2 py-1 bg-red-600 text-white text-xs font-bold rounded">N3</span>
-                            <span class="text-xs text-red-700 font-semibold">Full Mock Test</span>
+                            <span class="px-2 py-1 {{$key==0 ? 'bg-red-600' : ''}}{{$key==1 ? 'bg-orange-600' : ''}}{{$key==2 ? 'bg-blue-600' : ''}} text-white text-xs font-bold rounded">{{ $test->name }}</span>
+                            <span class="text-xs {{$key==0 ? 'text-red-700' : ''}}{{$key==1 ? 'text-orange-700' : ''}}{{$key==2 ? 'text-blue-700' : ''}} font-semibold">{{ $test->title }}</span>
                         </div>
-                        <p class="text-xs text-gray-600">Dec 15, 2024 • 10:00 AM</p>
+                        <p class="text-xs text-gray-600">{{ \Carbon\Carbon::parse($test->exam_date)->format('M j, Y • g:i A') }}</p>
                     </div>
-
-                    <div class="p-3 bg-orange-50 rounded-lg border border-orange-200">
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="px-2 py-1 bg-orange-600 text-white text-xs font-bold rounded">N2</span>
-                            <span class="text-xs text-orange-700 font-semibold">Grammar Quiz</span>
-                        </div>
-                        <p class="text-xs text-gray-600">Dec 18, 2024 • 2:00 PM</p>
-                    </div>
-
-                    <div class="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="px-2 py-1 bg-blue-600 text-white text-xs font-bold rounded">N4</span>
-                            <span class="text-xs text-blue-700 font-semibold">Vocabulary Test</span>
-                        </div>
-                        <p class="text-xs text-gray-600">Dec 20, 2024 • 4:00 PM</p>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </section>
@@ -233,40 +219,18 @@
                             d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM13 12V7H11V14H17V12H13Z">
                         </path>
                     </svg>
-                    Recent Activity
+                    Recent Subscription Activity
                 </h2>
                 <div class="space-y-3">
-                    <div class="flex items-start gap-3 p-3 bg-green-50 rounded-lg border border-green-200">
-                        <div class="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                    @foreach($recent_subscriptions as $key => $activity)
+                    <div class="flex items-start gap-3 p-3 rounded-lg border {{$activity->payment_status=='pending' ? 'bg-yellow-50 border-yellow-200' : ''}}{{$activity->payment_status=='success' ? 'bg-green-50 border-green-200' : ''}}{{$activity->payment_status=='failed' ? 'bg-red-50 border-red-200' : ''}}">
+                        <div class="w-2 h-2 {{$activity->payment_status=='pending' ? 'bg-yellow-500' : ''}}{{$activity->payment_status=='success' ? 'bg-green-500' : ''}}{{$activity->payment_status=='failed' ? 'bg-red-500' : ''}} rounded-full mt-2 flex-shrink-0"></div>
                         <div class="flex-1">
-                            <p class="text-sm font-semibold text-gray-800">Completed N3 Kanji Mock Test</p>
-                            <p class="text-xs text-gray-600 mt-1">Score: 85/100 • 2 hours ago</p>
+                            <p class="text-sm font-semibold text-gray-800">{{$activity->candidate->first_name}} subscribed to {{$activity->package->name}}</p>
+                            <p class="text-xs text-gray-600 mt-1">Payment Status: {{ucfirst($activity->payment_status)}} • {{ \Carbon\Carbon::parse($activity->created_at)->diffForHumans() }}</p>
                         </div>
                     </div>
-
-                    <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                        <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                        <div class="flex-1">
-                            <p class="text-sm font-semibold text-gray-800">Started N2 Grammar Practice</p>
-                            <p class="text-xs text-gray-600 mt-1">Progress: 45% • 5 hours ago</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-start gap-3 p-3 bg-purple-50 rounded-lg border border-purple-200">
-                        <div class="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
-                        <div class="flex-1">
-                            <p class="text-sm font-semibold text-gray-800">Achieved 30-day Study Streak!</p>
-                            <p class="text-xs text-gray-600 mt-1">Keep it up! • Yesterday</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-start gap-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                        <div class="w-2 h-2 bg-yellow-500 rounded-full mt-2 flex-shrink-0"></div>
-                        <div class="flex-1">
-                            <p class="text-sm font-semibold text-gray-800">Vocabulary Quiz Completed</p>
-                            <p class="text-xs text-gray-600 mt-1">N4 Level • 2 days ago</p>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
 
@@ -279,68 +243,27 @@
                             d="M2 13H8V21H2V13ZM16 8H22V21H16V8ZM9 3H15V21H9V3ZM4 15V19H6V15H4ZM11 5V19H13V5H11ZM18 10V19H20V10H18Z">
                         </path>
                     </svg>
-                    JLPT Level Progress
+                    Mock Test Wise Candidates Participation
                 </h2>
                 <div class="space-y-4">
-                    <!-- N5 Level -->
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm font-semibold text-gray-700">N5 (Beginner)</span>
-                            <span class="text-sm font-bold text-green-600">100%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5">
-                            <div class="bg-green-500 h-2.5 rounded-full transition-all duration-300" style="width: 100%">
-                            </div>
-                        </div>
-                    </div>
+         
+                    @foreach($exam_submission_count as $key => $exam)
+                    @php
+                        $colors = ['green','orange','yellow','red','teal','blue','indigo','violet','purple','pink'];
+                        $color = $colors[$key % count($colors)];
+                    @endphp
 
-                    <!-- N4 Level -->
-                    <div>
+                    <div title="Total Candidates: {{ $exam['count'] }}" class="cursor-pointer">
                         <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm font-semibold text-gray-700">N4 (Elementary)</span>
-                            <span class="text-sm font-bold text-blue-600">85%</span>
+                            <span class="text-sm font-semibold text-gray-700">{{ $exam['title'] }}</span>
+                            <span class="text-sm font-bold text-{{ $color }}-600">{{ $exam['percentage'] }}%</span>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-2.5">
-                            <div class="bg-blue-500 h-2.5 rounded-full transition-all duration-300" style="width: 85%">
-                            </div>
+                            <div class="bg-{{ $color }}-500 h-2.5 rounded-full transition-all duration-300" style="width: {{ $exam['percentage'] }}%"></div>
                         </div>
                     </div>
+                    @endforeach
 
-                    <!-- N3 Level -->
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm font-semibold text-gray-700">N3 (Intermediate)</span>
-                            <span class="text-sm font-bold text-yellow-600">60%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5">
-                            <div class="bg-yellow-500 h-2.5 rounded-full transition-all duration-300" style="width: 60%">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- N2 Level -->
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm font-semibold text-gray-700">N2 (Pre-Advanced)</span>
-                            <span class="text-sm font-bold text-orange-600">35%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5">
-                            <div class="bg-orange-500 h-2.5 rounded-full transition-all duration-300" style="width: 35%">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- N1 Level -->
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm font-semibold text-gray-700">N1 (Advanced)</span>
-                            <span class="text-sm font-bold text-red-600">15%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5">
-                            <div class="bg-red-500 h-2.5 rounded-full transition-all duration-300" style="width: 15%">
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
