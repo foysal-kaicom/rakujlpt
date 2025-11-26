@@ -44,6 +44,27 @@ body {
   background: var(--primary-color);
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #ffcefd00;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #a40db4;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #a30db4a4;
+}
+
 .scrollbar-hide {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
@@ -53,18 +74,26 @@ body {
   display: none; /* Chrome, Safari */
 }
 
+/* For Firefox */
 .scrollbar-thin {
-  scrollbar-width: 3px; /* Firefox */
-  -ms-overflow-style: 3px; /* IE and Edge */
+  scrollbar-width: thin;      /* valid values: auto, thin, none */
+  scrollbar-color: #a40db4 transparent; /* thumb | track */
 }
 
+/* For Chrome, Safari, Edge */
 .scrollbar-thin::-webkit-scrollbar {
-  display: 3px; /* Chrome, Safari */
+  width: 3px;
 }
 
-/* button{
-  cursor: pointer;
-} */
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #a40db4;
+  border-radius: 10px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 
 /* css for animation */
 

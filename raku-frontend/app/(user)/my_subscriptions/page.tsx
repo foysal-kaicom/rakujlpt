@@ -384,7 +384,7 @@ export default function SubscriptionPage() {
               onClick={() => setShowDetailModal(false)}
               className="absolute top-3 right-3 bg-red-600 size-7 rounded-full p-1 text-white hover:rotate-180 duration-300 cursor-pointer"
             />
-            <div className="max-h-[70vh] overflow-x-auto pr-5">
+            <div className="max-h-[70vh] overflow-y-auto pr-5 scrollbar-thin">
               <div className="flex flex-col items-center space-y-4">
                 <div className="bg-linear-to-tr from-blue-500 to-indigo-500 p-2 lg:p-4 rounded-2xl shadow-lg ring-2 ring-blue-100">
                   <CheckCircle className="size-6 lg:size-10 text-white" />
