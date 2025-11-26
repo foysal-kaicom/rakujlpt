@@ -18,13 +18,12 @@ class Exam extends Model
         'title',
         'slug',
         'description',
-        'exam_date',
-        'application_deadline',
-        'fee',
+        'duration',
+        'pass_point',
+        'total_point',
         'image',
-        'result_publish_date',
+        'answer_value',
         'start_time',
-        'end_time',
         'created_by',
     ];
 
@@ -69,6 +68,11 @@ class Exam extends Model
     public function mockTestModules()
     {
         return $this->hasMany(MockTestModule::class);
+    }
+
+    public function mockTestRecords()
+    {
+        return $this->hasMany(MockTestRecords::class, 'exam_id', 'id');
     }
 
 }

@@ -145,6 +145,7 @@ class RoadmapController extends Controller
 
             $result[] = [
                 'current_module_name' => $roadmap->title,
+                'current_module_slug' => $roadmap->slug,
                 'current_stage_id' => $currentStage ? $currentStage->stage->id : null,
                 'current_stage_name' => $currentStage ? $currentStage->stage->title : null,
                 'stage_slug' => $currentStage ? $currentStage->stage->slug : null,

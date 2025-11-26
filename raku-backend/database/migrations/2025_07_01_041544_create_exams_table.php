@@ -13,20 +13,16 @@ return new class extends Migration
     {
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->string('title');
+            $table->string('name')->comment("Short Name");
             $table->string('slug')->unique();
             $table->text('description')->nullable();
-            $table->date('exam_date')->nullable();
-            $table->date('application_deadline')->nullable();
-            $table->double('fee',10,2)->default(0.0);
             $table->string('image')->nullable();
-            $table->date('result_publish_date')->nullable();
+            $table->double('duration')->nullable();
+            $table->double('pass_point')->nullable();
+            $table->double('total_point')->nullable();
+            $table->double('answer_value')->nullable();
             $table->boolean('status')->default(true);
-
-            $table->time('start_time')->nullable();
-            $table->time('end_time')->nullable();
-
             $table->foreignId('created_by')->constrained('users');
             $table->softDeletes();
             $table->timestamps();
