@@ -16,7 +16,7 @@ import {
   FaChevronLeft,
   FaChevronRight,
   FaStar,
-  FaCheck
+  FaCheck,
 } from "react-icons/fa";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 
@@ -91,7 +91,6 @@ export default function ExamPage() {
   const [examTitle, setExamTitle] = useState<string>(
     "Japanese Language Proficiency Exam"
   );
-  const [timeRemaining , setTimeRemaining] = useState<number>()
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -107,6 +106,8 @@ export default function ExamPage() {
     answers,
     setAnswer,
     clearAnswers,
+    timeRemaining,
+    setTimeRemaining,
     decrementTime,
     resetTime,
     examStarted,
@@ -195,10 +196,10 @@ export default function ExamPage() {
         );
         setQuestions(response.data.data.sections);
         setExamTitle(response.data.data.exam_title);
-        setTimeRemaining(response?.data?.data?.exam_duration)
         setCurrentSectionIndex(0);
 
-        resetTime(50 * 60);
+        const duration = Number(response.data.data.exam_duration); // convert to number
+        setTimeRemaining(duration * 60);
 
         toast.success(response?.data?.message || "Mock test questions loaded!");
       } catch (error: any) {
@@ -768,14 +769,10 @@ export default function ExamPage() {
                                         />
 
                                         {/* Default Circle */}
-                                        <span
-                                          className="absolute inset-0 w-5 h-5 border-2 border-purple-500 rounded-full flex items-center justify-center transition-all duration-200 peer-checked:opacity-0"
-                                        ></span>
+                                        <span className="absolute inset-0 w-5 h-5 border-2 border-purple-500 rounded-full flex items-center justify-center transition-all duration-200 peer-checked:opacity-0"></span>
 
                                         {/* Star When Checked */}
-                                        <FaCheck
-                                          className="absolute inset-0 w-5 h-5 text-white bg-purple-500 rounded-full p-1 opacity-0 transition-all duration-200 peer-checked:opacity-100"
-                                        />
+                                        <FaCheck className="absolute inset-0 w-5 h-5 text-white bg-purple-500 rounded-full p-1 opacity-0 transition-all duration-200 peer-checked:opacity-100" />
                                       </div>
 
                                       <div
