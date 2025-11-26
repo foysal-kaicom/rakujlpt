@@ -17,14 +17,11 @@ interface Exam {
   slug: string;
   short_name: string;
   title: string;
-  fee: string;
   description: string;
-  exam_date?: string;
-  start_time?: string;
-  end_time?: string;
-  application_deadline?: string;
-  result_publish_date?: string;
-  available_to_apply?: string;
+  duration?: string;
+  pass_point?: number;
+  total_point?: number;
+  answer_value?: number;
 }
 
 type Option = {
@@ -146,6 +143,26 @@ export default function MockTestSelect() {
                               <p className="text-gray-600 text-sm mb-6 group-hover:text-black transition-colors">
                                 {test.description}
                               </p>
+
+                              <div className="flex justify-between gap-5 mb-6 text-sm">
+                                <div className="flex-1">
+                                  <p className="text-gray-500 font-medium">
+                                    ⏱ Duration
+                                  </p>
+                                  <p className="text-lg font-bold text-indigo-600">
+                                    {test.duration}
+                                  </p>
+                                </div>
+
+                                <div className="flex-1">
+                                  <p className="text-gray-500 font-medium">
+                                    🏅 Passing
+                                  </p>
+                                  <p className="text-lg font-bold text-pink-600">
+                                    {test.pass_point} Point
+                                  </p>
+                                </div>
+                              </div>
 
                               <Link
                                 href={`/mock_test_select/${test.id}?type=${test.short_name}`}
