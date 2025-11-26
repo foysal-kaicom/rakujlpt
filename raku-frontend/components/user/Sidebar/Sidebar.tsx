@@ -19,7 +19,7 @@ export default function Sidebar() {
 
   const MainSidebar = () => {
     return (
-      <div className="min-h-[75vh] bg-white w-[300px] sticky top-0 shadow-lg hidden xl:block">
+      <div className="h-[calc(100vh-80px)] bg-white w-[300px] fixed top-[80px] shadow-lg hidden xl:block overflow-y-auto scrollbar-thin">
         <Link href="/profile">
           <div className="p-5 flex flex-col items-center relative pt-8">
             <div className="h-22 w-full bg-purple-400 absolute left-0 top-0"></div>
