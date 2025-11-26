@@ -21,7 +21,7 @@ class DashboardController extends Controller
         $practice_count = Roadmap::count();
         $package_count = Package::where('status', 1)->count();
 
-        $recent_mock_tests = Exam::orderBy('exam_date', 'desc')->select('title', 'name', 'exam_date')->take(3)->get();
+        $recent_mock_tests = Exam::orderBy('created_at', 'desc')->select('title', 'name', 'created_at')->take(3)->get();
 
         $recent_subscriptions = UserSubscription::with([
             'package:id,name',

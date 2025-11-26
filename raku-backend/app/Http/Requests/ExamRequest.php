@@ -22,16 +22,14 @@ class ExamRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:100',
             'title' => 'required|string|max:255',
+            'name' => 'required|string|max:100',
             'description' => 'nullable|string',
-            'exam_date' => 'nullable|date',
-            'application_deadline' => 'nullable|date',
-            'result_publish_date' => 'nullable|date',
-            'fee' => 'required|numeric',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'start_time' => 'nullable|date_format:H:i',
-            'end_time' => 'nullable|date_format:H:i',
+            'duration' => 'nullable|numeric',
+            'pass_point' => 'nullable|numeric',
+            'total_point' => 'nullable|numeric',
+            'answer_value' => 'nullable|numeric',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ];
     }
 }
