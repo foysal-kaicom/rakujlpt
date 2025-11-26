@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { Sparkles, ArrowUpCircle, CheckCircle } from "lucide-react";
 import { FiArrowRight } from "react-icons/fi";
+import { RxCross2 } from "react-icons/rx";
 
 import axiosInstance from "@/utils/axios";
 import { toast } from "sonner";
@@ -12,6 +13,7 @@ import { toast } from "sonner";
 import BreadCrumb from "@/components/BreadCrumb";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
 import Loader from "@/components/Loader";
+import PaginatedComponent from "@/components/PaginateComponent";
 
 interface SubscriptionItem {
   id: number;
@@ -32,7 +34,25 @@ export default function SubscriptionPage() {
   const [subscriptionData, setSubscriptionData] = useState<SubscriptionItem[]>(
     []
   );
+  const [showDetailModal, setShowDetailModal] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  // Calculate pagination
+  const totalExams = subscriptionData.length;
+  const totalPages = Math.ceil(totalExams / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentSubcription = subscriptionData.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) setCurrentPage(page);
+  };
 
   const getSubscriptionData = async () => {
     setLoading(true);
@@ -78,6 +98,27 @@ export default function SubscriptionPage() {
     }
   };
 
+  const planDetails = [
+    {
+      name: "JPT",
+      totalExam: 100,
+      used: 50,
+      remain: 50,
+    },
+    {
+      name: "JLPT",
+      totalExam: 100,
+      used: 100,
+      remain: 0,
+    },
+    {
+      name: "NAT",
+      totalExam: 100,
+      used: 0,
+      remain: 100,
+    },
+  ];
+
   return (
     <>
       {loading && <Loader />}
@@ -95,11 +136,16 @@ export default function SubscriptionPage() {
                   <CheckCircle className="w-10 h-10 text-white" />
                 </div>
                 <h2 className="text-2xl font-extrabold text-gray-800 tracking-tight">
-                  Current Plan: <span className="text-blue-600">{subscriptionData[0].package_name}</span>
+                  Current Plan:{" "}
+                  <span className="text-blue-600">
+                    {subscriptionData[0].package_name}
+                  </span>
                 </h2>
                 <p className="text-sm text-gray-500 max-w-sm">
                   You are currently enjoying the{" "}
-                  <span className="font-medium text-blue-600">{subscriptionData[0].package_name} plan</span>{" "}
+                  <span className="font-medium text-blue-600">
+                    {subscriptionData[0].package_name} plan
+                  </span>{" "}
                   with limited access to premium feature.
                 </p>
               </div>
@@ -149,35 +195,34 @@ export default function SubscriptionPage() {
           </div>
         )}
         {/* 📜 Subscription History */}
-        <div>
-          <h3 className="text-lg font-semibold mb-4 text-gray-800">
-            Subscription History
-          </h3>
-
-          <div className="overflow-clip rounded-2xl hidden md:block">
-            <table className="w-full border-separate border-spacing-0 rounded-xl bg-white border border-gray-200 shadow text-sm">
-              <thead>
-                <tr className="bg-gradient-to-r from-purple-700 via-violet-700 to-blue-700 text-white text-xs sm:text-sm">
-                  <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
-                    Package
-                  </th>
-                  <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200 hidden sm:table-cell">
-                    Price
-                  </th>
-                  <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
-                    Payment Status
-                  </th>
-                  <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
-                    Last Updated
-                  </th>
-                  <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {subscriptionData.length > 0 ? (
-                  subscriptionData.map((subscription, index) => (
+        {subscriptionData.length > 0 ? (
+          <>
+            <h3 className="text-lg font-semibold mb-4 text-gray-800">
+              Subscription History
+            </h3>
+            <div className="overflow-clip rounded-2xl hidden md:block">
+              <table className="w-full border-separate border-spacing-0 rounded-xl bg-white border border-gray-200 shadow text-sm">
+                <thead>
+                  <tr className="bg-gradient-to-r from-purple-700 via-violet-700 to-blue-700 text-white text-xs sm:text-sm">
+                    <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
+                      Package
+                    </th>
+                    <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200 hidden sm:table-cell">
+                      Price
+                    </th>
+                    <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
+                      Payment Status
+                    </th>
+                    <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
+                      Last Updated
+                    </th>
+                    <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentSubcription.map((subscription, index) => (
                     <tr
                       key={index}
                       className="bg-white hover:bg-blue-50 text-xs sm:text-sm transition"
@@ -206,33 +251,32 @@ export default function SubscriptionPage() {
 
                       <td className="p-2 sm:p-3 text-gray-700 border-t border-r border-gray-200 capitalize">
                         {!subscription.is_free && index === 0 ? (
-                          <button
-                            onClick={() => handleRenew(subscription.id)}
-                            className="inline-block px-4 py-2 bg-gradient-to-r from-purple-700 via-violet-700 to-blue-700 font-medium text-white rounded-lg hover:opacity-80 transition"
-                          >
-                            Renew
-                          </button>
+                          <div className="space-x-2">
+                            <button
+                              onClick={() => handleRenew(subscription.id)}
+                              className="inline-block px-4 py-2 bg-gradient-to-r from-purple-700 via-violet-700 to-blue-700 font-medium text-white rounded-lg hover:opacity-80 transition"
+                            >
+                              Renew
+                            </button>
+                            {/* <button
+                              onClick={() => setShowDetailModal(true)}
+                              className="inline-block px-4 py-2 bg-purple-600 font-medium text-white rounded-lg hover:opacity-80 transition"
+                            >
+                              Details
+                            </button> */}
+                          </div>
                         ) : (
                           "N/A"
                         )}
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={7} className="text-center text-gray-500 py-6">
-                      No subscription found.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-          {/* Mobile view */}
-          <div className="md:hidden mt-6 space-y-4">
-            {subscriptionData.length > 0 ? (
-              subscriptionData.map((subscription, index) => (
+            <div className="md:hidden mt-6 space-y-4">
+              {currentSubcription.map((subscription, index) => (
                 <div
                   key={index}
                   className="relative bg-gradient-to-br from-blue-50 to-pink-50 rounded-2xl p-6 border-2 border-purple-200 hover:border-purple-400 hover:shadow-2xl hover:shadow-purple-200/50 transition-all duration-300 hover:-translate-y-1 group overflow-hidden"
@@ -291,17 +335,104 @@ export default function SubscriptionPage() {
                         </div>
                       </div>
                     </div>
+                    {index === 0 && (
+                      <div className="flex justify-end">
+                        <button
+                          onClick={() => handleRenew(subscription.id)}
+                          className="text-sm inline-block px-6 py-1.5 bg-gradient-to-r from-purple-700 via-violet-700 to-blue-700 font-medium text-white rounded-full hover:opacity-80 transition"
+                        >
+                          Renew
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
-              ))
-            ) : (
-              <div className="text-center text-gray-500 py-6">
-                No subscriptions found.
+              ))}
+            </div>
+
+            <PaginatedComponent
+              handlePageChange={handlePageChange}
+              totalPages={totalPages}
+              currentPage={currentPage}
+            />
+          </>
+        ) : (
+          <div className="text-center text-gray-500 py-6 flex flex-col gap-3 justify-center items-center">
+            You have not purchased any subscription yet !!
+            <Link href="/packages">
+              <button className="relative overflow-hidden text-sm md:text-base inline-block px-10 py-2 font-semibold text-white rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg shadow-purple-500/40 hover:shadow-purple-500/60 hover:scale-105 transition-all duration-300 ease-out">
+                <span className="relative z-10"> Buy Now</span>
+                <span className="absolute inset-0 bg-gradient-to-r from-purple-400/30 via-pink-400/30 to-blue-400/30 blur-xl opacity-60 transition-opacity duration-300 group-hover:opacity-90"></span>
+              </button>
+            </Link>
+          </div>
+        )}
+      </div>
+
+      {showDetailModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-5">
+          <div className="max-w-lg relative bg-gradient-to-br from-white to-gray-50 rounded-3xl border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.08)] py-5 pl-5 text-center transition hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] flex items-center fade-slide-in-bottom">
+            <RxCross2
+              onClick={() => setShowDetailModal(false)}
+              className="absolute top-3 right-3 bg-red-600 size-7 rounded-full p-1 text-white hover:rotate-180 duration-300 cursor-pointer"
+            />
+            <div className="max-h-[70vh] overflow-x-auto pr-5">
+              <div className="flex flex-col items-center space-y-4">
+                <div className="bg-gradient-to-tr from-blue-500 to-indigo-500 p-4 rounded-2xl shadow-lg ring-2 ring-blue-100">
+                  <CheckCircle className="w-10 h-10 text-white" />
+                </div>
+                <h2 className="text-2xl font-extrabold text-gray-800 tracking-tight">
+                  Current Plan:{" "}
+                  <span className="text-blue-600">
+                    {subscriptionData[0].package_name}
+                  </span>
+                </h2>
+                <p className="text-sm text-gray-500 max-w-sm">
+                  You are currently enjoying the{" "}
+                  <span className="font-medium text-blue-600">
+                    {subscriptionData[0].package_name} plan
+                  </span>{" "}
+                  with limited access to premium feature.
+                </p>
               </div>
-            )}
+              <div className="grid grid-cols-1 gap-6 mt-5">
+                {planDetails.map((exam) => (
+                  <div
+                    key={exam.name}
+                    className="p-5 rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white shadow-sm hover:shadow-md transition"
+                  >
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                      {exam.name}
+                    </h3>
+
+                    <div className="space-y-1 text-sm">
+                      <p className="flex justify-between text-gray-700">
+                        <span>Total Exams:</span> <span>{exam.totalExam}</span>
+                      </p>
+                      <p className="flex justify-between text-gray-700">
+                        <span>Used:</span> <span>{exam.used}</span>
+                      </p>
+                      <p className="flex justify-between font-medium text-blue-600">
+                        <span>Remaining:</span> <span>{exam.remain}</span>
+                      </p>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="w-full bg-gray-200 h-2 rounded-full mt-4 overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-blue-500 to-indigo-600"
+                        style={{
+                          width: `${(exam.used / exam.totalExam) * 100}%`,
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

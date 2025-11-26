@@ -38,81 +38,64 @@
             <!-- Form Fields -->
             <div class="col-md-9">
                 <div class="row g-3">
-                    <!-- Exam Name -->
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold">Exam Short Name</label>
-                        <input type="text" name="name" value="{{ old('name', $exam->name) }}" 
-                               class="form-control form-control-lg shadow-sm rounded-2" placeholder="Enter exam short name" />
-                        @error('name') <div class="text-danger small">{{ $message }}</div> @enderror
-                    </div>
-
                     <!-- Exam Title -->
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Exam Title</label>
-                        <input type="text" name="title" value="{{ old('title', $exam->title) }}" 
-                               class="form-control form-control-lg shadow-sm rounded-2" placeholder="Enter exam title" />
+                        <label class="form-label fw-semibold">Exam Title <span class="text-danger">*</span></label>
+                        <input type="text" name="title" value="{{ old('title', $exam->title) }}"
+                            class="form-control form-control-lg shadow-sm rounded-2" placeholder="Enter exam title" required />
                         @error('title') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
 
-                    <!-- Exam Date -->
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold">Exam Date</label>
-                        <input type="date" name="exam_date" 
-                               value="{{ old('exam_date', \Carbon\Carbon::parse($exam->exam_date)->format('Y-m-d')) }}" 
-                               class="form-control form-control-lg shadow-sm rounded-2" />
-                        @error('exam_date') <div class="text-danger small">{{ $message }}</div> @enderror
+                    <!-- Exam Name -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Exam Short Name <span class="text-danger">*</span></label>
+                        <select name="name" class="form-control form-control-lg shadow-sm rounded-2" required>
+                            <option value="" disabled {{ old('name', $exam->name) ? '' : 'selected' }}>Select Short Name</option>
+                            <option value="JLPT" {{ (old('name', $exam->name) === 'JLPT') ? 'selected' : '' }}>JLPT</option>
+                            <option value="JPT"  {{ (old('name', $exam->name) === 'JPT')  ? 'selected' : '' }}>JPT</option>
+                            <option value="NAT"  {{ (old('name', $exam->name) === 'NAT')  ? 'selected' : '' }}>NAT</option>
+                            <option value="JFT"  {{ (old('name', $exam->name) === 'JFT')  ? 'selected' : '' }}>JFT</option>
+                        </select>
+                        @error('name') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
 
-                    <!-- Deadline -->
+                    <!-- Duration -->
                     <div class="col-md-3">
-                        <label class="form-label fw-semibold">Deadline</label>
-                        <input type="date" name="application_deadline" 
-                               value="{{ old('application_deadline', \Carbon\Carbon::parse($exam->application_deadline)->format('Y-m-d')) }}" 
-                               class="form-control form-control-lg shadow-sm rounded-2" />
-                        @error('application_deadline') <div class="text-danger small">{{ $message }}</div> @enderror
+                        <label class="form-label fw-semibold">Duration (minutes)</label>
+                        <input type="number" name="duration" min="1" value="{{ old('duration', $exam->duration) }}"
+                            class="form-control form-control-lg shadow-sm rounded-2" placeholder="e.g. 90" />
+                        @error('duration') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
 
-                    <!-- Fee -->
+                    <!-- Pass Point -->
                     <div class="col-md-3">
-                        <label class="form-label fw-semibold">Fee</label>
-                        <input type="number" name="fee" value="{{ old('fee', $exam->fee) }}" 
-                               class="form-control form-control-lg shadow-sm rounded-2" placeholder="e.g. 100" />
-                        @error('fee') <div class="text-danger small">{{ $message }}</div> @enderror
+                        <label class="form-label fw-semibold">Pass Point</label>
+                        <input type="number" min="1" name="pass_point" value="{{ old('pass_point', $exam->pass_point) }}"
+                            class="form-control form-control-lg shadow-sm rounded-2" placeholder="e.g. 60" />
+                        @error('pass_point') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
 
-                    <!-- Result Publish Date -->
+                    <!-- Total Point -->
                     <div class="col-md-3">
-                        <label class="form-label fw-semibold">Result Publish Date</label>
-                        <input type="date" name="result_publish_date" 
-                               value="{{ old('result_publish_date', \Carbon\Carbon::parse($exam->result_publish_date)->format('Y-m-d')) }}" 
-                               class="form-control form-control-lg shadow-sm rounded-2" />
-                        @error('result_publish_date') <div class="text-danger small">{{ $message }}</div> @enderror
+                        <label class="form-label fw-semibold">Total Point</label>
+                        <input type="number" min="1" name="total_point" value="{{ old('total_point', $exam->total_point) }}"
+                            class="form-control form-control-lg shadow-sm rounded-2" placeholder="e.g. 100" />
+                        @error('total_point') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
 
-                    <!-- Start Time -->
+                    <!-- Answer Value -->
                     <div class="col-md-3">
-                        <label class="form-label fw-semibold">Start Time</label>
-                        <input type="time" name="start_time" 
-                               value="{{ old('start_time', \Carbon\Carbon::parse($exam->start_time)->format('H:i')) }}" 
-                               class="form-control form-control-lg shadow-sm rounded-2" />
-                        @error('start_time') <div class="text-danger small">{{ $message }}</div> @enderror
-                    </div>
-
-                    <!-- End Time -->
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold">End Time</label>
-                        <input type="time" name="end_time" 
-                               value="{{ old('end_time', \Carbon\Carbon::parse($exam->end_time)->format('H:i')) }}" 
-                               class="form-control form-control-lg shadow-sm rounded-2" />
-                        @error('end_time') <div class="text-danger small">{{ $message }}</div> @enderror
+                        <label class="form-label fw-semibold">Answer Value</label>
+                        <input type="number" min="1" name="answer_value" value="{{ old('answer_value', $exam->answer_value) }}"
+                            class="form-control form-control-lg shadow-sm rounded-2" placeholder="e.g. 1" />
+                        @error('answer_value') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
 
                     <!-- Description -->
                     <div class="col-md-12">
                         <label class="form-label fw-semibold">Description</label>
-                        <textarea name="description" rows="4" 
-                                  class="form-control shadow-sm rounded-2" 
-                                  placeholder="Brief details about the exam">{{ old('description', $exam->description) }}</textarea>
+                        <textarea name="description" rows="4" class="form-control shadow-sm rounded-2"
+                            placeholder="Brief details about the exam">{{ old('description', $exam->description) }}</textarea>
                         @error('description') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
                 </div>
