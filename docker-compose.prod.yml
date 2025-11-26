@@ -14,6 +14,8 @@ services:
       - frontend
       - backend
     restart: always
+    networks:
+      - app-network
 
   frontend:
     build:
@@ -26,6 +28,8 @@ services:
     expose:
       - "3000"
     restart: always
+    networks:
+      - app-network
 
   backend:
     build:
@@ -35,13 +39,14 @@ services:
     volumes:
       - ./raku-backend:/var/www/backend
       - ./raku-backend/docker/custom.ini:/usr/local/etc/php/conf.d/custom.ini
-
     command: php-fpm
     expose:
       - "9000"
     depends_on:
       - db
     restart: always
+    networks:
+      - app-network
 
   queue:
     build:
@@ -56,6 +61,8 @@ services:
       - db
     environment:
       - QUEUE_CONNECTION=database
+    networks:
+      - app-network
 
   db:
     image: mysql:8
@@ -70,6 +77,12 @@ services:
       - dbdata:/var/lib/mysql
     ports:
       - "3306:3306"
+    networks:
+      - app-network
 
 volumes:
   dbdata:
+
+networks:
+  app-network:
+    driver: bridge
