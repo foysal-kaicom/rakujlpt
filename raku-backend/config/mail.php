@@ -46,7 +46,7 @@ return [
             'username' => env('MAIL_USERNAME','9c0d69001@smtp-brevo.com'),
             'password' => env('MAIL_PASSWORD','cmsbzhX7pN9V3dB4'),
             'timeout' => null,
-            'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'http://rakujlpt.com'), PHP_URL_HOST)),
+            'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'https://rakujlpt.com'), PHP_URL_HOST)),
         ],
 
         'ses' => [

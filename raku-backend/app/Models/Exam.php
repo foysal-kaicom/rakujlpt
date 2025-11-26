@@ -71,4 +71,9 @@ class Exam extends Model
         return $this->hasMany(MockTestModule::class);
     }
 
+    public function mockTestRecords()
+    {
+        return $this->hasMany(MockTestRecords::class, 'exam_id', 'id');
+    }
+
 }
