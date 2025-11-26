@@ -28,13 +28,10 @@ class DashboardController extends Controller
             'candidate:id,first_name'
         ])->orderBy('created_at', 'desc')->take(4)->get();
 
-        // Get exams with their mock test records count
         $exams = Exam::withCount('mockTestRecords')->get(['id', 'title']);
 
-        // Total mock test records across all exams
         $totalRecords = $exams->sum('mock_test_records_count');
 
-        // Map to title, count and percentage (sorted by count desc)
         $exam_submission_count = $exams->map(function ($exam) use ($totalRecords) {
             $count = $exam->mock_test_records_count;
             $percentage = $totalRecords ? round(($count / $totalRecords) * 100, 2) : 0;
@@ -44,8 +41,6 @@ class DashboardController extends Controller
             'percentage' => $percentage,
             ];
         })->sortByDesc('count')->values();
-
-        // dd($exam_submission_count);
 
         return view('dashboard.dashboard', compact('exam_count', 'candidate_count', 'practice_count', 'package_count', 'recent_mock_tests', 'recent_subscriptions', 'exam_submission_count'));
     }
