@@ -192,7 +192,7 @@
                             d="M9 1V3H15V1H17V3H21C21.5523 3 22 3.44772 22 4V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H7V1H9ZM20 11H4V19H20V11ZM7 5H4V9H20V5H17V7H15V5H9V7H7V5Z">
                         </path>
                     </svg>
-                    Upcoming Mock Tests
+                    Recent Mock Tests
                 </h2>
                 <div class="space-y-3">
                     @foreach($recent_mock_tests as $key => $test)
@@ -201,7 +201,7 @@
                             <span class="px-2 py-1 {{$key==0 ? 'bg-red-600' : ''}}{{$key==1 ? 'bg-orange-600' : ''}}{{$key==2 ? 'bg-blue-600' : ''}} text-white text-xs font-bold rounded">{{ $test->name }}</span>
                             <span class="text-xs {{$key==0 ? 'text-red-700' : ''}}{{$key==1 ? 'text-orange-700' : ''}}{{$key==2 ? 'text-blue-700' : ''}} font-semibold">{{ $test->title }}</span>
                         </div>
-                        <p class="text-xs text-gray-600">{{ \Carbon\Carbon::parse($test->exam_date)->format('M j, Y • g:i A') }}</p>
+                        <p class="text-xs text-gray-600">{{ \Carbon\Carbon::parse($test->created_at)->format('M j, Y • g:i A') }}</p>
                     </div>
                     @endforeach
                 </div>

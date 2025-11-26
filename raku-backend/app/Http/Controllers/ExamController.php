@@ -18,17 +18,13 @@ class ExamController extends Controller
         $direction = $request->direction ?? 'asc';
 
         $query = Exam::with('creator:id,name')
-            ->select('id', 'title', 'exam_date', 'application_deadline', 'result_publish_date', 'fee', 'created_by', 'status');
+            ->select('id', 'title', 'name', 'slug', 'duration', 'total_point', 'answer_value', 'created_by', 'status');
         
         if ($request->has('title') && $request->title != '') {
             $query->where('title', 'like', '%'. $request->title . '%');
         }
 
         $query->orderBy($orderBy, $direction);
-    
-        if ($request->has('date_filter') && $request->date_filter != '' && $request->has('from_date') && $request->from_date != '' && $request->has('to_date') && $request->to_date) {
-            $query->whereBetween($request->date_filter, [$request->from_date, $request->to_date]);
-        }
     
         $exams = $query->paginate(10)->appends($request->all());
 
@@ -44,6 +40,7 @@ class ExamController extends Controller
     public function store(ExamRequest $request)
     {
         $data = $request->validated();
+
 
         if ($request->hasFile('image')) {
             $imageName = time() . '_' . $request->file('image')->getClientOriginalName();
