@@ -93,6 +93,7 @@
                         <td class="px-4 py-3">{{ $member->designation }}</td>
                         <td class="px-4 py-3">{{ $member->serial_no }}</td>
                         <td class="px-4 py-3">
+                            @hasPermission('our-team.toggleStatus')
                             <form action="{{ route('our-team.toggleStatus', $member->id) }}" method="POST" class="d-flex">
                                 @csrf
                                 <div class="form-check form-switch toggle-switch-lg">
@@ -103,6 +104,7 @@
                                         {{ $member->status ? 'checked' : '' }}>
                                 </div>
                             </form>
+                            @endHasPermission
                         </td>
 
                         <!-- Actions -->

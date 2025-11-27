@@ -581,21 +581,32 @@ class MockTestController extends Controller
 
     public function getReportsData(Request $request)
     {
-        $candidates = Candidate::all();
         $exams = Exam::all();
-
+    
         $query = MockTestRecords::with('candidate', 'exam');
-
-        if ($request->candidate_id) {
-            $query->where('candidate_id', $request->candidate_id);
-        }
-
+    
         if ($request->exam_id) {
             $query->where('exam_id', $request->exam_id);
         }
+    
+        if ($request->from_date) {
+            $query->whereDate('created_at', '>=', $request->from_date);
+        }
 
-        $records = $query->orderBy('created_at', 'desc')->get();
+        if ($request->to_date) {
+            $query->whereDate('created_at', '<=', $request->to_date);
+        }
 
-        return view('mock-tests.reports.list', compact('records', 'candidates', 'exams'));
+        if ($request->from_date && $request->to_date) {
+            $query->whereBetween('created_at', [
+                $request->from_date . ' 00:00:00',
+                $request->to_date . ' 23:59:59'
+            ]);
+        }
+    
+        $records = $query->orderBy('created_at', 'desc')->paginate(20)->withQueryString();
+    
+        return view('mock-tests.reports.list', compact('records', 'exams'));
     }
+    
 }

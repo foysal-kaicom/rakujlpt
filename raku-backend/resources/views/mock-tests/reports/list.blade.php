@@ -9,15 +9,13 @@
     <!-- Filters -->
     <div class="px-4 py-3 d-flex gap-3 flex-wrap bg-light">
         <form method="GET" action="{{ route('mock-tests.reports.list') }}" class="d-flex gap-2 flex-wrap">
-            <select name="candidate_id" class="form-select w-auto">
-                <option value="">-- Select Candidate --</option>
-                @foreach($candidates as $candidate)
-                    <option value="{{ $candidate->id }}" {{ request('candidate_id') == $candidate->id ? 'selected' : '' }}>
-                        {{ $candidate->full_name }}
-                    </option>
-                @endforeach
-            </select>
 
+            <input type="date" name="from_date" class="form-control w-auto"
+                   value="{{ request('from_date') }}">
+        
+            <input type="date" name="to_date" class="form-control w-auto"
+                   value="{{ request('to_date') }}">
+        
             <select name="exam_id" class="form-select w-auto">
                 <option value="">-- Select Exam --</option>
                 @foreach($exams as $exam)
@@ -26,10 +24,11 @@
                     </option>
                 @endforeach
             </select>
-
+        
             <button type="submit" class="btn btn-primary">Filter</button>
             <a href="{{ route('mock-tests.reports.list') }}" class="btn btn-secondary">Reset</a>
         </form>
+        
     </div>
 
     <!-- Table -->
@@ -73,5 +72,10 @@
             </tbody>
         </table>
     </div>
+    <div class="d-flex justify-content-end px-4 py-3">
+        {{ $records->links() }}
+    </div>
+    
+    
 </section>
 @endsection
