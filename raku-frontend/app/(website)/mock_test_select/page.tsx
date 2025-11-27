@@ -4,11 +4,10 @@ import BreadCrumb from "@/components/BreadCrumb";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import axios from "@/utils/axios";
 
-import Image from "next/image";
 import { Suspense, useEffect, useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import Loader from "@/components/Loader";
+
 import MockTestSelectSkeleton from "./mockSelectSkeleton";
 import CustomSelect from "@/components/CustomSelect";
 
@@ -40,6 +39,8 @@ export default function MockTestSelect() {
   const [examOption, setExamOption] = useState<
     { label: string; value: string }[]
   >([]);
+
+  const router = useRouter();
 
   const getExamOptions = (data: { short_name: any }[]): Option[] => {
     const uniqueShortNames = Array.from(
@@ -79,6 +80,17 @@ export default function MockTestSelect() {
   useEffect(() => {
     getMockTestsData();
   }, []);
+
+  const handleChooseTest = (test: any) => {
+    const filters = {
+      type: test.short_name,
+      title: test.title,
+      duration: test.duration,
+      total_point: test.total_point,
+    };
+    const params = new URLSearchParams(filters as any).toString();
+    router.push(`/mock_test_select/${test.id}?${params}`);
+  };
 
   return (
     <>
@@ -156,20 +168,19 @@ export default function MockTestSelect() {
 
                                 <div className="flex-1">
                                   <p className="text-gray-500 font-medium">
-                                    🏅 Passing
+                                    🏅 Passing Point
                                   </p>
                                   <p className="text-lg font-bold text-pink-600">
-                                    {test.pass_point} Point
+                                    {test.pass_point}/{test.total_point}
                                   </p>
                                 </div>
                               </div>
-
-                              <Link
-                                href={`/mock_test_select/${test.id}?type=${test.short_name}`}
+                              <button
+                                onClick={() => handleChooseTest(test)}
                                 className="px-6 py-3 inline-block rounded-full space-x-2 font-semibold text-white text-sm shadow-md bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400 hover:scale-105 transition-transform duration-300"
                               >
                                 🎯 Choose Test
-                              </Link>
+                              </button>
                             </div>
                             <div className="absolute top-2 right-2 text-4xl opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-2 group-hover:-translate-y-0">
                               ✨

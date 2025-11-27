@@ -3,15 +3,16 @@ import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 
 interface QuestionCompositionProps {
   breadCrumbData: { name: string; to: string }[];
-  mainText: string;
-  preText: string | "";
-  subText: string | "";
   type: string | "";
+  title:string | "";
+  duration:string | ""
 }
 
 export default function QuestionCompositionComponent({
   breadCrumbData,
   type,
+  title,
+  duration,
 }: QuestionCompositionProps) {
   return (
     <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 overflow-hidden pb-20 pt-5">
@@ -24,7 +25,8 @@ export default function QuestionCompositionComponent({
 
             <div className="relative z-10 max-w-5xl mx-auto text-center px-6">
               <h2 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 py-2">
-                JLPT Question Composition
+                <span className="uppercase">{title ? title : "JLPT"}</span>{" "}
+                Question Composition
               </h2>
               <p className="mt-4 text-gray-700 text-lg">
                 The JLPT measures Japanese proficiency through{" "}
@@ -71,10 +73,17 @@ export default function QuestionCompositionComponent({
                   </ul>
                 </div>
               </div>
-
-              <div className="mt-10 text-sm text-gray-800 font-medium">
-                🏅 Levels: N5 → N1 | ⏰ Duration: <b>90–170 mins</b> (varies by level)
-              </div>
+              {title && duration ? (
+                <div className="mt-10 text-sm text-gray-800 font-medium">
+                  🏅 Levels: <span className="uppercase">{title}</span> | ⏰
+                  Duration: <b>{duration}</b>
+                </div>
+              ) : (
+                <div className="mt-10 text-sm text-gray-800 font-medium">
+                  🏅 Levels: N5 → N1 | ⏰ Duration: <b>90–170 minutes</b> (varies
+                  by level)
+                </div>
+              )}
             </div>
           </section>
         )}
@@ -130,8 +139,8 @@ export default function QuestionCompositionComponent({
               </div>
 
               <div className="mt-10 text-sm text-gray-800">
-                🕒 Total Time: <b>50 minutes</b> | 🔢 Total Questions:{" "}
-                <b>80</b> | 🏆 Max Score: <b>200</b>
+                🕒 Total Time: <b>50 minutes</b> | 🔢 Total Questions: <b>80</b>{" "}
+                | 🏆 Max Score: <b>200</b>
               </div>
             </div>
           </section>
