@@ -176,6 +176,7 @@ Route::group(['middleware' => 'auth', 'checkPermission'], function () {
         Route::post('/attend/{detail}', [PackageController::class, 'attendExam'])->name('attend');
     });
 
+
     Route::group(['prefix' => 'roadmaps', 'as' => 'roadmaps.', 'module' => 'roadmaps'], function () {
         Route::resource('', RoadmapController::class)->parameters(['' => 'roadmap']);
     });
