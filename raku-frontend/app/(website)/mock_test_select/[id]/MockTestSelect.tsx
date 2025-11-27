@@ -2,7 +2,6 @@
 
 import { Suspense } from "react";
 import { useParams, useSearchParams } from "next/navigation";
-import Link from "next/link";
 
 import QuestionCompositionComponent from "@/components/QuestionCompositionComponent";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
@@ -16,6 +15,8 @@ export default function MockTestQuestionComposition() {
   const id = params.id;
   const searchParams = useSearchParams();
   const type = (searchParams.get("type") || "").toLowerCase();
+  const title = searchParams.get("title")?.toLowerCase();
+  const duration= searchParams.get("duration")?.toLowerCase();
   const router = useRouter();
   const { examStarted, startExam } = useExamStore();
 
@@ -33,9 +34,8 @@ export default function MockTestQuestionComposition() {
       <QuestionCompositionComponent
         breadCrumbData={breadCrumbData}
         type={type || ""}
-        mainText="Question Composition"
-        preText="Mock test"
-        subText="Read the question composition before starting the exam"
+        title={title || ""}
+        duration={duration || ""}
       />
       <div className="relative pb-12 p-6 sm:p-8 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 overflow-hidden">
         {/* Floating background shapes */}
@@ -75,9 +75,7 @@ export default function MockTestQuestionComposition() {
                   <li>
                     The exam duration is{" "}
                     <span className="font-semibold text-blue-600">
-                      {" "}
-                      {type == "jpt" ? "50 " : "90 to 170 "}
-                      minutes
+                      {duration}
                     </span>
                     .
                   </li>
