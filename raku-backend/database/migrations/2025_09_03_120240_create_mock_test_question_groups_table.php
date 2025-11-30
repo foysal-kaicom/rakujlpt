@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('mock_test_question_groups', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('mock_test_section_id')->constrained('mock_test_sections')->onDelete('cascade');
+            $table->foreignId('mock_test_section_id')->constrained('mock_test_sections')->restrictOnDelete();
             $table->enum('type', ['single', 'multiple']);
             $table->integer('set_no')->default(0);
             $table->enum('group_type', ['passage', 'audio'])->nullable();
