@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useRef, ReactNode } from "react";
-import { useRouter , useParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
 import {
@@ -42,6 +42,7 @@ interface Question {
   proficiency_level: string;
   title: string;
   type: string;
+  hints: string;
   options: QuestionOption;
 }
 
@@ -550,7 +551,7 @@ export default function ExamPage() {
                       {currentSection.module_name}
                     </span>
                   </div>
-                  <p className="text-xs opacity-90">25 min • 100 points</p>
+                  {/* <p className="text-xs opacity-90">25 min • 100 points</p> */}
                 </div>
 
                 <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
@@ -584,8 +585,8 @@ export default function ExamPage() {
                       }}
                     />
                   </div>
-                  <p className="text-xs text-gray-600 mt-1">
-                    {answeredQuestions} / {totalQuestions} completed
+                  <p className="text-xs text-gray-600 mt-1 font-medium">
+                    <span className="text-purple-700">{answeredQuestions} / {totalQuestions}</span> completed
                   </p>
                 </div>
 
@@ -642,7 +643,7 @@ export default function ExamPage() {
                     ) ?? 0;
 
                   return (
-                    <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium p-6 rounded-xl">
+                    <div className="bg-gradient-to-r from-violet-700 to-indigo-700 text-white font-medium p-6 rounded-xl">
                       <div className="flex flex-wrap items-center space-x-2 mb-1">
                         {stepHeadingIcons[currentSection.slug]}
                         <h2 className="text-xl font-bold">
@@ -727,12 +728,20 @@ export default function ExamPage() {
                                   Q{getGlobalQuestionNumber(question.id)}:{" "}
                                 </span>
                                 {question.type === "image" ? (
-                                  <img
-                                    draggable="false"
-                                    src={question.title}
-                                    alt={`Question ${question.id}`}
-                                    className="max-w-[250px] sm:max-w-sm mx-auto"
-                                  />
+                                  <div className="flex flex-col w-full">
+                                    <img
+                                      draggable="false"
+                                      src={question.title}
+                                      alt={`Question ${question.id}`}
+                                      className="max-w-[250px] sm:max-w-sm mx-auto"
+                                    />
+                                    <div
+                                      className="text-gray-800 whitespace-pre-line mt-1.5 text-center"
+                                      dangerouslySetInnerHTML={{
+                                        __html: question.hints ?? "",
+                                      }}
+                                    />
+                                  </div>
                                 ) : (
                                   <div
                                     className=""
