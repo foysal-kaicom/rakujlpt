@@ -19,6 +19,7 @@ class QuestionResource extends JsonResource
             'id' => $this->id,
             'proficiency_level' => $this->proficiency_level,
             'title' => $this->title,
+            'hints' => $this->hints,
             'type' => $this->type,
             'options' => $this->mockTestQuestionOption    
         ];
