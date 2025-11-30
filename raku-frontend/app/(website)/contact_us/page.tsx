@@ -1,16 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { Suspense } from "react";
 
 // Components
-import HeadLine from "@/components/HeadLine";
 import BreadCrumb from "@/components/BreadCrumb";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import SuspenseLoader from "@/components/SuspenseLoader";
-
-// Icons
-import { IoLogoYoutube } from "react-icons/io";
-import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
+import ContactSocialComponent from "./ContactSocialComponent";
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -35,97 +30,17 @@ export default function ContactUs() {
 
           <div className="w-full text-center mt-10 mb-14">
             <h1 className="text-5xl font-extrabold">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-700 via-pink-500 to-blue-500">Get in Touch</span> 💬
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-700 via-pink-500 to-blue-500">
+                Get in Touch
+              </span>{" "}
+              💬
             </h1>
             <p className="text-gray-600 mt-2 text-lg tracking-wide">
               We’d love to hear your ideas, feedback, or collaboration requests!
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-10">
-            {/* Left Info Card */}
-            <div className="p-10 rounded-2xl backdrop-blur-md bg-white/70 shadow-xl border border-white/50">
-              <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-                Our Contact Info 📍
-              </h2>
-
-              <div className="space-y-5 text-gray-700">
-                <div>
-                  <p className="text-lg font-semibold">Address</p>
-                  <p>A-SHA, House No: 2 E (2nd Floor), Road: 8,<br />Sector: 7, Dhaka 1230</p>
-                </div>
-                <div>
-                  <p className="text-lg font-semibold">Email</p>
-                  <p>mocktestbd@gmail.com</p>
-                </div>
-                <div>
-                  <p className="text-lg font-semibold">Phone</p>
-                  <p>+880 1847 291886 <br /> +880 1847 291881</p>
-                </div>
-              </div>
-
-              <div className="flex gap-4 mt-6">
-                <a
-                  href="https://www.facebook.com/JPTTESTBANGLADESH"
-                  target="_blank"
-                  className="p-3 rounded-full bg-gradient-to-tr from-blue-400 to-blue-600 text-white shadow-lg hover:scale-110 duration-300"
-                >
-                  <FaFacebookF className="size-5" />
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/kaicom-jpt-274196233/"
-                  target="_blank"
-                  className="p-3 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-700 text-white shadow-lg hover:scale-110 duration-300"
-                >
-                  <FaLinkedinIn className="size-5" />
-                </a>
-                <a
-                  href="https://www.youtube.com/@JPTBANGLADESH"
-                  target="_blank"
-                  className="p-3 rounded-full bg-gradient-to-tr from-red-500 to-pink-600 text-white shadow-lg hover:scale-110 duration-300"
-                >
-                  <IoLogoYoutube className="size-5" />
-                </a>
-              </div>
-            </div>
-
-            {/* Contact Form */}
-            <div className="relative p-10 bg-white rounded-2xl shadow-xl border border-gray-100">
-              <h2 className="text-2xl font-semibold mb-4">
-                <span className="bg-gradient-to-r from-purple-600 to-pink-500 text-transparent bg-clip-text">Send Us a Message</span> ✉️
-              </h2>
-              <form className="space-y-6">
-                <div className="grid grid-cols-2 gap-5">
-                  <input
-                    type="text"
-                    placeholder="First name"
-                    className="w-full border-b border-gray-300 px-2 pb-2 text-sm text-gray-700 focus:border-purple-400 focus:outline-none"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Last name"
-                    className="w-full border-b border-gray-300 px-2 pb-2 text-sm text-gray-700 focus:border-purple-400 focus:outline-none"
-                  />
-                </div>
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="w-full border-b border-gray-300 px-2 pb-2 text-sm text-gray-700 focus:border-purple-400 focus:outline-none"
-                />
-                <textarea
-                  placeholder="Write your message here..."
-                  rows={6}
-                  className="w-full border-b border-gray-300 px-2 pb-2 text-sm text-gray-700 focus:border-purple-400 focus:outline-none resize-none"
-                ></textarea>
-                <button
-                  type="submit"
-                  className="w-full py-3 font-semibold rounded-lg bg-gradient-to-r from-purple-600 to-pink-500 text-white hover:opacity-90 shadow-lg duration-300"
-                >
-                  Submit Message
-                </button>
-              </form>
-            </div>
-          </div>
+          <ContactSocialComponent />
 
           {/* Google Map */}
           <div className="my-20 rounded-2xl overflow-hidden shadow-lg border border-white/70">

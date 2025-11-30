@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useRef, ReactNode } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter , useParams } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
 import {
@@ -25,8 +25,6 @@ import { useExamStore } from "@/stores/useExamStore";
 
 import SkeletonMockExam from "./MocktestSkeleton";
 import CircularProgress from "@/components/CircularProgress";
-import { useParams } from "next/navigation";
-import Image from "next/image";
 
 /* -------------------- Types -------------------- */
 interface QuestionOption {

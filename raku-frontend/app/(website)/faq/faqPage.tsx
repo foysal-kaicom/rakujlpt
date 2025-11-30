@@ -7,6 +7,7 @@ import { FaPlus, FaMinus } from "react-icons/fa";
 
 import { useState } from "react";
 import PaginatedComponent from "@/components/PaginateComponent";
+import Link from "next/link";
 
 interface FAQ {
   id: null | number;
@@ -118,12 +119,12 @@ export default function FAQ({ faqs }: FAQProps) {
 
           {/* CTA Button */}
           <div className="mt-8">
-            <a
+            <Link
               href="/contact_us"
               className="relative inline-block px-10 py-4 text-lg font-bold text-white rounded-full bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-pink-500 hover:to-indigo-500 transition-all duration-500 hover:scale-105 shadow-[0_0_25px_rgba(168,85,247,0.5)]"
             >
               Still Need Help? Contact Us 💬
-            </a>
+            </Link>
           </div>
         </div>
       </WebpageWrapper>
