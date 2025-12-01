@@ -98,7 +98,6 @@ class MockTestController extends Controller
     {
         try {
             $data = $request->all();
-
             $request->validate([
                 'exam_id' => 'required|integer|exists:exams,id',
             ]);
@@ -111,7 +110,7 @@ class MockTestController extends Controller
                 'Reading' => ['answered' => 0, 'correct' => 0, 'wrong' => 0],
                 'Listening' => ['answered' => 0, 'correct' => 0, 'wrong' => 0],
             ];
-
+            $userAnswers = [];
             foreach ($data as $key => $questionPayload) {
                 if ($key === 'exam_id') continue;
                 if (!isset($questionPayload['id']) || !isset($questionPayload['answer'])) continue;
@@ -120,19 +119,33 @@ class MockTestController extends Controller
                     ->find($questionPayload['id']);
 
                 if (!$question) continue;
-
+// dd($question->toArray());
                 $moduleName = $question->section->mockTestModule->name ?? null;
                 if (!isset($modulesScore[$moduleName])) continue;
 
                 $modulesScore[$moduleName]['answered']++;
 
                 $correctAnswer = $question->mockTestQuestionOption->correct_answer_index;
+                $isCorrect = false;
                 if ($questionPayload['answer'] == $correctAnswer) {
                     $modulesScore[$moduleName]['correct']++;
+                    $isCorrect = true;
                 } else {
                     $modulesScore[$moduleName]['wrong']++;
                 }
+
+                $userAnswers[] = [
+                    'question_id'   => $question->id,
+                    'question'      => $question->title ?? null,
+                    'selected'      => $questionPayload['answer'],
+                    'correct'       => $correctAnswer,
+                    'is_correct'    => $isCorrect,
+                    'options'       => $question->mockTestQuestionOption->values ?? null,
+                    'module'        => $moduleName,
+                ];
             }
+
+            // dd($userAnswers);
 
             $per_question_mark = $exam['total_point'] / $data['total_questions'];
 
@@ -149,6 +162,7 @@ class MockTestController extends Controller
                 'wrong_listening_answer'    => $modulesScore['Listening']['wrong'],
                 'total_questions'           => $data['total_questions'],
                 'per_question_mark'         => $per_question_mark,
+                'answers'                   => json_encode($userAnswers),
             ]);
 
             $mockTestRecord->per_question_mark = $per_question_mark;
@@ -168,7 +182,7 @@ class MockTestController extends Controller
                 }
             }
 
-            return $this->responseWithSuccess(new MockTestResultResource($mockTestRecord),"Mock test result recorded successfully.");
+            return $this->responseWithSuccess(new MockTestResultResource($mockTestRecord), "Mock test result recorded successfully.");
         } catch (Throwable $e) {
             Log::error('Mock test evaluation error', ['error' => $e->getMessage()]);
             return $this->responseWithError("Something went wrong.", $e->getMessage());
