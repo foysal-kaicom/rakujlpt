@@ -611,71 +611,7 @@ class MockTestController extends Controller
     
     public function exportReportsCsv(Request $request)
     {
-        $query = MockTestRecords::with(['candidate', 'exam']);
-    
-        if ($request->filled('from_date')) {
-            $query->whereDate('created_at', '>=', $request->from_date);
-        }
-    
-        if ($request->filled('to_date')) {
-            $query->whereDate('created_at', '<=', $request->to_date);
-        }
-    
-        if ($request->filled('exam_id')) {
-            $query->where('exam_id', $request->exam_id);
-        }
-    
-        $records = $query->get();
-
-        $filename = "mock_test_reports_" . now()->format('Y-m-d_H-i-s') . ".csv";
-    
-        $headers = [
-            "Content-Type"        => "text/csv",
-            "Content-Disposition" => "attachment; filename=$filename",
-            "Pragma"              => "no-cache",
-            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-            "Expires"             => "0"
-        ];
-
-        $columns = [
-            'ID',
-            'Candidate',
-            'Exam',
-            'Question Set',
-            'Reading Answered',
-            'Correct Reading',
-            'Wrong Reading',
-            'Listening Answered',
-            'Correct Listening',
-            'Wrong Listening',
-            'Created At'
-        ];
-    
-        $callback = function() use ($records, $columns) {
-            $file = fopen('php://output', 'w');
-    
-            fputcsv($file, $columns);
-    
-            foreach ($records as $r) {
-                fputcsv($file, [
-                    $r->id,
-                    $r->candidate->full_name ?? '-',
-                    $r->exam->title ?? '-',
-                    $r->question_set,
-                    $r->reading_answered,
-                    $r->correct_reading_answer,
-                    $r->wrong_reading_answer,
-                    $r->listening_answered,
-                    $r->correct_listening_answer,
-                    $r->wrong_listening_answer,
-                    $r->created_at->format('Y-m-d H:i'),
-                ]);
-            }
-    
-            fclose($file);
-        };
-    
-        return response()->stream($callback, 200, $headers);
+        dd("export");
     }
 
 }
