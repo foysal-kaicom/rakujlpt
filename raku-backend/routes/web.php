@@ -167,7 +167,15 @@ Route::group(['middleware' => 'auth', 'checkPermission'], function () {
     });
 
     Route::group(['prefix' => 'mock-test-modules', 'as' => 'mock-test-modules.', 'module' => 'mock-test-modules'], function () {
-        Route::resource('/', MockTestModuleController::class);
+        // Route::resource('mock-test-modules', MockTestModuleController::class);
+
+        Route::get('/', [MockTestModuleController::class, 'index'])->name('index');
+        Route::get('/create', [MockTestModuleController::class, 'create'])->name('create');
+        Route::post('/store', [MockTestModuleController::class, 'store'])->name('store');
+        Route::get('/edit/{mockTestModule}', [MockTestModuleController::class, 'edit'])->name('edit');
+        Route::post('/update/{mockTestModule}', [MockTestModuleController::class, 'update'])->name('update');
+
+
         Route::post('{id}/toggle-status', [MockTestModuleController::class, 'toggleStatus'])->name('toggleStatus');
     });
 

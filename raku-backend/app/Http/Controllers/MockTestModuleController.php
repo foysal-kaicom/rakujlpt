@@ -8,10 +8,32 @@ use App\Models\MockTestModule;
 
 class MockTestModuleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $modules = MockTestModule::with('exam')->latest()->paginate(10);
-        return view('mock-tests.modules.index', compact('modules'));
+        $orderBy = $request->order_by ?? 'id';
+        $direction = $request->direction ?? 'asc';
+
+        $query = MockTestModule::with('exam:id,title')
+            ->select('id', 'exam_id', 'name', 'status');
+
+        // Filter by module name
+        if ($request->name) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        // Filter by exam
+        if ($request->exam_id) {
+            $query->where('exam_id', $request->exam_id);
+        }
+
+        $query->orderBy($orderBy, $direction);
+
+        $modules = $query->paginate(10)->appends($request->all());
+
+        // Exam list for dropdown
+        $exams = Exam::select('id', 'title')->orderBy('title')->get();
+
+        return view('mock-tests.modules.index', compact('modules', 'exams'));
     }
 
     public function create()
@@ -54,13 +76,39 @@ class MockTestModuleController extends Controller
     {
         $request->validate([
             'exam_id' => 'nullable|exists:exams,id',
-            'slug' => 'required|unique:mock_test_modules,slug,' . $mockTestModule->id,
-            'name' => 'required|string',
-            'status' => 'required|in:active,disabled',
+            'slug'    => 'required|string',
+            'name'    => 'required|string',
+            'status'  => 'required|in:active,disabled',
         ]);
 
-        $mockTestModule->update($request->all());
-        return redirect()->route('mock-test-modules.index')->with('success', 'Module updated successfully.');
+        // Build final slug
+        $finalSlug = ($request->exam_id ? $request->exam_id . '_' : '') . $request->slug;
+
+        // Validate final slug
+        $request->validate([
+            'slug' => [
+                function ($attribute, $value, $fail) use ($finalSlug, $mockTestModule) {
+                    $exists = MockTestModule::where('slug', $finalSlug)
+                        ->where('id', '!=', $mockTestModule->id)
+                        ->exists();
+
+                    if ($exists) {
+                        $fail('Slug already exists.');
+                    }
+                }
+            ]
+        ]);
+
+        // Update module
+        $mockTestModule->update([
+            'exam_id' => $request->exam_id,
+            'slug'    => $finalSlug,
+            'name'    => $request->name,
+            'status'  => $request->status,
+        ]);
+
+        return redirect()->route('mock-test-modules.index')
+            ->with('success', 'Module updated successfully.');
     }
 
     public function destroy(MockTestModule $mockTestModule)
