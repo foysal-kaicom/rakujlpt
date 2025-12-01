@@ -4,7 +4,7 @@
 
 <div class="flex gap-3 text-xs sm:text-sm font-semibold text-gray-500 items-center w-full mb-[20px]">
     <div class="flex gap-3 items-center">
-        <a href={b.to}>
+        <a href="{{ route('candidate.list') }}">
             <p class="cursor-pointer line-clamp-1">
                 Candidates
             </p>

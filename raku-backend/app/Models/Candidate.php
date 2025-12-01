@@ -69,4 +69,10 @@ class Candidate extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(UserSubscription::class, 'candidate_id')->latest();
     }
+
+    public function currentPackage()
+    {
+        return $this->belongsTo(Package::class, 'current_package_id');
+    }
+    
 }

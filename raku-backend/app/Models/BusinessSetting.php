@@ -15,14 +15,14 @@ class BusinessSetting extends Model
         'legal_docs' => 'json',
     ];
 
-    // protected static function booted()
-    // {
-    //     static::saved(function () {
-    //         Cache::forget('business_settings:first');
-    //     });
+    protected static function booted()
+    {
+        static::saved(function () {
+            Cache::forget('business_settings:first');
+        });
 
-    //     static::deleted(function () {
-    //         Cache::forget('business_settings:first');
-    //     });
-    // }
+        static::deleted(function () {
+            Cache::forget('business_settings:first');
+        });
+    }
 }

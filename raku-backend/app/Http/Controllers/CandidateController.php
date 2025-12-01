@@ -161,7 +161,9 @@ class CandidateController extends Controller
      */
     public function edit(string $id)
     {
-        $candidate = Candidate::findOrFail($id);
+        $candidate = Candidate::with('UserSubscriptions.package:id,name',
+        'UserSubscriptions.subscriptionDetails.exam')->findOrFail($id);
+        // return $candidate;
         return view('candidate.edit', compact('candidate'));
     }
 
@@ -170,7 +172,6 @@ class CandidateController extends Controller
      */
     public function update(CandidateRequest $request, $id)
     {
-
         $candidate = Candidate::findOrFail($id);
 
         $data = $request->validated();
