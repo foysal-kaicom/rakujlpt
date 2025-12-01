@@ -148,7 +148,7 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div class="flex gap-4 flex-col">
                             <input type="file" name="question_image" class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-full" />
-                            <textarea name="hints" placeholder="Enter Question hints" class="border p-2">{{$question->hints}}</textarea>
+                            <textarea name="hints" placeholder="Enter Question hints" class="tinymce border p-2">{{$question->hints}}</textarea>
                         </div>
 
                         <div id="image_preview" class=" flex justify-end">

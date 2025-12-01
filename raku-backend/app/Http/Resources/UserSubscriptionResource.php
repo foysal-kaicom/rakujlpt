@@ -21,8 +21,9 @@ class UserSubscriptionResource extends JsonResource
             'title' => $this->title,
             'total_payable' => $this->package && $this->package->is_free ? 'FREE' : $this->total_payable,
             'package_name' => $this->package ? $this->package->name : null,
-            'date' => $this->created_at->toDateString(),
+            'date' => optional($this->created_at)->toDateString() ?? '',
             'date' => Carbon::parse($this->created_at)->format('h:i A - d-M-Y'),
+            'subscription_details' => $this->subscriptionDetails ?? [],
             'is_free' => $this->package ? $this->package->is_free : null,
         ];
         return parent::toArray($request);

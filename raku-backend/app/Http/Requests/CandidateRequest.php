@@ -15,48 +15,37 @@ class CandidateRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
 
 
     public function rules(): array
     {
-        // $isUpdate = $this->isMethod('PUT') || $this->isMethod('PATCH');
+        $isUpdate = $this->isMethod('PUT');
+        $candidateId = $this->route('id');
 
         return [
-            'first_name'    => 'required|string|max:100',
-            'last_name'     => 'required|string|max:100',
-            'email'         => 'nullable|email|unique:candidates|required_without:phone_number|max:150',
-            'phone_number'  => 'nullable|string|unique:candidates|required_without:email|max:20',
-            'password'      => 'required|min:6|confirmed',
+            'first_name' => 'required|string|max:100',
+            'last_name'  => 'required|string|max:100',
+            'date_of_birth' => 'required|date|before_or_equal:' . now()->subYears(10)->toDateString(),
+            'national_id' => 'required|string|max:20',
+            'gender' => 'required|in:male,female',
+            'currently_living_country' => 'nullable|in:Bangladesh,Japan',
+            'social_facebook' => 'nullable|url',
+            'social_linkedin' => 'nullable|url',
+            'address' => 'nullable|string|max:500',
+
+            'photo' => $isUpdate
+                ? ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048']
+                : ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'], 
+
+            'email' => $isUpdate
+                ? ['prohibited']
+                : ['required', 'email', Rule::unique('candidates', 'email')->whereNull('deleted_at')],
+
+           'phone_number' => [
+                'required',
+                Rule::unique('candidates', 'phone_number')->ignore($candidateId)
+            ],
+
         ];
-
-
-
-        // return [
-        //     'first_name'        => 'required|string|max:100',
-        //     'last_name'         => 'required|string|max:100',
-        //     'date_of_birth'     => 'nullable|date|before_or_equal:' . now()->subYears(10)->toDateString(),
-        //     'national_id'       => 'required|string|max:20',
-        //     'gender'            => 'required|in:male,female',
-        //     'currently_living_country'   => 'nullable|in:Bangladesh,Japan',
-        //     'social_facebook'   => 'nullable|url',
-        //     'social_linkedin'   => 'nullable|url',
-        //     'address'           => 'nullable|string|max:500',
-        //     'photo' => $isUpdate
-        //         ? ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'] // optional during update
-        //         : ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'], // required during create
-
-        //     'email' => $isUpdate
-        //         ? ['prohibited'] // completely block updating email
-        //         : ['required', 'email', 'unique:candidates,email'],
-
-        //    'phone_number' => $isUpdate
-        //         ? ['prohibited'] // block updates
-        //         : ['required', Rule::unique('candidates', 'phone_number')],
-        // ];
     }
 }
