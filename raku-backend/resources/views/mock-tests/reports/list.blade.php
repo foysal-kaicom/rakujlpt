@@ -27,6 +27,10 @@
         
             <button type="submit" class="btn btn-primary">Filter</button>
             <a href="{{ route('mock-tests.reports.list') }}" class="btn btn-secondary">Reset</a>
+            <a href="{{ route('mock-tests.reports.export', request()->query()) }}" 
+                class="btn btn-success">
+                 Export CSV
+             </a>
         </form>
         
     </div>
