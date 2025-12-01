@@ -5,121 +5,381 @@ import { QRCodeSVG } from "qrcode.react";
 import { useParams } from "next/navigation";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import BreadCrumb from "@/components/BreadCrumb";
-
-// interface CertificateProps {
-//   studentName: string;
-//   testName: string;
-//   score: number;
-//   totalScore: number;
-//   date: string;
-// }
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import { useRef } from "react";
+import { toast } from "sonner";
 
 export default function Certificate() {
   const params = useParams();
   const certificateId = params?.id;
+
+  const certificateRef = useRef<HTMLDivElement>(null);
 
   const breadCrumbData = [
     { name: "Home", to: "/" },
     { name: "Certificate", to: `/certificate/${certificateId}` },
   ];
 
+  const handleDownload = async () => {
+    if (!certificateRef.current) return;
+
+    const canvas = await html2canvas(certificateRef.current, {
+      scale: 2,
+      useCORS: true,
+    });
+    const imgData = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF({
+      orientation: "landscape",
+      unit: "px",
+      format: [842, 595],
+    });
+    pdf.addImage(imgData, "PNG", 0, 0, 842, 595);
+    pdf.save(`certificate-${certificateId}.pdf`);
+  };
+
+  const handleShare = async () => {
+    if (!certificateRef.current) return;
+
+    const canvas = await html2canvas(certificateRef.current, {
+      scale: 2,
+      useCORS: true,
+    });
+
+    const blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob((b) => resolve(b), "image/png")
+    );
+    if (!blob) return;
+
+    const file = new File([blob], `certificate-${certificateId}.png`, {
+      type: "image/png",
+    });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({
+        files: [file],
+        title: "My Certificate",
+        text: "Check out my certificate from RAKU JLPT!",
+      });
+    } else {
+      // fallback: download
+      const url = URL.createObjectURL(file);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `certificate-${certificateId}.png`;
+      link.click();
+      URL.revokeObjectURL(url);
+      toast.success(
+        "Your certificate image is ready! You can now share it on social media."
+      );
+    }
+  };
+
   return (
-    <div className="md:min-h-[70vh] bg-gray-100 pt-5 pb-8">
+    <div
+      style={{
+        minHeight: "70vh",
+        backgroundColor: "#f5f3ff",
+        padding: "20px 0",
+        paddingBottom: "40px",
+      }}
+    >
       <WebpageWrapper>
         <BreadCrumb breadCrumbData={breadCrumbData} />
-        <div className="flex flex-1 justify-center items-center size-full pt-8">
-          <div className="w-[900px] scale-50 sm:scale-50 md:scale-75 lg:scale-100 rounded-3xl shadow-xl bg-[url('/assets/logo/logo-watermark.png')] bg-repeat bg-top-left">
-            <div className="relative w-full bg-gradient-to-r from-white/98 via-gray-50/98 to-white/98 border-[12px] border-pink-500 rounded-3xl p-12">
-              {/* Decorative Top Line */}
-              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-2/3 h-1 bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-400 rounded-full"></div>
 
-              {/* Watermark Seal */}
-              <div className="absolute inset-0 flex justify-center items-center">
-                <FaCertificate className="text-amber-100 text-[260px]" />
+        {/* Download Button */}
+        <div
+          style={{
+            textAlign: "center",
+            marginBottom: "20px",
+            marginTop: "20px",
+            display: "flex",
+            gap: "20px",
+            justifyContent: "space-between",
+          }}
+        >
+          <button
+            onClick={handleDownload}
+            style={{
+              padding: "12px 28px",
+              backgroundColor: "#7c3aed",
+              color: "#fff",
+              fontWeight: 600,
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontSize: "1rem",
+              transition: "all 0.2s",
+            }}
+          >
+            Download
+          </button>
+          <button
+            onClick={handleShare}
+            style={{
+              padding: "12px 28px",
+              backgroundColor: "#10b981",
+              color: "#fff",
+              fontWeight: 600,
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontSize: "1rem",
+              transition: "all 0.2s",
+              marginLeft: "12px",
+            }}
+          >
+            Share
+          </button>
+        </div>
+        <div
+          style={{
+            // backgroundColor: "gray",
+            padding: "10px",
+            overflow: "scroll",
+          }}
+        >
+          {/* Certificate Container */}
+          <div
+            ref={certificateRef}
+            style={{
+              width: "842px",
+              height: "595px",
+              margin: "0 auto",
+              position: "relative",
+              backgroundColor: "#ffffff",
+              border: "2px solid #e0d7ff",
+              padding: "60px",
+              fontFamily: "'Roboto', sans-serif",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {/* Watermark */}
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                pointerEvents: "none", // makes sure it doesn’t block interaction
+              }}
+            >
+              <div
+                style={{
+                  transform: "rotate(-30deg)",
+                  fontSize: "100px",
+                  color: "rgba(124, 58, 237, 0.05)", // soft violet
+                  fontWeight: 700,
+                  fontFamily: "'Merriweather', serif",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                RAKU JLPT
               </div>
+            </div>
 
-              {/* Header */}
-              <div className="text-center relative z-10 mb-10">
-                <h1 className="text-5xl font-serif font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2 tracking-wide">
-                  Certificate of Achievement
-                </h1>
-                <p className="text-lg text-gray-600 italic">
-                  This certificate is proudly presented to
+            {/* Violet Border */}
+            <div
+              style={{
+                position: "absolute",
+                inset: "10px",
+                border: "3px solid #7c3aed",
+                borderRadius: "16px",
+              }}
+            ></div>
+
+            {/* Watermark */}
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                opacity: 0.05,
+              }}
+            >
+              <FaCertificate style={{ fontSize: "280px", color: "#7c3aed" }} />
+            </div>
+
+            {/* Header */}
+            <div
+              style={{
+                textAlign: "center",
+                position: "relative",
+                zIndex: 10,
+                marginBottom: "0px",
+              }}
+            >
+              <h1
+                style={{
+                  fontSize: "3rem",
+                  fontWeight: 700,
+                  color: "#4c1d95",
+                  marginBottom: "0px",
+                  fontFamily: "'Merriweather', serif",
+                }}
+              >
+                Certificate of Achievement
+              </h1>
+              <p
+                style={{
+                  fontSize: "1.125rem",
+                  color: "#6b7280",
+                  fontStyle: "italic",
+                }}
+              >
+                This certificate is proudly presented to
+              </p>
+            </div>
+
+            {/* Student Name */}
+            <div
+              style={{
+                textAlign: "center",
+                position: "relative",
+                zIndex: 10,
+                marginBottom: "0px",
+              }}
+            >
+              <h2
+                style={{
+                  fontSize: "3.5rem",
+                  fontWeight: 700,
+                  color: "#7c3aed",
+                  fontFamily: "'Merriweather', serif",
+                }}
+              >
+                Arif Akib
+              </h2>
+            </div>
+
+            
+            {/* Exam Info */}
+            <div
+              style={{
+                textAlign: "center",
+                position: "relative",
+                zIndex: 10,
+                color: "#374151",
+                fontSize: "1.125rem",
+                marginBottom: "10px",
+                lineHeight: "1.6rem",
+              }}
+            >
+              <p>
+                For completing the{" "}
+                <span style={{ fontWeight: 600 }}>JPT Exam</span>
+              </p>
+              <p>
+                Score: <span style={{ fontWeight: 600 }}>180 / 200</span>
+              </p>
+              <p style={{ color: "#9ca3af" }}>November 6, 2025</p>
+            </div>
+
+            {/* QR Code & Signatures */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                position: "relative",
+                zIndex: 10,
+                padding: "0 80px",
+                width: "100%",
+              }}
+            >
+              {/* Instructor */}
+              <div style={{ textAlign: "center" }}>
+                <p
+                  style={{
+                    borderTop: "2px solid #d1c4ff",
+                    width: "160px",
+                    margin: "0 auto",
+                  }}
+                ></p>
+                <p
+                  style={{
+                    marginTop: "8px",
+                    fontStyle: "italic",
+                    color: "#4b2db2",
+                    fontWeight: 500,
+                  }}
+                >
+                  Instructor
                 </p>
               </div>
 
-              {/* Student Name */}
-              <div className="text-center relative z-10 mb-6">
-                <h2 className="text-6xl font-serif font-extrabold text-purple-700">
-                  {/* {studentName} */}
-                  Arif Akib
-                </h2>
-              </div>
-
-              {/* Ribbon / Badge */}
-              <div className="relative z-10 text-center mb-5">
-                <div className="inline-block bg-gradient-to-r from-purple-600 to-pink-500 px-10 py-3 rounded-full text-white text-lg font-semibold shadow-lg">
-                  Successfully Completed
-                </div>
-              </div>
-
-              {/* Test Info */}
-              <div className="text-center relative z-10 text-gray-700 text-lg mb-12 space-y-2">
-                <p>
-                  For completing the{" "}
-                  <span className="font-semibold">
-                    {/* {testName} */}
-                    JPT
-                  </span>
-                </p>
-                <p>
-                  Score:{" "}
-                  <span className="font-semibold">
-                    {/* {score} / {totalScore} */}
-                    180 / 200
-                  </span>
-                </p>
-                <p className="text-gray-500">
-                  {/* {date} */}
-                  November 6 , 2025
+              {/* QR */}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <QRCodeSVG
+                  value={`https://example.com/certificate/${certificateId}`}
+                  size={40}
+                  fgColor="#7c3aed"
+                  bgColor="#fff"
+                  level="H"
+                />
+                <p
+                  style={{
+                    marginTop: "8px",
+                    color: "#6b7280",
+                    fontSize: "0.875rem",
+                  }}
+                >
+                  Scan to Verify
                 </p>
               </div>
 
-              <div className="flex justify-between items-center relative z-10 mt-12 px-20 gap-10">
-                {/* Instructor Section */}
-                <div className="text-center">
-                  <p className="border-t-2 border-gray-400 w-40 mx-auto"></p>
-                  <p className="font-serif text-gray-700 mt-2 italic text-lg">
-                    Instructor
-                  </p>
-                </div>
-
-                {/* QR Code Section */}
-                <div className="flex flex-col items-center">
-                  <QRCodeSVG
-                    value={`https://example.com/certificate/${certificateId}`} // Replace with your dynamic URL
-                    size={80}
-                    fgColor="#8F4A9D" // Blue color
-                    bgColor="#FFFFFF"
-                    level="H"
-                  />
-                  <p className="mt-2 text-gray-600 text-sm text-center">Scan To Verify</p>
-                </div>
-
-                {/* Administrator Section */}
-                <div className="text-center">
-                  <p className="border-t-2 border-gray-400 w-40 mx-auto"></p>
-                  <p className="font-serif text-gray-700 mt-2 italic text-lg">
-                    Administrator
-                  </p>
-                </div>
+              {/* Administrator */}
+              <div style={{ textAlign: "center" }}>
+                <p
+                  style={{
+                    borderTop: "2px solid #d1c4ff",
+                    width: "160px",
+                    margin: "0 auto",
+                  }}
+                ></p>
+                <p
+                  style={{
+                    marginTop: "8px",
+                    fontStyle: "italic",
+                    color: "#4b2db2",
+                    fontWeight: 500,
+                  }}
+                >
+                  Administrator
+                </p>
               </div>
-
-              {/* Decorative Corners */}
-              <div className="absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 border-purple-600 rounded-tl-xl"></div>
-              <div className="absolute top-0 right-0 w-16 h-16 border-t-4 border-r-4 border-purple-600 rounded-tr-xl"></div>
-              <div className="absolute bottom-0 left-0 w-16 h-16 border-b-4 border-l-4 border-purple-600 rounded-bl-xl"></div>
-              <div className="absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 border-purple-600 rounded-br-xl"></div>
+            </div>
+            {/* Disclaimer */}
+            <div
+              style={{
+                textAlign: "center",
+                position: "relative",
+                zIndex: 10,
+                marginTop: "10px",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "0.875rem",
+                  color: "#6b7280",
+                  fontStyle: "italic",
+                  lineHeight: "1.4rem",
+                }}
+              >
+                This certificate is generated by RAKU JLPT. Any alteration to
+                this certificate is prohibited.
+              </p>
             </div>
           </div>
         </div>

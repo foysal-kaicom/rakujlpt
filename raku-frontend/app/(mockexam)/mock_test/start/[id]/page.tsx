@@ -73,6 +73,7 @@ interface ExamResult {
   listeningAnswered: number;
   correctListeningAnswer: number;
   wrongListeningAnswer: number;
+  per_question_mark: number;
 }
 
 /* -------------------- Helpers -------------------- */
@@ -297,7 +298,7 @@ export default function ExamPage() {
       );
 
       const response = await axiosInstance.post(
-        `/mock-test/submit-answer?exam_id=${id}`,
+        `/mock-test/submit-answer?exam_id=${id}&total_questions=${totalQuestions}`,
         payload
       );
 
@@ -309,6 +310,7 @@ export default function ExamPage() {
         correctListeningAnswer:
           response?.data?.data?.correct_listening_answer ?? 0,
         wrongListeningAnswer: response?.data?.data?.wrong_listening_answer ?? 0,
+        per_question_mark: response?.data?.data?.per_question_mark ?? 0,
       });
 
       setIsSubmitted(true);
@@ -354,9 +356,11 @@ export default function ExamPage() {
           </p>
           <p className="text-base sm:text-xl font-semibold text-green-500 mb-6">
             Total Score:{" "}
-            {((result?.correctListeningAnswer ?? 0) +
-              (result?.correctReadingAnswer ?? 0)) *
-              2.5}
+            {Math.ceil(
+              ((result?.correctListeningAnswer ?? 0) +
+                (result?.correctReadingAnswer ?? 0)) *
+                (result?.per_question_mark ?? 0)
+            )}
           </p>
 
           <div className="grid sm:grid-cols-2 gap-5 mb-6">
@@ -434,7 +438,9 @@ export default function ExamPage() {
       <div className="sticky top-0 z-20 bg-gradient-to-r from-purple-300 to-violet-300 pb-3">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row gap-5 justify-between md:items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">{examTitle} Mocktest</h1>
+            <h1 className="text-2xl font-bold text-gray-800">
+              {examTitle} Mocktest
+            </h1>
             <p className="text-sm text-gray-700 mt-1 capitalize font-medium">
               {currentSection?.module_name} part - {currentSection?.title}
             </p>
@@ -586,7 +592,10 @@ export default function ExamPage() {
                     />
                   </div>
                   <p className="text-xs text-gray-600 mt-1 font-medium">
-                    <span className="text-purple-700">{answeredQuestions} / {totalQuestions}</span> completed
+                    <span className="text-purple-700">
+                      {answeredQuestions} / {totalQuestions}
+                    </span>{" "}
+                    completed
                   </p>
                 </div>
 

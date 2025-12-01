@@ -165,7 +165,7 @@ export default function MockExamResult() {
           <div className="mt-5 lg:pb-10">
             <UserHeadline mainText="Mock Exam Result" preText="" subText="" />
 
-            <div className="mt-6 flex flex-col lg:flex-row justify-center items-start gap-10">
+            {/* <div className="mt-6 flex flex-col lg:flex-row justify-center items-start gap-10">
               <div className="rounded-xl bg-white drop-shadow-xl p-6 border border-gray-200 relative overflow-hidden w-full lg:w-2/3">
                 <div className="flex justify-center 2xl:justify-between flex-wrap items-center gap-3 mb-4">
                   <h3 className="text-xl font-bold text-gray-900 flex items-center gap-3 relative z-10">
@@ -390,7 +390,7 @@ export default function MockExamResult() {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Result Table/Card */}
             <div className="w-full flex flex-col gap-5 mt-6">
