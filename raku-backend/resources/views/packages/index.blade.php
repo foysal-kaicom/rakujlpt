@@ -35,7 +35,13 @@
                 @foreach($packages as $package) 
                 <tr> 
                     {{-- <td class="px-4 py-1">{{ $package->id }}</td>  --}}
-                    <td class="px-4 py-1">{{ $package->name }}</td> 
+                    <td class="px-4 py-1">{{ $package->name }} 
+                        @if($package->is_active)
+                            <span class="badge bg-success">Available</span> 
+                        @else 
+                            <span class="badge bg-secondary">Not Available</span> 
+                        @endif
+                    </td> 
                     <td class="px-4 py-1">{{ $package->is_free == 1 ? 'FREE' : $package->price }}</td> 
                     <td class="px-4 py-1">{{ $package->short_description }}</td> 
                     <td class="px-4 py-1">{{ $package->order }}</td>

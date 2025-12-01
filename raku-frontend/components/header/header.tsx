@@ -8,6 +8,7 @@ import { FaUser } from "react-icons/fa";
 
 import { toast } from "sonner";
 import axiosInstance from "@/utils/axios";
+import axios from "axios";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -18,6 +19,7 @@ import { navdata } from "./navdata";
 import { SidebarData } from "../user/Sidebar/sidebarData";
 
 import { useAuthStore } from "@/stores/useAuthStore";
+import { useBusinessSettingsStore } from "@/stores/useBusinessStore";
 import Notification from "./notificationComponent";
 
 export default function Header() {
@@ -353,9 +355,49 @@ export default function Header() {
     );
   };
 
+
+  const getSettingsData = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/settings`
+      );
+      const data = response.data?.data;
+
+      if (data) {
+        const businessData = {
+          business_name: data.business_name,
+          business_email: data.business_email,
+          business_phone: data.business_phone,
+          bkash_number: data.bkash_number,
+          website_url: data.website_url,
+          certificate_amount: data.certificate_amount,
+          address: data.address,
+          bin_number: data.bin_number,
+          tin_number: data.tin_number,
+          trade_license: data.trade_license,
+          legal_docs: data.legal_docs,
+          certification_docs: data.certification_docs,
+          authorized_docs: data.authorized_docs,
+          logo: data.logo,
+          facebook_url: data.facebook_url,
+          twitter_url: data.twitter_url,
+          linkedin_url: data.linkedin_url,
+          youtube_url: data.youtube_url,
+          instagram_url: data.instagram_url,
+        };
+
+        useBusinessSettingsStore.getState().setSettings(businessData);
+      }
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  };
+
   useEffect(() => {
+    getSettingsData();
     setHydrated(true);
   }, []);
+
 
   return (
     <>

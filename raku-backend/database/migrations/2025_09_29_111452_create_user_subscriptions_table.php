@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('user_subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('candidate_id')->constrained('candidates');
-            $table->foreignId('package_id')->constrained('packages')->cascadeOnDelete();
+            $table->foreignId('candidate_id')->constrained('candidates')->cascadeOnDelete();
+            $table->foreignId('package_id')->constrained('packages')->restrictOnDelete();
             $table->string('tran_id')->unique();
             $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending'); //dropdown in edit
             $table->enum('payment_status', ['pending', 'success', 'failed','cancelled'])->default('pending');  //dropdown in edit
