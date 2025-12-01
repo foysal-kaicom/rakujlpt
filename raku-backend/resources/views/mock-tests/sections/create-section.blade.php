@@ -3,6 +3,15 @@
 @section('contents')
 
 <div class="bg-white rounded-3 shadow-sm border p-6">
+    @if ($errors->any())
+            <div class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm">
+                <ul class="list-disc list-inside">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     <!-- Header -->
     <div class="text-2xl font-bold text-gray-800 border-b pb-3 mb-5 flex items-center gap-2">
         <p class="p-2 rounded-full bg-indigo-500 text-white">
