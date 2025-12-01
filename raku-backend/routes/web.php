@@ -100,6 +100,7 @@ Route::group(['middleware' => 'auth', 'checkPermission'], function () {
         Route::delete('/delete-question/{id}', [MockTestController::class, 'deleteQuestion'])->name('question.delete');
         Route::post('/update-question-group/{id}', [MockTestController::class, 'updateQuestionGroup'])->name('question-group.update');
         Route::get('/reports/list', [MockTestController::class, 'getReportsData'])->name('reports.list');
+        Route::get('/reports/export', [MockTestController::class, 'exportReportsCsv'])->name('reports.export');
 
 
         // ajax dependent dropdown routes

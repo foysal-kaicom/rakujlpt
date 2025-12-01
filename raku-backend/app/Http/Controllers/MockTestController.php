@@ -609,4 +609,9 @@ class MockTestController extends Controller
         return view('mock-tests.reports.list', compact('records', 'exams'));
     }
     
+    public function exportReportsCsv(Request $request)
+    {
+        dd("export");
+    }
+
 }
