@@ -13,6 +13,9 @@ const partnersList = async (): Promise<Partner[]> => {
       }
     );
     const data = await res.json();
+    console.log("URL:", `${process.env.NEXT_PUBLIC_API_BASE_URL}/partner/list`);
+    console.log(data);
+    
     return data?.data || [];
   } catch (error) {
     return [];
