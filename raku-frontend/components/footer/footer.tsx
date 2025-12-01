@@ -1,13 +1,19 @@
 "use client";
+
+
 import Image from "next/image";
-import WebpageWrapper from "../wrapper/WebpageWrapper";
 import Link from "next/link";
+
 import { IoLogoYoutube } from "react-icons/io";
 import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
+
 import { useBusinessSettingsStore } from "@/stores/useBusinessStore";
 
 export default function Footer() {
+
   const settings = useBusinessSettingsStore((state) => state.settings);
+
+
   return (
     <div className="bg-gradient-to-br from-blue-50 to-purple-50 py-4 relative overflow-hidden">
       {/* Decorative circles */}
@@ -33,24 +39,24 @@ export default function Footer() {
               solutions and real-time mock tests.
             </p>
             <div className="mt-6 flex space-x-4">
-              <Link
-                href="#"
+              <a
+                href={settings?.facebook_url || ''} target="_blank"
                 className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full p-2 drop-shadow-sm drop-shadow-violet-400 border-b border-white/50 hover:scale-110 duration-300"
               >
                 <FaFacebookF className="size-4" />
-              </Link>
-              <Link
-                href="#"
+              </a>
+              <a
+                href={settings?.linkedin_url || ''} target="_blank"
                 className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full p-2 drop-shadow-sm drop-shadow-violet-400 border-b border-white/50 hover:scale-110 duration-300"
               >
                 <FaLinkedinIn className="size-4" />
-              </Link>
-              <Link
-                href="#"
+              </a>
+              <a
+                href={settings?.youtube_url || ''} target="_blank"
                 className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full p-2 drop-shadow-sm drop-shadow-violet-400 border-b border-white/50 hover:scale-110 duration-300"
               >
                 <IoLogoYoutube className="size-4" />
-              </Link>
+              </a>
             </div>
           </div>
 

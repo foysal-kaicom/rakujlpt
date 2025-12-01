@@ -18,9 +18,6 @@ export default function UserLayout({
           {children}
         </div>
       </div>
-      {/* <div className="hidden xl:block">
-        <Footer />
-      </div> */}
     </>
   );
 }
