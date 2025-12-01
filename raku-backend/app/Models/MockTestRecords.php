@@ -19,6 +19,8 @@ class MockTestRecords extends Model
         'listening_answered',
         'correct_listening_answer',
         'wrong_listening_answer',
+        'total_questions',
+        'per_question_mark'
     ];
 
     public function candidate() {
