@@ -147,6 +147,8 @@ class MockTestController extends Controller
                 'listening_answered'        => $modulesScore['Listening']['answered'],
                 'correct_listening_answer'  => $modulesScore['Listening']['correct'],
                 'wrong_listening_answer'    => $modulesScore['Listening']['wrong'],
+                'total_questions'           => $data['total_questions'],
+                'per_question_mark'         => $per_question_mark,
             ]);
 
             $mockTestRecord->per_question_mark = $per_question_mark;
@@ -177,11 +179,10 @@ class MockTestController extends Controller
     {
         try {
             $id = Auth::guard('candidate')->id();
-            $testResults = MockTestRecords::where('candidate_id', $id)->get();
+            $testResults = MockTestRecords::with('exam:id,name,title,pass_point,total_point')->where('candidate_id', $id)->get();
             if (!$testResults || $testResults->isEmpty()) {
                 return $this->responseWithSuccess([], "No mock test records found.");
             }
-            // $testResults = MockTestResultResource::collection(MockTestRecords::where('candidate_id', $id)->get());//need to use later
 
             return $this->responseWithSuccess($testResults, "Mock test results fetched.");
         } catch (Throwable $ex) {
