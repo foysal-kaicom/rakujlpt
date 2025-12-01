@@ -224,15 +224,15 @@
                   <option value="text" selected>Text</option>
                   <option value="image">Image</option>
                 </select>
-              </div>
+                </div>
+                </div>
+                <div class="space-y-2 col-span-4 lg:col-span-3">
+                <label class="block font-semibold">Question</label>
+                <div class="questionInputWrapper" data-index="${i}">
+                    <textarea id="question-${i}" name="questions[${i}][question]" class="tinymce"></textarea>
+                </div>
+                </div>
             </div>
-            <div class="space-y-2 col-span-4 lg:col-span-3">
-              <label class="block font-semibold">Question</label>
-              <div class="questionInputWrapper" data-index="${i}">
-                <textarea id="question-${i}" name="questions[${i}][question]" class="tinymce"></textarea>
-              </div>
-            </div>
-          </div>
  
           <div class="p-6 rounded-lg border bg-white mt-[30px] space-y-7">
             <h3 class="font-semibold rounded text-black">Create Options (Choose the correct answer)</h3>
@@ -267,7 +267,8 @@
                                 tinymce.get(`question-${index}`).remove();
                             }
                             wrapper.innerHTML =
-                                `<div class="flex gap-4 flex-col"> <input type="file" name="questions[${index}][question]" class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-[250px]" /> <textarea name="questions[${index}][hints]" placeholder="Enter Question hints" class="border p-2"></textarea></div>`;
+                                `<div class="flex gap-4 flex-col"> <input type="file" name="questions[${index}][question]" class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-[250px]" /> <textarea  id="question-${index}" name="questions[${index}][hints]" placeholder="Enter Question hints" class="tinymce border p-2"></textarea></div>`;
+                                initTiny(`#question-${index}`);
                         } else {
                             wrapper.innerHTML =
                                 `<textarea id="question-${index}" name="questions[${index}][question]" class="tinymce"></textarea>`;

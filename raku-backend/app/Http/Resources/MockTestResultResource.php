@@ -24,6 +24,7 @@ class MockTestResultResource extends JsonResource
             'listening_answered'       => $this->listening_answered,
             'correct_listening_answer' => $this->correct_listening_answer,
             'wrong_listening_answer'   => $this->wrong_listening_answer,
+            'per_question_mark'        => $this->per_question_mark,
             'created_at'               => date('Y-m-d h:i:s',strtotime($this->created_at)),
             'updated_at'               => date('Y-m-d h:i:s',strtotime($this->updated_at)),
 
