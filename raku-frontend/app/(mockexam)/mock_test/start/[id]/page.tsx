@@ -434,7 +434,7 @@ export default function ExamPage() {
       <div className="sticky top-0 z-20 bg-gradient-to-r from-purple-300 to-violet-300 pb-3">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row gap-5 justify-between md:items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">{examTitle}</h1>
+            <h1 className="text-2xl font-bold text-gray-800">{examTitle} Mocktest</h1>
             <p className="text-sm text-gray-700 mt-1 capitalize font-medium">
               {currentSection?.module_name} part - {currentSection?.title}
             </p>

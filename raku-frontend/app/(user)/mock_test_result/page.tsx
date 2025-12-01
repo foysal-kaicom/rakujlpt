@@ -48,17 +48,17 @@ export default function MockExamResult() {
   ];
 
   const [resultData, setResultData] = useState<Exam[]>([]);
-  // const [scoreData, setScoreData] = useState<ScoreData[]>([]);
-  // const [highestScores, setHighestScores] = useState({
-  //   listening: 0,
-  //   reading: 0,
-  //   total: 0,
-  // });
-  // const [allTimeHighestScores, setAllTimeHighestScores] = useState({
-  //   listening: 0,
-  //   reading: 0,
-  //   total: 0,
-  // });
+  const [scoreData, setScoreData] = useState<ScoreData[]>([]);
+  const [highestScores, setHighestScores] = useState({
+    listening: 0,
+    reading: 0,
+    total: 0,
+  });
+  const [allTimeHighestScores, setAllTimeHighestScores] = useState({
+    listening: 0,
+    reading: 0,
+    total: 0,
+  });
   const [loading, setLoading] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -90,25 +90,25 @@ export default function MockExamResult() {
     return `${day}/${month}/${year}`;
   };
 
-  // const getAllTimeHighest = (data: any[]) => {
-  //   return data.reduce(
-  //     (best, attempt) => {
-  //       const listeningScore = attempt.correct_listening_answer * 2.5;
-  //       const readingScore = attempt.correct_reading_answer * 2.5;
-  //       const totalScore = listeningScore + readingScore;
+  const getAllTimeHighest = (data: any[]) => {
+    return data.reduce(
+      (best, attempt) => {
+        const listeningScore = attempt.correct_listening_answer * 2.5;
+        const readingScore = attempt.correct_reading_answer * 2.5;
+        const totalScore = listeningScore + readingScore;
 
-  //       if (totalScore > best.total) {
-  //         return {
-  //           listening: listeningScore,
-  //           reading: readingScore,
-  //           total: totalScore,
-  //         };
-  //       }
-  //       return best;
-  //     },
-  //     { listening: 0, reading: 0, total: 0 }
-  //   );
-  // };
+        if (totalScore > best.total) {
+          return {
+            listening: listeningScore,
+            reading: readingScore,
+            total: totalScore,
+          };
+        }
+        return best;
+      },
+      { listening: 0, reading: 0, total: 0 }
+    );
+  };
 
   const getMockTestResultData = async () => {
     setLoading(true);
@@ -117,32 +117,32 @@ export default function MockExamResult() {
       const data: Exam[] = response?.data?.data || [];
       setResultData(data);
 
-      // // Transform API response -> chart-friendly data
-      // const formatted = data.map((exam, index) => {
-      //   const listening = exam.correct_listening_answer * 2.5; // weighting
-      //   const reading = exam.correct_reading_answer * 2.5;
-      //   return {
-      //     test:
-      //       `${formatDate(exam.created_at)}-(T${index + 1})` ||
-      //       `Test ${index + 1}`,
-      //     listening,
-      //     reading,
-      //     total: listening + reading,
-      //   };
-      // });
+      // Transform API response -> chart-friendly data
+      const formatted = data.map((exam, index) => {
+        const listening = exam.correct_listening_answer * 2.5; // weighting
+        const reading = exam.correct_reading_answer * 2.5;
+        return {
+          test:
+            `${formatDate(exam.created_at)}-(T${index + 1})` ||
+            `Test ${index + 1}`,
+          listening,
+          reading,
+          total: listening + reading,
+        };
+      });
 
-      // setScoreData(formatted);
-      // const maxListening = Math.max(...formatted.map((d) => d.listening), 0);
-      // const maxReading = Math.max(...formatted.map((d) => d.reading), 0);
-      // const maxTotal = Math.max(...formatted.map((d) => d.total), 0);
+      setScoreData(formatted);
+      const maxListening = Math.max(...formatted.map((d) => d.listening), 0);
+      const maxReading = Math.max(...formatted.map((d) => d.reading), 0);
+      const maxTotal = Math.max(...formatted.map((d) => d.total), 0);
 
-      // setHighestScores({
-      //   listening: maxListening,
-      //   reading: maxReading,
-      //   total: maxTotal,
-      // });
-      // const highest = getAllTimeHighest(data);
-      // setAllTimeHighestScores(highest);
+      setHighestScores({
+        listening: maxListening,
+        reading: maxReading,
+        total: maxTotal,
+      });
+      const highest = getAllTimeHighest(data);
+      setAllTimeHighestScores(highest);
     } catch (error: any) {
       console.error(error);
       toast.error(error?.response?.data?.message || "Failed to get exam data");
@@ -165,8 +165,7 @@ export default function MockExamResult() {
           <div className="mt-5 lg:pb-10">
             <UserHeadline mainText="Mock Exam Result" preText="" subText="" />
 
-            {/* <div className="mt-6 flex flex-col lg:flex-row justify-center items-start gap-10">
-        
+            <div className="mt-6 flex flex-col lg:flex-row justify-center items-start gap-10">
               <div className="rounded-xl bg-white drop-shadow-xl p-6 border border-gray-200 relative overflow-hidden w-full lg:w-2/3">
                 <div className="flex justify-center 2xl:justify-between flex-wrap items-center gap-3 mb-4">
                   <h3 className="text-xl font-bold text-gray-900 flex items-center gap-3 relative z-10">
@@ -203,7 +202,6 @@ export default function MockExamResult() {
                   </div>
                 </div>
 
-         
                 <div className="h-90 relative z-10">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={scoreData}>
@@ -234,7 +232,7 @@ export default function MockExamResult() {
                           fontSize: "12px",
                         }}
                       />
-                
+
                       <Line
                         type="monotone"
                         dataKey="listening"
@@ -356,7 +354,6 @@ export default function MockExamResult() {
               </div>
 
               <div className="w-full lg:w-1/3 grid grid-cols-2 gap-6">
-           
                 <div className="col-span-2 p-6 bg-white border border-gray-200 rounded-2xl text-center shadow-sm">
                   <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
                     All Time Highest Score
@@ -393,7 +390,7 @@ export default function MockExamResult() {
                   </p>
                 </div>
               </div>
-            </div> */}
+            </div>
 
             {/* Result Table/Card */}
             <div className="w-full flex flex-col gap-5 mt-6">
@@ -421,6 +418,9 @@ export default function MockExamResult() {
                             Date
                           </th>
                           <th className="p-3 text-left font-bold border-r border-gray-200">
+                            Name
+                          </th>
+                          <th className="p-3 text-left font-bold border-r border-gray-200">
                             Listening
                           </th>
                           <th className="p-3 text-left font-bold border-r border-gray-200">
@@ -428,6 +428,9 @@ export default function MockExamResult() {
                           </th>
                           <th className="p-3 text-left font-bold border-gray-200">
                             Total Score
+                          </th>
+                          <th className="p-3 text-left font-bold border-gray-200">
+                            Certificate
                           </th>
                         </tr>
                       </thead>
@@ -440,8 +443,11 @@ export default function MockExamResult() {
                             <td className="p-3 text-gray-700 border-t border-r border-gray-200">
                               {formatDate(c?.created_at)}
                             </td>
-                            <td className="p-3 border-t border-r border-gray-200">
-                              <div className="grid grid-cols-1 gap-1 text-xs">
+                            <td className="p-3 text-purple-700 border-t border-r border-gray-200 font-semibold">
+                              JLPT
+                            </td>
+                            <td className="p-3 border-t border-r border-gray-200 font-medium">
+                              <div className="grid grid-cols-1 gap-1 text-xs ">
                                 <span className="text-blue-600">
                                   Answered: {c?.listening_answered ?? 0}
                                 </span>
@@ -457,7 +463,7 @@ export default function MockExamResult() {
                                 </span>
                               </div>
                             </td>
-                            <td className="p-3 border-t border-r border-gray-200">
+                            <td className="p-3 border-t border-r border-gray-200 font-medium">
                               <div className="grid grid-cols-1 gap-1 text-xs">
                                 <span className="text-blue-600">
                                   Answered: {c?.reading_answered ?? 0}
@@ -479,6 +485,13 @@ export default function MockExamResult() {
                                 (c?.correct_reading_answer ?? 0)) *
                                 2.5}
                             </td>
+                            <td className="p-3 border-t border-gray-200 capitalize  text-xs font-medium">
+                              <Link href={`/certificate/${c.id}`}>
+                                <button className="py-1.5 px-4 border-b border-b-purple-300 rounded-2xl bg-purple-700 text-white hover:opacity-80 duration-300 drop-shadow-sm drop-shadow-purple-500">
+                                  Generate
+                                </button>
+                              </Link>
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -492,11 +505,21 @@ export default function MockExamResult() {
                         key={i}
                         className="bg-white shadow-sm rounded-lg p-4 hover:shadow-xl transition"
                       >
-                        <div className="mb-2 space-y-1 text-xs  flex gap-x-1">
-                          <p className="font-semibold text-blue-500">Date :</p>
-                          <p className="text-gray-500">
-                            {formatDate(c?.created_at)}
-                          </p>
+                        <div className="mb-4 text-xs flex justify-between gap-4 items-center">
+                          <div className=" space-y-1    space-x-1">
+                            <span className="font-semibold text-violet-500">
+                              JLPT Exam
+                            </span>
+                            <span className="text-gray-500">
+                              ({formatDate(c?.created_at)})
+                            </span>
+                          </div>
+
+                          <Link href={`/certificate/${c.id}`}>
+                            <button className="py-1 px-3 border-b border-b-purple-300 rounded-2xl bg-purple-700 text-white hover:opacity-80 duration-300 drop-shadow-sm drop-shadow-purple-500">
+                              Generate
+                            </button>
+                          </Link>
                         </div>
                         <div className="flex justify-between gap-4">
                           <div className="space-y-1">
