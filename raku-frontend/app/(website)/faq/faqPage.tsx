@@ -5,9 +5,10 @@ import BreadCrumb from "@/components/BreadCrumb";
 
 import { FaPlus, FaMinus } from "react-icons/fa";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PaginatedComponent from "@/components/PaginateComponent";
 import Link from "next/link";
+import axios from "axios";
 
 interface FAQ {
   id: null | number;
@@ -15,11 +16,7 @@ interface FAQ {
   answer: string;
 }
 
-interface FAQProps {
-  faqs: FAQ[];
-}
-
-export default function FAQ({ faqs }: FAQProps) {
+export default function FAQ() {
   const breadCrumbData = [
     {
       name: "Home",
@@ -31,6 +28,7 @@ export default function FAQ({ faqs }: FAQProps) {
     },
   ];
 
+    const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -49,6 +47,22 @@ export default function FAQ({ faqs }: FAQProps) {
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
+
+
+  const getFaqList = async () => {
+  try {
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/faq/list`,
+    );
+    setFaqs( res?.data?.data || []);
+  } catch (error) {
+   setFaqs([]);
+  }
+};
+
+useEffect(()=>{
+  getFaqList()
+},[])
 
   return (
     <section className="relative min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50 overflow-hidden pt-5 pb-20 px-6">
