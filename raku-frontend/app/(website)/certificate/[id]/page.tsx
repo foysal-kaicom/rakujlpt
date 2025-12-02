@@ -5,10 +5,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { useParams } from "next/navigation";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import BreadCrumb from "@/components/BreadCrumb";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import { useRef } from "react";
-import { toast } from "sonner";
 
 export default function Certificate() {
   const params = useParams();
@@ -85,33 +82,17 @@ export default function Certificate() {
           {/* Certificate Container */}
           <div
             ref={certificateRef}
-            className="
-          relative bg-white border-2 border-[#e0d7ff] p-6 sm:p-10
-          font-roboto flex flex-col justify-center items-center rounded-2xl
-          shadow mt-10 mx-auto
-          w-full max-w-[842px] 
-          h-auto sm:h-[595px]
-        "
+            className="relative bg-white border-2 border-[#e0d7ff] p-6 sm:p-10 font-roboto flex flex-col justify-center items-center rounded-2xl shadow mt-10 mx-auto w-full max-w-[842px] h-auto sm:h-[595px]"
           >
             {/* Watermark Text */}
             <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
-              <div
-                className="
-              -rotate-30 text-[50px] sm:text-[100px] font-bold font-merriweather 
-              text-purple-700/5 whitespace-nowrap
-            "
-              >
+              <div className="-rotate-30 text-[50px] sm:text-[100px] font-bold font-merriweather text-purple-700/5 whitespace-nowrap">
                 RAKU JLPT
               </div>
             </div>
 
             {/* Violet Border */}
-            <div
-              className="
-            absolute inset-[5px] sm:inset-[10px] border-[2px] sm:border-[3px] 
-            border-purple-600 rounded-2xl pointer-events-none
-          "
-            ></div>
+            <div className="absolute inset-[5px] sm:inset-[10px] border-[2px] sm:border-[3px] border-purple-600 rounded-2xl pointer-events-none"></div>
 
             {/* Center Watermark Icon */}
             <div className="absolute inset-0 flex justify-center items-center opacity-5 pointer-events-none">
@@ -120,12 +101,7 @@ export default function Certificate() {
 
             {/* Header */}
             <div className="text-center relative z-10 px-2">
-              <h1
-                className="
-              text-3xl sm:text-5xl font-bold text-[#4c1d95] mb-3 
-              font-merriweather
-            "
-              >
+              <h1 className="text-3xl sm:text-5xl font-bold text-[#4c1d95] mb-3 font-merriweather">
                 Certificate of Achievement
               </h1>
               <p className="text-md sm:text-lg text-gray-500 italic">
@@ -135,22 +111,13 @@ export default function Certificate() {
 
             {/* Student Name */}
             <div className="text-center relative z-10 leading-tight px-2">
-              <h2
-                className="
-              text-3xl sm:text-[3.5rem] font-bold text-purple-600 font-merriweather
-            "
-              >
+              <h2 className="text-3xl sm:text-[3.5rem] font-bold text-purple-600 font-merriweather">
                 Arif Akib
               </h2>
             </div>
 
             {/* Exam Info */}
-            <div
-              className="
-            text-center relative z-10 text-gray-700 
-            text-md sm:text-lg mb-5 leading-6 space-y-1 px-2
-          "
-            >
+            <div className="text-center relative z-10 text-gray-700 text-md sm:text-lg mb-5 leading-6 space-y-1 px-2">
               <p>
                 For completing the{" "}
                 <span className="font-semibold">JPT Exam</span>
@@ -177,14 +144,12 @@ export default function Certificate() {
             </div>
 
             {/* QR & Signatures */}
-            <div
-              className="
-            flex flex-row justify-between items-center relative z-10 md:px-20 w-full gap-6 sm:gap-0
-          "
-            >
+            <div className="flex flex-row justify-between items-center relative z-10 md:px-20 w-full gap-6 sm:gap-0">
               {/* Instructor */}
               <div className="text-center">
-                <p className="border-b-2 border-[#d1c4ff] md:w-40 mx-auto pb-1">fdhn</p>
+                <p className="border-b-2 border-[#d1c4ff] md:w-40 mx-auto pb-1">
+                  fdhn
+                </p>
                 <p className="mt-0 italic text-[#4b2db2] font-medium">
                   Instructor
                 </p>
@@ -206,7 +171,9 @@ export default function Certificate() {
 
               {/* Administrator */}
               <div className="text-center">
-                <p className="border-b-2 border-[#d1c4ff] md:w-40 mx-auto pb-1">fdhs</p>
+                <p className="border-b-2 border-[#d1c4ff] md:w-40 mx-auto pb-1">
+                  fdhs
+                </p>
                 <p className="mt-0 italic text-[#4b2db2] font-medium">
                   Administrator
                 </p>

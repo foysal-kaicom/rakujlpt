@@ -187,9 +187,10 @@ export default function MockExamResult() {
                               </div>
                             </td>
                             <td className="p-3 border-t border-gray-200 capitalize font-bold text-purple-700 text-lg">
-                              {((c?.correct_listening_answer ?? 0) +
-                                (c?.correct_reading_answer ?? 0)) *
-                                c?.per_question_mark}
+                              {Math.round(
+                                (c?.correct_listening_answer ?? 0) +
+                                  (c?.correct_reading_answer ?? 0)
+                              ) * c?.per_question_mark}
                             </td>
                             <td className="p-3 border-t border-gray-200 capitalize text-xs font-medium">
                               {((c?.correct_listening_answer ?? 0) +
@@ -282,9 +283,10 @@ export default function MockExamResult() {
                               Total
                             </p>
                             <p className="text-purple-500 font-semibold text-xs">
-                              {(c?.correct_listening_answer +
-                                c?.correct_reading_answer) *
-                                2.5}{" "}
+                              {Math.round(
+                                (c?.correct_listening_answer ?? 0) +
+                                  (c?.correct_reading_answer ?? 0)
+                              ) * c?.per_question_mark}
                             </p>
                           </div>
                         </div>

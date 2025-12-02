@@ -26,7 +26,7 @@ export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [method, setMethod] = useState("email");
+  const [method, setMethod] = useState<"email" | "phone">("email");
   const [formData, setFormData] = useState<FormData>({
     first_name: "",
     last_name: "",
@@ -52,9 +52,18 @@ export default function SignUpPage() {
     // console.log("Form submitted:", formData);
     try {
       setLoading(true);
+      const payload = {
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        password: formData.password,
+        password_confirmation: formData.password_confirmation,
+        ...(method === "email"
+          ? { email: formData.email }
+          : { phone_number: formData.phone_number }),
+      };
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/candidate/register`,
-        formData
+        payload
       );
       router.push("/sign_in");
       toast.success(response.data.message || "Sign up completed");
