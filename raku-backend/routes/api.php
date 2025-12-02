@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\DemoQuestionController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\CandidateProgressController;
 use App\Http\Controllers\Api\SslCommerzPaymentController;
+use App\Http\Controllers\Api\CertificateController;
 
 Route::prefix('v1')->group(function () {
         
@@ -103,6 +104,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/stages/{stageId}/start', [CandidateProgressController::class, 'showStage']);
         Route::post('/stages/{stageId}/complete', [CandidateProgressController::class, 'completeStage']);
         Route::get('/candidate/current-roadmap', [RoadmapController::class, 'get_current_roadmap']);
+        Route::get('/certificate-download', [CertificateController::class, 'download']);
 
     });
 
@@ -117,7 +119,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
     Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
 
-
+    Route::get('/verify-certificate', [CertificateController::class, 'verifyCertificate']);
 
     Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
     //SSLCOMMERZ END
