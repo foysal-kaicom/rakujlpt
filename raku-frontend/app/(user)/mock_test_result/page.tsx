@@ -99,6 +99,15 @@ export default function MockExamResult() {
     getMockTestResultData();
   }, []);
 
+  const handleDownload = async (id:any) => {
+    try {
+      const response = await axiosInstance.get(`/certificate-download?${id}`);
+      toast.success("Download Complete");
+    } catch (error: any) {
+      toast.error("Download Failed");
+    }
+  };
+
   return (
     <>
       <Suspense fallback={<SuspenseLoader />}>
@@ -197,11 +206,12 @@ export default function MockExamResult() {
                                 (c?.correct_reading_answer ?? 0)) *
                                 (c?.per_question_mark ?? 0) >
                               (c.exam.pass_point ?? 0) ? (
-                                <Link href={`/certificate/${c.exam_id}`}>
-                                  <button className="py-1.5 px-4 border-b border-b-purple-300 rounded-2xl bg-purple-700 text-white hover:opacity-80 duration-300 drop-shadow-sm drop-shadow-purple-500">
-                                    Generate
-                                  </button>
-                                </Link>
+                                <button
+                                  onClick={() => handleDownload(c.id)}
+                                  className="py-1.5 px-4 border-b border-b-purple-300 rounded-2xl bg-purple-700 text-white hover:opacity-80 duration-300 drop-shadow-sm drop-shadow-purple-500"
+                                >
+                                  Generate
+                                </button>
                               ) : (
                                 <span className="text-gray-400">
                                   Not Passed
@@ -231,11 +241,12 @@ export default function MockExamResult() {
                             </span>
                           </div>
 
-                          <Link href={`/certificate/${c.id}`}>
-                            <button className="py-1 px-3 border-b border-b-purple-300 rounded-2xl bg-purple-700 text-white hover:opacity-80 duration-300 drop-shadow-sm drop-shadow-purple-500">
-                              Generate
-                            </button>
-                          </Link>
+                          <button
+                            onClick={() => handleDownload(c.id)}
+                            className="py-1 px-3 border-b border-b-purple-300 rounded-2xl bg-purple-700 text-white hover:opacity-80 duration-300 drop-shadow-sm drop-shadow-purple-500"
+                          >
+                            Download
+                          </button>
                         </div>
                         <div className="flex justify-between gap-4">
                           <div className="space-y-1">
