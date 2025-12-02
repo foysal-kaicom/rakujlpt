@@ -356,7 +356,7 @@ export default function ExamPage() {
           </p>
           <p className="text-base sm:text-xl font-semibold text-green-500 mb-6">
             Total Score:{" "}
-            {Math.ceil(
+            {Math.round(
               ((result?.correctListeningAnswer ?? 0) +
                 (result?.correctReadingAnswer ?? 0)) *
                 (result?.per_question_mark ?? 0)
