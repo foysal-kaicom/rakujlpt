@@ -149,7 +149,7 @@
 
     <div class="details">
         For completing the <strong>{{ $examName }}</strong><br>
-        Score: <strong>{{ $score }}</strong><br>
+        Score: <strong>{{ $score }} / {{ $totalPoint }} </strong><br>
         {{ $date }}
     </div>
 
