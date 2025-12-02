@@ -6,15 +6,29 @@ import RouteLoader from "@/components/RouteLoader";
 export const metadata: Metadata = {
   title: "Raku - Mock Test",
   description:
-    "Register for the Japanese Proficiency Mock Test in Bangladesh. Find test dates, centers, application deadlines, and fees.",
+    "Register for the Japanese Proficiency Mock Test. Access an international Japanese language mock test platform with practice exams, scoring, and performance tracking for JLPT and JPT-style tests",
   keywords: [
     "Raku JLPT",
     "Japanese Proficiency Test",
     "JPT registration",
+    "JPLT registration",
     "Japanese mock exam",
     "JPT test dates",
+    "JPLT test dates",
     "study in Japan",
     "JLPT",
+    "JPT",
+    "Japanese language test online",
+    "Japanese language practice test",
+    "LPT mock test online",
+    "JPT online mock test",
+    "Japanese proficiency exam practice",
+    "Japanese grammar test online",
+    "JLPT preparation test",
+    "JLPT sample questions",
+    "Practice Japanese vocabulary test",
+    "Japanese listening mock test",
+    "Japanese reading mock test",
     "Japanese language Proficiency Test",
   ],
   authors: [{ name: "Raku JLPT", url: "https://rakujlpt.com" }],
@@ -22,9 +36,9 @@ export const metadata: Metadata = {
     canonical: "https://rakujlpt.com/",
   },
   openGraph: {
-    title: "Raku Bangladesh – Japanese Proficiency Mock Test Registration",
+    title: "Raku JLPT – Japanese Proficiency Mock Test",
     description:
-      "Get registered for mock test exams in Bangladesh. View all available test dates and center info.",
+      "Get registered for mock test website practice all available tests to improve your score.",
     url: "https://rakujlpt.com",
     siteName: "Raku JLPT",
     images: [

@@ -6,7 +6,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="relative">
-                        <img src="{{ url($settings->logo) }}" alt="Logo"
+                        <img src="{{ $settings->logo}}" alt="Logo"
                             class="h-10 w-10 rounded-xl shadow-md ring-2 ring-indigo-100 object-cover">
                         <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white">
                         </div>

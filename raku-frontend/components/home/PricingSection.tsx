@@ -18,7 +18,6 @@ interface Plan {
   is_popular?: boolean;
   is_home: boolean;
   is_active: number;
-  
 }
 
 const defaultPlans: Plan[] = [];
@@ -40,7 +39,9 @@ const PricingSection = () => {
         data: Plan[];
       }>(`/subscriptions`);
       if (response?.data?.success) {
-        const showOnHome = response.data.data.filter((plan)=>plan.is_home == true)
+        const showOnHome = response.data.data.filter(
+          (plan) => plan.is_home == true
+        );
         setPlansData(showOnHome);
       }
     } catch (error: any) {
@@ -99,6 +100,14 @@ const PricingSection = () => {
             Select the perfect plan to accelerate your Japanese language
             learning journey.
           </p>
+          <div className="mt-5 flex justify-center">
+            <Link
+              href="/packages"
+              className="px-8 py-3 rounded-full bg-linear-to-r from-blue-500 to-purple-500 text-white font-semibold hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] transition-all duration-300 drop-shadow-sm drop-shadow-violet-600 border-b border-white/50"
+            >
+              See All Packages
+            </Link>
+          </div>
         </div>
 
         <div
@@ -109,12 +118,12 @@ const PricingSection = () => {
           }`}
         >
           {plansData.map((plan, index) => (
-              <PricingCard
-                key={index}
-                plan={plan}
-                subscribeModal={subscribeModal}
-              />
-            ))}
+            <PricingCard
+              key={index}
+              plan={plan}
+              subscribeModal={subscribeModal}
+            />
+          ))}
         </div>
 
         {/* Modal Start */}

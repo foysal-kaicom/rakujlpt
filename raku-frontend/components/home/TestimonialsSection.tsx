@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 import { Star } from "lucide-react";
 import { FaUser } from "react-icons/fa";
 interface Review {
@@ -9,23 +13,27 @@ interface Review {
   image: string;
 }
 
-const reviewList = async (): Promise<Review[]> => {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/review/list`,
-      {
-        cache: "no-store",
-      }
-    );
-    const data = await res.json();
-    return data?.data || [];
-  } catch (error) {
-    return [];
-  }
-};
+export default function TestimonialsSection() {
+  const [testimonials, setTestimonials] = useState<Review[]>([]);
 
-export default async function TestimonialsSection() {
-  const testimonials = await reviewList();
+  const reviewList = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/review/list`,
+        {
+          cache: "no-store",
+        }
+      );
+      const data = await res.json();
+      setTestimonials(data?.data || []);
+    } catch (error) {
+      setTestimonials([]);
+    }
+  };
+
+  useEffect(() => {
+    reviewList();
+  });
 
   return (
     <section id="testimonials" className="py-20 bg-white">

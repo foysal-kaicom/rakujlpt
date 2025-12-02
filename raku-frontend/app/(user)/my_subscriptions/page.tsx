@@ -250,14 +250,17 @@ export default function SubscriptionPage() {
                       </td>
 
                       <td className="p-2 sm:p-3 text-gray-700 border-t border-r border-gray-200 capitalize">
-                        {!subscription.is_free && startIndex + index === 0 ? (
+                        {startIndex + index === 0 ? (
                           <div className="space-x-2">
-                            <button
-                              onClick={() => handleRenew(subscription.id)}
-                              className="inline-block px-4 py-2 bg-linear-to-r from-purple-700 via-violet-700 to-blue-700 font-medium text-white rounded-lg hover:opacity-80 transition"
-                            >
-                              Renew
-                            </button>
+                            {!subscription.is_free && (
+                              <button
+                                onClick={() => handleRenew(subscription.id)}
+                                className="inline-block px-4 py-2 bg-linear-to-r from-purple-700 via-violet-700 to-blue-700 font-medium text-white rounded-lg hover:opacity-80 transition"
+                              >
+                                Renew
+                              </button>
+                            )}
+
                             <button
                               onClick={() =>
                                 handleShowDetailsModal(subscription.id)
@@ -340,7 +343,9 @@ export default function SubscriptionPage() {
                     {!subscription.is_free && startIndex + index === 0 && (
                       <div className="flex justify-between text-xs">
                         <button
-                          onClick={() => handleShowDetailsModal(subscription.id)}
+                          onClick={() =>
+                            handleShowDetailsModal(subscription.id)
+                          }
                           className="inline-block px-6 py-1.5 bg-purple-600 font-medium text-white rounded-full hover:opacity-80 transition"
                         >
                           Details
@@ -404,7 +409,7 @@ export default function SubscriptionPage() {
                 </p>
               </div>
               <div className="grid grid-cols-1 gap-6 mt-5">
-                {planDetails.map((exam,index) => (
+                {planDetails.map((exam, index) => (
                   <div
                     key={index}
                     className="p-5 rounded-2xl border border-gray-200 bg-linear-to-br from-gray-50 to-white shadow-sm hover:shadow-md transition"
@@ -415,13 +420,15 @@ export default function SubscriptionPage() {
 
                     <div className="space-y-1 text-sm">
                       <p className="flex justify-between text-gray-700">
-                        <span>Total Exams:</span> <span>{exam.max_attempts}</span>
+                        <span>Total Exams:</span>{" "}
+                        <span>{exam.max_attempts}</span>
                       </p>
                       <p className="flex justify-between text-gray-700">
                         <span>Used:</span> <span>{exam.used_attempts}</span>
                       </p>
                       <p className="flex justify-between font-medium text-blue-600">
-                        <span>Remaining:</span> <span>{exam.remaining_attempts}</span>
+                        <span>Remaining:</span>{" "}
+                        <span>{exam.remaining_attempts}</span>
                       </p>
                     </div>
 
@@ -430,7 +437,9 @@ export default function SubscriptionPage() {
                       <div
                         className="h-full bg-linear-to-r from-blue-500 to-indigo-600"
                         style={{
-                          width: `${(exam.used_attempts / exam.max_attempts) * 100}%`,
+                          width: `${
+                            (exam.used_attempts / exam.max_attempts) * 100
+                          }%`,
                         }}
                       ></div>
                     </div>

@@ -1,4 +1,8 @@
-import { Users, BookOpen, Award, Globe, Target, Clock } from "lucide-react";
+'use client'
+
+import axios from "axios";
+import { BookOpen } from "lucide-react";
+import { useEffect , useState } from "react";
 
 interface feature {
   id: null | number;
@@ -7,24 +11,24 @@ interface feature {
   icon: string;
 }
 
-const featureList = async (): Promise<feature[]> => {
+export default function FeaturesSection() {
+
+  const [features , setFeatures] = useState<feature[]>([])
+
+  const featureList = async () => {
   try {
-    const res = await fetch(
+    const res = await axios.get(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/feature/list`,
-      {
-        cache: "no-store",
-      }
     );
-    const data = await res.json();
-    return data?.data || [];
+     setFeatures(res?.data?.data || [])
   } catch (error) {
-    return [];
+   setFeatures([]);
   }
 };
 
-export default async function FeaturesSection() {
-
-  const features = await featureList();
+useEffect(()=>{
+  featureList()
+},[])
 
   return (
     <section id="features" className="py-20 bg-white">

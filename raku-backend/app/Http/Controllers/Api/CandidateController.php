@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CandidateRequest;
+use App\Http\Requests\WebCandidateRegistrationRequest;
 use App\Http\Resources\CandidateResource;
 use App\Jobs\SendRegistrationEmail;
 use App\Jobs\SendRegistrationEmailJob;
@@ -39,7 +40,7 @@ class CandidateController extends Controller
         $this->fileStorageService = $file_storage_service;
     }
 
-    public function register(CandidateRequest $request)
+    public function register(WebCandidateRegistrationRequest $request)
     {
         $data = $request->validated();
 

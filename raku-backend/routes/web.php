@@ -183,6 +183,7 @@ Route::group(['middleware' => 'auth', 'checkPermission'], function () {
         Route::resource('', PackageController::class)->parameters(['' => 'package']);
         Route::post('{package}/buy', [PackageController::class, 'buy'])->name('buy');
         Route::post('/attend/{detail}', [PackageController::class, 'attendExam'])->name('attend');
+        Route::post('{id}/toggle-status', [PackageController::class, 'toggleStatus'])->name('toggleStatus');
     });
 
 

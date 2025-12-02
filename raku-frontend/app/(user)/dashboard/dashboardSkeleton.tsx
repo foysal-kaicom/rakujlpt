@@ -15,7 +15,7 @@ export default function DashboardSkeleton() {
         {Array.from({ length: 5 }).map((_, i) => (
           <div
             key={i}
-            className={`w-full h-12 ${i % 2 === 0 ? "bg-gray-200" : "bg-gray-100"} border-b border-gray-300`}
+            className={`w-full h-12 ${i % 2 === 0 ? "bg-gray-50/50" : "bg-gray-100/50"} border-b border-gray-300`}
           ></div>
         ))}
       </div>
@@ -46,7 +46,7 @@ export default function DashboardSkeleton() {
   );
 
   return (
-    <div className="space-y-5 bg-white p-5 rounded-md absolute w-full inset-0 pt-20 left-0 top-0 z-20">
+    <div className="space-y-5 bg-purple-100 p-5 rounded-md absolute w-full inset-0 pt-20 left-0 top-0 z-20">
       {/* Header */}
       <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
         <div className="h-6 w-1/3 bg-gray-100 rounded animate-pulse"></div>

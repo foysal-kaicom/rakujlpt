@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState ,useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { BookOpen, Sparkles, Rocket } from "lucide-react";
 import Link from "next/link";
 import axiosInstance from "@/utils/axios";
 import { toast } from "sonner";
 import BreadCrumb from "@/components/BreadCrumb";
+import PracticeSkeleton from "./PracticeSkeleton";
 import Image from "next/image";
 
 interface Roadmap {
@@ -25,20 +26,19 @@ export default function Practice() {
 
   const practiceLevelRef = useRef<HTMLDivElement | null>(null);
 
-const scrollToPractice = () => {
-  practiceLevelRef.current?.scrollIntoView({
-    behavior: "smooth",
-    block: "start",
-  });
-};
+  const scrollToPractice = () => {
+    practiceLevelRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
 
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(true);
   const [practiceTestsData, setPracticeTestsData] = useState<Roadmap[]>([]);
 
   useEffect(() => {
     const fetchRoadmaps = async () => {
       try {
-        setLoader(true);
         const response = await axiosInstance.get(`/roadmaps`);
         if (response?.data?.success) {
           setPracticeTestsData(response.data.data);
@@ -54,11 +54,7 @@ const scrollToPractice = () => {
 
   return (
     <>
-      {loader && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-50">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
-        </div>
-      )}
+      {loader && <PracticeSkeleton />}
 
       {/* MAIN SECTION */}
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-pink-50 to-purple-50 relative overflow-hidden">
@@ -90,7 +86,10 @@ const scrollToPractice = () => {
               real exam.
             </p>
 
-            <button onClick={scrollToPractice} className="mt-8 px-10 py-4 text-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer">
+            <button
+              onClick={scrollToPractice}
+              className="mt-8 px-10 py-4 text-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer"
+            >
               Practice Free
             </button>
 
