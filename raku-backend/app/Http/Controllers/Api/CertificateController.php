@@ -47,11 +47,12 @@ class CertificateController extends Controller
         $obtainedMarks = ($mock_test->correct_reading_answer + $mock_test->correct_listening_answer) * $mock_test->per_question_mark;
     
         return [
-            'name'      => $mock_test->candidate->FullName,
-            'examName'  => $mock_test->exam->title,
-            'score'     => $obtainedMarks . ' / ' . $mock_test->exam->total_point,
-            'date'      => now()->format('F j, Y'),
-            'verifyUrl' => rtrim(env('FRONTEND_URL'), '/') . '/certificate?mock_test_id=' . $mock_test->id,
+            'name'           => $mock_test->candidate->FullName,
+            'examName'       => $mock_test->exam->title,
+            'score'          => $obtainedMarks,
+            'totalPoint'     => $mock_test->exam->total_point,
+            'date'           => now()->format('F j, Y'),
+            'verifyUrl'      => rtrim(env('FRONTEND_URL'), '/') . '/certificate?mock_test_id=' . $mock_test->id,
         ];
     }
     
