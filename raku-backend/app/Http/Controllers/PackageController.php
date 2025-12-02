@@ -16,14 +16,34 @@ use Yajra\DataTables\Facades\DataTables;
 
 class PackageController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $packages = Package::with('package_details')
-            ->orderByRaw('ISNULL(`order`), `order` ASC')
-            // ->orderBy('order', 'asc')
-            ->get();
+        $orderBy = $request->order_by ?? 'order';
+        $direction = $request->direction ?? 'asc';
+
+        $query = Package::with('package_details')
+            ->select('id', 'name', 'price', 'is_free', 'short_description', 'order', 'status', 'is_active');
+
+        // Filter (optional)
+        if ($request->has('name') && $request->name != '') {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        $query->orderBy($orderBy, $direction);
+        $packages = $query->paginate(10)->appends($request->all());
         return view('packages.index', compact('packages'));
     }
+
+    public function toggleStatus($id)
+    {
+        $package = Package::findOrFail($id);
+
+        $package->status = $package->status ? 0 : 1;
+        $package->save();
+
+        return redirect()->back()->with('success', 'Package status updated successfully.');
+    }
+
 
     public function create()
     {
@@ -85,16 +105,24 @@ class PackageController extends Controller
             'order' => $request->order,
         ]);
 
-        // Delete old details and re-insert
-        $package->package_details()->delete();
-
         if ($request->exam_id) {
-            foreach ($request->exam_id as $key => $exam) {
-                PackageDetail::create([
-                    'package_id' => $package->id,
-                    'exam_id'    => $exam,
-                    'max_exam_attempt' => $request->max_exam_attempt[$key],
-                ]);
+            foreach ($request->exam_id as $key => $examId) {
+                $detailId = $request->detail_id[$key] ?? null;
+
+                if ($detailId) {
+                    // Update existing details
+                    PackageDetail::where('id', $detailId)->update([
+                        'exam_id' => $examId,
+                        'max_exam_attempt' => $request->max_exam_attempt[$key],
+                    ]);
+                } else {
+                    // Add new details
+                    PackageDetail::create([
+                        'package_id' => $package->id,
+                        'exam_id' => $examId,
+                        'max_exam_attempt' => $request->max_exam_attempt[$key],
+                    ]);
+                }
             }
         }
 
