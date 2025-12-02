@@ -179,7 +179,7 @@ class MockTestController extends Controller
     {
         try {
             $id = Auth::guard('candidate')->id();
-            $testResults = MockTestRecords::with('exam:id,name,title,pass_point,total_point')->where('candidate_id', $id)->get();
+            $testResults = MockTestRecords::with('exam:id,name,title,pass_point,total_point')->where('candidate_id', $id)->orderBy('id', 'desc')->get();
             if (!$testResults || $testResults->isEmpty()) {
                 return $this->responseWithSuccess([], "No mock test records found.");
             }
