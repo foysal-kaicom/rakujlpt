@@ -5,6 +5,7 @@ import { Html5QrcodeScanner } from "html5-qrcode";
 import BreadCrumb from "@/components/BreadCrumb";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function QRScannerPage() {
   const breadCrumbData = [
@@ -35,10 +36,11 @@ export default function QRScannerPage() {
     scanner.render(
       (decodedText: string) => {
         setScannedData(decodedText);
-        router.push(`/certificate/12?code=${encodeURIComponent(decodedText)}`);
+        router.push(`${decodedText}`);
       },
       (errorMessage: string) => {
         // optional: console.log(errorMessage);
+        toast.error("Certificate not found")
       }
     );
 

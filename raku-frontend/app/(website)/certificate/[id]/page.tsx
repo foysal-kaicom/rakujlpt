@@ -5,85 +5,74 @@ import { QRCodeSVG } from "qrcode.react";
 import { useParams } from "next/navigation";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import BreadCrumb from "@/components/BreadCrumb";
-import { useRef } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+
+interface Details {
+  name: string;
+  examName: string;
+  score: string;
+  totalPoint: string;
+  date: string;
+  verifyUrl: string;
+}
 
 export default function Certificate() {
   const params = useParams();
   const certificateId = params?.id;
-
-  const certificateRef = useRef<HTMLDivElement>(null);
+  const [certificateDetails, setCertificateDetails] = useState<Details>({
+    name: "",
+    examName: "",
+    score: "",
+    totalPoint: "",
+    date: "",
+    verifyUrl: "",
+  });
+  const [loading, setLoading] = useState(true);
 
   const breadCrumbData = [
     { name: "Home", to: "/" },
     { name: "Certificate", to: `/certificate/${certificateId}` },
   ];
 
-  // const handleDownload = async () => {
-  //   if (!certificateRef.current) return;
+  const getCertificateDetails = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/verify-certificate`,
+        {
+          params: { mockTest_id: certificateId },
+        }
+      );
 
-  //   const canvas = await html2canvas(certificateRef.current, {
-  //     scale: 2,
-  //     useCORS: true,
-  //   });
-  //   const imgData = canvas.toDataURL("image/png");
+      setCertificateDetails(response?.data?.data || []);
+    } catch (error: any) {
+      console.error(error);
+      toast.error("Failed to get subscription data");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  //   const pdf = new jsPDF({
-  //     orientation: "landscape",
-  //     unit: "px",
-  //     format: [842, 595],
-  //   });
-  //   pdf.addImage(imgData, "PNG", 0, 0, 842, 595);
-  //   pdf.save(`certificate-${certificateId}.pdf`);
-  // };
-
-  // const handleShare = async () => {
-  //   if (!certificateRef.current) return;
-
-  //   const canvas = await html2canvas(certificateRef.current, {
-  //     scale: 2,
-  //     useCORS: true,
-  //   });
-
-  //   const blob = await new Promise<Blob | null>((resolve) =>
-  //     canvas.toBlob((b) => resolve(b), "image/png")
-  //   );
-  //   if (!blob) return;
-
-  //   const file = new File([blob], `certificate-${certificateId}.png`, {
-  //     type: "image/png",
-  //   });
-
-  //   if (navigator.canShare && navigator.canShare({ files: [file] })) {
-  //     navigator.share({
-  //       files: [file],
-  //       title: "My Certificate",
-  //       text: "Check out my certificate from RAKU JLPT!",
-  //     });
-  //   } else {
-  //     // fallback: download
-  //     const url = URL.createObjectURL(file);
-  //     const link = document.createElement("a");
-  //     link.href = url;
-  //     link.download = `certificate-${certificateId}.png`;
-  //     link.click();
-  //     URL.revokeObjectURL(url);
-  //     toast.success(
-  //       "Your certificate image is ready! You can now share it on social media."
-  //     );
-  //   }
-  // };
+  useEffect(() => {
+    getCertificateDetails();
+  }, [certificateId]);
 
   return (
     <div className="min-h-[70vh] bg-[#f5f3ff] py-5 pb-10">
       <WebpageWrapper>
         <BreadCrumb breadCrumbData={breadCrumbData} />
 
-        <div className="p-3">
-          {/* Certificate Container */}
-          <div
-            ref={certificateRef}
-            className="relative bg-white border-2 border-[#e0d7ff] p-6 sm:p-10 font-roboto flex flex-col justify-center items-center rounded-2xl shadow mt-10 mx-auto w-full max-w-[842px] h-auto sm:h-[595px]"
-          >
+        {loading ? (
+          <div className="text-xl sm:text-2xl font-bold text-[#4c1d95] mb-3 font-merriweather text-center h-[70vh] flex justify-center items-center">
+            Certificate is getting ready Please wait !!
+          </div>
+        ) : certificateDetails.name == "" ? (
+          <div className="text-xl sm:text-2xl font-bold text-[#4c1d95] mb-3 font-merriweather text-center h-[70vh] flex justify-center items-center">
+            No Certificate Found !!
+          </div>
+        ) : (
+          <div className="relative bg-white border-2 border-[#e0d7ff] p-6 sm:p-10 font-roboto flex flex-col justify-center items-center rounded-2xl shadow mt-10 mx-auto w-full max-w-[842px] h-auto sm:h-[595px]">
             {/* Watermark Text */}
             <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
               <div className="-rotate-30 text-[50px] sm:text-[100px] font-bold font-merriweather text-purple-700/5 whitespace-nowrap">
@@ -112,7 +101,7 @@ export default function Certificate() {
             {/* Student Name */}
             <div className="text-center relative z-10 leading-tight px-2">
               <h2 className="text-3xl sm:text-[3.5rem] font-bold text-purple-600 font-merriweather">
-                Arif Akib
+                {certificateDetails?.name}
               </h2>
             </div>
 
@@ -120,19 +109,24 @@ export default function Certificate() {
             <div className="text-center relative z-10 text-gray-700 text-md sm:text-lg mb-5 leading-6 space-y-1 px-2">
               <p>
                 For completing the{" "}
-                <span className="font-semibold">JPT Exam</span>
+                <span className="font-semibold">
+                  {certificateDetails?.examName}
+                </span>
               </p>
               <p>
-                Score: <span className="font-semibold">180 / 200</span>
+                Score:{" "}
+                <span className="font-semibold">
+                  {certificateDetails?.score} / {certificateDetails?.totalPoint}
+                </span>
               </p>
               <p className="text-gray-400 text-sm sm:text-base">
-                November 6, 2025
+                {certificateDetails?.date}
               </p>
             </div>
 
             <div className="flex md:hidden flex-col items-center">
               <QRCodeSVG
-                value={`https://example.com/certificate/${certificateId}`}
+                value={certificateDetails?.verifyUrl || ""}
                 size={60}
                 fgColor="#7c3aed"
                 bgColor="#ffffff"
@@ -188,7 +182,7 @@ export default function Certificate() {
         </div>
         */}
           </div>
-        </div>
+        )}
       </WebpageWrapper>
     </div>
   );
