@@ -74,11 +74,11 @@ export default function Certificate() {
         ) : (
           <div className="relative bg-white border-2 border-[#e0d7ff] p-6 sm:p-10 font-roboto flex flex-col justify-center items-center rounded-2xl shadow mt-10 mx-auto w-full max-w-[842px] h-auto sm:h-[595px]">
             {/* Watermark Text */}
-            <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
+            {/* <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
               <div className="-rotate-30 text-[50px] sm:text-[100px] font-bold font-merriweather text-purple-700/5 whitespace-nowrap">
                 RAKU JLPT
               </div>
-            </div>
+            </div> */}
 
             {/* Violet Border */}
             <div className="absolute inset-[5px] sm:inset-[10px] border-[2px] sm:border-[3px] border-purple-600 rounded-2xl pointer-events-none"></div>
@@ -90,7 +90,7 @@ export default function Certificate() {
 
             {/* Header */}
             <div className="text-center relative z-10 px-2">
-              <h1 className="text-3xl sm:text-5xl font-bold text-[#4c1d95] mb-3 font-merriweather">
+              <h1 className="text-3xl md:text-5xl font-extrabold bg-gradient-to-r from-purple-600 via-violet-600 to-pink-600 text-transparent bg-clip-text mb-3 font-merriweather italic">
                 Certificate of Achievement
               </h1>
               <p className="text-md sm:text-lg text-gray-500 italic">
@@ -99,14 +99,14 @@ export default function Certificate() {
             </div>
 
             {/* Student Name */}
-            <div className="text-center relative z-10 leading-tight px-2">
-              <h2 className="text-3xl sm:text-[3.5rem] font-bold text-purple-600 font-merriweather">
+            <div className="text-center relative z-10 leading-tight px-2 my-3">
+              <h2 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 text-transparent bg-clip-text font-merriweather">
                 {certificateDetails?.name}
               </h2>
             </div>
 
             {/* Exam Info */}
-            <div className="text-center relative z-10 text-gray-700 text-md sm:text-lg mb-5 leading-6 space-y-1 px-2">
+            <div className="text-center relative z-10 text-gray-700 text-base md:text-lg mb-5 leading-6 space-y-1 px-2">
               <p>
                 For completing the{" "}
                 <span className="font-semibold">
@@ -119,7 +119,7 @@ export default function Certificate() {
                   {certificateDetails?.score} / {certificateDetails?.totalPoint}
                 </span>
               </p>
-              <p className="text-gray-400 text-sm sm:text-base">
+              <p className="text-gray-600 text-sm md:text-base">
                 {certificateDetails?.date}
               </p>
             </div>
@@ -132,17 +132,17 @@ export default function Certificate() {
                 bgColor="#ffffff"
                 level="H"
               />
-              <p className="mt-2 text-gray-500 text-sm text-center">
+              <p className="mt-2 text-gray-500 text-xs text-center">
                 Scan to Verify
               </p>
             </div>
 
             {/* QR & Signatures */}
-            <div className="flex flex-row justify-between items-center relative z-10 md:px-20 w-full gap-6 sm:gap-0">
+            <div className="grid grid-cols-2 md:grid-cols-3 items-center relative z-10 md:px-20 w-full gap-10 md:gap-0">
               {/* Instructor */}
               <div className="text-center">
                 <p className="border-b-2 border-[#d1c4ff] md:w-40 mx-auto pb-1">
-                  fdhn
+                  <img src="/assets/sign/instructor.png" alt="instructor" className="h-6 md:h-9 mx-auto"/>
                 </p>
                 <p className="mt-0 italic text-[#4b2db2] font-medium">
                   Instructor
@@ -166,7 +166,7 @@ export default function Certificate() {
               {/* Administrator */}
               <div className="text-center">
                 <p className="border-b-2 border-[#d1c4ff] md:w-40 mx-auto pb-1">
-                  fdhs
+                  <img src="/assets/sign/instructor.png" alt="instructor" className="h-6 md:h-9 mx-auto"/>
                 </p>
                 <p className="mt-0 italic text-[#4b2db2] font-medium">
                   Administrator
