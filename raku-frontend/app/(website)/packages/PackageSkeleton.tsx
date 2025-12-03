@@ -24,7 +24,7 @@ const PackagesSkeleton = () => {
         </div>
 
         {/* Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 lg:max-w-5xl mx-auto gap-8 justify-center animate-pulse">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:max-w-5xl mx-auto gap-8 justify-center animate-pulse">
           {[...Array(3)].map((_, i) => (
             <div
               key={i}

@@ -124,7 +124,7 @@ class MockTestController extends Controller
 
                 ->addColumn('action', function ($row) {
 
-                    $buttons = '';
+                    $buttons = '<div class="flex items-center gap-1">';
                     if (checkAdminPermission('mock-tests.edit.question')) {
                         $editUrl = route('mock-tests.edit.question', $row->id) . '?question_list_page=' . urlencode(request()->get('page', 1));
 
@@ -366,6 +366,9 @@ class MockTestController extends Controller
     public function questionSetup(StoreMockTestRequest $request)
     {
 
+      //  return response()->json($request->all());
+
+
         if ($request->group_by == 'audio') {
             //upload audio file to bucket and get the path
 
@@ -508,9 +511,22 @@ class MockTestController extends Controller
             'question' => 'required|string',
             'proficiency_level' => 'required|in:N4,N5',
             'question_type' => 'required|in:text,image',
-            'answer' => 'required|integer|in:1,2,3,4',
-            'options' => 'required|array|min:4|max:4',
-            'options.*' => 'required|string',
+            'answer' => ['required', 'integer', 'in:1,2,3,4',
+                function ($attribute, $value, $fail) use ($request) {
+                    $options = $request->input('options', []);
+                    if (!array_key_exists($value, $options)) {
+                        return $fail("Selected answer is not a valid option.");
+                    }
+                    if (trim($options[$value]) === '') {
+                        return $fail("The selected answer option cannot be empty.");
+                    }
+                }
+            ],
+            'options' => 'required|array|min:3|max:4',
+            'options.1' => 'required|string',
+            'options.2' => 'required|string',
+            'options.3' => 'required|string',
+            'options.4' => 'nullable|string',
             'question_image' => 'nullable|file|mimes:jpeg,jpg,png,gif|max:2048',
             'hints' => 'nullable|string',
         ]);

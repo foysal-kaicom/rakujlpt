@@ -24,10 +24,10 @@ const navdata = [
         to: "/practice",
         label: "Practice",
       },
-      // {
-      //   to: "/certificate",
-      //   label: "Verify Certificate",
-      // }
+      {
+        to: "/certificate",
+        label: "Verify Certificate",
+      }
     ],
   },
   {

@@ -10,15 +10,6 @@ import axiosInstance from "@/utils/axios";
 import SuspenseLoader from "@/components/SuspenseLoader";
 import PaginatedComponent from "@/components/PaginateComponent";
 
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
-} from "recharts";
 import Link from "next/link";
 
 interface Exam {
@@ -98,6 +89,27 @@ export default function MockExamResult() {
   useEffect(() => {
     getMockTestResultData();
   }, []);
+
+  const handleDownload = async (id: any) => {
+    try {
+      const response = await axiosInstance.get("/certificate-download", {
+        params: { mockTest_id: id },
+        responseType: "blob",
+      });
+      const fileURL = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = fileURL;
+      link.setAttribute("download", `certificate-${id}.pdf`);
+      document.body.appendChild(link);
+
+      link.click();
+      link.remove();
+
+      toast.success("Download Complete");
+    } catch (error: any) {
+      toast.error("Download Failed");
+    }
+  };
 
   return (
     <>
@@ -197,11 +209,12 @@ export default function MockExamResult() {
                                 (c?.correct_reading_answer ?? 0)) *
                                 (c?.per_question_mark ?? 0) >
                               (c.exam.pass_point ?? 0) ? (
-                                <Link href={`/certificate/${c.exam_id}`}>
-                                  <button className="py-1.5 px-4 border-b border-b-purple-300 rounded-2xl bg-purple-700 text-white hover:opacity-80 duration-300 drop-shadow-sm drop-shadow-purple-500">
-                                    Generate
-                                  </button>
-                                </Link>
+                                <button
+                                  onClick={() => handleDownload(c.id)}
+                                  className="py-1.5 px-4 border-b border-b-purple-300 rounded-2xl bg-purple-700 text-white hover:opacity-80 duration-300 drop-shadow-sm drop-shadow-purple-500"
+                                >
+                                  Generate
+                                </button>
                               ) : (
                                 <span className="text-gray-400">
                                   Not Passed
@@ -230,12 +243,19 @@ export default function MockExamResult() {
                               ({formatDate(c?.created_at)})
                             </span>
                           </div>
-
-                          <Link href={`/certificate/${c.id}`}>
-                            <button className="py-1 px-3 border-b border-b-purple-300 rounded-2xl bg-purple-700 text-white hover:opacity-80 duration-300 drop-shadow-sm drop-shadow-purple-500">
-                              Generate
+                          {((c?.correct_listening_answer ?? 0) +
+                            (c?.correct_reading_answer ?? 0)) *
+                            (c?.per_question_mark ?? 0) >
+                          (c.exam.pass_point ?? 0) ? (
+                            <button
+                              onClick={() => handleDownload(c.id)}
+                              className="py-1 px-3 border-b border-b-purple-300 rounded-2xl bg-purple-700 text-white hover:opacity-80 duration-300 drop-shadow-sm drop-shadow-purple-500"
+                            >
+                              Download
                             </button>
-                          </Link>
+                          ) : (
+                            <p className="text-gray-500">Not Passed</p>
+                          )}
                         </div>
                         <div className="flex justify-between gap-4">
                           <div className="space-y-1">
@@ -254,7 +274,8 @@ export default function MockExamResult() {
                               </span>
                               <span className="text-purple-500 font-semibold">
                                 Score:{" "}
-                                {(c?.correct_listening_answer ?? "N/A") * 2.5}
+                                {(c?.correct_listening_answer ?? "N/A") *
+                                  c.per_question_mark}
                               </span>
                             </div>
                           </div>
@@ -274,7 +295,8 @@ export default function MockExamResult() {
                               </span>
                               <span className="text-purple-500 font-semibold">
                                 Score:{" "}
-                                {(c?.correct_reading_answer ?? "N/A") * 2.5}
+                                {(c?.correct_reading_answer ?? "N/A") *
+                                  c.per_question_mark}
                               </span>
                             </div>
                           </div>

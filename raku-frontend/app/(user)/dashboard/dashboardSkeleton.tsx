@@ -1,69 +1,36 @@
 export default function DashboardSkeleton() {
-  const renderCardSkeleton = () => (
-    <div className="p-5 rounded-xl shadow-md animate-pulse space-y-4 border border-transparent">
-      <div className="flex items-center gap-4">
-        <div className="w-12 h-12 bg-gray-100 rounded-full"></div>
-        <div className="w-24 h-4 bg-gray-100 rounded"></div>
-      </div>
-      <div className="w-full h-8 bg-gray-100 rounded mt-4"></div>
-    </div>
-  );
-
-  const renderTableSkeleton = () => (
-    <div className="hidden lg:block rounded-xl border border-gray-200 overflow-hidden">
-      <div className="animate-pulse">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <div
-            key={i}
-            className={`w-full h-12 ${i % 2 === 0 ? "bg-gray-50/50" : "bg-gray-100/50"} border-b border-gray-300`}
-          ></div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const renderMobileExamSkeleton = () => (
-    <div className="lg:hidden space-y-5">
-      {Array.from({ length: 1 }).map((_, i) => (
-        <div
-          key={i}
-          className={`rounded-2xl border border-gray-200 p-6 shadow-md transition-all duration-300 animate-pulse ${
-            i % 2 === 0
-              ? "bg-gradient-to-br from-white via-gray-50 to-white"
-              : "bg-white"
-          }`}
-        >
-          <div className="h-6 w-2/3 bg-gray-300 rounded mb-2"></div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm sm:text-base text-gray-700">
-            <div className="h-4 w-full bg-gray-100 rounded"></div>
-            <div className="h-4 w-full bg-gray-100 rounded"></div>
-            <div className="h-4 w-full bg-gray-100 rounded"></div>
-            <div className="h-8 w-1/2 bg-gray-100 rounded mt-2"></div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-
   return (
-    <div className="space-y-5 bg-purple-100 p-5 rounded-md absolute w-full inset-0 pt-20 left-0 top-0 z-20">
-      {/* Header */}
-      <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-        <div className="h-6 w-1/3 bg-gray-100 rounded animate-pulse"></div>
-      </section>
-
-      {/* Cards */}
-      <section className="grid grid-cols-2 xl:grid-cols-4 gap-6">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i}>{renderCardSkeleton()}</div>
+    <div className="space-y-5 rounded-md w-full opacity-40">
+      <div className="h-5 w-30 bg-gray-300 rounded-md animate-pulse"></div>
+      <div className="h-50 w-full bg-gray-300 rounded-md p-5 flex justify-center items-center gap-5 animate-pulse">
+        <div className="space-y-5 w-2/3">
+          <div className="h-8 w-full bg-gray-100 rounded-md"></div>
+          <div className="h-5 w-full bg-gray-100 rounded-md"></div>
+          <div className="h-8 w-30 bg-gray-100 rounded-md"></div>
+        </div>
+        <div className="h-full w-1/3 bg-gray-200 rounded-md"></div>
+      </div>
+      <div className="h-5 w-30 bg-gray-300 rounded-md animate-pulse"></div>
+      <div className="grid grid-cols-4 md:flex gap-5 flex-wrap">
+        {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+          <div key={i}>
+            <div className="h-20 md:h-40 aspect-3/4 bg-gray-300 rounded-md p-3 flex flex-col gap-3 justify-center items-center animate-pulse">
+              <div className="size-10 md:size-20 bg-gray-100 rounded-md"></div>
+              <div className="h-5 w-full bg-gray-100 rounded-md"></div>
+            </div>
+          </div>
         ))}
-      </section>
-
-      {/* Exams */}
-      <div className="mt-8 space-y-3">
-        <div className="h-6 w-1/3 bg-gray-100 rounded animate-pulse mb-3"></div>
-        {renderTableSkeleton()}
-        {renderMobileExamSkeleton()}
+      </div>
+      <div className="w-full bg-gray-300 rounded-md p-5 grid grid-cols-1 md:grid-cols-2 gap-5 items-center animate-pulse">
+        {[1, 2, 3, 4].map((i) => (
+          <div className="p-3 bg-gray-100 rounded-md flex gap-3 animate-pulse">
+            <div className="size-10 rounded-full bg-gray-300"></div>
+            <div className="w-[calc(100%-50px)] space-y-2">
+              <div className="h-3 w-1/3 rounded-md bg-gray-300"></div>
+              <div className="h-3 w-full rounded-md bg-gray-300"></div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

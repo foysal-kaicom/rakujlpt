@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Candidate;
-use App\Models\Exam;
 use App\Models\MockTestRecords;
 use Illuminate\Http\Request;
 use PDF;
@@ -52,7 +50,7 @@ class CertificateController extends Controller
             'score'          => $obtainedMarks,
             'totalPoint'     => $mock_test->exam->total_point,
             'date'           => now()->format('F j, Y'),
-            'verifyUrl'      => rtrim(env('FRONTEND_URL'), '/') . '/certificate?mock_test_id=' . $mock_test->id,
+            'verifyUrl'      => rtrim(config('app.frontend.url'), '/') . '/certificate?mock_test_id=' . $mock_test->id,
         ];
     }
     
