@@ -30,6 +30,26 @@ export const metadata: Metadata = {
     "Japanese listening mock test",
     "Japanese reading mock test",
     "Japanese language Proficiency Test",
+    "Japanese language parctice test",
+    "Study in japan",
+    "Learn japanese language ",
+    "JLPT practice test",
+    "JPT practice test",
+    "Raku Practice test",
+    "Practice JLPT",
+    "Practice JPT",
+    "Practice JLPT online",
+    "Practice JPT online",
+    "How to learn Japanese Language online",
+    "Learn Japanese language online",
+    "Online japanese practice test",
+    "online japanese learning center",
+    "Website for japanese language learning",
+    "Japanese learning practice website",
+    "practice japanese language for free",
+    "free japanese language test online",
+    "Practice JLPT for free",
+    "Practice JPT for free",
   ],
   authors: [{ name: "Raku JLPT", url: "https://rakujlpt.com" }],
   alternates: {
@@ -38,7 +58,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Raku JLPT – Japanese Proficiency Mock Test",
     description:
-      "Get registered for mock test website practice all available tests to improve your score.",
+      "Get registered for mock test. Practice all available tests to improve your score.",
     url: "https://rakujlpt.com",
     siteName: "Raku JLPT",
     images: [
@@ -65,9 +85,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="max-w-[2000px] mx-auto">
-        <RouteLoader/>
+        <RouteLoader />
         {children}
-        <Toaster position="top-center" richColors />
+        <Toaster position="top-center" richColors duration={3000} closeButton={true}/>
       </body>
     </html>
   );
