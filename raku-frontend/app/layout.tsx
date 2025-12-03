@@ -87,7 +87,7 @@ export default function RootLayout({
       <body className="max-w-[2000px] mx-auto">
         <RouteLoader />
         {children}
-        <Toaster position="top-center" richColors />
+        <Toaster position="top-center" richColors duration={3000} closeButton={true}/>
       </body>
     </html>
   );
