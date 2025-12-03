@@ -234,20 +234,32 @@
                 </div>
             </div>
  
-          <div class="p-6 rounded-lg border bg-white mt-[30px] space-y-7">
-            <h3 class="font-semibold rounded text-black">Create Options (Choose the correct answer)</h3>
-            <div class="grid lg:grid-cols-2 gap-4">
-              ${[1,2,3,4].map(opt => `
-                    <div class="flex items-center gap-1">
-                      <input type="radio" name="questions[${i}][answer]" value="${opt}" class="size-5">
-                      <div class="optionWrapper w-full" data-q="${i}" data-opt="${opt}">
-                        <textarea id="question-${i}-option-${opt}" name="questions[${i}][options][${opt}]" class="tinymce"></textarea>
-                      </div>
-                    </div>`).join('')}
-            </div>
-          </div>
-        </div>
-      `;
+                <div class="p-6 rounded-lg border bg-white mt-[30px] space-y-7">
+                    <h3 class="font-semibold rounded text-black">Create Options (Choose the correct answer)</h3>
+                    <div class="grid lg:grid-cols-2 gap-4">
+                        ${[1, 2, 3, 4].map(opt => `
+                            <div class="flex items-center gap-1">
+                                <input 
+                                    type="radio" 
+                                    name="questions[${i}][answer]" 
+                                    value="${opt}" 
+                                    class="size-5"
+                                    ${opt === 4 ? '' : 'required'}
+                                >
+                                <div class="optionWrapper w-full" data-q="${i}" data-opt="${opt}">
+                                    <textarea 
+                                        id="question-${i}-option-${opt}"
+                                        name="questions[${i}][options][${opt}]"
+                                        class="tinymce"
+                                    ></textarea>
+                                </div>
+                            </div>
+                        `).join('')}
+
+                    </div>
+                </div>
+                </div>
+            `;
                     questionsContainer.insertAdjacentHTML("beforeend", questionBlock);
                 }
 
@@ -351,5 +363,37 @@
             }
         });
     </script>
+
+<script>
+    document.querySelector('form').addEventListener('submit', function (e) {
+        if (typeof tinymce !== 'undefined') {
+            tinymce.triggerSave();
+        }
+    
+        let valid = true;
+    
+        document.querySelectorAll('.optionWrapper').forEach(wrapper => {
+            const opt = wrapper.dataset.opt;
+            const textarea = wrapper.querySelector('textarea');
+            const value = (textarea.value || '').trim();
+    
+            // Options 1, 2, 3 = required
+            if (opt !== '4' && value === '') {
+                valid = false;
+                textarea.classList.add('border', 'border-red-500');
+            }
+    
+            if (opt === '4' && value === '') {
+                textarea.removeAttribute('name');
+            }
+        });
+    
+        if (!valid) {
+            e.preventDefault();
+            alert('Options 1, 2 and 3 are required.');
+        }
+    });
+    </script>
+    
 
 @endsection

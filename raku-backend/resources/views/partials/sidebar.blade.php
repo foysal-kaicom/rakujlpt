@@ -200,7 +200,7 @@
                     @hasPermission('mock-tests.reports.list')
                     <a href="{{ route('mock-tests.reports.list') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('mock-tests.reports.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
-                        <i class="fa-regular fa-circle-check text-xs"></i>
+                        <i class="fa-notdog-duo fa-solid fa-chart-bar"></i>
                         <span>Mock Test Reports</span>
                     </a>
                     @endHasPermission

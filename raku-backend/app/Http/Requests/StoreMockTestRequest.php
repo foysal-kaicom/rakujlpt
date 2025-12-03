@@ -45,17 +45,17 @@ class StoreMockTestRequest extends FormRequest
                     ]),
                 ],
  
- 
             'questions'                     => 'required|array|min:1',
             'questions.*.proficiency_level' => 'required|in:N4,N5',
             'questions.*.question_type'     => 'required|in:text,image,audio',
+
             'questions.*.question'          => [
                 'required',
                 function ($attribute, $value, $fail) {
                     $parts = explode('.', $attribute);
                     $index = $parts[1] ?? null;
                     $type  = request()->input("questions.$index.question_type");
- 
+
                     if ($type === 'text' && !is_string($value)) {
                         $fail('The question must be text when type is text.');
                     }
@@ -67,9 +67,34 @@ class StoreMockTestRequest extends FormRequest
                     }
                 }
             ],
-            'questions.*.options'   => 'required|array|size:4',
-            'questions.*.options.*' => 'required|string',
-            'questions.*.answer'    => 'required|integer|between:1,4',
+
+            'questions.*.options' => 'required|array|min:3|max:4',
+
+            'questions.*.options.1' => 'required|string',
+            'questions.*.options.2' => 'required|string',
+            'questions.*.options.3' => 'required|string',
+            'questions.*.options.4' => 'nullable|string',
+
+            // Answer must correspond to a non-empty option
+            'questions.*.answer' => [
+                'required',
+                'integer',
+                function ($attribute, $value, $fail) {
+                    $parts = explode('.', $attribute);
+                    $index = $parts[1] ?? null;
+
+                    $options = request()->input("questions.$index.options", []);
+
+                    if (!array_key_exists($value, $options)) {
+                        return $fail("Selected answer does not correspond to a valid option.");
+                    }
+
+                    if (trim($options[$value]) === '') {
+                        return $fail("Cannot select an empty option as the answer.");
+                    }
+                }
+            ],
+
             'set_no' => 'required|integer'
         ];
     }
