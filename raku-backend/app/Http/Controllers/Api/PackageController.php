@@ -122,23 +122,26 @@ class PackageController extends Controller
             }
 
             // Notify candidate
-            $successPath = config('app.frontend.payment_success')
-                . '?subscription_id=' . $userSubscription->id
-                . '&amount=0&tran_id=' . $tranId;
+        
+            $successPath = config('app.frontend.payment_success') . '?subscription_id=' . $userSubscription->id . '&amount=' . $userSubscription->price . '&tran_id=' . $tranId;
 
             $userSubscription->candidate->notify(new CandidateNotification([
                 'title'   => "Free Subscription Activated!",
                 'message' => "Your free package '{$package->name}' has been successfully activated.",
                 'url'     => $successPath,
             ]));
+        
 
-            return response()->json([
-                'status'          => 'success',
-                'subscription_id' => $userSubscription->id,
-                'package_id'      => $package->id,
-                'package'         => $package->name,
-                'url'             => $successPath,
-            ]);
+            $baseUrl     = config('app.frontend.url');
+            return redirect()->away($baseUrl . $successPath);
+
+            // return response()->json([
+            //     'status'          => 'success',
+            //     'subscription_id' => $userSubscription->id,
+            //     'package_id'      => $package->id,
+            //     'package'         => $package->name,
+            //     'url'             => $successPath,
+            // ]);
         }
 
 
