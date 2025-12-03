@@ -1,34 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Certificate of Achievement</title>
 
     <style>
         @page {
-            size: A4 landscape; /* Wider than A4 */
+            size: A4 landscape;
+            /* Wider than A4 */
             margin: 0;
         }
 
-        html, body {
+        html,
+        body {
             margin: 0;
             padding: 0;
-            background: #fff;
+            background: #EFBF04;
             font-family: sans-serif;
             color: #000;
         }
 
         .certificate {
-            width: 220mm;          /* safe zone inside A4 width */
-            height: 105mm;         /* fits within 210mm height */
-            margin-top:50px;
-            margin-left:85px;
-            padding: 20mm 15mm;
+            width: 254mm;
+            height: 156.5mm;
+            margin: 5mm;
+            padding-top: 30mm;
+            padding-bottom: 10mm;
+            padding-left: 15mm;
+            padding-right: 15mm;
             border: 6px solid #7b3cff;
-            border-radius: 18px;
+            border-radius: 5px;
             box-sizing: border-box;
             position: relative;
             overflow: hidden;
+            background: white;
+            text-align: center;
         }
 
         .certificate::before {
@@ -57,18 +64,19 @@
         .title {
             text-align: center;
             color: #5e2ce0;
-            font-size: 26pt;
+            font-size: 46pt;
             font-weight: 700;
             margin-bottom: 4mm;
             z-index: 2;
             position: relative;
+            font-style: italic;
         }
 
         .subtitle {
             text-align: center;
             font-style: italic;
             color: #777;
-            font-size: 11pt;
+            font-size: 21pt;
             margin-bottom: 10mm;
             z-index: 2;
             position: relative;
@@ -76,7 +84,7 @@
 
         .name {
             text-align: center;
-            font-size: 23pt;
+            font-size: 33pt;
             font-weight: 700;
             color: #5e2ce0;
             margin-bottom: 4mm;
@@ -121,7 +129,7 @@
         .label {
             font-style: italic;
             color: #7b3cff;
-            font-size: 10pt;
+            font-size: 17pt;
         }
 
         .qr img {
@@ -137,43 +145,47 @@
         }
     </style>
 </head>
+
 <body>
 
-<div class="certificate">
-    <div class="watermark">RAKU JLPT</div>
+    <div class="certificate">
+        <div class="watermark">RAKU JLPT</div>
 
-    <div class="title">Certificate of Achievement</div>
-    <div class="subtitle">This certificate is proudly presented to</div>
+        <div class="title">Certificate of Achievement</div>
+        <div class="subtitle">This certificate is proudly presented to</div>
 
-    <div class="name">{{ $name }}</div>
+        <div class="name">{{ $name }}</div>
 
-    <div class="details">
-        For completing the <strong>{{ $examName }}</strong><br>
-        Score: <strong>{{ $score }} / {{ $totalPoint }} </strong><br>
-        {{ $date }}
+        <div class="details">
+            For completing the <strong>{{ $examName }}</strong><br>
+            Score: <strong>{{ $score }} / {{ $totalPoint }} </strong><br>
+            {{ $date }}
+        </div>
+
+        <table class="footer-table">
+            <tr>
+                <td>
+                    <div>fdhn</div>
+                    <div class="line"></div>
+
+                    <div class="label">Instructor</div>
+                </td>
+
+                <td class="qr">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{ urlencode($verifyUrl) }}" alt="QR Code">
+                    <div class="verify">Scan to Verify</div>
+                </td>
+
+                <td>
+                    <div>fdhs</div>
+                    <div class="line"></div>
+
+                    <div class="label">Administrator</div>
+                </td>
+            </tr>
+        </table>
     </div>
 
-    <table class="footer-table">
-        <tr>
-            <td>
-                <div class="line"></div>
-                <div>fdhn</div>
-                <div class="label">Instructor</div>
-            </td>
-
-            <td class="qr">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{ urlencode($verifyUrl) }}" alt="QR Code">
-                <div class="verify">Scan to Verify</div>
-            </td>
-
-            <td>
-                <div class="line"></div>
-                <div>fdhs</div>
-                <div class="label">Administrator</div>
-            </td>
-        </tr>
-    </table>
-</div>
-
 </body>
+
 </html>

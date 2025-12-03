@@ -23,7 +23,7 @@ return [
 		? env('APP_URL') . '/api/v1/success'
 		: '/api/v1/success',
 
-	'fail_url' => env('APP_ENV') === 'production'
+	'failed_url' => env('APP_ENV') === 'production'
 		? env('APP_URL') . '/api/v1/fail'
 		: '/api/v1/fail',
 

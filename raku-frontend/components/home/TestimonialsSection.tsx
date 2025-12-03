@@ -33,7 +33,7 @@ export default function TestimonialsSection() {
 
   useEffect(() => {
     reviewList();
-  });
+  },[]);
 
   return (
     <section id="testimonials" className="py-20 bg-white">
