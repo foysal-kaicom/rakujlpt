@@ -577,14 +577,6 @@ class MockTestController extends Controller
         try {
             $question = MockTestQuestion::findOrFail($id);
 
-            if ($question->mockTestQuestionOption) {
-                $question->mockTestQuestionOption->delete();
-            }
-
-            if ($question->mockTestQuestionGroup) {
-                $question->mockTestQuestionGroup->delete();
-            }
-
             $question->delete();
 
             Toastr::success("Question deleted successfully.");

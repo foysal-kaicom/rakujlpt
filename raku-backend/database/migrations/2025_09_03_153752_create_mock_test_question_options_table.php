@@ -16,6 +16,7 @@ return new class extends Migration
             $table->json('values');
             $table->foreignId('mock_test_question_id')->constrained('mock_test_questions')->onDelete('cascade');
             $table->enum('correct_answer_index', ['1', '2', '3','4']);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
