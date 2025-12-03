@@ -142,7 +142,11 @@ export default function Certificate() {
               {/* Instructor */}
               <div className="text-center">
                 <p className="border-b-2 border-[#d1c4ff] md:w-40 mx-auto pb-1">
-                  <img src="/assets/sign/instructor.png" alt="instructor" className="h-6 md:h-9 mx-auto"/>
+                  <img
+                    src="/assets/sign/instructor.png"
+                    alt="instructor"
+                    className="h-6 md:h-9 mx-auto"
+                  />
                 </p>
                 <p className="mt-0 italic text-[#4b2db2] font-medium">
                   Instructor
@@ -152,7 +156,7 @@ export default function Certificate() {
               {/* QR Code */}
               <div className="hidden md:flex flex-col items-center">
                 <QRCodeSVG
-                  value={`https://example.com/certificate/${certificateId}`}
+                  value={certificateDetails?.verifyUrl || ""}
                   size={60}
                   fgColor="#7c3aed"
                   bgColor="#ffffff"
@@ -166,7 +170,11 @@ export default function Certificate() {
               {/* Administrator */}
               <div className="text-center">
                 <p className="border-b-2 border-[#d1c4ff] md:w-40 mx-auto pb-1">
-                  <img src="/assets/sign/instructor.png" alt="instructor" className="h-6 md:h-9 mx-auto"/>
+                  <img
+                    src="/assets/sign/instructor.png"
+                    alt="instructor"
+                    className="h-6 md:h-9 mx-auto"
+                  />
                 </p>
                 <p className="mt-0 italic text-[#4b2db2] font-medium">
                   Administrator
