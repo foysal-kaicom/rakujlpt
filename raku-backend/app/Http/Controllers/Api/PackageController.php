@@ -132,16 +132,16 @@ class PackageController extends Controller
             ]));
         
 
-            $baseUrl     = config('app.frontend.url');
-            return redirect()->away($baseUrl . $successPath);
+            $baseUrl     = config('app.frontend.url').$successPath;
+            
 
-            // return response()->json([
-            //     'status'          => 'success',
-            //     'subscription_id' => $userSubscription->id,
-            //     'package_id'      => $package->id,
-            //     'package'         => $package->name,
-            //     'url'             => $successPath,
-            // ]);
+            return response()->json([
+                'status'          => 'success',
+                'subscription_id' => $userSubscription->id,
+                'package_id'      => $package->id,
+                'package'         => $package->name,
+                'url'             => $baseUrl,
+            ]);
         }
 
 
