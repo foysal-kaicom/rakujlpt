@@ -115,6 +115,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/send-password-reset-otp', [CandidateController::class, 'sendPasswordResetOtp']);
     Route::post('/verify-password-reset-otp', [CandidateController::class, 'verifyResetPasswordOtp']);
 
+    Route::post('/news-letter-subscribe', [NotificationController::class, 'storeNewsLetter']);
 
     Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
     Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
