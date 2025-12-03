@@ -52,7 +52,7 @@ class CertificateController extends Controller
             'score'          => $obtainedMarks,
             'totalPoint'     => $mock_test->exam->total_point,
             'date'           => now()->format('F j, Y'),
-            'verifyUrl'      => rtrim(env('FRONTEND_URL'), '/') . '/certificate?mock_test_id=' . $mock_test->id,
+            'verifyUrl'      => rtrim(config('app.frontend.url'), '/') . '/certificate?mock_test_id=' . $mock_test->id,
         ];
     }
     
