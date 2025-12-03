@@ -31,7 +31,7 @@ export default function PricingCard({ plan, subscribeModal }: any) {
         current_package_id: current_package_id,
         current_package_name: current_package_name,
         is_subscribed: is_subscribed,
-        is_free:is_free
+        is_free: is_free,
       });
     } catch (error: any) {
       console.log(error);
@@ -57,11 +57,20 @@ export default function PricingCard({ plan, subscribeModal }: any) {
       )}
       <div className="bg-white rounded-3xl p-8 size-full relative overflow-clip">
         {/* Current Plan Ribbon */}
-        {user?.current_package_id == plan.id && (
-          <div className="absolute top-6 -left-18 rotate-[-45deg] bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-semibold px-20 py-1 text-center shadow-md">
-            Current Plan
-          </div>
-        )}
+        {(user?.current_package_id == plan.id || !plan.is_active) && (<div
+              className={`absolute top-6 -left-18 rotate-[-45deg]  text-white text-sm font-semibold px-20 py-1 text-center shadow-md ${
+                user?.current_package_id == plan.id
+                  ? "bg-gradient-to-r from-blue-600 to-purple-600"
+                  : "bg-red-600"
+              }`}
+            >
+              {user?.current_package_id == plan.id
+                ? "Current Plan"
+                : "Upcoming"}
+            </div>)
+          }
+
+           
 
         {/* Plan Info */}
         <div className="text-center mb-8 mt-4">
@@ -83,7 +92,9 @@ export default function PricingCard({ plan, subscribeModal }: any) {
 
         {/* Subscribe Button */}
         <div className="w-full flex justify-center absolute bottom-5 left-0 px-8">
-          {user?.current_package_id == plan.id && user?.is_subscribed == 1 || plan.is_free == true && user?.is_free == 1 || plan.is_active==0  ? (
+          {(user?.current_package_id == plan.id && user?.is_subscribed == 1) ||
+          (plan.is_free == true && user?.is_free == 1) ||
+          plan.is_active == 0 ? (
             <button
               className={`w-full py-4 px-6 rounded-full font-semibold transition-all duration-300 cursor-not-allowed bg-gradient-to-r from-blue-100 to-purple-100 drop-shadow-sm drop-shadow-violet-600 border-b border-white/50`}
             >

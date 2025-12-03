@@ -12,7 +12,8 @@ import Link from "next/link";
 // Metadata
 export const metadata: Metadata = {
   title: "About Raku",
-  description: "Raku is your all-in-one platform for JPT, JLPT, and NAT exam prep with practice tests, study tools, and personalized learning for Japanese language proficiency.Master Japanese with Raku — a complete language proficiency platform providing JPT, JLPT, and NAT exam prep, mock tests, smart analytics, and step-by-step learning for every level.",
+  description:
+    "Raku is your all-in-one platform for JPT, JLPT, and NAT exam prep with practice tests, study tools, and personalized learning for Japanese language proficiency.Master Japanese with Raku — a complete language proficiency platform providing JPT, JLPT, and NAT exam prep, mock tests, smart analytics, and step-by-step learning for every level.",
 };
 
 export default function AboutJPT() {
@@ -85,13 +86,14 @@ export default function AboutJPT() {
                     </p>
                   </div>
                 </div>
-
-                <Link
-                  href="/mock_test_select"
-                  className="bg-gradient-to-r from-pink-500 to-purple-500 px-8 py-3 rounded-3xl font-bold text-white shadow-lg hover:shadow-xl transition-all duration-300 border border-white"
-                >
-                  Start Practicing Now
-                </Link>
+                <div className="flex justify-center sm:justify-start">
+                  <Link
+                    href="/mock_test_select"
+                    className="bg-gradient-to-r from-pink-500 to-purple-500 px-8 py-3 rounded-3xl font-bold text-white shadow-lg hover:shadow-xl transition-all duration-300 border border-white"
+                  >
+                    Start Practicing Now
+                  </Link>
+                </div>
               </div>
 
               {/* Right funky illustration */}

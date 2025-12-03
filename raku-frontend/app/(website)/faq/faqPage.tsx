@@ -28,7 +28,7 @@ export default function FAQ() {
     },
   ];
 
-    const [faqs, setFaqs] = useState<FAQ[]>([]);
+  const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -48,21 +48,20 @@ export default function FAQ() {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
 
-
   const getFaqList = async () => {
-  try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/faq/list`,
-    );
-    setFaqs( res?.data?.data || []);
-  } catch (error) {
-   setFaqs([]);
-  }
-};
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/faq/list`
+      );
+      setFaqs(res?.data?.data || []);
+    } catch (error) {
+      setFaqs([]);
+    }
+  };
 
-useEffect(()=>{
-  getFaqList()
-},[])
+  useEffect(() => {
+    getFaqList();
+  }, []);
 
   return (
     <section className="relative min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50 overflow-hidden pt-5 pb-20 px-6">
@@ -135,7 +134,7 @@ useEffect(()=>{
           <div className="mt-8">
             <Link
               href="/contact_us"
-              className="relative inline-block px-10 py-4 text-lg font-bold text-white rounded-full bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-pink-500 hover:to-indigo-500 transition-all duration-500 hover:scale-105 shadow-[0_0_25px_rgba(168,85,247,0.5)]"
+              className="relative inline-block px-10 py-4 test-xs sm:text-lg font-bold text-white rounded-full bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-pink-500 hover:to-indigo-500 transition-all duration-500 hover:scale-105 shadow-[0_0_25px_rgba(168,85,247,0.5)]"
             >
               Still Need Help? Contact Us 💬
             </Link>
