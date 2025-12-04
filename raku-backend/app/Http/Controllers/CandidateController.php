@@ -31,21 +31,15 @@ class CandidateController extends Controller
     {
         if ($request->ajax()) {
             $status = $request->get('status', 'active');
-            $livingCountry = $request->get('living_country', 'all'); // Get living_country filter
-    
-            if ($status === 'all') {
-                $query = Candidate::select(['id', 'first_name', 'last_name', 'current_package_name','email', 'status', 'phone_number', 'gender', 'photo', 'currently_living_country', 'deleted_at']);
-            } else {
-                $query = Candidate::where('status', 'active')
-                    ->select(['id', 'first_name', 'last_name', 'email','current_package_name', 'status', 'photo', 'phone_number', 'gender', 'currently_living_country', 'deleted_at']);
+            
+           $query = Candidate::query();
+
+            if ($status !== 'all') {
+                $query->where('status', $status);
             }
-    
-            if ($livingCountry !== 'all') {
-                $query->where('currently_living_country', $livingCountry); // Apply living_country filter
-            }
-    
-            $data = $query->get();
-    
+
+            $data = $query->latest('id')->get();
+
             return DataTables::of($data)
                 ->addColumn('name', function ($row) {
                     $editUrl = route('candidate.edit', $row->id);
