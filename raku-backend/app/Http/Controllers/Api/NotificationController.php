@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\NewsLetter;
 use Illuminate\Http\Request;
 use Throwable;
 
@@ -64,5 +65,18 @@ class NotificationController extends Controller
 
             return $this->responseWithError('Notification not found.', $ex->getMessage());
         }
+    }
+
+    public function storeNewsLetter(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|unique:news_letter,email',
+        ]);
+
+        $newsletter = NewsLetter::create([
+            'email' => $request->email
+        ]);
+
+        return $this->responseWithSuccess($newsletter , 'Email subscribed successfully.');
     }
 }
