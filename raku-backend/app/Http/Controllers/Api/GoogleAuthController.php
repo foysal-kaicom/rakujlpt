@@ -8,6 +8,7 @@ use App\Models\Candidate;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Throwable;
 
@@ -23,6 +24,7 @@ class GoogleAuthController extends Controller
         ]);
 
         if ($validated->fails()) {
+            Log::info($validated->getMessageBag());
             return $this->responseWithError("Validation failed", $validated->getMessageBag());
         }
 
@@ -32,6 +34,7 @@ class GoogleAuthController extends Controller
             ]);
 
             if (!$response->ok()) {
+                Log::info($response);
                 return $this->responseWithError("Error", "Invalid Google token");
 
             }
@@ -70,6 +73,7 @@ class GoogleAuthController extends Controller
                 'token' => $token,
             ]);
         } catch (Throwable $e) {
+            Log::error($e->getMessage());
             return response()->json([
                 'error' => 'Something went wrong.',
                 'message' => $e->getMessage(),
