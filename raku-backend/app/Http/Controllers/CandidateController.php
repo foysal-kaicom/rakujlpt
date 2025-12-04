@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Throwable;
+use Carbon\Carbon;
 use Yajra\DataTables\Facades\DataTables;
 
 class CandidateController extends Controller
@@ -34,10 +35,10 @@ class CandidateController extends Controller
             $livingCountry = $request->get('living_country', 'all'); // Get living_country filter
     
             if ($status === 'all') {
-                $query = Candidate::select(['id', 'first_name', 'last_name', 'current_package_name','email', 'status', 'phone_number', 'gender', 'photo', 'currently_living_country', 'deleted_at']);
+                $query = Candidate::select(['id', 'first_name', 'last_name', 'current_package_name','email', 'status', 'phone_number', 'gender', 'photo', 'currently_living_country', 'created_at', 'deleted_at']);
             } else {
                 $query = Candidate::where('status', 'active')
-                    ->select(['id', 'first_name', 'last_name', 'email','current_package_name', 'status', 'photo', 'phone_number', 'gender', 'currently_living_country', 'deleted_at']);
+                    ->select(['id', 'first_name', 'last_name', 'email','current_package_name', 'status', 'photo', 'phone_number', 'gender', 'currently_living_country', 'created_at', 'deleted_at']);
             }
     
             if ($livingCountry !== 'all') {
@@ -109,7 +110,14 @@ class CandidateController extends Controller
                                 </div>
                             </form>';
                     }
-                })                
+                })      
+                ->editColumn('created_at', function ($row) {
+                    return $row->created_at
+                        ? Carbon::parse($row->created_at)
+                            ->timezone(config('app.timezone'))
+                            ->format('m-d-Y')
+                        : '-';
+                })
                 ->rawColumns(['photo', 'name', 'action', 'status'])
                 ->make(true);
         }
