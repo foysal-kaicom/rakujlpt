@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import HTMLReactParser from "html-react-parser/lib/index";
 
 interface AIHintProps {
   hint: string | null;
@@ -63,6 +64,7 @@ export default function AIHint({ hint }: AIHintProps) {
 
   return (
     // Use whitespace-pre-wrap to handle line breaks correctly if the hint has them
-    <p className="text-gray-700 font-medium whitespace-pre-wrap">{displayedHint}</p>
+    <p className="text-gray-700 font-medium whitespace-pre-wrap">{HTMLReactParser(displayedHint)}</p>
+    
   );
 }

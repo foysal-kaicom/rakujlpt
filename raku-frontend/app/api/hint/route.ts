@@ -15,7 +15,7 @@ export async function POST(req: Request) {
 
     // 1. Define the system instruction to set the model's role
     const systemInstruction =
-      "You are a mock test tutor. Give a short hint. Do NOT reveal the answer.";
+      "You are a mock test tutor. Give a short hint. Do NOT reveal the answer. And give the hint in japanese if the question use furigana you should also use furigana or explain the furigana";
 
     // 2. Collect all the user-provided parts (text, image, audio)
     const userParts: any[] = [];

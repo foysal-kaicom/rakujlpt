@@ -504,17 +504,19 @@ export default function PracticeQuestion() {
                   <button
                     onClick={() => {
                       setShowHint(!showHint);
+                      if (currentQuestion?.question_type === "audio") return;
+                      else {
+                        // Prepare payload dynamically
+                        const payload: any = {};
+                        if (currentQuestion?.question_type === "text") {
+                          payload.questionText = currentQuestion?.question;
+                        } else if (currentQuestion?.question_type === "audio") {
+                          payload.audioUrl = currentQuestion?.audio_file;
+                          payload.imageUrl = currentQuestion?.question;
+                        }
 
-                      // Prepare payload dynamically
-                      const payload: any = {};
-                      if (currentQuestion?.question_type === "text") {
-                        payload.questionText = currentQuestion?.question;
-                      } else if (currentQuestion?.question_type === "audio") {
-                        payload.audioUrl = currentQuestion?.audio_file;
-                        payload.imageUrl = currentQuestion?.question;
+                        getHint(payload);
                       }
-
-                      getHint(payload);
                     }}
                     className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors mx-auto cursor-pointer"
                   >
@@ -532,7 +534,9 @@ export default function PracticeQuestion() {
                     <div className="mt-4 p-4 bg-yellow-50 border-2 border-yellow-200 rounded-xl">
                       <div className="flex gap-3">
                         <Lightbulb className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5 shake-pause" />
-                        {loadingHint ? (
+                        {currentQuestion?.question_type === "audio" ? (
+                          <>{currentQuestion.hints}</>
+                        ) : loadingHint ? (
                           <p className="text-gray-800 font-medium">
                             Thinking
                             <span className="animate-dots ml-1">...</span>
