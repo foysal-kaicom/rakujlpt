@@ -1,12 +1,14 @@
 "use client";
 
-
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import BreadCrumb from "@/components/BreadCrumb";
 
 import { FaPlus, FaMinus } from "react-icons/fa";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import PaginatedComponent from "@/components/PaginateComponent";
+import Link from "next/link";
+import axios from "axios";
 
 interface FAQ {
   id: null | number;
@@ -14,11 +16,7 @@ interface FAQ {
   answer: string;
 }
 
-interface FAQProps {
-  faqs: FAQ[];
-}
-
-export default function FAQ({ faqs }: FAQProps) {
+export default function FAQ() {
   const breadCrumbData = [
     {
       name: "Home",
@@ -30,25 +28,51 @@ export default function FAQ({ faqs }: FAQProps) {
     },
   ];
 
+  const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const [showAll, setShowAll] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   const toggle = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  const visibleFaqs = showAll ? faqs : faqs.slice(0, 9);
+  // Calculate pagination
+  const totalExams = faqs.length;
+  const totalPages = Math.ceil(totalExams / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentFAQ = faqs.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) setCurrentPage(page);
+  };
+
+  const getFaqList = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/faq/list`
+      );
+      setFaqs(res?.data?.data || []);
+    } catch (error) {
+      setFaqs([]);
+    }
+  };
+
+  useEffect(() => {
+    getFaqList();
+  }, []);
 
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 overflow-hidden pt-5 pb-20 px-6">
+    <section className="relative min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50 overflow-hidden pt-5 pb-20 px-6">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-gradient-to-br from-purple-400/30 to-pink-400/30 rounded-full blur-[120px] animate-float"></div>
         <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-gradient-to-tr from-indigo-400/30 to-pink-400/20 rounded-full blur-[140px] animate-float-slow"></div>
       </div>
       <WebpageWrapper>
-        <BreadCrumb breadCrumbData={breadCrumbData}/>
+        <BreadCrumb breadCrumbData={breadCrumbData} />
         <div className="relative z-10 max-w-3xl mx-auto text-center pt-15">
-          <h1 className="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent drop-shadow-sm">
+          <h1 className="text-5xl md:text-6xl font-extrabold pb-6 bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent drop-shadow-sm">
             Got Questions?
           </h1>
           <p className="text-gray-700 mb-16 text-lg">
@@ -57,8 +81,8 @@ export default function FAQ({ faqs }: FAQProps) {
           </p>
 
           {/* FAQ Accordion */}
-          <div className="space-y-6 text-left">
-            {faqs.map((faq, index) => {
+          <div className="space-y-6 text-left mb-8">
+            {currentFAQ.map((faq, index) => {
               const isOpen = openIndex === index;
               return (
                 <div
@@ -98,15 +122,22 @@ export default function FAQ({ faqs }: FAQProps) {
               );
             })}
           </div>
+          {faqs.length > itemsPerPage && (
+            <PaginatedComponent
+              handlePageChange={handlePageChange}
+              totalPages={totalPages}
+              currentPage={currentPage}
+            />
+          )}
 
           {/* CTA Button */}
-          <div className="mt-20">
-            <a
+          <div className="mt-8">
+            <Link
               href="/contact_us"
-              className="relative inline-block px-10 py-4 text-lg font-bold text-white rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-pink-500 hover:to-indigo-500 transition-all duration-500 hover:scale-105 shadow-[0_0_25px_rgba(168,85,247,0.5)]"
+              className="relative inline-block px-10 py-4 test-xs sm:text-lg font-bold text-white rounded-full bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-pink-500 hover:to-indigo-500 transition-all duration-500 hover:scale-105 shadow-[0_0_25px_rgba(168,85,247,0.5)]"
             >
               Still Need Help? Contact Us 💬
-            </a>
+            </Link>
           </div>
         </div>
       </WebpageWrapper>

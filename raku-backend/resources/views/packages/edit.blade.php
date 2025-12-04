@@ -37,7 +37,7 @@
 
             <!-- Home -->
             <div class="col-md-12 d-flex align-items-center">
-                <div class="form-check mt-4">
+                <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="is_home" id="isHome"
                         {{ $package->is_home ? 'checked' : '' }}>  
                     <label for="isHome" class="form-check-label fw-semibold">Show Homepage</label>
@@ -46,7 +46,7 @@
 
             <!-- Popular -->
             <div class="col-md-12 d-flex align-items-center">
-                <div class="form-check mt-4">
+                <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="is_popular" id="isPopular"
                         {{ $package->is_popular ? 'checked' : '' }}>
                     <label for="isPopular" class="form-check-label fw-semibold">Popular Package</label>
@@ -55,7 +55,7 @@
 
             <!-- Free -->
             <div class="col-md-12 d-flex align-items-center">
-                <div class="form-check mt-4">
+                <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="is_free" id="isFree"
                         {{ $package->is_free ? 'checked' : '' }}
                         onchange="document.querySelector('#priceDiv').style.display = this.checked ? 'none' : 'block'">
@@ -63,8 +63,16 @@
                 </div>
             </div>
 
-            <div id="priceDiv" style="{{ $package->is_free ? 'display:none' : '' }}">
-                <div class="col-md-3">
+            <div class="col-md-12 d-flex align-items-center">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="is_active" id="is_active"
+                        {{ $package->is_active ? 'checked' : '' }}>
+                    <label for="is_active" class="form-check-label fw-semibold">Is Active</label>
+                </div>
+            </div>
+
+            <div class="col-md-3" id="priceDiv" style="{{ $package->is_free ? 'display:none' : '' }}">
+                <div >
                     <label class="form-label fw-semibold">Price</label>
                     <input type="number" name="price" value="{{ $package->price }}"
                         class="form-control form-control-lg shadow-sm rounded-2" placeholder="e.g. 1000" required />
@@ -79,6 +87,19 @@
                     class="form-control form-control-lg shadow-sm rounded-2" placeholder="e.g. 1" required />
                 @error('order') <div class="text-danger small">{{ $message }}</div> @enderror
             </div>
+
+            <!-- Status -->
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Status</label>
+                <select name="status" class="form-control shadow-sm rounded-2">
+                    <option value="1" {{ $package->status ? 'selected' : '' }}>Active</option>
+                    <option value="0" {{ !$package->status ? 'selected' : '' }}>Inactive</option>
+                </select>
+            </div>
+
+
+
+            
 
             <!-- Short Description -->
             <div class="col-md-12">
@@ -96,14 +117,7 @@
                 @error('description') <div class="text-danger small">{{ $message }}</div> @enderror
             </div>
 
-            <!-- Status -->
-            <div class="col-md-6">
-                <label class="form-label fw-semibold">Status</label>
-                <select name="status" class="form-control shadow-sm rounded-2">
-                    <option value="1" {{ $package->status ? 'selected' : '' }}>Active</option>
-                    <option value="0" {{ !$package->status ? 'selected' : '' }}>Inactive</option>
-                </select>
-            </div>
+            
 
             <!-- Exams Section -->
             <div class="col-md-12">
@@ -111,6 +125,7 @@
                 <div id="exam-wrapper">
                     @foreach($package->package_details as $detail)
                         <div class="exam-row flex gap-2 mb-2">
+                            <input type="hidden" name="detail_id[]" value="{{ $detail->id }}">
                             <select name="exam_id[]" class="form-control shadow-sm rounded-2 exam-select" required>
                                 <option value="">-- Select Exam --</option>
                                 @foreach($exams as $exam)
@@ -135,6 +150,7 @@
 
         <!-- Submit -->
         <div class="pt-4 flex justify-end">
+            @hasPermission('packages.update')
             <button type="submit"
                 class="w-full md:w-auto px-6 py-2 bg-indigo-500 text-white font-semibold rounded-xl shadow hover:bg-indigo-600 transition flex items-center gap-1">
                 <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24" fill="currentColor">
@@ -142,6 +158,7 @@
                 </svg>
                 Update Package
             </button>
+            @endHasPermission
         </div>
     </form>
 
@@ -195,6 +212,7 @@
         });
 
         newRow.innerHTML = `
+            <input type="hidden" name="detail_id[]" value="">
             <select name="exam_id[]" class="form-control shadow-sm rounded-2 exam-select" required>
                 ${optionsHtml}
             </select>

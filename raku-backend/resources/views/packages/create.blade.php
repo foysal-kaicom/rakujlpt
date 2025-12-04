@@ -69,6 +69,13 @@
             @error('order') <div class="text-danger small">{{ $message }}</div> @enderror
         </div>
 
+        <div class="col-md-12 d-flex align-items-center">
+                <div class="form-check mt-4">
+                    <input class="form-check-input" type="checkbox" name="is_active" id="is_active">
+                    <label for="is_active" class="form-check-label fw-semibold">Is Active</label>
+                </div>
+            </div>
+
         <!-- Short Description -->
         <div class="col-md-12">
             <label class="form-label fw-semibold">Short Description</label>
@@ -116,6 +123,7 @@
 
     <!-- Submit -->
     <div class="pt-4 flex justify-end">
+        @hasPermission('packages.store')
         <button type="submit"
             class="w-full md:w-auto px-6 py-2 bg-indigo-500 text-white font-semibold rounded-xl shadow hover:bg-indigo-600 transition flex items-center gap-1">
             <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24" fill="currentColor">
@@ -123,6 +131,7 @@
             </svg>
             Save Package
         </button>
+        @endHasPermission
     </div>
 </form>
 

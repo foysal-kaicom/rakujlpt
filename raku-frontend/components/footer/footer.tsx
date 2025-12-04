@@ -1,13 +1,19 @@
 "use client";
+
+
 import Image from "next/image";
-import WebpageWrapper from "../wrapper/WebpageWrapper";
 import Link from "next/link";
+
 import { IoLogoYoutube } from "react-icons/io";
 import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
+
 import { useBusinessSettingsStore } from "@/stores/useBusinessStore";
 
 export default function Footer() {
+
   const settings = useBusinessSettingsStore((state) => state.settings);
+
+
   return (
     <div className="bg-gradient-to-br from-blue-50 to-purple-50 py-4 relative overflow-hidden">
       {/* Decorative circles */}
@@ -29,27 +35,28 @@ export default function Footer() {
               />
             </Link>
             <p className="text-sm text-gray-500">
-              Empowering learners worldwide with modern e-learning courses.
+              Empowering Japanese learners with modern, high-quality e-learning
+              solutions and real-time mock tests.
             </p>
             <div className="mt-6 flex space-x-4">
-              <Link
-                href="#"
+              <a
+                href={settings?.facebook_url || ''} target="_blank"
                 className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full p-2 drop-shadow-sm drop-shadow-violet-400 border-b border-white/50 hover:scale-110 duration-300"
               >
                 <FaFacebookF className="size-4" />
-              </Link>
-              <Link
-                href="#"
+              </a>
+              <a
+                href={settings?.linkedin_url || ''} target="_blank"
                 className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full p-2 drop-shadow-sm drop-shadow-violet-400 border-b border-white/50 hover:scale-110 duration-300"
               >
                 <FaLinkedinIn className="size-4" />
-              </Link>
-              <Link
-                href="#"
+              </a>
+              <a
+                href={settings?.youtube_url || ''} target="_blank"
                 className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full p-2 drop-shadow-sm drop-shadow-violet-400 border-b border-white/50 hover:scale-110 duration-300"
               >
                 <IoLogoYoutube className="size-4" />
-              </Link>
+              </a>
             </div>
           </div>
 
@@ -58,22 +65,34 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Company</h3>
             <ul className="space-y-2 text-gray-500 text-sm">
               <li>
-                <Link href="/about_us" className="hover:text-purple-500 transition">
+                <Link
+                  href="/about_us"
+                  className="hover:text-purple-500 transition"
+                >
                   About Raku
                 </Link>
               </li>
               <li>
-                <Link href="/contact_us" className="hover:text-purple-500 transition">
+                <Link
+                  href="/contact_us"
+                  className="hover:text-purple-500 transition"
+                >
                   Contact Us
                 </Link>
               </li>
               <li>
-                <Link href="/contact_us" className="hover:text-purple-500 transition">
+                <Link
+                  href="/contact_us"
+                  className="hover:text-purple-500 transition"
+                >
                   Verify Certificate
                 </Link>
               </li>
               <li>
-                <Link href="/terms_condition" className="hover:text-purple-500 transition">
+                <Link
+                  href="/terms_condition"
+                  className="hover:text-purple-500 transition"
+                >
                   Terms & Condition
                 </Link>
               </li>
@@ -84,7 +103,6 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Resources</h3>
             <ul className="space-y-2 text-gray-500 text-sm">
-             
               <li>
                 <Link href="/faq" className="hover:text-purple-500 transition">
                   FAQ
@@ -96,12 +114,18 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="/refund_and_cancellation" className="hover:text-purple-500 transition">
+                <a
+                  href="/refund_and_cancellation"
+                  className="hover:text-purple-500 transition"
+                >
                   Refund & Cancellation
                 </a>
               </li>
               <li>
-                <a href="/privacy_policy" className="hover:text-purple-500 transition">
+                <a
+                  href="/privacy_policy"
+                  className="hover:text-purple-500 transition"
+                >
                   Privacy Policy
                 </a>
               </li>
@@ -133,7 +157,7 @@ export default function Footer() {
         <div className="border-t border-purple-300 text-gray-500 text-sm py-6">
           <div className="flex flex-col md:flex-row justify-center items-center">
             <p>
-              © {new Date().getFullYear()} Your Company. All rights reserved.
+              © {new Date().getFullYear()} RAKU JLPT. All rights reserved.
             </p>
           </div>
         </div>

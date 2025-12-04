@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Package extends Model
 {
-    protected $fillable = ['name', 'price', 'short_description', 'description','status', 'is_popular', 'is_home', 'is_free', 'order'];
+    protected $guarded = [];
 
     protected $casts = [
         'is_popular' => 'boolean',
@@ -17,6 +17,11 @@ class Package extends Model
     public function package_details()
     {
         return $this->hasMany(PackageDetail::class);
+    }
+
+    public function current_package_candidates()
+    {
+        return $this->hasMany(Candidate::class,  'current_package_id');
     }
 
     // public function subscriptions()

@@ -38,7 +38,7 @@ export const useBusinessSettingsStore = create<BusinessSettingsStore>()(
       clearSettings: () => set({ settings: null }),
     }),
     {
-      name: 'business-settings', // key in localStorage
+      name: 'business-settings',
     }
   )
 );

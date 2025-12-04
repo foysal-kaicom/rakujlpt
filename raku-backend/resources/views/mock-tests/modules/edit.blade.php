@@ -13,8 +13,7 @@
     <!-- Form -->
     <form action="{{ route('mock-test-modules.update', $mockTestModule) }}" method="POST" class="p-4">
         @csrf
-        @method('PUT')
-
+ 
         <div class="row g-4">
             <!-- Form Fields -->
             <div class="col-md-12">
@@ -34,20 +33,6 @@
                         @error('exam_id') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
 
-                    <!-- Slug -->
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold">Slug</label>
-                        <input type="text" name="slug" value="{{ old('slug', $mockTestModule->slug) }}" class="form-control form-control-lg shadow-sm rounded-2" placeholder="Enter slug" />
-                        @error('slug') <div class="text-danger small">{{ $message }}</div> @enderror
-                    </div>
-
-                    <!-- Name -->
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold">Module Name</label>
-                        <input type="text" name="name" value="{{ old('name', $mockTestModule->name) }}" class="form-control form-control-lg shadow-sm rounded-2" placeholder="Enter module name" />
-                        @error('name') <div class="text-danger small">{{ $message }}</div> @enderror
-                    </div>
-
                     <!-- Status -->
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Status</label>
@@ -58,17 +43,62 @@
                         @error('status') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
 
+                     <!-- Name -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Module Name</label>
+                        <input type="text" name="name" value="{{ old('name', $mockTestModule->name) }}" class="form-control form-control-lg shadow-sm rounded-2" placeholder="Enter module name" />
+                        @error('name') <div class="text-danger small">{{ $message }}</div> @enderror
+                    </div>
+
+                    <!-- Slug -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Slug</label>
+                        <input type="text" name="slug" value="{{ old('slug', $mockTestModule->slug) }}" class="form-control form-control-lg shadow-sm rounded-2" placeholder="Enter slug" />
+                        @error('slug') <div class="text-danger small">{{ $message }}</div> @enderror
+                    </div>
+
+                   
+
+                    
+
                 </div>
             </div>
         </div>
 
+        @hasPermission('mock-test-modules.update')
         <div class="pt-4 flex justify-end">
             <button type="submit"
                 class="w-full md:w-auto px-6 py-2 bg-indigo-500 text-white font-semibold rounded-xl shadow hover:bg-indigo-600 transition flex items-center gap-1">
                 Update Module
             </button>
         </div>
+        @endHasPermission
     </form>
 </div>
 
 @endsection
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const nameInput = document.querySelector('input[name="name"]');
+    const slugInput = document.querySelector('input[name="slug"]');
+
+    if (!nameInput || !slugInput) return;
+
+    // Auto-generate slug while typing name
+    nameInput.addEventListener('input', function () {
+        if (!slugInput.dataset.modified) {
+            slugInput.value = this.value
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+        }
+    });
+
+    // When user manually edits slug, stop auto fill
+    slugInput.addEventListener('input', function () {
+        this.dataset.modified = true;
+    });
+
+});
+</script>

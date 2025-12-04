@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\UserSubscriptionDetails;
 use App\Notifications\CandidateNotification;
 use App\Http\Resources\PackageDetailResource;
+use Illuminate\Support\Facades\DB;
 
 class PackageController extends Controller
 {
@@ -19,7 +20,7 @@ class PackageController extends Controller
         $query = Package::with(['package_details.exam'])
             ->where('status', 1)
             ->orderByRaw('ISNULL(`order`), `order` ASC');
-            // ->orderBy('order', 'asc');
+        // ->orderBy('order', 'asc');
 
         // Apply filter dynamically
         if ($request->has('is_home') && $request->is_home == true) {
@@ -40,6 +41,7 @@ class PackageController extends Controller
                     'is_popular' => $package->is_popular,
                     'is_home' => $package->is_home,
                     'is_free' => $package->is_free,
+                    'is_active' => $package->is_active,
                     'sequence' => $package->order,
                     'package_details' => PackageDetailResource::collection($package->package_details),
                 ];
@@ -55,84 +57,105 @@ class PackageController extends Controller
         ]);
 
         $candidate = Auth::guard('candidate')->user();
-        if (!$candidate) {
-            return $this->responseWithError('Unauthorized', 'Please log in to subscribe to a package', 401);
-        }
 
         $package = Package::with('package_details.exam')->findOrFail($request->package_id);
 
         // Find previous successful subscription (if any)
-        $existingSubscription = UserSubscription::with('subscriptionDetails')
-            ->where('candidate_id', $candidate->id)
+        $existingSubscription = UserSubscription::where('id', $candidate->user_subscriptions_id)
             ->where('package_id', $package->id)
-            ->where('payment_status', 'success')
-            ->latest()
-            ->first();
+            ->exists();
 
-        // If the package is FREE
+        // ============================
+        // FREE PACKAGE (Only once)
+        // ============================
         if ($package->is_free) {
- 
-            // Block free re-subscription (only once)
+
             if ($existingSubscription) {
-                return $this->responseWithError('Already Subscribed', 'You already activated this free package.', 400);
+                return $this->responseWithError(
+                    'Already Subscribed',
+                    'You already activated this free package.',
+                    400
+                );
             }
 
-            $tranId = strtoupper(substr($package->name, 0, 3)) . $package->id . str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+            DB::beginTransaction();
 
-            $userSubscription = UserSubscription::create([
-                'candidate_id'   => $candidate->id,
-                'package_id'     => $package->id,
-                'tran_id'        => $tranId,
-                'status'         => 'confirmed',
-                'payment_status' => 'success',
-                'total_payable'  => 0,
-                'title'          => 'subscription',
-            ]);
+            try {
+                $tranId = strtoupper(substr($package->name, 0, 3)) .
+                    $package->id .
+                    str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
 
-            $candidate->update([
-                'user_subscriptions_id' => $userSubscription->id, 
-                'is_subscribed' => true,
-                'is_free' => true,
-                'current_package_id' => $package->id,
-                'current_package_name' => $package->name,
-            ]);
-
-            foreach ($package->package_details as $detail) {
-                UserSubscriptionDetails::create([
-                    'package_details_id'   => $detail->id,
-                    'user_subscription_id' => $userSubscription->id,
-                    'exam_id'              => $detail->exam_id,
-                    'max_exam_attempt'     => $detail->max_exam_attempt,
-                    'used_exam_attempt'    => 0,
+                $userSubscription = UserSubscription::create([
+                    'candidate_id'   => $candidate->id,
+                    'package_id'     => $package->id,
+                    'tran_id'        => $tranId,
+                    'status'         => 'confirmed',
+                    'payment_status' => 'success',
+                    'total_payable'  => 0,
+                    'title'          => 'free_subscription',
                 ]);
-            }
 
+                // Update Candidate
+                $candidate->update([
+                    'user_subscriptions_id' => $userSubscription->id,
+                    'is_subscribed'         => true,
+                    'is_free'               => true,
+                    'current_package_id'    => $package->id,
+                    'current_package_name'  => $package->name,
+                ]);
+
+                // Add package details
+                foreach ($package->package_details as $detail) {
+                    UserSubscriptionDetails::create([
+                        'package_details_id'   => $detail->id,
+                        'user_subscription_id' => $userSubscription->id,
+                        'exam_id'              => $detail->exam_id,
+                        'max_exam_attempt'     => $detail->max_exam_attempt,
+                        'used_exam_attempt'    => 0,
+                    ]);
+                }
+
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return $this->responseWithError('Error', $e->getMessage(), 500);
+            }
 
             // Notify candidate
-            $successPath = config('app.frontend.payment_success') . '?subscription_id=' . $userSubscription->id . '&amount=' . '0' . '&tran_id=' . $tranId;
+        
+            $successPath = config('app.frontend.payment_success') . '?subscription_id=' . $userSubscription->id . '&amount=' . $userSubscription->price . '&tran_id=' . $tranId;
 
             $userSubscription->candidate->notify(new CandidateNotification([
                 'title'   => "Free Subscription Activated!",
                 'message' => "Your free package '{$package->name}' has been successfully activated.",
                 'url'     => $successPath,
             ]));
+        
+
+            $baseUrl     = config('app.frontend.url').$successPath;
+            
+
             return response()->json([
                 'status'          => 'success',
                 'subscription_id' => $userSubscription->id,
                 'package_id'      => $package->id,
                 'package'         => $package->name,
-                'url'             => $successPath,
+                'url'             => $baseUrl,
             ]);
         }
 
-        if ($existingSubscription) {
-            return $this->responseWithError('Already Subscribed', 'You already have an active subscription for this package.', 400);
-        }
 
-        // Generate new transaction ID
-        $tranId = strtoupper(substr($package->name, 0, 3)) . $package->id . str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+        // ============================
+        // PAID PACKAGE (Rebuy always allowed)
+        // ============================
 
-        // Create a new pending subscription
+        // 👉 REMOVE BLOCKING PENDING PAYMENT
+        // User can purchase again even if pending payment exists.
+
+        $tranId = strtoupper(substr($package->name, 0, 3)) .
+            $package->id .
+            str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+
         $userSubscription = UserSubscription::create([
             'candidate_id'   => $candidate->id,
             'package_id'     => $package->id,
@@ -143,12 +166,65 @@ class PackageController extends Controller
             'title'          => $existingSubscription ? 'renewal' : 'subscription',
         ]);
 
-        // $candidate->update(['user_subscriptions_id' => $userSubscription->id]);
-
+        // Redirect to SSL
         $paymentResponse = $sslController->payNow($userSubscription);
 
         return response()->json($paymentResponse);
     }
+
+    public function subscriptionDetails(Request $request)
+    {
+        try {
+
+            $request->validate([
+                'user_subscription_id' => 'required|exists:user_subscriptions,id'
+            ]);
+
+            $candidate = Auth::guard('candidate')->user();
+
+            // Fetch subscription with exam details
+            $subscription = UserSubscription::with('subscriptionDetails.exam')
+                ->where('candidate_id', $candidate->id)
+                ->where('id', $request->user_subscription_id)
+                ->first();
+
+            if (!$subscription) {
+                return $this->responseWithError('Not Found', 'Subscription not found.', 404);
+            }
+
+            // Format the details
+            $details = $subscription->subscriptionDetails->map(function ($detail) {
+
+                $remaining = (int) max(
+                    (int)$detail->max_exam_attempt - (int)$detail->used_exam_attempt,
+                    0
+                );
+
+                return [
+                    'exam_title'         => $detail->exam->title ?? 'Unknown',
+                    'max_attempts'       => (int) $detail->max_exam_attempt,
+                    'used_attempts'      => (int) $detail->used_exam_attempt,
+                    'remaining_attempts' => $remaining,
+                ];
+            });
+
+            return response()->json([
+                'status' => 'success',
+                'subscription_id' => (int) $subscription->id,
+                'details' => $details,
+            ]);
+
+        } catch (\Exception $e) {
+
+            // Catch any unexpected exception
+            return response()->json([
+                'status'  => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
 
     public function renewSubscription(Request $request, SslCommerzPaymentController $sslController)
     {
@@ -223,5 +299,4 @@ class PackageController extends Controller
 
         // return response()->json($sslController->payNow($userSubscription));
     }
-    
 }

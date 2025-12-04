@@ -13,13 +13,15 @@ return new class extends Migration
     {
         Schema::create('mock_test_sections', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('mock_test_module_id')->constrained('mock_test_modules')->onDelete('cascade');
+            $table->foreignId('mock_test_module_id')->constrained('mock_test_modules')->restrictOnDelete();
             // $table->foreignId('exam_id')->constrained('exams')->onDelete('cascade');
             $table->string('slug')->unique();
             $table->string('title');
-            $table->longText('sample_question')->nullable();
             $table->enum('status', ['active', 'disabled'])->default('active');
             $table->integer('question_limit')->default('1');
+            $table->longText('sample_question')->nullable();
+            $table->string('sample_audio')->nullable();
+            $table->string('sample_image')->nullable();
             $table->timestamps();
         });
     }

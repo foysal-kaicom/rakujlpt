@@ -2,7 +2,7 @@ import { FaClock } from "react-icons/fa";
 
 export default function SkeletonMockExam() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 animate-pulse">
+    <div className="min-h-screen bg-linear-to-br from-purple-50 to-indigo-100 animate-pulse">
       {/* Header */}
       <div className="bg-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row gap-5 justify-between md:items-center">
@@ -44,7 +44,7 @@ export default function SkeletonMockExam() {
         <div className="lg:col-span-3">
           {/* header */}
           <div className="bg-white rounded-xl shadow-lg">
-            <div className="bg-gradient-to-r from-blue-200 to-indigo-200 p-6 rounded-t-xl">
+            <div className="bg-linear-to-r from-purple-200 to-indigo-200 p-6 rounded-t-xl">
               <div className="h-6 w-48 bg-gray-200 rounded mb-2"></div>
               <div className="h-4 w-64 bg-gray-200 rounded"></div>
             </div>

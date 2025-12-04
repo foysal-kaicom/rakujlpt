@@ -3,6 +3,15 @@
 @section('contents')
 
 <div class="bg-white rounded-3 shadow-sm border p-6">
+    @if ($errors->any())
+            <div class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm">
+                <ul class="list-disc list-inside">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     <!-- Header -->
     <div class="text-2xl font-bold text-gray-800 border-b pb-3 mb-5 flex items-center gap-2">
         <p class="p-2 rounded-full bg-indigo-500 text-white">
@@ -14,35 +23,27 @@
     </div>
 
     <!-- Form -->
-    <form action="{{ route('mock-tests.section.store') }}" method="POST">
+    <form action="{{ route('mock-tests.section.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row g-4">
             <!-- Mock Test Selection -->
             <div class="col-md-12">
-                <label class="form-label fw-semibold">Select Mock Test Modules</label>
+                <label class="form-label fw-semibold">Select Mock Test Modules <span class="text-red-600">*</span></label>
                 <select name="mock_test_module_id" class="form-select form-select-lg shadow-sm rounded-2" required>
                     <option value="">-- Select a Module --</option>
 
                     @foreach($modules as $examTitle => $group)
-                        <optgroup label="{{ $examTitle }}">
-                            @foreach($group as $module)
-                                <option value="{{ $module->id }}">
-                                    {{-- {{ $module->name }} --}}
-                                    {{ $module->exam->title }} - {{ $module->name }}
-                                </option>
-                            @endforeach
-                        </optgroup>
+                    <optgroup label="{{ $examTitle }}">
+                        @foreach($group as $module)
+                        <option value="{{ $module->id }}">
+                            {{-- {{ $module->name }} --}}
+                            {{ $module->exam->title }} - {{ $module->name }}
+                        </option>
+                        @endforeach
+                    </optgroup>
                     @endforeach
                 </select>
 
-                {{-- <select name="mock_test_module_id" class="form-select form-select-lg shadow-sm rounded-2" required>
-                    <option value="" disabled selected>Select a Modules</option>
-                    @foreach($modules as $mockTestModule)
-                        <option value="{{ $mockTestModule->id }}" {{ old('mock_test_module_id') == $mockTestModule->id ? 'selected' : '' }}>
-                            {{ $mockTestModule->name }}
-                        </option>
-                    @endforeach
-                </select> --}}
                 @error('mock_test_module_id')
                 <small class="text-danger">{{ $message }}</small>
                 @enderror
@@ -52,7 +53,7 @@
         <!-- Section Title -->
         <div class="row g-4 pt-4">
             <div class="col-md-12">
-                <label class="form-label fw-semibold">Section Title</label>
+                <label class="form-label fw-semibold">Section Title <span class="text-red-600">*</span></label>
                 <input
                     type="text"
                     name="title"
@@ -68,7 +69,7 @@
         <!-- Section Slug -->
         <div class="row g-4 pt-4">
             <div class="col-md-12">
-                <label class="form-label fw-semibold">Section Slug</label>
+                <label class="form-label fw-semibold">Section Slug <span class="text-red-600">*</span></label>
                 <input
                     type="text"
                     name="slug"
@@ -80,7 +81,22 @@
                 @enderror
             </div>
         </div>
-        
+
+        <div class="row g-4 pt-4">
+            <div class="col-md-12">
+                <label class="form-label fw-semibold">Question Limit <span class="text-red-600">*</span></label>
+                <input
+                    type="number"
+                    name="question_limit"
+                    value="{{ old('question_limit') }}"
+                    class="form-control form-control-lg shadow-sm rounded-2"
+                    placeholder="e.g. 10" />
+                @error('question_limit')
+                <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+        </div>
+
         <!-- Sample Question (TinyMCE editor) -->
         <div class="mt-4">
             <label for="sample_question" class="form-label fw-semibold">Sample Question</label>
@@ -94,7 +110,50 @@
             @enderror
         </div>
 
+       <div class="row ">
+    <div class="col-md-6 mt-6">
+        <label class="form-label fw-semibold">Sample Image</label>
+
+        <input
+            type="file"
+            id="sample_image"
+            name="sample_image"
+            class="form-control form-control-lg shadow-sm rounded-2"
+            accept="image/*"
+        />
+
+        <div class="position-relative mt-3 d-inline-block col-12" style="max-width: 300px;">
+            <img id="image_preview" src="" class="w-100 d-none rounded" />
+            <button id="remove_image" type="button"
+                class="btn btn-danger btn-sm position-absolute top-0 end-0 rounded-circle d-none"
+                style="transform: translate(40%, -40%);">✖</button>
+        </div>
+    </div>
+
+    <div class="col-md-6 mt-6">
+        <label class="form-label fw-semibold">Sample Audio</label>
+
+        <input
+            type="file"
+            id="sample_audio"
+            name="sample_audio"
+            class="form-control form-control-lg shadow-sm rounded-2"
+            accept="audio/*"
+        />
+
+        <div class="position-relative mt-3 d-inline-block col-12" style="max-width: 300px;">
+            <audio id="audio_preview" controls class="w-100 d-none"></audio>
+            <button id="remove_audio" type="button"
+                class="btn btn-danger btn-sm position-absolute top-0 end-0 rounded-circle d-none"
+                style="transform: translate(40%, -40%);">✖</button>
+        </div>
+    </div>
+</div>
+
+
+
         <!-- Submit Button -->
+        @hasPermission('mock-tests.section.store')
         <div class="pt-4">
             <button type="submit"
                 class="w-full md:w-auto px-6 py-2 bg-indigo-500 text-white font-semibold rounded-xl shadow hover:bg-indigo-600 transition flex items-center gap-1">
@@ -103,6 +162,7 @@
                 </svg> Create Section
             </button>
         </div>
+        @endHasPermission
     </form>
 </div>
 
@@ -110,46 +170,104 @@
 
 @push('js')
 <script type="text/javascript">
-tinymce.init({
-  selector: '#editor',
-  menubar: false,
-  toolbar: 'bold italic furigana code',
-  extended_valid_elements: 'ruby,rt,rp',
-  setup: function (editor) {
-    editor.ui.registry.addButton('furigana', {
-      text: 'Furigana',
-      onAction: function () {
-        editor.windowManager.open({
-          title: 'Add Furigana',
-          body: {
-            type: 'panel',
-            items: [
-              { type: 'input', name: 'kanji', label: 'Kanji' },
-              { type: 'input', name: 'reading', label: 'Furigana' }
-            ]
-          },
-          buttons: [
-            { type: 'cancel', text: 'Close' },
-            { type: 'submit', text: 'Insert', primary: true }
-          ],
-          onSubmit: function (api) {
-            const data = api.getData();
-            editor.insertContent(`<ruby>${data.kanji}<rt>${data.reading}</rt></ruby>`);
-            api.close();
-          }
-        });
-      }
+    tinymce.init({
+        selector: '#editor',
+        menubar: false,
+        toolbar: 'bold italic furigana code',
+        extended_valid_elements: 'ruby,rt,rp',
+        setup: function(editor) {
+            editor.ui.registry.addButton('furigana', {
+                text: 'Furigana',
+                onAction: function() {
+                    editor.windowManager.open({
+                        title: 'Add Furigana',
+                        body: {
+                            type: 'panel',
+                            items: [{
+                                    type: 'input',
+                                    name: 'kanji',
+                                    label: 'Kanji'
+                                },
+                                {
+                                    type: 'input',
+                                    name: 'reading',
+                                    label: 'Furigana'
+                                }
+                            ]
+                        },
+                        buttons: [{
+                                type: 'cancel',
+                                text: 'Close'
+                            },
+                            {
+                                type: 'submit',
+                                text: 'Insert',
+                                primary: true
+                            }
+                        ],
+                        onSubmit: function(api) {
+                            const data = api.getData();
+                            editor.insertContent(`<ruby>${data.kanji}<rt>${data.reading}</rt></ruby>`);
+                            api.close();
+                        }
+                    });
+                }
+            });
+        }
     });
-  }
-});
 </script>
 <script>
-// Add any additional JavaScript if needed for slug generation based on title
-document.querySelector('input[name="title"]').addEventListener('input', function() {
-    const slugInput = document.querySelector('input[name="slug"]');
-    const slug = this.value.toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '');
-    slugInput.value = slug;
+    // Add any additional JavaScript if needed for slug generation based on title
+    document.querySelector('input[name="title"]').addEventListener('input', function() {
+        const slugInput = document.querySelector('input[name="slug"]');
+        const slug = this.value.toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '');
+        slugInput.value = slug;
+    });
+</script>
+
+<script>
+const imgInput = document.getElementById("sample_image");
+const imgPreview = document.getElementById("image_preview");
+const removeImage = document.getElementById("remove_image");
+
+imgInput.addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    if (file) {
+        imgPreview.src = URL.createObjectURL(file);
+        imgPreview.classList.remove("d-none");
+        removeImage.classList.remove("d-none");
+    }
 });
 
+removeImage.addEventListener("click", function () {
+    imgPreview.src = "";
+    imgPreview.classList.add("d-none");
+    removeImage.classList.add("d-none");
+    imgInput.value = "";
+});
+
+// AUDIO SECTION --------------------------
+
+const audioInput = document.getElementById("sample_audio");
+const audioPreview = document.getElementById("audio_preview");
+const removeAudio = document.getElementById("remove_audio");
+
+audioInput.addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    if (file) {
+        audioPreview.src = URL.createObjectURL(file);
+        audioPreview.classList.remove("d-none");
+        removeAudio.classList.remove("d-none");
+    }
+});
+
+removeAudio.addEventListener("click", function () {
+    audioPreview.src = "";
+    audioPreview.classList.add("d-none");
+    removeAudio.classList.add("d-none");
+    audioInput.value = "";
+});
 </script>
+
+
 @endpush

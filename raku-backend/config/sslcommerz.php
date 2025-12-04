@@ -5,8 +5,8 @@
 $apiDomain = env('SSLCZ_TESTMODE') ? "https://sandbox.sslcommerz.com" : "https://securepay.sslcommerz.com";
 return [
 	'apiCredentials' => [
-		'store_id' => env("SSLCZ_STORE_ID"),
-		'store_password' => env("SSLCZ_STORE_PASSWORD"),
+		'store_id' => env("SSLCZ_STORE_ID", 'kaico686f8b27809f1'),
+		'store_password' => env("SSLCZ_STORE_PASSWORD", 'kaico686f8b27809f1@ssl'),
 	],
 	'apiUrl' => [
 		'make_payment' => "/gwprocess/v4/api.php",
@@ -18,17 +18,21 @@ return [
 	'apiDomain' => $apiDomain,
 	'connect_from_localhost' => env("IS_LOCALHOST", true), // For Sandbox, use "true", For Live, use "false"
 
-	
-	'success_url' => '/api/v1/success',
-	'failed_url' => '/api/v1/fail',
-	'cancel_url' => '/api/v1/cancel',
-	'ipn_url' => '/api/v1/ipn',
 
-	// 'success_url' => env('APP_URL') . '/api/v1/success',
-    // 'failed_url'  => env('APP_URL') . '/api/v1/fail',
-    // 'cancel_url'  => env('APP_URL') . '/api/v1/cancel',
-    // 'ipn_url'     => env('APP_URL') . '/api/v1/ipn',
+	'success_url' => env('APP_ENV') === 'production'
+		? env('APP_URL') . '/api/v1/success'
+		: '/api/v1/success',
+
+	'failed_url' => env('APP_ENV') === 'production'
+		? env('APP_URL') . '/api/v1/fail'
+		: '/api/v1/fail',
+
+	'cancel_url' => env('APP_ENV') === 'production'
+		? env('APP_URL') . '/api/v1/cancel'
+		: '/api/v1/cancel',
+
+	'ipn_url' => env('APP_ENV') === 'production'
+		? env('APP_URL') . '/api/v1/ipn'
+		: '/api/v1/ipn',
+
 ];
-
-
-https://admin.kaicombd.com/payment-success/%7Bbooking_id%7D?subscription_id=16&amount=200&tran_id=PRE3458250

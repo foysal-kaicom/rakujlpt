@@ -20,9 +20,10 @@ use App\Http\Controllers\Api\DemoQuestionController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\CandidateProgressController;
 use App\Http\Controllers\Api\SslCommerzPaymentController;
+use App\Http\Controllers\Api\CertificateController;
 
 Route::prefix('v1')->group(function () {
-
+        
     Route::post('/login', [CandidateController::class, 'doLogin']);
     Route::post('/google-login', [GoogleAuthController::class, 'googleLogin']);
 
@@ -31,7 +32,6 @@ Route::prefix('v1')->group(function () {
     Route::get('/roadmaps', [RoadmapController::class, 'getRoadmaps']);
     Route::get('/roadmaps/{slug}/stages', [RoadmapController::class, 'getStages']);
     Route::get('/subscriptions', [PackageController::class, 'show']);
-    Route::post('/subscribe', [PackageController::class, 'subscribe']);
 
 
     Route::get('/settings', [HomeController::class, 'settingsData']);
@@ -53,6 +53,8 @@ Route::prefix('v1')->group(function () {
 
     Route::get('/feature/list', [CMSController::class, 'getFeatureList']);
 
+    Route::get('/our-member/list', [CMSController::class, 'getTeamMemberList']);
+
 
     // Route::group(['prefix' => 'center', 'as' => 'center.'], function () {
     //     Route::get('/list', [CenterController::class, 'list']);
@@ -62,6 +64,7 @@ Route::prefix('v1')->group(function () {
 
     Route::group(['middleware' => 'auth:candidate'], function () {
 
+        Route::post('/subscribe', [PackageController::class, 'subscribe']);
 
         Route::group(['prefix' => 'candidate', 'as' => 'candidate.'], function () {
             Route::get('/dashboard', [CandidateController::class, 'dashboard']);
@@ -73,6 +76,8 @@ Route::prefix('v1')->group(function () {
             Route::post('/post-verify-phone', [CandidateController::class, 'postVerifyPhoneNumber']);
 
             Route::post('/subscription-renew', [PackageController::class, 'renewSubscription']);
+            Route::get('/subscription-details', [PackageController::class, 'subscriptionDetails']);
+    
         });
 
         // Route::group(['prefix' => 'exam', 'as' => 'exam.'], function () {
@@ -99,6 +104,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/stages/{stageId}/start', [CandidateProgressController::class, 'showStage']);
         Route::post('/stages/{stageId}/complete', [CandidateProgressController::class, 'completeStage']);
         Route::get('/candidate/current-roadmap', [RoadmapController::class, 'get_current_roadmap']);
+        Route::get('/certificate-download', [CertificateController::class, 'download']);
 
     });
 
@@ -109,11 +115,12 @@ Route::prefix('v1')->group(function () {
     Route::post('/send-password-reset-otp', [CandidateController::class, 'sendPasswordResetOtp']);
     Route::post('/verify-password-reset-otp', [CandidateController::class, 'verifyResetPasswordOtp']);
 
+    Route::post('/news-letter-subscribe', [NotificationController::class, 'storeNewsLetter']);
 
     Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
     Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
 
-
+    Route::get('/verify-certificate', [CertificateController::class, 'verifyCertificate']);
 
     Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
     //SSLCOMMERZ END

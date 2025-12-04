@@ -18,7 +18,7 @@ export default function QuestionComposition() {
   
   return (
     <Suspense fallback={<QuestionCompositionSkeleton />}>
-      <QuestionCompositionComponent breadCrumbData={breadCrumbData} mainText="Question Composition" preText="" subText="" type="" />
+      <QuestionCompositionComponent breadCrumbData={breadCrumbData} type="" title="" duration="" />
     </Suspense>
   );
 }

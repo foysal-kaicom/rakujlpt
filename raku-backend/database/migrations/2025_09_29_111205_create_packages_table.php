@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->boolean('status')->default(1);
             $table->boolean('is_popular')->default(false);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

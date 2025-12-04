@@ -2,19 +2,21 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import axiosInstance from "@/utils/axios";
 import { toast } from "sonner";
 
-import { FaBookOpen, FaClock } from "react-icons/fa";
+import { FaBookOpen } from "react-icons/fa";
 
 import BreadCrumb from "@/components/BreadCrumb";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
 import Loader from "@/components/Loader";
 import SuspenseLoader from "@/components/SuspenseLoader";
 
+
 interface Practice {
-  roadmap_slug: string;
+  current_module_slug: string;
   current_module_name: string;
   current_stage_id: number;
   current_stage_name: string;
@@ -24,7 +26,6 @@ interface Practice {
 }
 
 export default function MyPractice() {
-  // console.log(recieverNumber , 'yo')
   const breadCrumbData = [
     { name: "Dashboard", to: "/dashboard" },
     { name: "My Practice", to: "/my_practice" },
@@ -34,22 +35,6 @@ export default function MyPractice() {
   const [practiceData, setPracticeData] = useState<Practice[]>([]);
 
   const router = useRouter();
-
-  const modules = {
-    current: {
-      title: "Basics of JavaScript",
-      description:
-        "Learn the core concepts of JS — variables, loops, and functions.",
-      progress: 64,
-      color: "bg-purple-700",
-    },
-    next: {
-      title: "Intermediate Logic & Functions",
-      description:
-        "Explore ES6+, arrow functions, and modular programming patterns.",
-      color: "from-blue-500 to-yellow-400",
-    },
-  };
 
   const getPracticetData = async () => {
     try {
@@ -121,7 +106,7 @@ export default function MyPractice() {
                         <button
                           onClick={() =>
                             router.push(
-                              `/practice/${item.roadmap_slug}/${item.stage_slug}/${item.current_stage_id}`
+                              `/practice/${item.current_module_slug}/${item.stage_slug}/${item.current_stage_id}`
                             )
                           }
                           disabled={item?.complete == 100}
@@ -141,7 +126,15 @@ export default function MyPractice() {
                   ))}
                 </div>
               ) : (
-                <div>No data found</div>
+                <div className="text-center text-gray-500 py-6 flex flex-col gap-3 justify-center items-center">
+                  You have not started any practice !!
+                  <Link href="/practice">
+                    <button className="relative overflow-hidden text-sm md:text-base inline-block px-10 py-2 font-semibold text-white rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg shadow-purple-500/40 hover:shadow-purple-500/60 hover:scale-105 transition-all duration-300 ease-out">
+                      <span className="relative z-10">Start Now</span>
+                      <span className="absolute inset-0 bg-gradient-to-r from-purple-400/30 via-pink-400/30 to-blue-400/30 blur-xl opacity-60 transition-opacity duration-300 group-hover:opacity-90"></span>
+                    </button>
+                  </Link>
+                </div>
               )}
             </section>
           </div>

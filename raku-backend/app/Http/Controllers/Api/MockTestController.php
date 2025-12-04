@@ -10,10 +10,12 @@ use App\Models\MockTestQuestion;
 use App\Models\UserSubscription;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MockTestResultResource;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserSubscriptionDetails;
 use App\Http\Resources\MockTestSectionResource;
 use App\Http\Resources\UserSubscriptionResource;
+use App\Models\Exam;
 
 class MockTestController extends Controller
 {
@@ -28,26 +30,27 @@ class MockTestController extends Controller
 
             $candidate = auth('candidate')->user();
 
-            // Step 1: Get all active subscriptions for this candidate
-            $activeSubscriptions = UserSubscription::where('candidate_id', $candidate->id)
-                ->where('status', 'confirmed')
-                ->where('payment_status', 'success')
-                ->pluck('id');
+            // Get active subscriptions for this candidate
+            $latestSubscription = UserSubscription::find($candidate->user_subscriptions_id);
 
-            if ($activeSubscriptions->isEmpty()) {
-                return $this->responseWithError("You do not have an active subscription for any exam.");
+            if (!$latestSubscription) {
+                return $this->responseWithSuccess(
+                    [],
+                    'You do not have an active subscription for any exam.',
+                    200
+                );
             }
 
-            // Step 2: Check if this exam exists in any active subscription
-            $subscriptionDetails = UserSubscriptionDetails::whereIn('user_subscription_id', $activeSubscriptions)
-                ->where('exam_id', $examId)
+            // Get all exams for this subscription
+            $subscriptionDetails = UserSubscriptionDetails::where('user_subscription_id', $latestSubscription->id)
+                ->where('exam_id', $examId) // you can remove this line if you want all exams
                 ->get();
 
             if ($subscriptionDetails->isEmpty()) {
-                return $this->responseWithError("This exam is not included in your active subscriptions.");
+                return $this->responseWithError("This exam is not included in your active subscription.");
             }
 
-            // Step 3: Verify remaining attempts
+            // Check remaining attempts for the requested exam
             $hasRemaining = $subscriptionDetails->contains(function ($detail) {
                 return $detail->used_exam_attempt < $detail->max_exam_attempt;
             });
@@ -56,27 +59,20 @@ class MockTestController extends Controller
                 return $this->responseWithError("You have reached the maximum attempt limit for this exam.");
             }
 
-            // Step 4: Fetch sections & questions
-            // $allSections = MockTestSection::with([
-            //         'mockTestQuestion',
-            //         'mockTestQuestionGroup',
-            //         'mockTestModule' => function ($query) use ($examId) {
-            //             $query->where('exam_id', $examId);
-            //         }
-            //     ])
-            //     ->get();
             $allSections = MockTestSection::with([
                 'mockTestQuestion',
                 'mockTestQuestionGroup',
                 'mockTestModule'
             ])
-            ->whereHas('mockTestModule', function ($query) use ($examId) {
-                $query->where('exam_id', $examId);
-            })
-            ->get();
+                ->whereHas('mockTestModule', function ($query) use ($examId) {
+                    $query->where('exam_id', $examId);
+                })
+                ->get();
 
-          
+
             $examTitle = $allSections->first()->mockTestModule->exam->title ?? null;
+            $examDuration = $allSections->first()->mockTestModule->exam->duration ?? null;
+            $examTotalPoint = $allSections->first()->mockTestModule->exam->total_point ?? null;
             $sectionWiseQuestions = [];
 
             foreach ($allSections as $section) {
@@ -84,15 +80,15 @@ class MockTestController extends Controller
 
                 if ($data) {
                     $sectionWiseQuestions[] = $data;
-                   
                 }
             }
             // return $this->responseWithSuccess($sectionWiseQuestions, "Questions generated for Exam ID: {$examId}");
             return $this->responseWithSuccess([
                 'exam_title' => $examTitle,
+                'exam_duration' => $examDuration,
+                'exam_total_point' => $examTotalPoint,
                 'sections'   => $sectionWiseQuestions
             ], "Questions generated for Exam ID: {$examId}");
-            
         } catch (Throwable $ex) {
             return $this->responseWithError("Something went wrong.", $ex->getMessage());
         }
@@ -103,22 +99,21 @@ class MockTestController extends Controller
         try {
             $data = $request->all();
 
-            // 🔹 Step 1: Validate exam_id
             $request->validate([
                 'exam_id' => 'required|integer|exists:exams,id',
             ]);
 
             $examId = $data['exam_id'];
             $candidateId = Auth::guard('candidate')->id();
+            $exam = Exam::findOrFail($examId);
 
             $modulesScore = [
                 'Reading' => ['answered' => 0, 'correct' => 0, 'wrong' => 0],
                 'Listening' => ['answered' => 0, 'correct' => 0, 'wrong' => 0],
             ];
 
-            // 🔹 Step 2: Loop over numeric keys only
             foreach ($data as $key => $questionPayload) {
-                if ($key === 'exam_id') continue; // skip exam_id
+                if ($key === 'exam_id') continue;
                 if (!isset($questionPayload['id']) || !isset($questionPayload['answer'])) continue;
 
                 $question = MockTestQuestion::with(['section.mockTestModule', 'mockTestQuestionOption'])
@@ -139,7 +134,9 @@ class MockTestController extends Controller
                 }
             }
 
-            // 🔹 Step 3: Create mock test record
+            $per_question_mark = $exam['total_point'] / $data['total_questions'];
+
+            // Create mock test record
             $mockTestRecord = MockTestRecords::create([
                 'candidate_id'              => $candidateId,
                 'exam_id'                   => $examId,
@@ -150,60 +147,70 @@ class MockTestController extends Controller
                 'listening_answered'        => $modulesScore['Listening']['answered'],
                 'correct_listening_answer'  => $modulesScore['Listening']['correct'],
                 'wrong_listening_answer'    => $modulesScore['Listening']['wrong'],
+                'total_questions'           => $data['total_questions'],
+                'per_question_mark'         => $per_question_mark,
             ]);
 
-            // 🔹 Step 4: Increment used_exam_attempt
+            $mockTestRecord->per_question_mark = $per_question_mark;
+
             $subscriptionId = UserSubscription::where('candidate_id', $candidateId)
                 ->where('status', 'confirmed')
-                ->value('id'); // assuming one active subscription per user
-            // dd($subscriptionId);
+                ->orderBy('id', 'desc')
+                ->value('id');
+
             if ($subscriptionId) {
                 $userSubscriptionDetail = UserSubscriptionDetails::where('user_subscription_id', $subscriptionId)
                     ->where('exam_id', $examId)
                     ->first();
-                // dd($userSubscriptionDetail);
 
                 if ($userSubscriptionDetail) {
                     $userSubscriptionDetail->increment('used_exam_attempt');
                 }
             }
 
-            return $this->responseWithSuccess($mockTestRecord, "Mock test result recorded successfully.");
+            return $this->responseWithSuccess(new MockTestResultResource($mockTestRecord),"Mock test result recorded successfully.");
         } catch (Throwable $e) {
             Log::error('Mock test evaluation error', ['error' => $e->getMessage()]);
             return $this->responseWithError("Something went wrong.", $e->getMessage());
         }
     }
 
-    public function getTestResult(){
-        $id = Auth::guard('candidate')->id();
-        $testResults = MockTestRecords::where('candidate_id', $id)->get();
-        if(!$testResults || $testResults->isEmpty()){
-            return $this->responseWithError("No mock test records found.");
+    public function getTestResult()
+    {
+        try {
+            $id = Auth::guard('candidate')->id();
+            $testResults = MockTestRecords::with('exam:id,name,title,pass_point,total_point')->where('candidate_id', $id)->orderBy('id', 'desc')->get();
+            if (!$testResults || $testResults->isEmpty()) {
+                return $this->responseWithSuccess([], "No mock test records found.");
+            }
+
+            return $this->responseWithSuccess($testResults, "Mock test results fetched.");
+        } catch (Throwable $ex) {
+            return $this->responseWithError("Something went wrong", $ex->getMessage());
         }
-        // $testResults = MockTestResultResource::collection(MockTestRecords::where('candidate_id', $id)->get());//need to use later
-       
-        return $this->responseWithSuccess($testResults, "Mock test results fetched.");
     }
 
-    public function activeUserSubscriptionDetails(){
-        $candidateId = Auth::guard('candidate')->id();
-        // return $candidateId;
-        $activeSubscriptions = UserSubscription::where('candidate_id', $candidateId)
-            ->where('status', 'confirmed')
-            ->where('payment_status', 'success')
-            ->with('package')
-            ->orderBy('created_at', 'desc')
-            ->get();
+    public function activeUserSubscriptionDetails()
+    {
+        try {
+            $candidateId = Auth::guard('candidate')->id();
+            $activeSubscriptions = UserSubscription::where('candidate_id', $candidateId)
+                ->where('status', 'confirmed')
+                ->where('payment_status', 'success')
+                ->with('package', 'subscriptionDetails.exam:id,title,name')
+                ->orderBy('created_at', 'desc')
+                ->get();
 
-        if ($activeSubscriptions->isEmpty()) {
-            return $this->responseWithError("You do not have an active subscription.");
+            if ($activeSubscriptions->isEmpty()) {
+                return $this->responseWithSuccess([], "You do not have an active subscription.");
+            }
+
+            return $this->responseWithSuccess(
+                UserSubscriptionResource::collection($activeSubscriptions),
+                "Active subscription details fetched."
+            );
+        } catch (Throwable $ex) {
+            return $this->responseWithError("Something went wrong", $ex->getMessage());
         }
-
-        // Use a resource for formatting the subscription details
-        return $this->responseWithSuccess(
-            UserSubscriptionResource::collection($activeSubscriptions),
-            "Active subscription details fetched."
-        );
     }
 }

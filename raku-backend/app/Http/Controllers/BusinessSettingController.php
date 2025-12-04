@@ -7,6 +7,7 @@ use App\Models\BusinessSetting;
 use App\Services\FileStorageService;
 use Brian2694\Toastr\Facades\Toastr;
 use App\Http\Requests\UpdateBusinessSettingsRequest;
+use Illuminate\Support\Facades\Cache;
 
 class BusinessSettingController extends Controller
 {
@@ -36,17 +37,9 @@ class BusinessSettingController extends Controller
             $data['logo'] = $awsImageUploadResponse['public_path'];
         }
 
-        // if ($request->hasFile('logo')) {
-        //     if ($setting->logo && file_exists(public_path($setting->logo))) {
-        //         unlink(public_path($setting->logo));
-        //     }
-
-        //     $photoName = time() . '_' . $request->file('logo')->getClientOriginalName();
-        //     $request->file('logo')->move(public_path('business-settings/logos'), $photoName);
-        //     $data['logo'] = 'business-settings/logos/' . $photoName;
-        // }
-
         $setting->update($data);
+
+        Cache::forget('business_settings');
 
         Toastr::success('Basic Information updated.');
         return redirect()->route('business-settings.edit', 1);

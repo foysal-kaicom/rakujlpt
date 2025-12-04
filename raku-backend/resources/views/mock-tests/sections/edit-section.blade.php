@@ -14,7 +14,7 @@
     </div>
 
     <!-- Form -->
-    <form action="{{ route('mock-tests.section.update', $section->id) }}" method="POST">
+    <form action="{{ route('mock-tests.section.update', $section->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="row g-4">
@@ -73,6 +73,21 @@
                 @enderror
             </div>
         </div>
+
+        <div class="row g-4 pt-4">
+            <div class="col-md-12">
+                <label class="form-label fw-semibold">Question Limit <span class="text-red-600">*</span></label>
+                <input
+                    type="number"
+                    name="question_limit"
+                    value="{{ old('question_limit',$section->question_limit) }}"
+                    class="form-control form-control-lg shadow-sm rounded-2"
+                    placeholder="e.g. 10" />
+                @error('question_limit')
+                <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+        </div>
         
         <!-- Sample Question (TinyMCE editor) -->
         <div class="mt-4">
@@ -87,7 +102,34 @@
             @enderror
         </div>
 
-        <!-- Submit Button -->
+         <div class="row ">
+            <div class="col-md-6 mt-6">
+                <label class="form-label fw-semibold">Sample Image </label>
+                <input
+                    type="file"
+                    name="sample_image"
+                    class="form-control form-control-lg shadow-sm rounded-2"
+                    placeholder="e.g. Samle Image" />
+                <!-- @error('title')
+                <small class="text-danger">{{ $message }}</small>
+                @enderror -->
+                <img src="{{$section->sample_image}}" alt="" class="col-3 mt-4">
+            </div>
+         <div class="col-md-6 mt-6">
+                <label class="form-label fw-semibold">Sample Audio</label>
+                <input
+                    type="file"
+                    name="sample_audio"
+                    class="form-control form-control-lg shadow-sm rounded-2"
+                    placeholder="e.g. Samle Audio" />
+                <!-- @error('title')
+                <small class="text-danger">{{ $message }}</small>
+                @enderror -->
+                <audio src="{{ $section->sample_audio }}" controls class="col-4 mt-4"></audio>
+            </div>
+        </div>
+
+        @hasPermission('mock-tests.section.update')
         <div class="pt-4">
             <button type="submit"
                 class="w-full md:w-auto px-6 py-2 bg-indigo-500 text-white font-semibold rounded-xl shadow hover:bg-indigo-600 transition flex items-center gap-1">
@@ -96,6 +138,7 @@
                 </svg> Update Section
             </button>
         </div>
+        @endHasPermission
     </form>
 </div>
 

@@ -7,10 +7,12 @@
 
     <div class="p-2 px-4 bg-indigo-300 d-flex justify-content-between align-items-center">
         <h3 class="text-lg font-semibold">Mock Test Modules & Sections</h3>
+        @hasPermission('mock-tests.section.create')
         <a href="{{ route('mock-tests.section.create') }}"
             class="px-4 py-2 rounded-xl text-sm font-medium bg-sky-500 text-white hover:bg-sky-600 transition">
             <i class="fa-solid fa-plus"></i> Create New Section
         </a>
+        @endHasPermission
     </div>
 
     <div class="p-3">
@@ -20,6 +22,7 @@
                     <th>Exam</th>
                     <th>Module</th>
                     <th>Section</th>
+                    <th>Question Limit</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -48,6 +51,7 @@ $(document).ready(function() {
             { data: 'exam', name: 'exam' },
             { data: 'module', name: 'module' },
             { data: 'section', name: 'section' },
+            { data: 'question_limit', name: 'question_limit' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false },
         ]
     });

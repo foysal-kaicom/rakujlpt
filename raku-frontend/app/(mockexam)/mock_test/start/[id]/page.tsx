@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useRef, ReactNode } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
 import {
@@ -16,7 +16,7 @@ import {
   FaChevronLeft,
   FaChevronRight,
   FaStar,
-  FaCheck
+  FaCheck,
 } from "react-icons/fa";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 
@@ -25,8 +25,6 @@ import { useExamStore } from "@/stores/useExamStore";
 
 import SkeletonMockExam from "./MocktestSkeleton";
 import CircularProgress from "@/components/CircularProgress";
-import { useParams } from "next/navigation";
-import Image from "next/image";
 
 /* -------------------- Types -------------------- */
 interface QuestionOption {
@@ -44,6 +42,7 @@ interface Question {
   proficiency_level: string;
   title: string;
   type: string;
+  hints: string;
   options: QuestionOption;
 }
 
@@ -74,6 +73,7 @@ interface ExamResult {
   listeningAnswered: number;
   correctListeningAnswer: number;
   wrongListeningAnswer: number;
+  per_question_mark: number;
 }
 
 /* -------------------- Helpers -------------------- */
@@ -107,6 +107,7 @@ export default function ExamPage() {
     setAnswer,
     clearAnswers,
     timeRemaining,
+    setTimeRemaining,
     decrementTime,
     resetTime,
     examStarted,
@@ -197,7 +198,8 @@ export default function ExamPage() {
         setExamTitle(response.data.data.exam_title);
         setCurrentSectionIndex(0);
 
-        resetTime(50 * 60);
+        const duration = Number(response.data.data.exam_duration); // convert to number
+        setTimeRemaining(duration * 60);
 
         toast.success(response?.data?.message || "Mock test questions loaded!");
       } catch (error: any) {
@@ -296,7 +298,7 @@ export default function ExamPage() {
       );
 
       const response = await axiosInstance.post(
-        `/mock-test/submit-answer?exam_id=${id}`,
+        `/mock-test/submit-answer?exam_id=${id}&total_questions=${totalQuestions}`,
         payload
       );
 
@@ -308,6 +310,7 @@ export default function ExamPage() {
         correctListeningAnswer:
           response?.data?.data?.correct_listening_answer ?? 0,
         wrongListeningAnswer: response?.data?.data?.wrong_listening_answer ?? 0,
+        per_question_mark: response?.data?.data?.per_question_mark ?? 0,
       });
 
       setIsSubmitted(true);
@@ -353,9 +356,11 @@ export default function ExamPage() {
           </p>
           <p className="text-base sm:text-xl font-semibold text-green-500 mb-6">
             Total Score:{" "}
-            {((result?.correctListeningAnswer ?? 0) +
-              (result?.correctReadingAnswer ?? 0)) *
-              2.5}
+            {Math.round(
+              ((result?.correctListeningAnswer ?? 0) +
+                (result?.correctReadingAnswer ?? 0)) *
+                (result?.per_question_mark ?? 0)
+            )}
           </p>
 
           <div className="grid sm:grid-cols-2 gap-5 mb-6">
@@ -433,7 +438,9 @@ export default function ExamPage() {
       <div className="sticky top-0 z-20 bg-gradient-to-r from-purple-300 to-violet-300 pb-3">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row gap-5 justify-between md:items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">{examTitle}</h1>
+            <h1 className="text-2xl font-bold text-gray-800">
+              {examTitle} Mocktest
+            </h1>
             <p className="text-sm text-gray-700 mt-1 capitalize font-medium">
               {currentSection?.module_name} part - {currentSection?.title}
             </p>
@@ -550,7 +557,7 @@ export default function ExamPage() {
                       {currentSection.module_name}
                     </span>
                   </div>
-                  <p className="text-xs opacity-90">25 min • 100 points</p>
+                  {/* <p className="text-xs opacity-90">25 min • 100 points</p> */}
                 </div>
 
                 <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
@@ -584,8 +591,11 @@ export default function ExamPage() {
                       }}
                     />
                   </div>
-                  <p className="text-xs text-gray-600 mt-1">
-                    {answeredQuestions} / {totalQuestions} completed
+                  <p className="text-xs text-gray-600 mt-1 font-medium">
+                    <span className="text-purple-700">
+                      {answeredQuestions} / {totalQuestions}
+                    </span>{" "}
+                    completed
                   </p>
                 </div>
 
@@ -642,7 +652,7 @@ export default function ExamPage() {
                     ) ?? 0;
 
                   return (
-                    <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium p-6 rounded-xl">
+                    <div className="bg-gradient-to-r from-violet-700 to-indigo-700 text-white font-medium p-6 rounded-xl">
                       <div className="flex flex-wrap items-center space-x-2 mb-1">
                         {stepHeadingIcons[currentSection.slug]}
                         <h2 className="text-xl font-bold">
@@ -654,7 +664,7 @@ export default function ExamPage() {
                       </div>
 
                       <div
-                        className="mt-3"
+                        className="mt-3 text-white"
                         dangerouslySetInnerHTML={{
                           __html: (
                             currentSection.sample_question ?? ""
@@ -727,12 +737,20 @@ export default function ExamPage() {
                                   Q{getGlobalQuestionNumber(question.id)}:{" "}
                                 </span>
                                 {question.type === "image" ? (
-                                  <img
-                                    draggable="false"
-                                    src={question.title}
-                                    alt={`Question ${question.id}`}
-                                    className="max-w-[250px] sm:max-w-sm mx-auto"
-                                  />
+                                  <div className="flex flex-col w-full">
+                                    <img
+                                      draggable="false"
+                                      src={question.title}
+                                      alt={`Question ${question.id}`}
+                                      className="max-w-[250px] sm:max-w-sm mx-auto"
+                                    />
+                                    <div
+                                      className="text-gray-800 whitespace-pre-line mt-1.5 text-center"
+                                      dangerouslySetInnerHTML={{
+                                        __html: question.hints ?? "",
+                                      }}
+                                    />
+                                  </div>
                                 ) : (
                                   <div
                                     className=""
@@ -767,14 +785,10 @@ export default function ExamPage() {
                                         />
 
                                         {/* Default Circle */}
-                                        <span
-                                          className="absolute inset-0 w-5 h-5 border-2 border-purple-500 rounded-full flex items-center justify-center transition-all duration-200 peer-checked:opacity-0"
-                                        ></span>
+                                        <span className="absolute inset-0 w-5 h-5 border-2 border-purple-500 rounded-full flex items-center justify-center transition-all duration-200 peer-checked:opacity-0"></span>
 
                                         {/* Star When Checked */}
-                                        <FaCheck
-                                          className="absolute inset-0 w-5 h-5 text-white bg-purple-500 rounded-full p-1 opacity-0 transition-all duration-200 peer-checked:opacity-100"
-                                        />
+                                        <FaCheck className="absolute inset-0 w-5 h-5 text-white bg-purple-500 rounded-full p-1 opacity-0 transition-all duration-200 peer-checked:opacity-100" />
                                       </div>
 
                                       <div

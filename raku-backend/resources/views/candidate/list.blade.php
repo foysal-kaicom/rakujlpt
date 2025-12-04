@@ -70,7 +70,7 @@
             },
             columns: [{
                     data: 'id',
-                    name: 'id'
+                    name: 'id',
                 },
                 {
                     data: 'photo',
@@ -111,17 +111,6 @@
             initComplete: function() {
                 const filter = $('#candidateTable_filter');
                 const dropdownHtml = `
-                  <div class="flex items-center gap-2 ml-4">
-                        <label for="filterLivingCountry" class="text-sm font-medium text-gray-700 whitespace-nowrap">
-                        Living Country:
-                        </label>
-                        <select id="filterLivingCountry" 
-                        class="border border-gray-300 text-sm rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
-                            <option value="all">All Countries</option>
-                            <option value="Bangladesh">Bangladesh</option>
-                            <option value="Japan">Japan</option>
-                        </select>
-                    </div>
                     <div class="flex items-center gap-2 ml-4">
                         <label for="filterStatus" class="text-sm font-medium text-gray-700 whitespace-nowrap">
                         Candidate Status:

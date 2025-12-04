@@ -4,7 +4,7 @@
 
 <div class="flex gap-3 text-xs sm:text-sm font-semibold text-gray-500 items-center w-full mb-[20px]">
     <div class="flex gap-3 items-center">
-        <a href={b.to}>
+        <a href="{{ route('candidate.list') }}">
             <p class="cursor-pointer line-clamp-1">
                 Candidates
             </p>
@@ -128,7 +128,7 @@
                 </div>
             </div>
             <!-- Submit -->
-            @hasPermission('account.store')
+            @hasPermission('candidate.store')
             <div class="flex justify-end mt-6">
                 <button type="submit" class="w-[250px] bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-4 rounded transition">
                     Save

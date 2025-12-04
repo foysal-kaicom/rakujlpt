@@ -1,26 +1,31 @@
+'use client'
+
+import axios from "axios";
+import { useEffect, useState } from "react";
+
 interface Partner {
   id: null | number;
   name: string;
   logo: string;
 }
 
-const partnersList = async (): Promise<Partner[]> => {
+export default function AssociatedSection() {
+  const [partners , setPartners] = useState<Partner[]>([])
+
+  const getPartnersList = async () => {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/partner/list`,
-      {
-        cache: "no-store",
-      }
-    );
-    const data = await res.json();
-    return data?.data || [];
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/partner/list`);
+    setPartners(res?.data?.data || [])
   } catch (error) {
-    return [];
+    setPartners([]);
   }
 };
 
-export default async function AssociatedSection() {
-  const partners = await partnersList();
+useEffect(()=>{
+  getPartnersList()
+},[])
+  
   return (
     <>
       <section className="relative py-10 px-6 bg-linear-to-br from-blue-50 to-purple-50 overflow-hidden">

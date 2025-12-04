@@ -171,7 +171,7 @@ export default function LoginPage() {
                     htmlFor="email_or_phone"
                     className="block text-gray-700 font-bold mb-3 text-lg"
                   >
-                    📧 Email address
+                    📧 Email or Phone
                   </label>
                   <div className="flex border-3 border-purple-300 rounded-2xl overflow-hidden shadow-lg bg-white transform hover:scale-105 transition-all duration-300 focus-within:border-purple-500 focus-within:shadow-xl">
                     <button
@@ -187,7 +187,7 @@ export default function LoginPage() {
                       value={formData.email_or_phone}
                       onChange={handleChange}
                       required
-                      placeholder="you@example.com"
+                      placeholder="Enter email or phone number"
                       className="w-full px-4 py-3 focus:outline-none text-gray-700 font-medium"
                     />
                   </div>

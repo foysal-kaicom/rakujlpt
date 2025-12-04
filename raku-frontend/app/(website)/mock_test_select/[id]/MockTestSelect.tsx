@@ -2,7 +2,6 @@
 
 import { Suspense } from "react";
 import { useParams, useSearchParams } from "next/navigation";
-import Link from "next/link";
 
 import QuestionCompositionComponent from "@/components/QuestionCompositionComponent";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
@@ -16,6 +15,8 @@ export default function MockTestQuestionComposition() {
   const id = params.id;
   const searchParams = useSearchParams();
   const type = (searchParams.get("type") || "").toLowerCase();
+  const title = searchParams.get("title")?.toLowerCase();
+  const duration= searchParams.get("duration")?.toLowerCase();
   const router = useRouter();
   const { examStarted, startExam } = useExamStore();
 
@@ -33,9 +34,8 @@ export default function MockTestQuestionComposition() {
       <QuestionCompositionComponent
         breadCrumbData={breadCrumbData}
         type={type || ""}
-        mainText="Question Composition"
-        preText="Mock test"
-        subText="Read the question composition before starting the exam"
+        title={title || ""}
+        duration={duration || ""}
       />
       <div className="relative pb-12 p-6 sm:p-8 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 overflow-hidden">
         {/* Floating background shapes */}
@@ -45,7 +45,7 @@ export default function MockTestQuestionComposition() {
 
           <div className="relative z-10 w-full max-w-5xl mx-auto">
             <div className="flex items-start gap-4 w-full">
-              <div className="flex-shrink-0 mt-1">
+              <div className="flex-shrink-0 mt-1 hidden sm:block">
                 <div className="p-2 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 shadow-md animate-pulse">
                   <svg
                     className="w-6 h-6 text-white"
@@ -75,7 +75,7 @@ export default function MockTestQuestionComposition() {
                   <li>
                     The exam duration is{" "}
                     <span className="font-semibold text-blue-600">
-                      50 minutes
+                      {duration}
                     </span>
                     .
                   </li>
@@ -106,8 +106,7 @@ export default function MockTestQuestionComposition() {
                   </p>
                   <p className="text-xs text-gray-500 mt-2 font-medium">
                     All rights reserved by{" "}
-                    <span className="font-semibold text-blue-600">Raku</span>
-                    .
+                    <span className="font-semibold text-blue-600">Raku</span>.
                   </p>
                 </div>
               </div>

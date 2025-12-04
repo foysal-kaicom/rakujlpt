@@ -42,7 +42,9 @@
                 </div>
                 @endforeach
             </div>
+            @hasPermission('user.roles.store')
             <button class="bg-primary rounded text-white mt-3 py-2 px-5 border-0">Submit</button>
+            @endHasPermission 
         </form>
 </div>
 

@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('user_subscription_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_subscription_id')->constrained('user_subscriptions')->cascadeOnDelete();
-            $table->foreignId('package_details_id')->constrained('package_details')->cascadeOnDelete();
-            $table->foreignId('exam_id')->constrained('exams')->cascadeOnDelete();
+            $table->foreignId('package_details_id')->constrained('package_details')->restrictOnDelete();
+            $table->foreignId('exam_id')->constrained('exams')->restrictOnDelete();
             $table->integer('max_exam_attempt')->default(0);
             $table->integer('used_exam_attempt')->default(0); 
             $table->timestamps();
