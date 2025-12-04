@@ -122,6 +122,8 @@ Route::prefix('v1')->group(function () {
 
     Route::get('/verify-certificate', [CertificateController::class, 'verifyCertificate']);
 
+    Route::post('/send-query-mail', [HomeController::class, 'sendQueryMail']);
+
     Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
     //SSLCOMMERZ END
 

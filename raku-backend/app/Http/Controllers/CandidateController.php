@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Throwable;
+use Carbon\Carbon;
 use Yajra\DataTables\Facades\DataTables;
 
 class CandidateController extends Controller
@@ -103,7 +104,14 @@ class CandidateController extends Controller
                                 </div>
                             </form>';
                     }
-                })                
+                })      
+                ->editColumn('created_at', function ($row) {
+                    return $row->created_at
+                        ? Carbon::parse($row->created_at)
+                            ->timezone(config('app.timezone'))
+                            ->format('m-d-Y')
+                        : '-';
+                })
                 ->rawColumns(['photo', 'name', 'action', 'status'])
                 ->make(true);
         }
