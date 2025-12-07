@@ -3,11 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ContactMessage;
 use App\Models\BusinessSetting;
 use App\Models\Faq;
 use App\Services\FileStorageService;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Throwable;
 
 class HomeController extends Controller
@@ -49,6 +54,34 @@ class HomeController extends Controller
             return $this->responseWithSuccess([], "Candidate registered successfully", 201);
         } catch (Throwable $e) {
             return $this->responseWithError($e->getMessage(), 'Something went wrong.');
+        }
+    }
+
+    public function sendQueryMail(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|max:100',
+            'last_name'  => 'required|string|max:100',
+            'email'      => 'required|email',
+            'body'       => 'required|string|max:2000',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $data = $validator->validated();
+
+        try{
+            Mail::to('jlptraku@gmail.com')->send(new ContactMessage($data));
+
+            return $this->responseWithSuccess("Mail sent successfully");
+        }
+        catch(Exception $e){
+            Log::error('Mail sending failed: '.$e->getMessage());
         }
     }
 }
