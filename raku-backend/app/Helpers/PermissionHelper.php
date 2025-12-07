@@ -62,3 +62,29 @@ function sanitizePhoneNumber(?string $number): ?string
     // Anything else is invalid (too short/long or wrong prefix)
     return null;
 }
+
+function sanitizeName(string $name): string
+{
+    // Step 1: Try to transliterate "fancy" unicode characters to ASCII
+    // but only if they are stylized variants (e.g., 𝙏 → T)
+    $normalized = Normalizer::normalize($name, Normalizer::FORM_KD);
+    $normalized = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $normalized);
+
+    // Step 2: Replace the transliterated text back into UTF-8
+    $name = mb_convert_encoding($normalized, 'UTF-8', 'ASCII');
+
+    // Step 3: Remove unwanted characters — keep only letters, dots, and spaces
+    $name = preg_replace('/[^\p{L}.\s]/u', '', $name);
+
+    // Step 4: Normalize spaces and dots
+    $name = preg_replace('/\s+/', ' ', $name);
+    $name = preg_replace('/\.+/', '.', $name);
+    $name = preg_replace('/\s*\.\s*/', '. ', $name);
+
+    // Step 5: Normalize casing for multilingual names
+    $name = mb_convert_case(trim($name), MB_CASE_TITLE, "UTF-8");
+
+    return $name;
+}
+
+
