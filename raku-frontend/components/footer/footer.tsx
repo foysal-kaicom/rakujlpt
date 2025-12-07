@@ -9,26 +9,36 @@ import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 import { useBusinessSettingsStore } from "@/stores/useBusinessStore";
 import { useState } from "react";
 import axios from "axios";
+import { toast } from "sonner";
 
 export default function Footer() {
   const settings = useBusinessSettingsStore((state) => state.settings);
   const [newLetterEmail, setNewsLetterEmail] = useState("");
 
-  const postNewsLetter = async () => {
+  const postNewsLetter = async (e: any) => {
+    e.preventDefault();
+    if (newLetterEmail == "") return;
     try {
+      const form = new FormData();
+      form.append("email", newLetterEmail);
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/news-letter-subscribe`,
-        {
-          email: newLetterEmail,
-        }
+        form
       );
-    } catch {
-      console.log("yo");
+      if (res.data.success) {
+        toast.success(res.data.message || "Your subscription in completed");
+      }
+    } catch (error: any) {
+      toast.error(
+        error.response?.data.message || "There was a problem while subscribing"
+      );
+    } finally {
+      setNewsLetterEmail("");
     }
   };
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-purple-50 py-4 relative overflow-hidden">
+    <div className="bg-linear-to-br from-blue-50 to-purple-50 py-4 relative overflow-hidden">
       {/* Decorative circles */}
       <div className="absolute top-10 left-10 w-32 h-32 bg-yellow-300 rounded-full opacity-20 blur-2xl"></div>
       <div className="absolute bottom-20 right-20 w-40 h-40 bg-blue-300 rounded-full opacity-20 blur-2xl"></div>
@@ -55,21 +65,21 @@ export default function Footer() {
               <a
                 href={settings?.facebook_url || ""}
                 target="_blank"
-                className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full p-2 drop-shadow-sm drop-shadow-violet-400 border-b border-white/50 hover:scale-110 duration-300"
+                className="bg-linear-to-r from-indigo-500 to-purple-500 text-white rounded-full p-2 drop-shadow-sm drop-shadow-violet-400 border-b border-white/50 hover:scale-110 duration-300"
               >
                 <FaFacebookF className="size-4" />
               </a>
               <a
                 href={settings?.linkedin_url || ""}
                 target="_blank"
-                className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full p-2 drop-shadow-sm drop-shadow-violet-400 border-b border-white/50 hover:scale-110 duration-300"
+                className="bg-linear-to-r from-indigo-500 to-purple-500 text-white rounded-full p-2 drop-shadow-sm drop-shadow-violet-400 border-b border-white/50 hover:scale-110 duration-300"
               >
                 <FaLinkedinIn className="size-4" />
               </a>
               <a
                 href={settings?.youtube_url || ""}
                 target="_blank"
-                className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full p-2 drop-shadow-sm drop-shadow-violet-400 border-b border-white/50 hover:scale-110 duration-300"
+                className="bg-linear-to-r from-indigo-500 to-purple-500 text-white rounded-full p-2 drop-shadow-sm drop-shadow-violet-400 border-b border-white/50 hover:scale-110 duration-300"
               >
                 <IoLogoYoutube className="size-4" />
               </a>
@@ -155,19 +165,20 @@ export default function Footer() {
               Get latest updates and offers.
             </p>
             <form
-              onSubmit={postNewsLetter}
+              onSubmit={(e) => postNewsLetter(e)}
               className="flex flex-col sm:flex-row sm:space-x-2"
             >
               <input
                 type="email"
                 placeholder="Your email"
+                required
                 value={newLetterEmail}
                 onChange={(e) => setNewsLetterEmail(e.target.value)}
                 className="w-full px-4 py-2 rounded-full text-gray-900 focus:outline-none border border-gray-500"
               />
               <button
                 type="submit"
-                className="mt-2 sm:mt-0 px-8 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold rounded-full hover:scale-105 transition drop-shadow-md drop-shadow-violet-400 border-b border-white/50 cursor-pointer"
+                className="mt-2 sm:mt-0 px-8 py-2 bg-linear-to-r from-indigo-500 to-purple-500 text-white font-semibold rounded-full hover:scale-105 transition drop-shadow-md drop-shadow-violet-400 border-b border-white/50 cursor-pointer"
               >
                 Subscribe
               </button>
