@@ -1,6 +1,5 @@
 "use client";
 
-
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,11 +7,25 @@ import { IoLogoYoutube } from "react-icons/io";
 import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 
 import { useBusinessSettingsStore } from "@/stores/useBusinessStore";
+import { useState } from "react";
+import axios from "axios";
 
 export default function Footer() {
-
   const settings = useBusinessSettingsStore((state) => state.settings);
+  const [newLetterEmail, setNewsLetterEmail] = useState("");
 
+  const postNewsLetter = async () => {
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/news-letter-subscribe`,
+        {
+          email: newLetterEmail,
+        }
+      );
+    } catch {
+      console.log("yo");
+    }
+  };
 
   return (
     <div className="bg-gradient-to-br from-blue-50 to-purple-50 py-4 relative overflow-hidden">
@@ -40,19 +53,22 @@ export default function Footer() {
             </p>
             <div className="mt-6 flex space-x-4">
               <a
-                href={settings?.facebook_url || ''} target="_blank"
+                href={settings?.facebook_url || ""}
+                target="_blank"
                 className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full p-2 drop-shadow-sm drop-shadow-violet-400 border-b border-white/50 hover:scale-110 duration-300"
               >
                 <FaFacebookF className="size-4" />
               </a>
               <a
-                href={settings?.linkedin_url || ''} target="_blank"
+                href={settings?.linkedin_url || ""}
+                target="_blank"
                 className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full p-2 drop-shadow-sm drop-shadow-violet-400 border-b border-white/50 hover:scale-110 duration-300"
               >
                 <FaLinkedinIn className="size-4" />
               </a>
               <a
-                href={settings?.youtube_url || ''} target="_blank"
+                href={settings?.youtube_url || ""}
+                target="_blank"
                 className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full p-2 drop-shadow-sm drop-shadow-violet-400 border-b border-white/50 hover:scale-110 duration-300"
               >
                 <IoLogoYoutube className="size-4" />
@@ -82,7 +98,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/contact_us"
+                  href="/certificate"
                   className="hover:text-purple-500 transition"
                 >
                   Verify Certificate
@@ -138,10 +154,15 @@ export default function Footer() {
             <p className="text-gray-500 text-sm mb-4">
               Get latest updates and offers.
             </p>
-            <form className="flex flex-col sm:flex-row sm:space-x-2">
+            <form
+              onSubmit={postNewsLetter}
+              className="flex flex-col sm:flex-row sm:space-x-2"
+            >
               <input
                 type="email"
                 placeholder="Your email"
+                value={newLetterEmail}
+                onChange={(e) => setNewsLetterEmail(e.target.value)}
                 className="w-full px-4 py-2 rounded-full text-gray-900 focus:outline-none border border-gray-500"
               />
               <button
@@ -156,9 +177,7 @@ export default function Footer() {
 
         <div className="border-t border-purple-300 text-gray-500 text-sm py-6">
           <div className="flex flex-col md:flex-row justify-center items-center">
-            <p>
-              © {new Date().getFullYear()} RAKU JLPT. All rights reserved.
-            </p>
+            <p>© {new Date().getFullYear()} RAKU JLPT. All rights reserved.</p>
           </div>
         </div>
       </footer>
