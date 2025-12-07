@@ -199,7 +199,6 @@ class PackageController extends Controller
 
     public function userSubscriptions(Request $request)
     {
-        // If request comes from DataTables AJAX
         if ($request->ajax()) {
 
             $query = UserSubscription::with([
@@ -207,7 +206,6 @@ class PackageController extends Controller
                 'candidate:id,first_name'
             ]);
 
-            // (Optional future filters)
             if ($request->status && $request->status !== 'all') {
                 $query->where('status', $request->status);
             }
@@ -268,7 +266,9 @@ class PackageController extends Controller
                 })
 
                 ->addColumn('subscription_date', function ($row) {
-                    return $row->created_at->format('Y-m-d H:i:s');
+                    return $row->created_at
+                        ? $row->created_at->format('Y-m-d H:i:s')
+                        : '--';
                 })
 
                 ->rawColumns(['candidate', 'package', 'payment_status', 'status', 'action'])

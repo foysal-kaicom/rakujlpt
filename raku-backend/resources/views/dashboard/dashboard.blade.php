@@ -104,13 +104,12 @@
                     Latest Stats
                 </h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <!-- Reading Practice -->
-                    <button
-                        class="p-4 bg-gradient-to-br from-pink-50 to-pink-100 rounded-lg border-2 border-pink-200 hover:border-pink-400 hover:shadow-md transition-all text-left group">
+                    <!-- Mock test List -->
+                    <a href="{{ route('mock-tests.exam.list') }}"
+                       class="block p-4 bg-gradient-to-br from-pink-50 to-pink-100 rounded-lg border-2 border-pink-200 hover:border-pink-400 hover:shadow-md transition-all text-left group w-full">
                         <div class="flex items-center gap-3">
                             <div class="p-2 bg-pink-500 text-white rounded-lg group-hover:scale-110 transition-transform">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24"
-                                    fill="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M13 21V23H11V21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H9C10.1947 3 11.2671 3.52375 12 4.35418C12.7329 3.52375 13.8053 3 15 3H21C21.5523 3 22 3.44772 22 4V20C22 20.5523 21.5523 21 21 21H13ZM20 19V5H15C13.8954 5 13 5.89543 13 7V19H20ZM11 19V7C11 5.89543 10.1046 5 9 5H4V19H11Z">
                                     </path>
@@ -121,15 +120,13 @@
                                 <p class="text-xs text-gray-600">{{ $exam_count }}</p>
                             </div>
                         </div>
-                    </button>
-
-                    <!-- Listening Practice -->
-                    <button
-                        class="p-4 bg-gradient-to-br from-cyan-50 to-cyan-100 rounded-lg border-2 border-cyan-200 hover:border-cyan-400 hover:shadow-md transition-all text-left group">
+                    </a>
+                   <!-- Candidate List-->
+                    <a href="{{ route('candidate.list') }}"
+                        class="block p-4 bg-gradient-to-br from-cyan-50 to-cyan-100 rounded-lg border-2 border-cyan-200 hover:border-cyan-400 hover:shadow-md transition-all text-left group w-full">
                         <div class="flex items-center gap-3">
                             <div class="p-2 bg-cyan-500 text-white rounded-lg group-hover:scale-110 transition-transform">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24"
-                                    fill="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12C1 5.92487 5.92487 1 12 1ZM12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3ZM12 5C15.8659 5 19 8.13401 19 12C19 15.866 15.8659 19 12 19V5ZM10 8.5V15.5C10 15.7761 9.77614 16 9.5 16C9.41634 16 9.33597 15.9738 9.27012 15.9257L6.8001 14.0757C6.2945 13.6892 6 13.1135 6 12.5037V11.4963C6 10.8865 6.2945 10.3108 6.8001 9.92426L9.27012 8.07426C9.47455 7.92084 9.76007 7.96301 9.91349 8.16745C9.96159 8.2333 9.98777 8.31367 9.98777 8.39733L10 8.5Z">
                                     </path>
@@ -140,16 +137,14 @@
                                 <p class="text-xs text-gray-600">{{ $candidate_count }}</p>
                             </div>
                         </div>
-                    </button>
+                    </a>
 
-                    <!-- Writing Practice -->
-                    <button
-                        class="p-4 bg-gradient-to-br from-violet-50 to-violet-100 rounded-lg border-2 border-violet-200 hover:border-violet-400 hover:shadow-md transition-all text-left group">
+                    <!--Practice List -->
+                    <a href="{{ route('practices.index') }}"
+                        class="block p-4 bg-gradient-to-br from-violet-50 to-violet-100 rounded-lg border-2 border-violet-200 hover:border-violet-400 hover:shadow-md transition-all text-left group w-full">
                         <div class="flex items-center gap-3">
-                            <div
-                                class="p-2 bg-violet-500 text-white rounded-lg group-hover:scale-110 transition-transform">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24"
-                                    fill="currentColor">
+                            <div class="p-2 bg-violet-500 text-white rounded-lg group-hover:scale-110 transition-transform">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M6.94043 4.99886L15.0601 13.1185L13.6458 14.5328L5.52614 6.41312L6.94043 4.99886ZM17.8895 2.87753L19.3037 4.29175L16.4753 7.12014L15.0611 5.70593L17.8895 2.87753ZM8.35443 16.6564L5.52614 13.828L1.09802 18.2561L2.51223 19.6703L3.92644 18.2561L5.34066 19.6703L6.75487 18.2561L8.16909 19.6703L9.58331 18.2561L8.35443 16.6564ZM4.47065 20.4946L3.05643 19.0804L1.64222 20.4946L1.28601 21.9088L2.70023 22.2651L4.11444 20.8509L5.52865 22.2651L6.94287 20.8509L5.52865 19.4367L4.47065 20.4946ZM17.1208 7.82818L19.9492 5.0098L22.7776 7.83832L19.9492 10.6567L17.1208 7.82818Z">
                                     </path>
@@ -160,26 +155,26 @@
                                 <p class="text-xs text-gray-600">{{ $practice_count }}</p>
                             </div>
                         </div>
-                    </button>
+                    </a>
 
-                    <!-- Vocabulary Practice -->
-                    <button
-                        class="p-4 bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg border-2 border-amber-200 hover:border-amber-400 hover:shadow-md transition-all text-left group">
-                        <div class="flex items-center gap-3">
-                            <div class="p-2 bg-amber-500 text-white rounded-lg group-hover:scale-110 transition-transform">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24"
-                                    fill="currentColor">
-                                    <path
-                                        d="M5 15V17C5 18.0544 5.81588 18.9182 6.85074 18.9945L7 19H10V21H7C4.79086 21 3 19.2091 3 17V15H5ZM18 10L22.4 21H16.245L14.755 17H10V15H13.5L11.755 10.8L18 10ZM17 3C19.2091 3 21 4.79086 21 7V9H19V7C19 5.94564 18.1841 5.08183 17.1493 5.00549L17 5H14V3H17ZM9 5V7H5V13H3V7C3 4.79086 4.79086 3 7 3H9V5Z">
-                                    </path>
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-gray-800">Total Active Packages</h3>
-                                <p class="text-xs text-gray-600">{{ $package_count }}</p>
-                            </div>
+                <!-- Active Packages -->
+                <a href="{{ route('packages.index') }}"
+                    class="block p-4 bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg border-2 border-amber-200 hover:border-amber-400 hover:shadow-md transition-all text-left group w-full">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-amber-500 text-white rounded-lg group-hover:scale-110 transition-transform">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M5 15V17C5 18.0544 5.81588 18.9182 6.85074 18.9945L7 19H10V21H7C4.79086 21 3 19.2091 3 17V15H5ZM18 10L22.4 21H16.245L14.755 17H10V15H13.5L11.755 10.8L18 10ZM17 3C19.2091 3 21 4.79086 21 7V9H19V7C19 5.94564 18.1841 5.08183 17.1493 5.00549L17 5H14V3H17ZM9 5V7H5V13H3V7C3 4.79086 4.79086 3 7 3H9V5Z">
+                                </path>
+                            </svg>
                         </div>
-                    </button>
+                        <div>
+                            <h3 class="font-bold text-gray-800">Total Active Packages</h3>
+                            <p class="text-xs text-gray-600">{{ $package_count }}</p>
+                        </div>
+                    </div>
+                </a>
+
                 </div>
             </div>
 
@@ -196,13 +191,15 @@
                 </h2>
                 <div class="space-y-3">
                     @foreach($recent_mock_tests as $key => $test)
-                    <div data-index="{{ $key }}" class="p-3 {{$key==0 ? 'bg-red-50' : ''}}{{$key==1 ? 'bg-orange-50' : ''}}{{$key==2 ? 'bg-blue-50' : ''}} rounded-lg border border-red-200">
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="px-2 py-1 {{$key==0 ? 'bg-red-600' : ''}}{{$key==1 ? 'bg-orange-600' : ''}}{{$key==2 ? 'bg-blue-600' : ''}} text-white text-xs font-bold rounded">{{ $test->name }}</span>
-                            <span class="text-xs {{$key==0 ? 'text-red-700' : ''}}{{$key==1 ? 'text-orange-700' : ''}}{{$key==2 ? 'text-blue-700' : ''}} font-semibold">{{ $test->title }}</span>
+                     <a href="{{ route('mock-tests.exam.edit', ['id' => $test['id']]) }}">
+                        <div data-index="{{ $key }}" class="p-3 {{$key==0 ? 'bg-red-50' : ''}}{{$key==1 ? 'bg-orange-50' : ''}}{{$key==2 ? 'bg-blue-50' : ''}} rounded-lg border my-3 border-red-200">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2 py-1 {{$key==0 ? 'bg-red-600' : ''}}{{$key==1 ? 'bg-orange-600' : ''}}{{$key==2 ? 'bg-blue-600' : ''}} text-white text-xs font-bold rounded">{{ $test->name }}</span>
+                                <span class="text-xs {{$key==0 ? 'text-red-700' : ''}}{{$key==1 ? 'text-orange-700' : ''}}{{$key==2 ? 'text-blue-700' : ''}} font-semibold">{{ $test->title }}</span>
+                            </div>
+                            <p class="text-xs text-gray-600">{{ \Carbon\Carbon::parse($test->created_at)->format('M j, Y • g:i A') }}</p>
                         </div>
-                        <p class="text-xs text-gray-600">{{ \Carbon\Carbon::parse($test->created_at)->format('M j, Y • g:i A') }}</p>
-                    </div>
+                    </a>
                     @endforeach
                 </div>
             </div>
@@ -246,25 +243,28 @@
                     Mock Test Wise Candidates Participation
                 </h2>
                 <div class="space-y-4">
-         
                     @foreach($exam_submission_count as $key => $exam)
-                    @php
-                        $colors = ['green','orange','yellow','red','teal','blue','indigo','violet','purple','pink'];
-                        $color = $colors[$key % count($colors)];
-                    @endphp
-
-                    <div title="Total Candidates: {{ $exam['count'] }}" class="cursor-pointer">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm font-semibold text-gray-700">{{ $exam['title'] }}</span>
-                            <span class="text-sm font-bold text-{{ $color }}-600">{{ $exam['percentage'] }}%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5">
-                            <div class="bg-{{ $color }}-500 h-2.5 rounded-full transition-all duration-300" style="width: {{ $exam['percentage'] }}%"></div>
-                        </div>
-                    </div>
+                        @php
+                            $colors = ['green','orange','yellow','red','teal','blue','indigo','violet','purple','pink'];
+                            $color = $colors[$key % count($colors)];
+                        @endphp
+                
+                        <a href="{{ route('mock-tests.reports.list', ['exam_id' => $exam['id']]) }}"
+                           class="block cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors"
+                           title="Total Candidates: {{ $exam['count'] }}">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-semibold text-gray-700">{{ $exam['title'] }}</span>
+                                <span class="text-sm font-bold text-{{ $color }}-600">{{ $exam['percentage'] }}%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-{{ $color }}-500 h-2.5 rounded-full transition-all duration-300"
+                                     style="width: {{ $exam['percentage'] }}%">
+                                </div>
+                            </div>
+                        </a>
                     @endforeach
-
                 </div>
+                
             </div>
         </section>
 

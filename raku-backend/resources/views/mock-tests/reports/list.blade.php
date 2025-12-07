@@ -2,6 +2,7 @@
 
 @section('contents')
 <section class="w-100 bg-white rounded overflow-hidden">
+    <!-- Header -->
     <div class="py-3 px-4 d-flex justify-content-between align-items-center bg-indigo-300">
         <h3 class="text-lg font-semibold m-0">Mock Test Reports</h3>
     </div>
@@ -32,7 +33,6 @@
                  Export CSV
              </a>
         </form>
-        
     </div>
 
     <!-- Table -->
@@ -57,7 +57,16 @@
                 @forelse($records as $record)
                     <tr>
                         <td>{{ $record->id }}</td>
-                        <td>{{ $record->candidate->full_name ?? '-' }}</td>
+                        <td>
+                            @if($record->candidate)
+                                <a href="{{ route('candidate.edit', $record->candidate->id) }}"
+                                   class="text-blue-600 hover:text-blue-800 font-medium hover:underline transition-colors">
+                                    {{ $record->candidate->full_name }}
+                                </a>
+                            @else
+                                -
+                            @endif
+                        </td>
                         <td>{{ $record->exam->title ?? '-' }}</td>
                         <td>{{ $record->question_set }}</td>
                         <td>{{ $record->reading_answered }}</td>
@@ -76,10 +85,22 @@
             </tbody>
         </table>
     </div>
-    <div class="d-flex justify-content-end px-4 py-3">
-        {{ $records->links() }}
+
+    <!-- Pagination & Record Count -->
+    <div class="d-flex justify-content-between align-items-center px-4 flex-wrap">
+        <div class="text-muted medium mb-2 mb-sm-0">
+            @if ($records->total() > 0)
+                Showing <strong>{{ $records->firstItem() }}</strong> to 
+                <strong>{{ $records->lastItem() }}</strong> of 
+                <strong>{{ $records->total() }}</strong> records
+            @else
+                Showing <strong>0</strong> records
+            @endif
+        </div>
+
+        <div>
+            {{ $records->links() }}
+        </div>
     </div>
-    
-    
 </section>
 @endsection
