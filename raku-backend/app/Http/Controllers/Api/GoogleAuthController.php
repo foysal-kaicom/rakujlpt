@@ -29,19 +29,19 @@ class GoogleAuthController extends Controller
         }
 
         try {
-            $response = Http::get("https://www.googleapis.com/oauth2/v3/userinfo", [
-                'access_token' => $request->token,
-            ]);
+            // $response = Http::get("https://www.googleapis.com/oauth2/v3/userinfo", [
+            //     'access_token' => $request->token,
+            // ]);
 
-            if (!$response->ok()) {
-                Log::info($response);
-                return $this->responseWithError("Error", "Invalid Google token");
+            // if (!$response->ok()) {
+            //     Log::info($response);
+            //     return $this->responseWithError("Error", "Invalid Google token");
 
-            }
+            // }
 
-            $googleUser = $response->json();
+            // $googleUser = $response->json();
 
-            $fullName = $googleUser['name'] ?? 'Unknown User';
+            $fullName = $request->name ?? 'Unknown User';
 
             // Split on the first space
             $nameParts = explode(' ', $fullName, 2);
@@ -49,12 +49,12 @@ class GoogleAuthController extends Controller
             $lastName  = $nameParts[1] ?? ''; 
             // Find or create candidate
             $candidate = Candidate::updateOrCreate(
-                ['email' => $googleUser['email']],
+                ['email' => $request->email],
                 [
                     'first_name' => $firstName,
                     'last_name' => $lastName,
-                    'google_id' => $googleUser['sub'] ?? Str::uuid(),
-                    'photo' => $googleUser['picture'] ?? $validated['image'] ?? null,
+                    'google_id' =>  Str::uuid(),
+                    'photo' =>  $request->image ?? null,
                 ]
             );
 
