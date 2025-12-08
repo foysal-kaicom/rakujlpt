@@ -1,18 +1,16 @@
-version: "3.9"
-
 services:
-  nginx:
+  nginx-proxy:
     image: nginx:stable-alpine
-    container_name: nginx
+    container_name: nginx-proxy
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d
       - ./nginx/certs:/etc/nginx/certs:ro
       - ./certbot/www:/var/www/certbot:rw
-      - ./raku-backend/public:/var/www/backend/public:ro   # important for PHP
-      - nginx-cache:/var/cache/nginx
+      - ./raku-frontend:/var/www/frontend:ro
+      - ./raku-backend:/var/www/backend:ro
     depends_on:
       - frontend
       - backend
@@ -20,69 +18,37 @@ services:
     networks:
       - app-network
 
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    volumes:
-      - ./nginx/certs:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    entrypoint: >
-      /bin/sh -c "trap exit TERM; 
-      while :; do 
-        sleep 12h & wait $${!}; 
-        certbot renew --webroot -w /var/www/certbot --post-hook 'nginx -s reload'; 
-      done"
-    restart: unless-stopped
-    networks:
-      - app-network
-
   frontend:
     build:
       context: ./raku-frontend
-      dockerfile: Dockerfile
     container_name: frontend
+    working_dir: /var/www/frontend
+    command: npm run start
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_API_BASE_URL=https://admin.rakujlpt.com/api/v1
     expose:
       - "3000"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/_next/static" ]
-      interval: 20s
-      timeout: 5s
-      retries: 3
-      start_period: 20s
-    restart: on-failure
+    restart: always
     networks:
       - app-network
 
   backend:
     build:
       context: ./raku-backend
-      dockerfile: Dockerfile
     container_name: backend
-    environment:
-      - APP_ENV=production
-      - APP_DEBUG=false
-      - DB_HOST=db
-      - DB_DATABASE=raku_db
-      - DB_USERNAME=raku
-      - DB_PASSWORD=12345
+    working_dir: /var/www/backend
+    volumes:
+      - ./raku-backend:/var/www/backend
+      - ./raku-backend/docker/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+    command: php-fpm
     expose:
       - "9000"
     depends_on:
       - db
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9000/health || exit 1"]
-      interval: 20s
-      timeout: 5s
-      retries: 3
-      start_period: 20s
-    restart: on-failure
+    restart: always
     networks:
       - app-network
-    volumes:
-      - backend-storage:/var/www/backend
 
   queue:
     build:
@@ -98,11 +64,12 @@ services:
     environment:
       - QUEUE_CONNECTION=database
     networks:
-      - app-network  
+      - app-network
 
   db:
     image: mysql:8
     container_name: mysql-db
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: raku_db
@@ -112,14 +79,11 @@ services:
       - dbdata:/var/lib/mysql
     ports:
       - "3306:3306"
-    restart: unless-stopped
     networks:
       - app-network
 
 volumes:
   dbdata:
-  nginx-cache:
-  backend-storage:
 
 networks:
   app-network:
