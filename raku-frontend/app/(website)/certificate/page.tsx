@@ -40,7 +40,7 @@ export default function QRScannerPage() {
       },
       (errorMessage: string) => {
         // optional: console.log(errorMessage);
-        toast.error("Certificate not found")
+        // toast.error("Certificate not found")
       }
     );
 

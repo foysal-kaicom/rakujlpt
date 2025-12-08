@@ -4,6 +4,16 @@ import { useEffect, useState } from "react";
 
 import { Star } from "lucide-react";
 import { FaUser } from "react-icons/fa";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+
+// import required modules
+import { Autoplay, Pagination } from "swiper/modules";
+
 interface Review {
   id: null | number;
   body: string;
@@ -33,7 +43,7 @@ export default function TestimonialsSection() {
 
   useEffect(() => {
     reviewList();
-  },[]);
+  }, []);
 
   return (
     <section id="testimonials" className="py-20 bg-white">
@@ -48,46 +58,75 @@ export default function TestimonialsSection() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <Swiper
+          slidesPerView={1}
+          spaceBetween={0}
+          pagination={{
+            clickable: true,
+          }}
+          autoplay={{
+            delay: 4000,
+            disableOnInteraction: false,
+          }}
+          loop={true}
+          breakpoints={{
+            640: {
+              slidesPerView: 1.5,
+              spaceBetween: 0,
+            },
+            768: {
+              slidesPerView: 2,
+              spaceBetween: 0,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 0,
+            },
+          }}
+          modules={[Pagination, Autoplay]}
+          className="mySwiper"
+        >
           {testimonials.slice(0, 3).map((testimonial, index) => (
-            <div
-              key={index}
-              className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
-            >
-              <div className="flex items-center mb-6">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className="w-5 h-5 text-yellow-400 fill-current"
-                  />
-                ))}
-              </div>
-              <p className="text-gray-700 mb-6 leading-relaxed">
-                "{testimonial.body}"
-              </p>
-              <div className="flex items-center">
-                {testimonial.image ? (
-                  <img
-                    src={testimonial.image}
-                    alt={testimonial.reviewer_name}
-                    className="w-12 h-12 rounded-full mr-4 object-cover"
-                  />
-                ) : (
-                  <FaUser className="w-12 h-12 rounded-full mr-4 object-cover text-purple-400 ring-2" />
-                )}
+            <SwiperSlide>
+              <div
+                key={index}
+                className="bg-linear-to-br from-gray-50 to-white rounded-2xl p-8 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 m-3"
+              >
+                <div className="flex items-center mb-6">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className="w-5 h-5 text-yellow-400 fill-current"
+                    />
+                  ))}
+                </div>
+                <p className="text-gray-700 mb-6 leading-relaxed">
+                  "{testimonial.body}"
+                </p>
+                <div className="flex items-center">
+                  {testimonial.image ? (
+                    <img
+                      src={testimonial.image}
+                      alt={testimonial.reviewer_name}
+                      className="w-12 h-12 rounded-full mr-4 object-cover"
+                    />
+                  ) : (
+                    <FaUser className="w-12 h-12 rounded-full mr-4 object-cover text-purple-400 ring-2" />
+                  )}
 
-                <div>
-                  <h4 className="font-semibold text-gray-900">
-                    {testimonial.reviewer_name}
-                  </h4>
-                  <p className="text-gray-600 text-sm">
-                    {testimonial.reviewer_designation}
-                  </p>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">
+                      {testimonial.reviewer_name}
+                    </h4>
+                    <p className="text-gray-600 text-sm">
+                      {testimonial.reviewer_designation}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            </SwiperSlide>
           ))}
-        </div>
+        </Swiper>
       </div>
     </section>
   );

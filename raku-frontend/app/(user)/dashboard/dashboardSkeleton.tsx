@@ -23,7 +23,7 @@ export default function DashboardSkeleton() {
       </div>
       <div className="w-full bg-gray-300 rounded-md p-5 grid grid-cols-1 md:grid-cols-2 gap-5 items-center animate-pulse">
         {[1, 2, 3, 4].map((i) => (
-          <div className="p-3 bg-gray-100 rounded-md flex gap-3 animate-pulse">
+          <div key={i} className="p-3 bg-gray-100 rounded-md flex gap-3 animate-pulse">
             <div className="size-10 rounded-full bg-gray-300"></div>
             <div className="w-[calc(100%-50px)] space-y-2">
               <div className="h-3 w-1/3 rounded-md bg-gray-300"></div>

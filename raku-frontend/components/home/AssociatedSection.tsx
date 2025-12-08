@@ -1,7 +1,11 @@
-'use client'
+"use client";
 
 import axios from "axios";
 import { useEffect, useState } from "react";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import "swiper/css";
 
 interface Partner {
   id: null | number;
@@ -10,22 +14,23 @@ interface Partner {
 }
 
 export default function AssociatedSection() {
-  const [partners , setPartners] = useState<Partner[]>([])
+  const [partners, setPartners] = useState<Partner[]>([]);
 
   const getPartnersList = async () => {
-  try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/partner/list`);
-    setPartners(res?.data?.data || [])
-  } catch (error) {
-    setPartners([]);
-  }
-};
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/partner/list`
+      );
+      setPartners(res?.data?.data || []);
+    } catch (error) {
+      setPartners([]);
+    }
+  };
 
-useEffect(()=>{
-  getPartnersList()
-},[])
-  
+  useEffect(() => {
+    getPartnersList();
+  }, []);
+
   return (
     <>
       <section className="relative py-10 px-6 bg-linear-to-br from-blue-50 to-purple-50 overflow-hidden">
@@ -35,22 +40,35 @@ useEffect(()=>{
         </div>
 
         <div className="px-2 lg:px-8 container mx-auto text-center text-black">
-          <div className="relative overflow-hidden">
-            <div className="flex items-center gap-10 whitespace-nowrap animate-partner-scroll w-max">
-              {partners.concat(partners).map((item, i) => (
-                <div
-                  key={i}
-                  className="inline-flex shrink-0 hover:scale-105 transition-transform duration-300"
-                >
+          <Swiper
+            modules={[Autoplay]}
+            loop={true}
+            speed={4000}
+            autoplay={{
+              delay: 0,
+              disableOnInteraction: false,
+            }}
+            allowTouchMove={false}
+            spaceBetween={20}
+            slidesPerView={2}
+            breakpoints={{
+              640: { slidesPerView: 3 },
+              768: { slidesPerView: 4 },
+              1024: { slidesPerView: 6 },
+            }}
+          >
+            {partners.concat(partners).map((item, i) => (
+              <SwiperSlide key={i}>
+                <div className="inline-flex shrink-0 hover:scale-105 transition-transform duration-300">
                   <img
                     src={item.logo}
                     alt={item.name}
                     className="h-12 object-contain grayscale-100 mx-auto"
                   />
                 </div>
-              ))}
-            </div>
-          </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
       </section>
     </>
