@@ -1,3 +1,4 @@
+version: "3.9"
 
 services:
   nginx:
@@ -8,8 +9,9 @@ services:
       - "443:443"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./nginx/certs:/etc/letsencrypt/live:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
       - ./certbot/www:/var/www/certbot:rw
+      - ./raku-backend/public:/var/www/backend/public:ro   # important for PHP
       - nginx-cache:/var/cache/nginx
     depends_on:
       - frontend
@@ -22,9 +24,14 @@ services:
     image: certbot/certbot
     container_name: certbot
     volumes:
-      - ./nginx/certs:/etc/letsencrypt/live
+      - ./nginx/certs:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 12h & wait $${!}; certbot renew --webroot -w /var/www/certbot --post-hook \"nginx -s reload\"; done'"
+    entrypoint: >
+      /bin/sh -c "trap exit TERM; 
+      while :; do 
+        sleep 12h & wait $${!}; 
+        certbot renew --webroot -w /var/www/certbot --post-hook 'nginx -s reload'; 
+      done"
     restart: unless-stopped
     networks:
       - app-network
@@ -32,7 +39,7 @@ services:
   frontend:
     build:
       context: ./raku-frontend
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     container_name: frontend
     environment:
       - NODE_ENV=production
@@ -52,7 +59,7 @@ services:
   backend:
     build:
       context: ./raku-backend
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     container_name: backend
     environment:
       - APP_ENV=production
@@ -66,7 +73,7 @@ services:
     depends_on:
       - db
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/health || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:9000/health || exit 1"]
       interval: 20s
       timeout: 5s
       retries: 3
@@ -80,23 +87,22 @@ services:
   queue:
     build:
       context: ./raku-backend
-      dockerfile: Dockerfile.prod
     container_name: queue
-    command: php /var/www/backend/artisan queue:work --sleep=3 --tries=3 --timeout=90
-    environment:
-      - QUEUE_CONNECTION=database
+    working_dir: /var/www/backend
+    volumes:
+      - ./raku-backend:/var/www/backend
+    command: php artisan queue:work --verbose --tries=3 --timeout=90
+    restart: always
     depends_on:
       - db
-      - backend
-    restart: on-failure
+    environment:
+      - QUEUE_CONNECTION=database
     networks:
-      - app-network
-    volumes:
-      - backend-storage:/var/www/backend
+      - app-network  
 
   db:
     image: mysql:8
-    container_name: mysql-db2
+    container_name: mysql-db
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: raku_db
