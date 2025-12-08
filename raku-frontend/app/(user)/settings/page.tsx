@@ -39,7 +39,7 @@ export default function SettingsPage() {
     <div className="">
       <BreadCrumb breadCrumbData={breadCrumbData} />
 
-      <div className="mt-5 lg:px-10 lg:pb-10">
+      <div className="mt-5">
         <UserHeadline mainText="Settings" subText="" preText="" />
         <div className="w-full bg-white rounded-2xl shadow-xl p-8 mt-5">
           <div className="grid sm:grid-cols-2 gap-6">

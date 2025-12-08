@@ -175,8 +175,10 @@ export default function MockExamResult() {
                                 </span>
                                 <span className="text-purple-600 font-semibold">
                                   Score:{" "}
-                                  {(c?.correct_listening_answer ?? 0) *
-                                    c?.per_question_mark}
+                                  {Math.ceil(
+                                    (c?.correct_listening_answer ?? 0) *
+                                      c?.per_question_mark
+                                  )}
                                 </span>
                               </div>
                             </td>
@@ -193,16 +195,19 @@ export default function MockExamResult() {
                                 </span>
                                 <span className="text-purple-600 font-semibold">
                                   Score:{" "}
-                                  {(c?.correct_reading_answer ?? 0) *
-                                    c?.per_question_mark}
+                                  {Math.ceil(
+                                    (c?.correct_reading_answer ?? 0) *
+                                      c?.per_question_mark
+                                  )}
                                 </span>
                               </div>
                             </td>
                             <td className="p-3 border-t border-gray-200 capitalize font-bold text-purple-700 text-lg">
                               {Math.round(
-                                (c?.correct_listening_answer ?? 0) +
-                                  (c?.correct_reading_answer ?? 0)
-                              ) * c?.per_question_mark}
+                                ((c?.correct_listening_answer ?? 0) +
+                                  (c?.correct_reading_answer ?? 0)) *
+                                  c?.per_question_mark
+                              )}
                             </td>
                             <td className="p-3 border-t border-gray-200 capitalize text-xs font-medium">
                               {((c?.correct_listening_answer ?? 0) +
@@ -274,8 +279,10 @@ export default function MockExamResult() {
                               </span>
                               <span className="text-purple-500 font-semibold">
                                 Score:{" "}
-                                {(c?.correct_listening_answer ?? "N/A") *
-                                  c.per_question_mark}
+                                {Math.round(
+                                  (c?.correct_listening_answer ?? "N/A") *
+                                    c.per_question_mark
+                                )}
                               </span>
                             </div>
                           </div>
@@ -295,8 +302,10 @@ export default function MockExamResult() {
                               </span>
                               <span className="text-purple-500 font-semibold">
                                 Score:{" "}
-                                {(c?.correct_reading_answer ?? "N/A") *
-                                  c.per_question_mark}
+                                {Math.round(
+                                  (c?.correct_reading_answer ?? "N/A") *
+                                    c.per_question_mark
+                                )}
                               </span>
                             </div>
                           </div>
@@ -306,9 +315,10 @@ export default function MockExamResult() {
                             </p>
                             <p className="text-purple-500 font-semibold text-xs">
                               {Math.round(
-                                (c?.correct_listening_answer ?? 0) +
-                                  (c?.correct_reading_answer ?? 0)
-                              ) * c?.per_question_mark}
+                                ((c?.correct_listening_answer ?? 0) +
+                                  (c?.correct_reading_answer ?? 0)) *
+                                  c?.per_question_mark
+                              )}
                             </p>
                           </div>
                         </div>

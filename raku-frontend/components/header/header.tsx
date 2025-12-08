@@ -136,8 +136,8 @@ export default function Header() {
             </p>
           </div>
 
-          <div className="bg-white grid grid-cols-1 rounded-md text-sm shadow absolute right-1/2 translate-x-1/2 top-[40px] scale-0 group-hover:scale-100 w-[200px] h-[180px] overflow-clip duration-400 origin-top outline outline-gray-200">
-            {SidebarData.slice(0, 4).map((item, i) => (
+          <div className="bg-white grid grid-cols-1 rounded-md text-sm shadow absolute right-1/2 translate-x-1/2 top-[40px] scale-0 group-hover:scale-100 w-[200px] h-[270px] overflow-clip duration-400 origin-top outline outline-gray-200">
+            {SidebarData.map((item, i) => (
               <Link
                 key={i}
                 href={item.to}
