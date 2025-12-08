@@ -41,6 +41,7 @@
                 <th class="border border-gray-300 px-4 py-3 text-left">Email</th>
                 <th class="border border-gray-300 px-4 py-3 text-left">Gender</th>
                 <th class="border border-gray-300 px-4 py-3 text-left">Phone</th>
+                <th class="border border-gray-300 px-4 py-3 text-left">Registration Date <br> (m-d-y)</th>
                 <th class="border border-gray-300 px-4 py-3 text-left">Status</th>
                 <th class="border border-gray-300 px-4 py-3 text-left">Action</th>
             </tr>
@@ -93,6 +94,10 @@
                 {
                     data: 'phone_number',
                     name: 'phone_number'
+                },
+                {
+                    data: 'created_at',
+                    name: 'created_at'
                 },
                 {
                     data: 'status',

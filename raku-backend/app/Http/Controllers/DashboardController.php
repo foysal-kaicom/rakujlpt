@@ -21,7 +21,7 @@ class DashboardController extends Controller
         $practice_count = Roadmap::count();
         $package_count = Package::where('status', 1)->count();
 
-        $recent_mock_tests = Exam::orderBy('created_at', 'desc')->select('title', 'name', 'created_at')->take(3)->get();
+        $recent_mock_tests = Exam::orderBy('created_at', 'desc')->select('id','title', 'name', 'created_at')->take(3)->get();
 
         $recent_subscriptions = UserSubscription::with([
             'package:id,name',
@@ -36,6 +36,7 @@ class DashboardController extends Controller
             $count = $exam->mock_test_records_count;
             $percentage = $totalRecords ? round(($count / $totalRecords) * 100, 2) : 0;
             return [
+            'id' => $exam->id, 
             'title' => $exam->title,
             'count' => $count,
             'percentage' => $percentage,
