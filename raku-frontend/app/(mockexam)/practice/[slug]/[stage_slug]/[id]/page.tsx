@@ -535,7 +535,7 @@ export default function PracticeQuestion() {
                       <div className="flex gap-3">
                         <Lightbulb className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5 shake-pause" />
                         {currentQuestion?.question_type === "audio" ? (
-                          <>{currentQuestion.hints}</>
+                          <AIHint hint={currentQuestion.hints || ''} />
                         ) : loadingHint ? (
                           <p className="text-gray-800 font-medium">
                             Thinking

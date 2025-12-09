@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import parse from "html-react-parser";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/useAuthStore";
 import Link from "next/link";

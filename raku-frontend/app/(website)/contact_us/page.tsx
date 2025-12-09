@@ -20,7 +20,7 @@ export default function ContactUs() {
 
   return (
     <Suspense fallback={<SuspenseLoader />}>
-      <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-purple-100 via-pink-50 to-blue-100 pt-5">
+      <div className="relative min-h-screen overflow-hidden bg-linear-to-b from-purple-100 via-pink-50 to-blue-100 pt-5">
         {/* Funky background blobs */}
         <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-pink-300/40 rounded-full blur-[100px] -z-10"></div>
         <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-300/40 rounded-full blur-[120px] -z-10"></div>
@@ -30,7 +30,7 @@ export default function ContactUs() {
 
           <div className="w-full text-center mt-10 mb-14">
             <h1 className="text-5xl font-extrabold">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-700 via-pink-500 to-blue-500">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-purple-700 via-pink-500 to-blue-500">
                 Get in Touch
               </span>{" "}
               💬

@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function RoadmapSection() {
-  const [activeIndex, setActiveIndex] = useState(2);
+  const [activeIndex, setActiveIndex] = useState(1);
 
   const steps = [
     {
@@ -52,6 +52,14 @@ export default function RoadmapSection() {
         return { translate: "0%", scale: 0.8, z: 1, opacity: 0.3 };
     }
   };
+
+  useEffect(() => {
+  const timer = setTimeout(() => {
+    setActiveIndex(prev => (prev === 5 ? 1 : prev + 1));
+  }, 4000);
+
+  return () => clearTimeout(timer);
+}, [activeIndex]);
 
   return (
     <section className="py-20 relative overflow-hidden bg-gradient-to-r from-pink-50/50 via-indigo-50/50 to-blue-50/50">
