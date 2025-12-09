@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\CandidateProgressController;
 use App\Http\Controllers\Api\SslCommerzPaymentController;
 use App\Http\Controllers\Api\CertificateController;
+use App\Http\Controllers\Api\ReviewController;
 
 Route::prefix('v1')->group(function () {
         
@@ -80,9 +81,9 @@ Route::prefix('v1')->group(function () {
     
         });
 
-        // Route::group(['prefix' => 'exam', 'as' => 'exam.'], function () {
-        //     Route::post('/booking/store/{slug}', [BookingController::class, 'book']);
-        // });
+        Route::group(['prefix' => 'review'], function () {
+            Route::post('/submit', [ReviewController::class, 'submitReview']);
+        });
 
 
         Route::group(['prefix' => 'notifications', 'as' => 'notifications.'], function () {
