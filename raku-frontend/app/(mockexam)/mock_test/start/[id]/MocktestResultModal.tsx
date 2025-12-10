@@ -60,7 +60,7 @@ export default function MocktestResultModal({
         rating: rating,
         exam_id: id,
       });
-      toast.success(res.data.data || "Review sent successfully");
+      toast.success(res.data.message || "Review sent successfully");
       setRating(0);
       setComment("");
       setIsOpen(false);

@@ -19,6 +19,7 @@ import MocktestResultModal from "./MocktestResultModal";
 import MocktestHeader from "./MocktestHeader";
 import MocktestSidebar from "./MocktestSidebar";
 import MocktestMainContent from "./MocktestMainContent";
+import AnswerConsent from "./Answerconsent";
 
 /* -------------------- Types -------------------- */
 interface QuestionOption {
@@ -92,6 +93,8 @@ export default function ExamPage() {
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
+  const [consent, setConsent] = useState(false);
+  const [showConsent, setShowConsent] = useState(false);
 
   /* -------------------- Exam Store -------------------- */
   const {
@@ -266,48 +269,57 @@ export default function ExamPage() {
     questions.length - 1 - [...questions].reverse().findIndex(hasQuestions);
 
   const handleSubmit = async () => {
-    if (isSubmitted) return;
+    if (consent && showConsent) {
+      console.log("true");
+      if (isSubmitted) return;
 
-    try {
-      setLoading(true);
-      const payload = Object.entries(answers).map(
-        ([questionId, selectedOption]) => ({
-          id: Number(questionId),
-          answer: Number(selectedOption),
-        })
-      );
+      try {
+        setLoading(true);
+        const payload = Object.entries(answers).map(
+          ([questionId, selectedOption]) => ({
+            id: Number(questionId),
+            answer: Number(selectedOption),
+          })
+        );
 
-      const response = await axiosInstance.post(
-        `/mock-test/submit-answer?exam_id=${id}&total_questions=${totalQuestions}`,
-        payload
-      );
+        const response = await axiosInstance.post(
+          `/mock-test/submit-answer?exam_id=${id}&total_questions=${totalQuestions}`,
+          payload
+        );
 
-      setResult({
-        readingAnswered: response?.data?.data?.reading_answered ?? 0,
-        correctReadingAnswer: response?.data?.data?.correct_reading_answer ?? 0,
-        wrongReadingAnswer: response?.data?.data?.wrong_reading_answer ?? 0,
-        listeningAnswered: response?.data?.data?.listening_answered ?? 0,
-        correctListeningAnswer:
-          response?.data?.data?.correct_listening_answer ?? 0,
-        wrongListeningAnswer: response?.data?.data?.wrong_listening_answer ?? 0,
-        per_question_mark: response?.data?.data?.per_question_mark ?? 0,
-      });
+        setResult({
+          readingAnswered: response?.data?.data?.reading_answered ?? 0,
+          correctReadingAnswer:
+            response?.data?.data?.correct_reading_answer ?? 0,
+          wrongReadingAnswer: response?.data?.data?.wrong_reading_answer ?? 0,
+          listeningAnswered: response?.data?.data?.listening_answered ?? 0,
+          correctListeningAnswer:
+            response?.data?.data?.correct_listening_answer ?? 0,
+          wrongListeningAnswer:
+            response?.data?.data?.wrong_listening_answer ?? 0,
+          per_question_mark: response?.data?.data?.per_question_mark ?? 0,
+        });
 
-      setIsSubmitted(true);
-      stopExam();
-      clearAnswers();
-      toast.success("Exam submitted successfully!");
+        setIsSubmitted(true);
+        stopExam();
+        clearAnswers();
+        toast.success("Exam submitted successfully!");
 
-      timeoutRef.current = setTimeout(() => {
-        setIsSubmitted(false);
-        router.back();
-      }, 3 * 60 * 1000);
-    } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message || "Cannot submit your answer"
-      );
-    } finally {
-      setLoading(false);
+        timeoutRef.current = setTimeout(() => {
+          setIsSubmitted(false);
+          router.back();
+        }, 3 * 60 * 1000);
+      } catch (error: any) {
+        toast.error(
+          error?.response?.data?.message || "Cannot submit your answer"
+        );
+      } finally {
+        setLoading(false);
+        setShowConsent(false);
+      }
+    } else {
+      setShowConsent(true);
+      setConsent(true);
     }
   };
 
@@ -334,50 +346,64 @@ export default function ExamPage() {
 
   /* -------------------- Exam Screen -------------------- */
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 to-slate-100">
-      {/* Header */}
-      <MocktestHeader
-        formatTime={formatTime}
-        examTitle={examTitle}
-        currentSection={currentSection}
-        timeRemaining={timeRemaining}
-        sliderRef={sliderRef}
-        currentSectionIndex={currentSectionIndex}
-        scroll={scroll}
-        questions={questions}
-        setCurrentSectionIndex={setCurrentSectionIndex}
-        answers={answers}
-      />
+    <>
+      {!showConsent ? (
+        <div className="min-h-screen bg-linear-to-br from-gray-50 to-slate-100">
+          {/* Header */}
+          <MocktestHeader
+            formatTime={formatTime}
+            examTitle={examTitle}
+            currentSection={currentSection}
+            timeRemaining={timeRemaining}
+            sliderRef={sliderRef}
+            currentSectionIndex={currentSectionIndex}
+            scroll={scroll}
+            questions={questions}
+            setCurrentSectionIndex={setCurrentSectionIndex}
+            answers={answers}
+          />
 
-      {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Sidebar */}
-        <MocktestSidebar
-          currentSection={currentSection}
-          sidebarShow={sidebarShow}
-          setSidebarShow={setSidebarShow}
-          answeredQuestions={answeredQuestions}
-          totalQuestions={totalQuestions}
-          answers={answers}
-          questionRefs={questionRefs}
-          getGlobalQuestionNumber={getGlobalQuestionNumber}
-        />
+          {/* Content */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
+            {/* Sidebar */}
+            <MocktestSidebar
+              currentSection={currentSection}
+              sidebarShow={sidebarShow}
+              setSidebarShow={setSidebarShow}
+              answeredQuestions={answeredQuestions}
+              totalQuestions={totalQuestions}
+              answers={answers}
+              questionRefs={questionRefs}
+              getGlobalQuestionNumber={getGlobalQuestionNumber}
+            />
 
-        {/* Main Content */}
-        <MocktestMainContent
-          currentSection={currentSection}
-          stepHeadingIcons={stepHeadingIcons}
-          questionRefs={questionRefs}
+            {/* Main Content */}
+            <MocktestMainContent
+              currentSection={currentSection}
+              stepHeadingIcons={stepHeadingIcons}
+              questionRefs={questionRefs}
+              getGlobalQuestionNumber={getGlobalQuestionNumber}
+              handleAnswerChange={handleAnswerChange}
+              answers={answers}
+              handlePrevious={handlePrevious}
+              isFirstStep={isFirstStep()}
+              isLastStep={isLastStep()}
+              handleSubmit={handleSubmit}
+              handleNext={handleNext}
+            />
+          </div>
+        </div>
+      ) : (
+        <AnswerConsent
+          questions={questions}
           getGlobalQuestionNumber={getGlobalQuestionNumber}
-          handleAnswerChange={handleAnswerChange}
           answers={answers}
-          handlePrevious={handlePrevious}
-          isFirstStep={isFirstStep()}
-          isLastStep={isLastStep()}
+          setCurrentSectionIndex={setCurrentSectionIndex}
+          questionRefs={questionRefs}
           handleSubmit={handleSubmit}
-          handleNext={handleNext}
+          setShowConsent={setShowConsent}
         />
-      </div>
-    </div>
+      )}
+    </>
   );
 }
