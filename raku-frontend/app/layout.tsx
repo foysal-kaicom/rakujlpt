@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import "../css/globals.css";
 import { Toaster } from "sonner";
 import RouteLoader from "@/components/RouteLoader";
+import MetaPixel from "@/components/MetaPixel";
 
 export const metadata: Metadata = {
-  title: "Raku - Mock Test",
+  title: "Raku JLPT - Mock Test",
   description:
     "Register for the Japanese Proficiency Mock Test. Access an international Japanese language mock test platform with practice exams, scoring, and performance tracking for JLPT and JPT-style tests",
   keywords: [
@@ -86,8 +87,14 @@ export default function RootLayout({
     <html lang="en">
       <body className="max-w-[2000px] mx-auto">
         <RouteLoader />
+        <MetaPixel />
         {children}
-        <Toaster position="top-center" richColors duration={3000} closeButton={true}/>
+        <Toaster
+          position="top-center"
+          richColors
+          duration={3000}
+          closeButton={true}
+        />
       </body>
     </html>
   );

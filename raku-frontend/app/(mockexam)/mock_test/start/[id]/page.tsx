@@ -327,6 +327,7 @@ export default function ExamPage() {
         result={result}
         setIsSubmitted={setIsSubmitted}
         moduleQuestionCounts={moduleQuestionCounts}
+        id={id}
       />
     );
   }
