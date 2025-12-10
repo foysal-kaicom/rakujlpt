@@ -32,12 +32,17 @@ export const config = {
     "/mock_test_result",
     "/support",
     "/update_password",
+    "/my_prectice",
+    "/settings",
+    "/my_subscriptions",
+    "/my_wallet",
 
     "/checkout/(.*)",
     "/payment-success/(.*)",
     "/payment-failed/(.*)",
     "/payment-cancle/(.*)",
     "/otp_verify",
-    "/mock_test/start/(.*)"
+    "/mock_test/start/(.*)",
+    "/practice/(.*)"
   ],
 };

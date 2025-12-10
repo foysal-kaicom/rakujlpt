@@ -6,6 +6,9 @@ import { FaStar } from "react-icons/fa";
 
 import CircularProgress from "@/components/CircularProgress";
 
+import axiosInstance from "@/utils/axios";
+import { toast } from "sonner";
+
 interface ExamResult {
   readingAnswered: number;
   correctReadingAnswer: number;
@@ -25,24 +28,47 @@ interface MocktestResultModalProps {
   result: ExamResult | null; // can be null
   setIsSubmitted: (value: boolean) => void; // because you call setIsSubmitted
   moduleQuestionCounts: ModuleQuestionCounts;
+  id: number | string;
 }
 
 export default function MocktestResultModal({
   result,
   setIsSubmitted,
   moduleQuestionCounts,
+  id,
 }: MocktestResultModalProps) {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {
-    if (rating === 0 || comment.trim() === "") return; // simple validation
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    if (rating === 0) {
+      toast.error("Please add a rating");
+      return;
+    }
 
-    // onSubmit({ name: "User", rating, comment });
-    setRating(0);
-    setComment("");
-    // onClose();
+    if (comment.trim() === "") {
+      toast.error("Comment cannot be empty");
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await axiosInstance.post(`/review/submit`, {
+        body: comment,
+        rating: rating,
+        exam_id: id,
+      });
+      toast.success(res.data.message || "Review sent successfully");
+      setRating(0);
+      setComment("");
+      setIsOpen(false);
+    } catch (err: any) {
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -124,9 +150,12 @@ export default function MocktestResultModal({
             Go to your profile to see details
           </Link>
 
-          {/* <button onClick={() => setIsOpen(true)} className="text-white text-center px-3 py-1.5 rounded-md bg-purple-500 hover:opacity-80 duration-300 drop-shadow drop-shadow-amber-50">
+          <button
+            onClick={() => setIsOpen(true)}
+            className="text-white text-center px-3 py-1.5 rounded-md bg-purple-500 hover:opacity-80 duration-300 drop-shadow drop-shadow-amber-50"
+          >
             Rate Us
-          </button> */}
+          </button>
 
           <button
             onClick={() => setIsSubmitted(false)}
@@ -177,7 +206,7 @@ export default function MocktestResultModal({
               onClick={handleSubmit}
               className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 w-full cursor-pointer"
             >
-              Submit
+              {loading ? "Submiting .." : "Submit"}
             </button>
           </div>
         </div>

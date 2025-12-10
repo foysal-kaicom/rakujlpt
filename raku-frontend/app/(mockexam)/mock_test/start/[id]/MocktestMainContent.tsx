@@ -197,7 +197,7 @@ export default function MocktestMainContent({
 
                             {/* Options */}
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
-                              {Object.entries(parsedOptions).map(
+                              {Object.entries(parsedOptions).filter(([_, option]) => option && option.trim() !== "").map(
                                 ([key, option], index) => (
                                   <label
                                     key={key}

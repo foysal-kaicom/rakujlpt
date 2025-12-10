@@ -2,54 +2,55 @@ import type { Metadata } from "next";
 import "../css/globals.css";
 import { Toaster } from "sonner";
 import RouteLoader from "@/components/RouteLoader";
+import MetaPixel from "@/components/MetaPixel";
 
 export const metadata: Metadata = {
-  title: "Raku - Mock Test",
+  title: "Raku JLPT - Mock Test",
   description:
     "Register for the Japanese Proficiency Mock Test. Access an international Japanese language mock test platform with practice exams, scoring, and performance tracking for JLPT and JPT-style tests",
   keywords: [
     "Raku JLPT",
-    "Japanese Proficiency Test",
-    "JPT registration",
-    "JPLT registration",
-    "Japanese mock exam",
-    "JPT test dates",
-    "JPLT test dates",
-    "study in Japan",
-    "JLPT",
-    "JPT",
-    "Japanese language test online",
-    "Japanese language practice test",
-    "LPT mock test online",
-    "JPT online mock test",
-    "Japanese proficiency exam practice",
-    "Japanese grammar test online",
-    "JLPT preparation test",
-    "JLPT sample questions",
-    "Practice Japanese vocabulary test",
-    "Japanese listening mock test",
-    "Japanese reading mock test",
-    "Japanese language Proficiency Test",
-    "Japanese language parctice test",
-    "Study in japan",
-    "Learn japanese language ",
-    "JLPT practice test",
-    "JPT practice test",
-    "Raku Practice test",
-    "Practice JLPT",
-    "Practice JPT",
-    "Practice JLPT online",
-    "Practice JPT online",
-    "How to learn Japanese Language online",
-    "Learn Japanese language online",
-    "Online japanese practice test",
-    "online japanese learning center",
-    "Website for japanese language learning",
-    "Japanese learning practice website",
-    "practice japanese language for free",
-    "free japanese language test online",
-    "Practice JLPT for free",
-    "Practice JPT for free",
+    // "Japanese Proficiency Test",
+    // "JPT registration",
+    // "JPLT registration",
+    // "Japanese mock exam",
+    // "JPT test dates",
+    // "JPLT test dates",
+    // "study in Japan",
+    // "JLPT",
+    // "JPT",
+    // "Japanese language test online",
+    // "Japanese language practice test",
+    // "JLPT mock test online",
+    // "JPT online mock test",
+    // "Japanese proficiency exam practice",
+    // "Japanese grammar test online",
+    // "JLPT preparation test",
+    // "JLPT sample questions",
+    // "Practice Japanese vocabulary test",
+    // "Japanese listening mock test",
+    // "Japanese reading mock test",
+    // "Japanese language Proficiency Test",
+    // "Japanese language parctice test",
+    // "Study in japan",
+    // "Learn japanese language ",
+    // "JLPT practice test",
+    // "JPT practice test",
+    // "Raku Practice test",
+    // "Practice JLPT",
+    // "Practice JPT",
+    // "Practice JLPT online",
+    // "Practice JPT online",
+    // "How to learn Japanese Language online",
+    // "Learn Japanese language online",
+    // "Online japanese practice test",
+    // "online japanese learning center",
+    // "Website for japanese language learning",
+    // "Japanese learning practice website",
+    // "practice japanese language for free",
+    // "free japanese language test online",
+    // "Practice JLPT for free",
+    // "Practice JPT for free",
   ],
   authors: [{ name: "Raku JLPT", url: "https://rakujlpt.com" }],
   alternates: {
@@ -86,8 +87,14 @@ export default function RootLayout({
     <html lang="en">
       <body className="max-w-[2000px] mx-auto">
         <RouteLoader />
+        <MetaPixel />
         {children}
-        <Toaster position="top-center" richColors duration={3000} closeButton={true}/>
+        <Toaster
+          position="top-center"
+          richColors
+          duration={3000}
+          closeButton={true}
+        />
       </body>
     </html>
   );
