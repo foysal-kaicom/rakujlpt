@@ -5,7 +5,6 @@ import { Html5QrcodeScanner } from "html5-qrcode";
 import BreadCrumb from "@/components/BreadCrumb";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 export default function QRScannerPage() {
   const breadCrumbData = [

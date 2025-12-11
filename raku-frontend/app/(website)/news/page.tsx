@@ -7,10 +7,21 @@ import SuspenseLoader from "@/components/SuspenseLoader";
 import NewsComponent from "./NewsComponent";
 
 export const metadata: Metadata = {
-  title: "Blogs",
+  title: "Raku JLPT News – Updates on JLPT, JPT & NAT Exams",
   description:
-    "Discover blogs on Japanese language learning, exam preparation tips, study guides, and updates for JPT, JLPT, and NAT learners. Learn smarter with Raku’s expert content. Boost your Japanese proficiency with the Raku blog — packed with study tips, exam guidance, learning techniques, and insights for JPT, JLPT, and NAT success.",
+    "Stay updated with the latest JLPT, JPT, and NAT exam news. Get announcements, policy changes, exam schedules, study updates, and important information for Japanese language learners from Raku JLPT.",
+  keywords: [
+    "JLPT news",
+    "JPT exam updates",
+    "NAT test news",
+    "Japanese language exam news",
+    "JLPT announcements",
+    "JPT latest news",
+    "Japanese proficiency test updates",
+    "Raku JLPT news",
+  ],
 };
+
 
 export default function AllNewsPage() {
   const breadCrumbData = [

@@ -141,11 +141,7 @@ const PackagesComponent = () => {
           </div>
 
           <div
-            className={`gap-8 ${
-              paginatedPlans.length < 3
-                ? "flex flex-col sm:flex-row justify-center items-center sm:items-stretch"
-                : "grid md:grid-cols-2 lg:grid-cols-3 lg:max-w-5xl mx-auto justify-center"
-            }`}
+            className={`gap-8 flex flex-wrap justify-center`}
           >
             {paginatedPlans.map((plan, index) => (
               <PricingCard

@@ -96,6 +96,10 @@ export default function ExamPage() {
   const [consent, setConsent] = useState(false);
   const [showConsent, setShowConsent] = useState(false);
 
+  const [moduleList, setModuleList] = useState<string[]>([]);
+  const [currentModule, setCurrentModule] = useState<string>("");
+  const [sectionList, setSectionList] = useState<ExamSection[]>([]);
+
   /* -------------------- Exam Store -------------------- */
   const {
     answers,
@@ -109,7 +113,7 @@ export default function ExamPage() {
     stopExam,
   } = useExamStore();
 
-  const currentSection = questions[currentSectionIndex] ?? null;
+  const currentSection = sectionList[currentSectionIndex] ?? null;
 
   const stepHeadingIcons: Record<string, ReactNode> = {
     "photo-description": <FaRegImage className="size-8" />,
@@ -181,6 +185,17 @@ export default function ExamPage() {
         setExamTitle(response.data.data.exam_title);
         setCurrentSectionIndex(0);
 
+        const uniqueModules = [
+          ...new Set(
+            response.data.data.sections.map(
+              (sec: ExamSection) => sec.module_name
+            )
+          ),
+        ] as string[];
+
+        setModuleList(uniqueModules);
+        setCurrentModule(uniqueModules[0]);
+
         const duration = Number(response.data.data.exam_duration); // convert to number
         setTimeRemaining(duration * 60);
 
@@ -198,6 +213,23 @@ export default function ExamPage() {
 
     fetchQuestions();
   }, [examStarted, isSubmitted]);
+
+ /* -------------------- current section list -------------------- */
+  useEffect(() => {
+  if (!currentModule || questions.length === 0) return;
+
+  const filtered = questions.filter(
+    (sec) => sec.module_name === currentModule
+  );
+
+  setSectionList(filtered);
+}, [currentModule, questions]);
+
+ /* -------------------- current module  change -------------------- */
+const handleModuleClick = (moduleName: string) => {
+  setCurrentModule(moduleName);
+};
+
 
   /* -------------------- Route Guard -------------------- */
   useEffect(() => {
@@ -361,6 +393,10 @@ export default function ExamPage() {
             questions={questions}
             setCurrentSectionIndex={setCurrentSectionIndex}
             answers={answers}
+            currentModule={currentModule} 
+            handleModuleClick={handleModuleClick}
+            moduleList={moduleList}    
+            sectionList={sectionList} 
           />
 
           {/* Content */}
