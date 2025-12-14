@@ -84,7 +84,7 @@ export default function ExamPage() {
   const [examTitle, setExamTitle] = useState<string>(
     "Japanese Language Proficiency Exam"
   );
-  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(5);
   const [loading, setLoading] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [sidebarShow, setSidebarShow] = useState(false);
@@ -99,6 +99,7 @@ export default function ExamPage() {
   const [moduleList, setModuleList] = useState<string[]>([]);
   const [currentModule, setCurrentModule] = useState<string>("");
   const [sectionList, setSectionList] = useState<ExamSection[]>([]);
+  const [ignoreModuleEffect, setIgnoreModuleEffect] = useState(false);
 
   /* -------------------- Exam Store -------------------- */
   const {
@@ -214,22 +215,21 @@ export default function ExamPage() {
     fetchQuestions();
   }, [examStarted, isSubmitted]);
 
- /* -------------------- current section list -------------------- */
+  /* -------------------- current section list -------------------- */
   useEffect(() => {
-  if (!currentModule || questions.length === 0) return;
+    if (!currentModule || questions.length === 0) return;
 
-  const filtered = questions.filter(
-    (sec) => sec.module_name === currentModule
-  );
+    const filtered = questions.filter(
+      (sec) => sec.module_name === currentModule
+    );
 
-  setSectionList(filtered);
-}, [currentModule, questions]);
+    setSectionList(filtered);
+  }, [currentModule, questions]);
 
- /* -------------------- current module  change -------------------- */
-const handleModuleClick = (moduleName: string) => {
-  setCurrentModule(moduleName);
-};
-
+  /* -------------------- current module  change -------------------- */
+  const handleModuleClick = (moduleName: string) => {
+    setCurrentModule(moduleName);
+  };
 
   /* -------------------- Route Guard -------------------- */
   useEffect(() => {
@@ -277,28 +277,96 @@ const handleModuleClick = (moduleName: string) => {
 
   const handlePrevious = () => {
     let prevIndex = currentSectionIndex - 1;
-    while (prevIndex >= 0 && !hasQuestions(questions[prevIndex])) prevIndex--;
+    while (prevIndex >= 0 && !hasQuestions(sectionList[prevIndex])) {
+      prevIndex--;
+    }
+
     if (prevIndex >= 0) {
       setCurrentSectionIndex(prevIndex);
       window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
     }
+    const currentModuleIndex = moduleList.indexOf(currentModule);
+    const prevModuleIndex = currentModuleIndex - 1;
+
+    if (prevModuleIndex < 0) return;
+
+    const prevModule = moduleList[prevModuleIndex];
+    const prevModuleSections = questions.filter(
+      (sec) => sec.module_name === prevModule
+    );
+    let lastValidIndex = -1;
+    for (let i = prevModuleSections.length - 1; i >= 0; i--) {
+      if (hasQuestions(prevModuleSections[i])) {
+        lastValidIndex = i;
+        break;
+      }
+    }
+
+    if (lastValidIndex === -1) return;
+    setCurrentModule(prevModule);
+    setCurrentSectionIndex(lastValidIndex);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleNext = () => {
     let nextIndex = currentSectionIndex + 1;
-    while (nextIndex < questions.length && !hasQuestions(questions[nextIndex]))
+    while (
+      nextIndex < sectionList.length &&
+      !hasQuestions(sectionList[nextIndex])
+    ) {
       nextIndex++;
-    if (nextIndex < questions.length) {
+    }
+
+    if (nextIndex < sectionList.length) {
       setCurrentSectionIndex(nextIndex);
       window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
     }
+    const currentModuleIndex = moduleList.indexOf(currentModule);
+    const nextModuleIndex = currentModuleIndex + 1;
+
+    if (nextModuleIndex >= moduleList.length) return;
+
+    const nextModule = moduleList[nextModuleIndex];
+    const nextModuleSections = questions.filter(
+      (sec) => sec.module_name === nextModule
+    );
+    const firstValidIndex = nextModuleSections.findIndex(hasQuestions);
+
+    if (firstValidIndex === -1) return;
+    setCurrentModule(nextModule);
+    setCurrentSectionIndex(firstValidIndex);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const isFirstStep = () =>
-    currentSectionIndex === questions.findIndex(hasQuestions);
-  const isLastStep = () =>
-    currentSectionIndex ===
-    questions.length - 1 - [...questions].reverse().findIndex(hasQuestions);
+  useEffect(() => {
+    if (ignoreModuleEffect) {
+      setIgnoreModuleEffect(false);
+      return;
+    }
+    setCurrentSectionIndex(0);
+  }, [currentModule]);
+
+  const isFirstStep = () => {
+    const firstModule = moduleList[0];
+    if (currentModule !== firstModule) return false;
+
+    const firstValidIndex = sectionList.findIndex(hasQuestions);
+    return currentSectionIndex === firstValidIndex;
+  };
+
+  const isLastStep = () => {
+    const lastModule = moduleList[moduleList.length - 1];
+    if (currentModule !== lastModule) return false;
+
+    const lastValidIndex =
+      sectionList.length -
+      1 -
+      [...sectionList].reverse().findIndex(hasQuestions);
+
+    return currentSectionIndex === lastValidIndex;
+  };
 
   const handleSubmit = async () => {
     if (consent && showConsent) {
@@ -361,6 +429,8 @@ const handleModuleClick = (moduleName: string) => {
     };
   }, []);
 
+  // console.log(questionRefs)
+
   /* -------------------- Render -------------------- */
   if (loading) return <SkeletonMockExam />;
 
@@ -385,18 +455,16 @@ const handleModuleClick = (moduleName: string) => {
           <MocktestHeader
             formatTime={formatTime}
             examTitle={examTitle}
-            currentSection={currentSection}
             timeRemaining={timeRemaining}
             sliderRef={sliderRef}
             currentSectionIndex={currentSectionIndex}
             scroll={scroll}
-            questions={questions}
             setCurrentSectionIndex={setCurrentSectionIndex}
             answers={answers}
-            currentModule={currentModule} 
+            currentModule={currentModule}
             handleModuleClick={handleModuleClick}
-            moduleList={moduleList}    
-            sectionList={sectionList} 
+            moduleList={moduleList}
+            sectionList={sectionList}
           />
 
           {/* Content */}
@@ -438,6 +506,8 @@ const handleModuleClick = (moduleName: string) => {
           questionRefs={questionRefs}
           handleSubmit={handleSubmit}
           setShowConsent={setShowConsent}
+          setCurrentModule={setCurrentModule}
+          setIgnoreModuleEffect={setIgnoreModuleEffect}
         />
       )}
     </>
