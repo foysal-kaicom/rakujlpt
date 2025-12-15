@@ -7,9 +7,11 @@ import PackagesSkeleton from "./PackageSkeleton";
 
 // Metadata
 export const metadata: Metadata = {
-  title: "Subscription packages",
-  description: "Here the packages can be found for subscription",
+  title: "Pricing & Subscription Packages",
+  description:
+    "Find the perfect Raku subscription plan for your Japanese language learning. Explore pricing options for JPT, JLPT, and NAT exam preparation — flexible, affordable packages designed for every learner.",
 };
+
 
 export default function SignInPageWrapper() {
   return (
