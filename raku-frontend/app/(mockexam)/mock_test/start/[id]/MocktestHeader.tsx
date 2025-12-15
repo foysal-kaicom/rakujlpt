@@ -74,7 +74,7 @@ export default function MocktestHeader({
           </div>
 
           <div className="flex items-center space-x-4 justify-center">
-            <div className="relative flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-r from-red-500 via-rose-500 to-pink-500 shadow-lg shadow-red-500/30 w-[150px] shake-pause">
+            <div className="relative flex items-center gap-3 p-1 rounded-full bg-gradient-to-r from-red-500 via-rose-500 to-pink-500 shadow-lg shadow-red-500/30 w-[150px] shake-pause">
               {/* Glow */}
               <div className="absolute inset-0 rounded-2xl blur-xl bg-red-400/40 -z-10" />
 
@@ -84,7 +84,7 @@ export default function MocktestHeader({
               </div>
 
               {/* Time */}
-              <span className="text-white font-mono tracking-widest font-bold">
+              <span className="text-white text-xl font-mono tracking-widest font-bold">
                 {formatTime(timeRemaining)}
               </span>
             </div>
