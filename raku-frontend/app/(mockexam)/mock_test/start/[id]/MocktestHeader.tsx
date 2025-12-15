@@ -68,17 +68,13 @@ export default function MocktestHeader({
       <div className="sticky top-0 z-20 bg-linear-to-r from-purple-300 to-violet-300 pb-3">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row gap-5 justify-between md:items-center">
           <div>
-            <h1 className="text-2xl font-bold bg-linear-to-b from-violet-700 via-fuchsia-700 to-purple-700 bg-clip-text text-transparent text-center">
+            <h1 className="text-2xl font-bold bg-linear-to-l from-violet-800 via-fuchsia-700 to-purple-800 bg-clip-text text-transparent text-center">
               {examTitle} Mocktest
             </h1>
-
-            {/* <p className="text-sm text-gray-700 mt-1 capitalize font-medium">
-              {currentSection?.module_name} part - {currentSection?.title}
-            </p> */}
           </div>
 
           <div className="flex items-center space-x-4 justify-center">
-            <div className="relative flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-r from-red-500 via-rose-500 to-pink-500 shadow-lg shadow-red-500/30 w-[150px] shake-pause">
+            <div className="relative flex items-center gap-3 p-1 rounded-full bg-gradient-to-r from-red-500 via-rose-500 to-pink-500 shadow-lg shadow-red-500/30 w-[150px] shake-pause">
               {/* Glow */}
               <div className="absolute inset-0 rounded-2xl blur-xl bg-red-400/40 -z-10" />
 
@@ -88,7 +84,7 @@ export default function MocktestHeader({
               </div>
 
               {/* Time */}
-              <span className="text-white font-mono tracking-widest font-bold">
+              <span className="text-white text-xl font-mono tracking-widest font-bold">
                 {formatTime(timeRemaining)}
               </span>
             </div>
@@ -99,10 +95,12 @@ export default function MocktestHeader({
             <button
               key={module}
               onClick={() => handleModuleClick(module)}
-              className={`${
+              className={`flex items-center gap-1 ${
                 module === currentModule ? "text-purple-700" : "text-gray-400"
               }`}
             >
+              {/* {module === currentModule && <p className="size-4 bg-purple-700 rounded-full"></p>} */}
+              <p className={`size-2 rounded-full ${module === currentModule ? "bg-purple-700 animate-ping" : "bg-gray-200"}`}></p>
               {module}
             </button>
           ))}
