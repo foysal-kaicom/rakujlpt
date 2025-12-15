@@ -399,6 +399,7 @@ class MockTestController extends Controller
 
             //store question into mockTestQuestion table
             foreach ($request->questions as $q) {
+                dd($q);
 
                 // Handle question title
                 $textOrImage = $q['question'];
