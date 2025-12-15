@@ -61,7 +61,7 @@ export default function MocktestSidebar({
     <>
       <div className="lg:col-span-1">
         {currentSection && (
-          <div className="bg-white rounded-xl outline outline-purple-200 p-6 sticky top-54">
+          <div className="bg-white rounded-xl outline outline-purple-200 p-6 sticky top-58">
             <div className="text-lg font-semibold text-gray-800 flex justify-between">
               Current Module
               <IoIosArrowDropdownCircle
@@ -86,7 +86,6 @@ export default function MocktestSidebar({
                     {currentSection.module_name}
                   </span>
                 </div>
-                {/* <p className="text-xs opacity-90">25 min • 100 points</p> */}
               </div>
 
               <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
