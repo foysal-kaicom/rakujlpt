@@ -110,11 +110,7 @@ const PricingSection = () => {
         </div>
 
         <div
-          className={`gap-8 ${
-            plansData.length < 3
-              ? "flex flex-col sm:flex-row justify-center items-center sm:items-stretch"
-              : "grid md:grid-cols-2 lg:grid-cols-3 lg:max-w-5xl mx-auto justify-center"
-          }`}
+          className={`gap-8 flex flex-wrap justify-center`}
         >
           {plansData.map((plan, index) => (
             <PricingCard
@@ -207,10 +203,10 @@ const PricingSection = () => {
         {/* Modal End */}
 
         <div className="text-center mt-12">
-          <p className="text-gray-600 mb-4">No credit card required</p>
+          <p className="text-gray-600 mb-4">No cards required</p>
           <div className="flex justify-center items-center space-x-4 text-sm text-gray-500">
+            <span>✓ No monthly fees</span>
             <span>✓ Cancel anytime</span>
-            {/* <span>✓ Money-back guarantee</span> */}
             <span>✓ 24/7 support</span>
           </div>
         </div>

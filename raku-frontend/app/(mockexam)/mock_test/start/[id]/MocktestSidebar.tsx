@@ -61,7 +61,7 @@ export default function MocktestSidebar({
     <>
       <div className="lg:col-span-1">
         {currentSection && (
-          <div className="bg-white rounded-xl outline outline-purple-200 p-6 sticky top-40">
+          <div className="bg-white rounded-xl outline outline-purple-200 p-6 sticky top-54">
             <div className="text-lg font-semibold text-gray-800 flex justify-between">
               Current Module
               <IoIosArrowDropdownCircle

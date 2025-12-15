@@ -37,49 +37,75 @@ interface ExamSection {
 interface MocktestHeaderProps {
   formatTime: (seconds: number) => string;
   examTitle: string;
-  currentSection: ExamSection | null;
   timeRemaining: number;
- sliderRef: React.RefObject<HTMLDivElement | null>;
+  sliderRef: React.RefObject<HTMLDivElement | null>;
   currentSectionIndex: number;
   scroll: (direction: "left" | "right") => void;
-  questions: ExamSection[];
   setCurrentSectionIndex: (index: number) => void;
   answers: Record<number, string>; // Add this because you use `answers[q.id]`
+  currentModule: string;
+  handleModuleClick: (moduleName: string) => void;
+  moduleList: string[];
+  sectionList: ExamSection[];
 }
 
 export default function MocktestHeader({
   formatTime,
   examTitle,
-  currentSection,
   timeRemaining,
   sliderRef,
   currentSectionIndex,
   scroll,
-  questions,
   setCurrentSectionIndex,
   answers,
+  currentModule,
+  handleModuleClick,
+  moduleList,
+  sectionList,
 }: MocktestHeaderProps) {
   return (
     <>
       <div className="sticky top-0 z-20 bg-linear-to-r from-purple-300 to-violet-300 pb-3">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row gap-5 justify-between md:items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">
+            <h1 className="text-2xl font-bold bg-linear-to-b from-violet-700 via-fuchsia-700 to-purple-700 bg-clip-text text-transparent text-center">
               {examTitle} Mocktest
             </h1>
-            <p className="text-sm text-gray-700 mt-1 capitalize font-medium">
+
+            {/* <p className="text-sm text-gray-700 mt-1 capitalize font-medium">
               {currentSection?.module_name} part - {currentSection?.title}
-            </p>
+            </p> */}
           </div>
 
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2 bg-red-100 px-4 py-2 rounded-lg">
-              <FaClock className="w-5 h-5 text-red-600" />
-              <span className="text-red-700 font-mono font-bold">
+          <div className="flex items-center space-x-4 justify-center">
+            <div className="relative flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-r from-red-500 via-rose-500 to-pink-500 shadow-lg shadow-red-500/30 w-[150px] shake-pause">
+              {/* Glow */}
+              <div className="absolute inset-0 rounded-2xl blur-xl bg-red-400/40 -z-10" />
+
+              {/* Icon */}
+              <div className="flex items-center justify-center size-8 rounded-full bg-white/20 backdrop-blur-md">
+                <FaClock className="size-4 text-white" />
+              </div>
+
+              {/* Time */}
+              <span className="text-white font-mono tracking-widest font-bold">
                 {formatTime(timeRemaining)}
               </span>
             </div>
           </div>
+        </div>
+        <div className="flex justify-center gap-5 w-fit my-2 bg-white container mx-auto rounded-lg py-2 px-5 font-semibold">
+          {moduleList.map((module) => (
+            <button
+              key={module}
+              onClick={() => handleModuleClick(module)}
+              className={`${
+                module === currentModule ? "text-purple-700" : "text-gray-400"
+              }`}
+            >
+              {module}
+            </button>
+          ))}
         </div>
         {/* Steps */}
         <div className="px-4 sm:px-6 lg:px-8">
@@ -97,7 +123,7 @@ export default function MocktestHeader({
               ref={sliderRef}
               className="flex flex-nowrap space-x-3 p-2 justify-start items-center font-medium bg-white rounded-xl overflow-x-auto scroll-smooth scrollbar-hide"
             >
-              {questions.map((section, index) => {
+              {sectionList.map((section, index) => {
                 const sectionQuestions =
                   section.group?.reduce(
                     (sum, g) => sum + g.questions.length,

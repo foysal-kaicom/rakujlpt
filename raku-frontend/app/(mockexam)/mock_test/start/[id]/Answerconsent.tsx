@@ -39,6 +39,8 @@ interface MocktestConsentProps {
   setCurrentSectionIndex: (index: number) => void;
   handleSubmit: () => void;
   setShowConsent: (value: boolean) => void;
+  setCurrentModule: (value: string) => void;
+  setIgnoreModuleEffect: (value: boolean) => void;
 }
 
 export default function AnswerConsent({
@@ -49,17 +51,31 @@ export default function AnswerConsent({
   setCurrentSectionIndex,
   handleSubmit,
   setShowConsent,
+  setCurrentModule,
+  setIgnoreModuleEffect,
 }: MocktestConsentProps) {
   const handleQuestionClick = (questionId: number) => {
-    const sectionIndex = questions.findIndex((section) =>
+    const targetSection = questions.find((section) =>
       section.group.some((group) =>
         group.questions.some((q) => q.id === questionId)
       )
     );
+    if (!targetSection) return;
 
+    const sectionIndex = questions
+      .filter((section) => section.module_name === targetSection.module_name)
+      .findIndex((section) =>
+        section.group.some((group) =>
+          group.questions.some((q) => q.id === questionId)
+        )
+      );
     if (sectionIndex === -1) return;
+
+    setIgnoreModuleEffect(true);
+    setCurrentModule(targetSection.module_name);
     setCurrentSectionIndex(sectionIndex);
     setShowConsent(false);
+
     setTimeout(() => {
       const el = questionRefs.current[questionId];
       if (el) {
@@ -69,7 +85,7 @@ export default function AnswerConsent({
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-purple-50 via-indigo-50 to-purple-50 flex flex-col items-center justify-center p-6">
+    <div className="min-h-screen w-full bg-linear-to-br from-purple-50 via-indigo-50 to-purple-50 flex flex-col items-center justify-center p-6">
       <div className="backdrop-blur-xl bg-purple-100 rounded-3xl p-5 lg:p-8 w-full max-w-3xl shadow-2xl border border-purple-400 animate-fadeIn">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-purple-600 text-center tracking-wide">
           Confirm Submission
@@ -113,7 +129,7 @@ export default function AnswerConsent({
 
           <button
             onClick={handleSubmit}
-            className="px-6 py-3 rounded-xl bg-gradient-to-br from-purple-400 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 hover:brightness-110 transition"
+            className="px-6 py-3 rounded-xl bg-linear-to-br from-purple-400 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 hover:brightness-110 transition"
           >
             Confirm
           </button>
