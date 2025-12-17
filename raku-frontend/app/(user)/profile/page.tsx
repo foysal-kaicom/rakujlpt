@@ -502,7 +502,7 @@ export default function ProfileNew() {
                 />
               )}
 
-              {profile.phone_number ? (
+              {user?.phone_number ? (
                 <p className="text-sm text-gray-500">
                   Phone:{" "}
                   <span className="font-medium">{profile?.phone_number}</span>{" "}

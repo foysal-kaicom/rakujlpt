@@ -57,7 +57,7 @@ export default function Practice() {
       {loader && <PracticeSkeleton />}
 
       {/* MAIN SECTION */}
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-pink-50 to-purple-50 relative overflow-hidden">
+      <div className="min-h-screen bg-linear-to-br from-blue-50 via-pink-50 to-purple-50 relative overflow-hidden">
         {/* Soft Blobs */}
         <div className="absolute w-80 h-80 bg-pink-200 opacity-40 blur-[120px] rounded-full top-[10%] left-[10%]" />
         <div className="absolute w-96 h-96 bg-blue-200 opacity-40 blur-[140px] rounded-full bottom-[10%] right-[5%]" />
@@ -75,7 +75,7 @@ export default function Practice() {
 
             <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mt-6 leading-tight">
               Master Your Skills with
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
+              <span className="bg-linear-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
                 {" "}
                 Interactive Practice Tests
               </span>
@@ -88,7 +88,7 @@ export default function Practice() {
 
             <button
               onClick={scrollToPractice}
-              className="mt-8 px-10 py-4 text-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer"
+              className="mt-8 px-10 py-4 text-lg bg-linear-to-r from-blue-500 to-purple-500 text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer ring-2 ring-purple-300 border-b border-b-white"
             >
               Practice Free
             </button>
@@ -115,11 +115,11 @@ export default function Practice() {
                 >
                   <div className="flex justify-center mb-4">
                     {test.image ? (
-                      <div className="p-5 bg-blue-100 rounded-xl shadow group-hover:bg-blue-200 transition-all">
+                      <div className="p-5 bg-purple-100 rounded-xl shadow group-hover:bg-purple-200 transition-all">
                         <Image src={test.image} alt="" className="w-12 h-12" />
                       </div>
                     ) : (
-                      <div className="p-5 bg-blue-100 rounded-xl shadow group-hover:bg-blue-200 transition-all">
+                      <div className="p-5 bg-purple-100 rounded-xl shadow group-hover:bg-purple-200 transition-all">
                         <BookOpen className="w-12 h-12 text-blue-600" />
                       </div>
                     )}
@@ -138,7 +138,7 @@ export default function Practice() {
                   </div>
 
                   <Link href={`/practice/${test.slug}`}>
-                    <button className="mt-6 w-full py-3 bg-blue-500 text-white rounded-xl font-semibold shadow-md hover:shadow-lg transition-all cursor-pointer">
+                    <button className="mt-6 w-full py-3 bg-linear-to-r from-blue-500 to-purple-500 text-white rounded-xl font-semibold shadow-md hover:shadow-lg transition-all cursor-pointer">
                       Start Now
                     </button>
                   </Link>

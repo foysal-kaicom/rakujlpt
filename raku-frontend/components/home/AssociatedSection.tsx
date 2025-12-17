@@ -45,7 +45,7 @@ export default function AssociatedSection() {
             loop={true}
             speed={4000}
             autoplay={{
-              delay: 0,
+              // delay: 1,
               disableOnInteraction: false,
             }}
             allowTouchMove={false}
@@ -54,7 +54,7 @@ export default function AssociatedSection() {
             breakpoints={{
               640: { slidesPerView: 3 },
               768: { slidesPerView: 4 },
-              1024: { slidesPerView: 6 },
+              1024: { slidesPerView: 5 },
             }}
           >
             {partners.concat(partners).map((item, i) => (
