@@ -86,7 +86,6 @@ export default function MocktestSidebar({
                     {currentSection.module_name}
                   </span>
                 </div>
-                {/* <p className="text-xs opacity-90">25 min • 100 points</p> */}
               </div>
 
               <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">

@@ -255,7 +255,7 @@ export default function SubscriptionPage() {
                             {!subscription.is_free && (
                               <button
                                 onClick={() => handleRenew(subscription.id)}
-                                className="inline-block px-4 py-2 bg-linear-to-r from-purple-700 via-violet-700 to-blue-700 font-medium text-white rounded-lg hover:opacity-80 transition"
+                                className="inline-block px-4 py-2 bg-linear-to-r from-purple-700 via-violet-700 to-blue-700 font-medium text-white rounded-lg hover:opacity-80 transition cursor-pointer"
                               >
                                 Renew
                               </button>
@@ -265,7 +265,7 @@ export default function SubscriptionPage() {
                               onClick={() =>
                                 handleShowDetailsModal(subscription.id)
                               }
-                              className="inline-block px-4 py-2 bg-purple-600 font-medium text-white rounded-lg hover:opacity-80 transition"
+                              className="inline-block px-4 py-2 bg-purple-600 font-medium text-white rounded-lg hover:opacity-80 transition cursor-pointer"
                             >
                               Details
                             </button>
@@ -346,13 +346,13 @@ export default function SubscriptionPage() {
                           onClick={() =>
                             handleShowDetailsModal(subscription.id)
                           }
-                          className="inline-block px-6 py-1.5 bg-purple-600 font-medium text-white rounded-full hover:opacity-80 transition"
+                          className="inline-block px-6 py-1.5 bg-purple-600 font-medium text-white rounded-full hover:opacity-80 transition cursor-pointer"
                         >
                           Details
                         </button>
                         <button
                           onClick={() => handleRenew(subscription.id)}
-                          className="inline-block px-6 py-1.5 bg-linear-to-r from-purple-700 via-violet-700 to-blue-700 font-medium text-white rounded-full hover:opacity-80 transition"
+                          className="inline-block px-6 py-1.5 bg-linear-to-r from-purple-700 via-violet-700 to-blue-700 font-medium text-white rounded-full hover:opacity-80 transition cursor-pointer"
                         >
                           Renew
                         </button>

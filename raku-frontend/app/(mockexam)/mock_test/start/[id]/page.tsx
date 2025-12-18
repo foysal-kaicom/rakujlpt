@@ -84,7 +84,7 @@ export default function ExamPage() {
   const [examTitle, setExamTitle] = useState<string>(
     "Japanese Language Proficiency Exam"
   );
-  const [currentSectionIndex, setCurrentSectionIndex] = useState(5);
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [sidebarShow, setSidebarShow] = useState(false);
@@ -346,6 +346,7 @@ export default function ExamPage() {
       return;
     }
     setCurrentSectionIndex(0);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentModule]);
 
   const isFirstStep = () => {
@@ -429,7 +430,6 @@ export default function ExamPage() {
     };
   }, []);
 
-  // console.log(questionRefs)
 
   /* -------------------- Render -------------------- */
   if (loading) return <SkeletonMockExam />;

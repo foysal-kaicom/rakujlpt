@@ -82,7 +82,9 @@ export default function Notification({ token }: any) {
         }`}
       >
         <div className="border-b border-gray-200 flex gap-3 justify-between items-center p-2 sticky top-0 bg-white">
-          <p className="font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">Notification</p>
+          <p className="font-semibold bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            Notification
+          </p>
 
           <button
             disabled={notifications?.unread_count < 1}
@@ -120,7 +122,9 @@ export default function Notification({ token }: any) {
             </div>
           ))
         ) : (
-          <p className="text-sm p-2 text-center bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">No notification</p>
+          <p className="text-sm p-2 text-center bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            No notification
+          </p>
         )}
       </div>
     </div>

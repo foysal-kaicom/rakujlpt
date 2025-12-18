@@ -129,9 +129,6 @@ export default function MocktestMainContent({
                           <source src={grp.content} type="audio/mpeg" />
                           Your browser does not support the audio element.
                         </audio>
-                        {/* <p className="text-sm mt-2 ml-4 text-red-500">
-                          In exam the audio will be played only once
-                        </p> */}
                       </div>
                     )}
 
@@ -251,8 +248,8 @@ export default function MocktestMainContent({
                 disabled={isFirstStep}
                 className={`flex items-center sm:space-x-2 p-2 sm:p-0 sm:px-6 sm:py-2 rounded-lg font-medium transition-colors ${
                   isFirstStep
-                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                    : "bg-gray-600 hover:bg-gray-700 text-white cursor-pointer"
+                    ? "bg-purple-200 text-gray-500 cursor-not-allowed"
+                    : "bg-purple-600 hover:bg-purple-700 text-white cursor-pointer"
                 }`}
               >
                 <FaChevronLeft className="size-4" />
