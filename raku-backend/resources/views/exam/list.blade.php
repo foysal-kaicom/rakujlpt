@@ -84,6 +84,12 @@
                     <td class="px-4 py-1">{{ $exam->id }}</td>
                     <td class="d-none d-sm-table-cell px-4 py-1">
                         {{ $exam->title }}
+
+                        @if($exam->type =='custom')
+                        <span class="inline-flex items-center rounded-full bg-blue-500 px-2.5 py-0.5 text-xs font-medium text-white ring-1 ring-inset ring-blue-700/10">
+                            Custom
+                        </span>
+                        @endif
                     </td>
                     <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->name }}</td>
                     <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->duration }}</td>

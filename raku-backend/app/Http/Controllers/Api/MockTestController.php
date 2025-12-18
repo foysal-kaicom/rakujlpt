@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\UserSubscriptionDetails;
 use App\Http\Resources\MockTestSectionResource;
 use App\Http\Resources\UserSubscriptionResource;
+use App\Models\CustomMockTest;
 use App\Models\Exam;
 
 class MockTestController extends Controller
@@ -59,36 +60,58 @@ class MockTestController extends Controller
                 return $this->responseWithError("You have reached the maximum attempt limit for this exam.");
             }
 
-            $allSections = MockTestSection::with([
-                'mockTestQuestion',
-                'mockTestQuestionGroup',
-                'mockTestModule'
-            ])
-                ->whereHas('mockTestModule', function ($query) use ($examId) {
-                    $query->where('exam_id', $examId);
-                })
-                ->get();
+            $exam = Exam::find($examId);
 
-
-            $examTitle = $allSections->first()->mockTestModule->exam->title ?? null;
-            $examDuration = $allSections->first()->mockTestModule->exam->duration ?? null;
-            $examTotalPoint = $allSections->first()->mockTestModule->exam->total_point ?? null;
             $sectionWiseQuestions = [];
 
-            foreach ($allSections as $section) {
-                $data = MockTestSectionResource::make($section);
+            if ($exam->type == 'custom') {
+                $allSections = CustomMockTest::with([
+                    'mockTestQuestion',
+                    'mockTestQuestionGroup',
+                    'mockTestModule'
+                ])
+                    ->where('exam_id', $examId)
+                    ->get();
 
-                if ($data) {
-                    $sectionWiseQuestions[] = $data;
+                foreach ($allSections as $section) {
+
+                    $section->title = $section->section->title;
+                    $section->slug = $section->section->slug;
+                    $section->question_limit = $section->question_quantity;
+                    $section->sample_question = $section->section->sample_question;
+                    // dd($section);
+                    $data = MockTestSectionResource::make($section);
+
+                    if ($data) {
+                        $sectionWiseQuestions[] = $data;
+                    }
+                }
+            } else {
+                $allSections = MockTestSection::with([
+                    'mockTestQuestion',
+                    'mockTestQuestionGroup',
+                    'mockTestModule'
+                ])
+                    ->whereHas('mockTestModule', function ($query) use ($examId) {
+                        $query->where('exam_id', $examId);
+                    })
+                    ->get();
+
+                foreach ($allSections as $section) {
+                    $data = MockTestSectionResource::make($section);
+
+                    if ($data) {
+                        $sectionWiseQuestions[] = $data;
+                    }
                 }
             }
-            // return $this->responseWithSuccess($sectionWiseQuestions, "Questions generated for Exam ID: {$examId}");
+
             return $this->responseWithSuccess([
-                'exam_title' => $examTitle,
-                'exam_duration' => $examDuration,
-                'exam_total_point' => $examTotalPoint,
+                'exam_title' => $exam->title ?? null,
+                'exam_duration' => $exam->duration ?? null,
+                'exam_total_point' => $exam->total_point ?? null,
                 'sections'   => $sectionWiseQuestions
-            ], "Questions generated for Exam ID: {$examId}");
+            ], "Questions generated for: {$exam->title}");
         } catch (Throwable $ex) {
             return $this->responseWithError("Something went wrong.", $ex->getMessage());
         }
@@ -168,7 +191,7 @@ class MockTestController extends Controller
                 }
             }
 
-            return $this->responseWithSuccess(new MockTestResultResource($mockTestRecord),"Mock test result recorded successfully.");
+            return $this->responseWithSuccess(new MockTestResultResource($mockTestRecord), "Mock test result recorded successfully.");
         } catch (Throwable $e) {
             Log::error('Mock test evaluation error', ['error' => $e->getMessage()]);
             return $this->responseWithError("Something went wrong.", $e->getMessage());

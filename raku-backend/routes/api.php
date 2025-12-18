@@ -129,3 +129,12 @@ Route::prefix('v1')->group(function () {
     //SSLCOMMERZ END
 
 });
+
+
+
+// Route for step 1: Getting modules by exam ID
+Route::get('/get-modules-by-exam/{examId}', [ExamController::class, 'getModulesByExam']);
+
+// Route for step 2: Getting sections by selected module IDs
+// Note: Use POST if you're sending multiple IDs in the request body
+Route::post('/get-sections-by-modules', [ExamController::class, 'getSectionsByModules']);

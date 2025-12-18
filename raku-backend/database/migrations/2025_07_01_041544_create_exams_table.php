@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('name')->comment("Short Name");
             $table->string('slug')->unique();
+            $table->enum('type',['custom','general']);
             $table->text('description')->nullable();
             $table->string('image')->nullable();
             $table->double('duration')->nullable();
