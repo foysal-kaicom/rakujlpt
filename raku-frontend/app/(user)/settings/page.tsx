@@ -41,7 +41,7 @@ export default function SettingsPage() {
 
       <div className="mt-5">
         <UserHeadline mainText="Settings" subText="" preText="" />
-        <div className="w-full bg-white rounded-2xl shadow-xl p-8 mt-5">
+        <div className="w-full bg-white rounded-2xl border border-purple-200 p-8 mt-5">
           <div className="grid sm:grid-cols-2 gap-6">
             {settingsOptions.map((option, index) => (
               <button

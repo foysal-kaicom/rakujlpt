@@ -43,13 +43,6 @@ export default function PaymentSuccessPage() {
             <p className="text-gray-500 text-sm md:text-base max-w-md">
               Your payment is failed
             </p>
-            {/* <p className="text-gray-500 text-sm md:text-base max-w-md pb-2 border-b border-dashed border-gray-400">
-              Booking Number : {id}
-            </p> */}
-            {/* <div className="flex gap-3 justify-between items-center text-gray-500">
-              <p>Amount Paid : </p>
-              <p>{bookingDetails?.total_payable} TK</p>
-            </div> */}
 
             <p className="text-sm text-gray-500">Redirecting to Home ...</p>
 
@@ -62,13 +55,6 @@ export default function PaymentSuccessPage() {
             <p className="size-20 bg-blue-50 rounded-full absolute -left-10 top-1/2 -translate-y-1/2 z-10"></p>
             <p className="size-20 bg-blue-50 rounded-full absolute -right-10 top-1/2 -translate-y-1/2 z-10"></p>
           </div>
-          {/* <Image
-            src="/assets/img/payment3.png"
-            height={1333}
-            width={2000}
-            alt=""
-            className="w-1/2"
-          /> */}
         </div>
       </WebpageWrapper>
     </div>
