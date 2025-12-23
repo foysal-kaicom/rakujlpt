@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('mock_test_question_group_id')->nullable()->constrained('mock_test_question_groups')->restrictOnDelete();
             $table->enum('type', ['text', 'image']);
             $table->text('hints')->nullable()->comment('can hints with image, source of question etc');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

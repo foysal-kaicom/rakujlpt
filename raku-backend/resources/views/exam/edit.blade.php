@@ -48,7 +48,7 @@
 
                     <!-- Exam Name -->
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Exam Short Name <span class="text-danger">*</span></label>
+                        <label class="form-label fw-semibold">Select Exam Type <span class="text-danger">*</span></label>
                         <select name="name" class="form-control form-control-lg shadow-sm rounded-2" required>
                             <option value="" disabled {{ old('name', $exam->name) ? '' : 'selected' }}>Select Short Name</option>
                             <option value="JLPT" {{ (old('name', $exam->name) === 'JLPT') ? 'selected' : '' }}>JLPT</option>

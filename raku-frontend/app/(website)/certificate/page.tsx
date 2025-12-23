@@ -35,10 +35,11 @@ export default function QRScannerPage() {
     scanner.render(
       (decodedText: string) => {
         setScannedData(decodedText);
-        router.push(`/certificate/12?code=${encodeURIComponent(decodedText)}`);
+        router.push(`${decodedText}`);
       },
       (errorMessage: string) => {
         // optional: console.log(errorMessage);
+        // toast.error("Certificate not found")
       }
     );
 
@@ -79,7 +80,7 @@ export default function QRScannerPage() {
           </div>
 
           {/* Hint / Footer */}
-          <p className="mt-6 text-gray-600 italic text-sm text-center max-w-md">
+          <p className="mt-6 text-gray-500 italic text-sm font-medium text-center max-w-md">
             Tip: Allow camera access for scanning. Works on desktop and mobile.
           </p>
         </div>

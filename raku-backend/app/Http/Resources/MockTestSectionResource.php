@@ -71,8 +71,8 @@ class MockTestSectionResource extends JsonResource
 
         return [
             'id'              => $this->id,
-            'slug'            => $this->slug,
-            'title'           => $this->title,
+            'slug'            => $this->slug ?? null,
+            'title'           => $this->title ?? null,
             'module_name'     => $this->mockTestModule->name ?? null,
             'sample_question' => $this->sample_question,
             'group'           => MockTestGroupResource::collection($groups),

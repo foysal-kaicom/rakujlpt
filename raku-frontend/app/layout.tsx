@@ -2,45 +2,48 @@ import type { Metadata } from "next";
 import "../css/globals.css";
 import { Toaster } from "sonner";
 import RouteLoader from "@/components/RouteLoader";
+import MetaPixel from "@/components/MetaPixel";
 
 export const metadata: Metadata = {
-  title: "Raku - Mock Test",
+  title:
+    "Free JLPT & JPT Mock Tests | Raku JLPT – Online Japanese Practice Exams",
   description:
-    "Register for the Japanese Proficiency Mock Test in Bangladesh. Find test dates, centers, application deadlines, and fees.",
+    "Take free JLPT and JPT mock tests online. Practice Japanese grammar, vocabulary, listening, and reading with realistic exam-style questions. Improve your Japanese proficiency score with Raku JLPT's interactive practice platform.",
   keywords: [
-    "Raku JLPT",
-    "Japanese Proficiency Test",
-    "JPT registration",
-    "Japanese mock exam",
-    "JPT test dates",
-    "study in Japan",
-    "JLPT",
-    "Japanese language Proficiency Test",
+    "JLPT mock test",
+    "JPT mock test",
+    "Japanese practice test online",
+    "JLPT practice online",
+    "JPT practice online",
+    "free Japanese mock test",
+    "online Japanese test",
+    "JLPT N5 N4 N3 N2 N1 practice",
+    "JPT exam practice",
+    "Japanese grammar test",
+    "Japanese vocabulary test",
+    "JLPT sample test",
+    "JLPT practice questions",
   ],
   authors: [{ name: "Raku JLPT", url: "https://rakujlpt.com" }],
-  alternates: {
-    canonical: "https://rakujlpt.com/",
-  },
+  alternates: { canonical: "https://rakujlpt.com/" },
   openGraph: {
-    title: "Raku Bangladesh – Japanese Proficiency Mock Test Registration",
+    title: "Free JLPT & JPT Mock Tests | Raku JLPT",
     description:
-      "Get registered for mock test exams in Bangladesh. View all available test dates and center info.",
+      "Practice JLPT and JPT mock tests online. Improve your Japanese language skill with free, realistic practice exams.",
     url: "https://rakujlpt.com",
     siteName: "Raku JLPT",
     images: [
       {
         url: "https://rakujlpt.com/og-banner.jpg",
-        width: 571,
-        height: 519,
-        alt: "Raky JLPT",
+        width: 1200,
+        height: 630,
+        alt: "Raku JLPT Mock Test Platform",
       },
     ],
     locale: "en_US",
     type: "website",
   },
-  icons: {
-    icon: "/favicon.ico",
-  },
+  icons: { icon: "/favicon.ico" },
 };
 
 export default function RootLayout({
@@ -51,9 +54,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="max-w-[2000px] mx-auto">
-        <RouteLoader/>
+        <RouteLoader />
+        <MetaPixel />
         {children}
-        <Toaster position="top-center" richColors />
+        <Toaster
+          position="top-center"
+          richColors
+          duration={3000}
+          closeButton={true}
+        />
       </body>
     </html>
   );

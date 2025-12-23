@@ -1,7 +1,7 @@
 export default function QuestionCompositionSkeleton() {
   return (
     <>
-      <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 overflow-hidden pb-20 pt-5">
+      <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 overflow-hidden pb-20 pt-5 min-h-[70vh]">
         <div className="max-w-6xl mx-auto px-4">
           <section className="relative pt-12">
             <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-300/30 rounded-full blur-3xl animate-bounce-slow" />

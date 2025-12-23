@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->text('body');
+            $table->foreignId('candidate_id')->nullable();
+            $table->foreignId('exam_id')->nullable();
             $table->string('reviewer_name');
             $table->string('reviewer_designation')->nullable();
             $table->unsignedTinyInteger('rating')->default(1)->comment('1 to 5');

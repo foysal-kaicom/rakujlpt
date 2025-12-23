@@ -41,6 +41,7 @@
                 <th class="border border-gray-300 px-4 py-3 text-left">Email</th>
                 <th class="border border-gray-300 px-4 py-3 text-left">Gender</th>
                 <th class="border border-gray-300 px-4 py-3 text-left">Phone</th>
+                <th class="border border-gray-300 px-4 py-3 text-left">Registration Date <br> (m-d-y)</th>
                 <th class="border border-gray-300 px-4 py-3 text-left">Status</th>
                 <th class="border border-gray-300 px-4 py-3 text-left">Action</th>
             </tr>
@@ -70,7 +71,7 @@
             },
             columns: [{
                     data: 'id',
-                    name: 'id'
+                    name: 'id',
                 },
                 {
                     data: 'photo',
@@ -95,6 +96,10 @@
                     name: 'phone_number'
                 },
                 {
+                    data: 'created_at',
+                    name: 'created_at'
+                },
+                {
                     data: 'status',
                     name: 'status',
                     orderable: false,
@@ -111,17 +116,6 @@
             initComplete: function() {
                 const filter = $('#candidateTable_filter');
                 const dropdownHtml = `
-                  <div class="flex items-center gap-2 ml-4">
-                        <label for="filterLivingCountry" class="text-sm font-medium text-gray-700 whitespace-nowrap">
-                        Living Country:
-                        </label>
-                        <select id="filterLivingCountry" 
-                        class="border border-gray-300 text-sm rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
-                            <option value="all">All Countries</option>
-                            <option value="Bangladesh">Bangladesh</option>
-                            <option value="Japan">Japan</option>
-                        </select>
-                    </div>
                     <div class="flex items-center gap-2 ml-4">
                         <label for="filterStatus" class="text-sm font-medium text-gray-700 whitespace-nowrap">
                         Candidate Status:

@@ -16,4 +16,9 @@ class Review extends Model
     protected $casts = [
         'rating' => 'integer',
     ];
+
+    public function exam()
+    {
+     return $this->hasOne(Exam::class,'id','exam_id');    
+    }
 }

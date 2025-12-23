@@ -4,6 +4,8 @@ WORKDIR /var/www
 
 COPY . .
 
+#COPY .env .env
+
 RUN npm install
 RUN npm run build
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ExamListFilterRequest;
 use App\Http\Requests\ExamRequest;
+use App\Models\CustomMockTest;
 use App\Models\Exam;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class ExamController extends Controller
         $direction = $request->direction ?? 'asc';
 
         $query = Exam::with('creator:id,name')
-            ->select('id', 'title', 'name', 'slug', 'duration', 'total_point', 'answer_value', 'created_by', 'status');
+            ->select('id', 'title', 'name', 'slug', 'duration', 'type', 'total_point', 'answer_value', 'created_by', 'status');
 
         if ($request->has('title') && $request->title != '') {
             $query->where('title', 'like', '%' . $request->title . '%');
@@ -34,11 +35,13 @@ class ExamController extends Controller
 
     public function showCreateExam()
     {
-        return view('exam.create');
+        $exams = Exam::where('status', 1)->where('type','general')->get();
+        return view('exam.create', compact('exams'));
     }
 
     public function store(ExamRequest $request)
     {
+
         try {
             $data = $request->validated();
 
@@ -51,13 +54,47 @@ class ExamController extends Controller
 
             $data['created_by'] = Auth::id();
             $data['slug'] = rand(1, 99999) . '-' . Str::of($data['title'])->slug('-');
+            $data['type'] = $request->type;
 
-            Exam::create($data);
+            $exam = Exam::create($data);
+
+            if ($request->type == 'custom') {
+
+                // 1. Prepare a timestamp so all records have the same time
+                $now = now();
+                $insertData = [];
+
+                // 2. Build the array in memory (PHP loops are extremely fast compared to DB queries)
+                foreach ($request->input('module', []) as $moduleKey => $module) {
+                    if (!empty($module['section_weights'])) {
+                        foreach ($module['section_weights'] as $sectionKey => $questionQty) {
+                            // Optional: Filter out empty values
+                            if ($questionQty > 0) {
+                                $insertData[] = [
+                                    'exam_id'              => $exam->id,
+                                    'mock_test_module_id'  => $moduleKey,
+                                    'mock_test_section_id' => $sectionKey,
+                                    'question_quantity'    => $questionQty,
+                                    'created_at'           => $now, // 'insert' doesn't auto-fill timestamps
+                                    'updated_at'           => $now,
+                                ];
+                            }
+                        }
+                    }
+                }
+
+
+                // 3. Perform a single Bulk Insert Query
+                if (!empty($insertData)) {
+                    CustomMockTest::insert($insertData);
+                }
+            }
 
             Toastr::success('Exam Registered Successfully.');
             return redirect()->route('mock-tests.exam.list');
         } catch (\Exception $e) {
             Toastr::error('Exam not created');
+            dd($e->getMessage());
             return redirect()->route('mock-tests.exam.list');
         }
     }

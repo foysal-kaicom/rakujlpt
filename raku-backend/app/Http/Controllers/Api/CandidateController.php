@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CandidateRequest;
+use App\Http\Requests\WebCandidateRegistrationRequest;
 use App\Http\Resources\CandidateResource;
 use App\Jobs\SendRegistrationEmail;
 use App\Jobs\SendRegistrationEmailJob;
@@ -39,11 +40,14 @@ class CandidateController extends Controller
         $this->fileStorageService = $file_storage_service;
     }
 
-    public function register(CandidateRequest $request)
+    public function register(WebCandidateRegistrationRequest $request)
     {
         $data = $request->validated();
 
         try {
+            $data['first_name'] = sanitizeName($data['first_name']);
+            $data['last_name']  = sanitizeName($data['last_name']);
+
             if ($request->hasFile('photo')) {
                 $image = $request->file('photo');
 
@@ -186,27 +190,23 @@ class CandidateController extends Controller
 
         $candidate = Candidate::findOrFail(auth('candidate')->user()->id);
 
-        // Get validated data from CandidateRequest
         $data = $validator->validated();
 
-        // Handle photo upload/update
         if ($request->hasFile('photo')) {
             if ($candidate->photo) {
-                // Update existing file in cloud
                 $newFile = $request->file('photo');
                 $fileToDelete = $candidate->photo;
                 $imageUploadResponse = $this->fileStorageService->updateFileFromCloud($fileToDelete, $newFile);
                 $data['photo'] = $imageUploadResponse['public_path'];
             } else {
-                // Upload new image
                 $image = $request->file('photo');
-
                 $imageUploadResponse = $this->fileStorageService->uploadImageToCloud($image, 'candidate');
                 $data['photo'] = $imageUploadResponse['public_path'];
             }
         }
+        $data['first_name'] = sanitizeName($data['first_name']);
+        $data['last_name']  = sanitizeName($data['last_name']);
 
-        // Update candidate
         $candidate->update($data);
 
         return $this->responseWithSuccess($candidate, 'Candidate profile updated successfully.');
@@ -216,7 +216,6 @@ class CandidateController extends Controller
     {
         $candidate = Candidate::findOrFail(auth('candidate')->user()->id);
 
-        // Validate input
         $request->validate([
             'current_password' => 'required',
             'new_password' => 'required|string|min:6|confirmed', // Must match new_password_confirmation

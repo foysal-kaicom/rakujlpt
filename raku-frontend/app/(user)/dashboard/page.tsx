@@ -103,9 +103,8 @@ export default function Dashboard() {
 
   return (
     <>
-      {/* <Suspense fallback={<DashboardSkeleton />}> */}
-      <div className="relative">
-        {loading && <DashboardSkeleton />}
+    {loading ? <DashboardSkeleton /> :
+      <div className="">
         <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
           <UserHeadline mainText="Dashboard" subText="" preText="" />
         </section>
@@ -289,8 +288,7 @@ export default function Dashboard() {
           </div>
         </section>
       </div>
-
-      {/* </Suspense> */}
+}
     </>
   );
 }

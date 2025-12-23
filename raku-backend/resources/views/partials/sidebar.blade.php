@@ -6,7 +6,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="relative">
-                        <img src="{{ url($settings->logo) }}" alt="Logo"
+                        <img src="{{ $settings->logo}}" alt="Logo"
                             class="h-10 w-10 rounded-xl shadow-md ring-2 ring-indigo-100 object-cover">
                         <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white">
                         </div>
@@ -200,7 +200,7 @@
                     @hasPermission('mock-tests.reports.list')
                     <a href="{{ route('mock-tests.reports.list') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('mock-tests.reports.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
-                        <i class="fa-regular fa-circle-check text-xs"></i>
+                        <i class="fa-notdog-duo fa-solid fa-chart-bar"></i>
                         <span>Mock Test Reports</span>
                     </a>
                     @endHasPermission
@@ -231,14 +231,14 @@
                     @hasPermission('roadmaps.index')
                     <a href="{{ route('roadmaps.index') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('roadmaps.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
-                        <i class="fas fa-list text-xs"></i>
+                        <i class="fas fa-road text-xs"></i>
                         <span>Roadmaps</span>
                     </a>
                     @endHasPermission
                     @hasPermission('stages.index')
                     <a href="{{ route('stages.index') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('stages.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
-                        <i class="fas fa-list text-xs"></i>
+                        <i class="fas fa-stairs text-xs"></i>
                         <span>Stages</span>
                     </a>
                     @endHasPermission
