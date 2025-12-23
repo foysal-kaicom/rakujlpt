@@ -115,14 +115,14 @@ export default function MockExamResult() {
     <>
       <Suspense fallback={<SuspenseLoader />}>
         {loading && <Loader />}
-        <div className="min-h-[60vh] py-6">
+        <div className="min-h-[60vh]">
           <BreadCrumb breadCrumbData={breadCrumbData} />
 
           <div className="mt-5 lg:pb-10">
             <UserHeadline mainText="Mock Exam Result" preText="" subText="" />
 
             {/* Result Table/Card */}
-            <div className="w-full flex flex-col gap-5 mt-6">
+            <div className="w-full flex flex-col gap-5 mt-5">
               {currentResult.length > 0 ? (
                 <>
                   {/* Desktop Table */}

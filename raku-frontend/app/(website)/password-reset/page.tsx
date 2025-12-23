@@ -168,8 +168,8 @@ export default function LoginPage() {
         }
       );
 
-      toast.success("Phone number verified successfully!");
-      router.push("/profile");
+      toast.success("Your Password is reset");
+      router.push("/sign_in");
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Verification failed.");
     }
@@ -177,7 +177,7 @@ export default function LoginPage() {
 
   return (
     <Suspense fallback={<SuspenseLoader />}>
-      <div className="bg-gradient-to-br from-slate-200 via-blue-100 to-gray-200 pt-5 pb-15">
+      <div className="bg-linear-to-br from-slate-200 via-blue-100 to-gray-200 pt-5 pb-15">
         <WebpageWrapper>
           <BreadCrumb breadCrumbData={breadCrumbData} />
 
@@ -238,7 +238,7 @@ export default function LoginPage() {
                       onChange={handleResetChange}
                       required
                       placeholder="Enter password"
-                      className="w-full pl-10 pr-10 py-2.5 rounded-xl border-2 border-transparent bg-gradient-to-r from-yellow-50 to-pink-50 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-300 outline-none text-gray-700 transition-all duration-300"
+                      className="w-full pl-10 pr-10 py-2.5 rounded-xl border-2 border-transparent bg-linear-to-r from-yellow-50 to-pink-50 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-300 outline-none text-gray-700 transition-all duration-300"
                     />
                     <button
                       type="button"
@@ -259,7 +259,7 @@ export default function LoginPage() {
                       onChange={handleResetChange}
                       required
                       placeholder="Confirm password"
-                      className="w-full pl-10 pr-10 py-2.5 rounded-xl border-2 border-transparent bg-gradient-to-r from-green-50 to-indigo-50 focus:border-green-400 focus:ring-2 focus:ring-green-300 outline-none text-gray-700 transition-all duration-300"
+                      className="w-full pl-10 pr-10 py-2.5 rounded-xl border-2 border-transparent bg-linear-to-r from-green-50 to-indigo-50 focus:border-green-400 focus:ring-2 focus:ring-green-300 outline-none text-gray-700 transition-all duration-300"
                     />
                     <button
                       type="button"
@@ -297,7 +297,7 @@ export default function LoginPage() {
               </div>
             ) : (
               <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-8 flex flex-col items-center">
-                <div className="bg-gradient-to-r from-pink-400 to-rose-400 rounded-3xl p-4 inline-block mb-4 shadow-lg transform -rotate-2">
+                <div className="bg-linear-to-r from-pink-400 to-rose-400 rounded-3xl p-4 inline-block mb-4 shadow-lg transform -rotate-2">
                   <h2 className="text-lg lg:text-4xl font-bold text-white">
                     🔑 Reset Password
                   </h2>
@@ -314,7 +314,7 @@ export default function LoginPage() {
                     <div className="flex border-3 border-purple-300 rounded-2xl overflow-hidden shadow-lg bg-white transform hover:scale-105 transition-all duration-300 focus-within:border-purple-500 focus-within:shadow-xl">
                       <button
                         type="button"
-                        className="px-4 flex items-center text-white bg-gradient-to-br from-purple-400 to-indigo-500 hover:from-purple-500 hover:to-indigo-600 focus:outline-none transition-all duration-300"
+                        className="px-4 flex items-center text-white bg-linear-to-br from-purple-400 to-indigo-500 hover:from-purple-500 hover:to-indigo-600 focus:outline-none transition-all duration-300"
                       >
                         <MdEmail className="size-6" />
                       </button>
@@ -337,8 +337,8 @@ export default function LoginPage() {
                     disabled={reseting}
                     className={`w-full ${
                       reseting
-                        ? "bg-gradient-to-r from-gray-400 to-gray-500 cursor-not-allowed"
-                        : "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 cursor-pointer"
+                        ? "bg-linear-to-r from-gray-400 to-gray-500 cursor-not-allowed"
+                        : "bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 cursor-pointer"
                     } text-white font-bold rounded-2xl py-4 transition-all duration-300 shadow-xl transform hover:scale-105 hover:-rotate-1 text-lg border-4 border-white/50 relative overflow-hidden group`}
                   >
                     {reseting ? (
@@ -371,7 +371,7 @@ export default function LoginPage() {
                       </span>
                     )}
                     {!reseting && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 group-hover:translate-x-full transition-all duration-700 -skew-x-12"></div>
+                      <div className="absolute inset-0 bg-linear-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 group-hover:translate-x-full transition-all duration-700 -skew-x-12"></div>
                     )}
                   </button>
                 </form>
