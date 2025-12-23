@@ -21,6 +21,7 @@ import { SidebarData } from "../user/Sidebar/sidebarData";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useBusinessSettingsStore } from "@/stores/useBusinessStore";
 import Notification from "./notificationComponent";
+import LanguageSwitcher from "../LanguageSwitcher";
 
 export default function Header() {
   const [scrollCount, setScrollCount] = useState(0);
@@ -113,6 +114,7 @@ export default function Header() {
     }
     return isAuthenticated && token && user ? (
       <>
+      <LanguageSwitcher />
         <Notification />
         <div className="flex gap-2 items-center relative group cursor-pointer">
           {user?.photo ? (
@@ -164,6 +166,7 @@ export default function Header() {
       </>
     ) : (
       <>
+      <LanguageSwitcher />
         <Link
           href="/registration"
           className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-5 2xl:py-4 2xl:px-7 text-indigo-700 bg-white rounded-full border-4 border-indigo-300 hover:border-orange-400 duration-300 shadow-2xl transform hover:scale-110 hover:-rotate-2 font-bold group relative overflow-hidden max-w-42"

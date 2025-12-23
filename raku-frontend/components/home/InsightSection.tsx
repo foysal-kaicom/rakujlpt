@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 
 import { PiExam } from "react-icons/pi";
@@ -7,10 +9,10 @@ import { BsFileText } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa6";
 import { GiStairsGoal } from "react-icons/gi";
 import InsightSectionCounter from "../InsightSectionCounter";
-
+import { useTranslation } from "react-i18next";
 
 export default function InsightSection() {
-  
+  const { t } = useTranslation("common");
 
   return (
     <section className="py-16 min-h-[70vh] flex items-center">
@@ -24,17 +26,15 @@ export default function InsightSection() {
             </p>
 
             <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
-              Premium{" "}
+              {t("premium")}{" "}
               <span className="bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 JPT & JLPT
               </span>{" "}
-              Mock Test Experience
+              {t("mocktest_exp")}
             </h2>
 
             <p className="text-gray-600 text-sm sm:text-base mb-8">
-              Prepare for your Japanese language exams with interactive mock
-              tests, real-time results, and AI-driven feedback — designed to
-              boost your confidence and accuracy before the real exam.
+              {t("prepare_for_your_exams")}
             </p>
 
             <div className="flex flex-wrap gap-3">
@@ -55,7 +55,7 @@ export default function InsightSection() {
               </Link>
             </div>
 
-            <InsightSectionCounter/>
+            <InsightSectionCounter />
           </div>
 
           {/* RIGHT CONTENT */}
