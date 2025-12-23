@@ -116,7 +116,7 @@ export default function Practice() {
                   <div className="flex justify-center mb-4">
                     {test.image ? (
                       <div className="p-5 bg-purple-100 rounded-xl shadow group-hover:bg-purple-200 transition-all">
-                        <Image src={test.image} alt="" className="w-12 h-12" />
+                        <Image src={test.image} alt="" className="w-12 h-12" loading="lazy" />
                       </div>
                     ) : (
                       <div className="p-5 bg-purple-100 rounded-xl shadow group-hover:bg-purple-200 transition-all">

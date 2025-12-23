@@ -54,6 +54,7 @@ export default function OurTeamsComponent() {
                 className="rounded-full w-full h-full object-cover border-4 border-blue-300 group-hover:scale-110 transition-transform duration-300"
                 width={128}
                 height={128}
+                loading="lazy"
               />
             ) : (
               <IoPersonCircle className="rounded-full size-32 object-cover group-hover:scale-110 transition-transform duration-300 text-purple-500 bg-purple-100" />

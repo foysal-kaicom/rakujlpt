@@ -101,6 +101,7 @@ export default function NewsDetailsPage() {
                   alt={newsDetails.title.slice(0, 10)}
                   fill
                   className="object-cover"
+                  loading="lazy"
                 />
               </div>
 
@@ -150,6 +151,7 @@ export default function NewsDetailsPage() {
                     width={50}
                     height={50}
                     className="rounded-full border border-gray-200 size-[50px] object-cover"
+                    loading="lazy"
                   />
                   <div className="w-[calc(100%-50px)]">
                     <p className="font-semibold text-gray-800 line-clamp-1">

@@ -81,6 +81,7 @@ export default function PaymentSuccessPage() {
         height={2000}
         width={2000}
         className="absolute top-0 size-full"
+        loading="lazy"
       />
     </div>
   );
