@@ -5,7 +5,6 @@ import { IoLogIn, IoLogOut } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 import { FaUser } from "react-icons/fa";
 
-
 import { toast } from "sonner";
 import axiosInstance from "@/utils/axios";
 import axios from "axios";
@@ -128,21 +127,23 @@ export default function Header() {
             <FaUser className="size-8 rounded-full object-cover aspect-auto ring-3 ring-purple-400 text-white bg-purple-400" />
           )}
           <div>
-            <p className="line-clamp-1 capitalize font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <p className="line-clamp-1 capitalize font-semibold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               {user?.first_name} {""}
               {user?.last_name}
             </p>
-            <p className="line-clamp-1 text-xs font-semibold bg-gradient-to-r from-blue-600  to-purple-600 bg-clip-text text-transparent">
+            <p className="line-clamp-1 text-xs font-semibold bg-linear-to-r from-blue-600  to-purple-600 bg-clip-text text-transparent">
               {user?.email || user?.phone_number}
             </p>
           </div>
 
-          <div className="bg-white grid grid-cols-1 rounded-md text-sm shadow absolute right-1/2 translate-x-1/2 top-[40px] scale-0 group-hover:scale-100 w-[200px] h-[270px] overflow-clip duration-400 origin-top outline outline-gray-200">
-            {SidebarData.map((item, i) => (
+          <div className="bg-white grid grid-cols-1 rounded-md text-sm shadow absolute right-1/2 translate-x-1/2 top-10 scale-0 group-hover:scale-100 w-[200px] h-[210px] overflow-clip duration-400 origin-top outline outline-gray-200">
+            {SidebarData.slice(0, 4).map((item, i) => (
               <Link
                 key={i}
                 href={item.to}
-                className={`flex gap-1.5 items-center hover:bg-purple-100 duration-300 cursor-pointer line-clamp-1 p-1 px-4 ${path.startsWith(item.to) ? 'bg-purple-100' : ''}`}
+                className={`flex gap-1.5 items-center hover:bg-purple-100 duration-300 cursor-pointer line-clamp-1 p-1 px-4 ${
+                  path.startsWith(item.to) ? "bg-purple-100" : ""
+                }`}
               >
                 <span className="p-1 bg-white rounded outline outline-purple-200 text-purple-500">
                   {item.icon}
@@ -155,7 +156,7 @@ export default function Header() {
               className="flex gap-1.5 items-center hover:bg-purple-100 duration-300 cursor-pointer line-clamp-1 p-1 px-4 text-red-500"
             >
               <span className="p-1 bg-white rounded outline outline-purple-200">
-                <IoLogOut/>
+                <IoLogOut />
               </span>
               Logout
             </p>
@@ -168,7 +169,7 @@ export default function Header() {
           href="/registration"
           className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-5 2xl:py-4 2xl:px-7 text-indigo-700 bg-white rounded-full border-4 border-indigo-300 hover:border-orange-400 duration-300 shadow-2xl transform hover:scale-110 hover:-rotate-2 font-bold group relative overflow-hidden max-w-42"
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-30 group-hover:translate-x-full transition-all duration-700 -skew-x-12"></div>
+          <div className="absolute inset-0 bg-linear-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-30 group-hover:translate-x-full transition-all duration-700 -skew-x-12"></div>
           <span className="relative z-10 group-hover:text-orange-600 transition-colors duration-300">
             🎪 Sign Up
           </span>
@@ -177,9 +178,9 @@ export default function Header() {
 
         <Link
           href="/sign_in"
-          className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-5 2xl:py-4 2xl:px-7 rounded-full border-4 border-white/50 bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-pink-500 hover:to-rose-500 hover:border-pink-300 duration-300 shadow-2xl transform hover:scale-110 hover:rotate-2 font-bold group relative overflow-hidden max-w-42"
+          className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-5 2xl:py-4 2xl:px-7 rounded-full border-4 border-white/50 bg-linear-to-r from-indigo-500 to-purple-500 text-white hover:from-pink-500 hover:to-rose-500 hover:border-pink-300 duration-300 shadow-2xl transform hover:scale-110 hover:rotate-2 font-bold group relative overflow-hidden max-w-42"
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 group-hover:translate-x-full transition-all duration-700 -skew-x-12"></div>
+          <div className="absolute inset-0 bg-linear-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 group-hover:translate-x-full transition-all duration-700 -skew-x-12"></div>
           <span className="relative z-10">🔑 Sign In</span>
           <IoLogIn className="size-5 relative z-10 group-hover:scale-125 transition-all duration-300" />
         </Link>
@@ -191,7 +192,7 @@ export default function Header() {
     return (
       <>
         <div
-          className={`xl:hidden h-[calc(100vh-80px)] w-full fixed z-40 top-20 left-0 bg-gradient-to-r from-indigo-200 to-purple-200 duration-500 transform ${
+          className={`xl:hidden h-[calc(100vh-80px)] w-full fixed z-40 top-20 left-0 bg-linear-to-r from-indigo-200 to-purple-200 duration-500 transform ${
             isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
@@ -199,36 +200,36 @@ export default function Header() {
             <div className="space-y-5">
               {isAuthenticated && token && user && (
                 <>
-                <div
-                  onClick={toggleSidebar}
-                  className="space-y-3 flex flex-col items-center border-b pb-3 border-white/70"
-                >
-                  <Link href="/dashboard">
-                    {user.photo ? (
-                      <Image
-                        src={user.photo || "#"}
-                        alt="profile pic"
-                        height={100}
-                        width={100}
-                        className="size-30 rounded-full object-cover aspect-auto border-3 border-white"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <FaUser className="size-30 rounded-full object-cover aspect-auto border-5 border-purple-400 bg-purple-400 text-white" />
-                    )}
-                  </Link>
+                  <div
+                    onClick={toggleSidebar}
+                    className="space-y-3 flex flex-col items-center border-b pb-3 border-white/70"
+                  >
+                    <Link href="/dashboard">
+                      {user.photo ? (
+                        <Image
+                          src={user.photo || "#"}
+                          alt="profile pic"
+                          height={100}
+                          width={100}
+                          className="size-30 rounded-full object-cover aspect-auto border-3 border-white"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <FaUser className="size-30 rounded-full object-cover aspect-auto border-5 border-purple-400 bg-purple-400 text-white" />
+                      )}
+                    </Link>
 
-                  <Link href="/dashboard" className="text-center mt-3">
-                    <p className="capitalize font-semibold text-xl">
-                      {user?.first_name} {user?.last_name}
-                    </p>
+                    <Link href="/dashboard" className="text-center mt-3">
+                      <p className="capitalize font-semibold text-xl">
+                        {user?.first_name} {user?.last_name}
+                      </p>
 
-                    <p className="text-sm">
-                      {user?.email || user?.phone_number}
-                    </p>
-                  </Link>
-                </div>
-                <div className="space-y-5 border-b border-white/70 pb-5 text-indigo-800">
+                      <p className="text-sm">
+                        {user?.email || user?.phone_number}
+                      </p>
+                    </Link>
+                  </div>
+                  <div className="space-y-5 border-b border-white/70 pb-5 text-indigo-800">
                     {/* Sidebar Items */}
                     {SidebarData.map((item, index) => (
                       <Link
@@ -239,15 +240,12 @@ export default function Header() {
                           path.startsWith(item.to) ? "text-[#d400ff]" : ""
                         }`}
                       >
-                        <span className="text-lg rounded-sm">
-                          {item.icon}
-                        </span>
+                        <span className="text-lg rounded-sm">{item.icon}</span>
                         {item.label}
                       </Link>
                     ))}
                   </div>
                 </>
-                
               )}
 
               {navdata.map((item, index) => {
@@ -309,7 +307,9 @@ export default function Header() {
                             key={i}
                             href={link.to}
                             className={`block hover:text-[#d400ff] text-sm duration-300 font-medium ${
-                              link.to === path ? "text-[#d400ff]" : "text-indigo-800"
+                              link.to === path
+                                ? "text-[#d400ff]"
+                                : "text-indigo-800"
                             }`}
                           >
                             {link.label}
@@ -335,7 +335,7 @@ export default function Header() {
                 <Link
                   onClick={toggleSidebar}
                   href="/registration"
-                  className="text-sm font-medium flex items-center gap-1 py-1 px-3 2xl:py-2 2xl:px-5 rounded-full border-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-pink-500 hover:to-rose-500 hover:border-pink-300 duration-300 w-[100px]"
+                  className="text-sm font-medium flex items-center gap-1 py-1 px-3 2xl:py-2 2xl:px-5 rounded-full border-2 bg-linear-to-r from-indigo-500 to-purple-500 text-white hover:from-pink-500 hover:to-rose-500 hover:border-pink-300 duration-300 w-[100px]"
                 >
                   Register
                   <IoLogIn className="size-5" />
@@ -344,7 +344,7 @@ export default function Header() {
                 <Link
                   onClick={toggleSidebar}
                   href="/sign_in"
-                  className="text-sm font-medium flex items-center gap-1 py-1 px-3 2xl:py-2 2xl:px-5 rounded-full border-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-pink-500 hover:to-rose-500 hover:border-pink-300 duration-300 w-[100px]"
+                  className="text-sm font-medium flex items-center gap-1 py-1 px-3 2xl:py-2 2xl:px-5 rounded-full border-2 bg-linear-to-r from-indigo-500 to-purple-500 text-white hover:from-pink-500 hover:to-rose-500 hover:border-pink-300 duration-300 w-[100px]"
                 >
                   Sign In
                   <IoLogIn className="size-5" />
@@ -356,7 +356,6 @@ export default function Header() {
       </>
     );
   };
-
 
   const getSettingsData = async () => {
     try {
@@ -400,7 +399,6 @@ export default function Header() {
     setHydrated(true);
   }, []);
 
-
   return (
     <>
       <div
@@ -417,11 +415,14 @@ export default function Header() {
               <RxCross2 className="size-6" />
             ) : (
               // <HiViewGridAdd className="size-6" />
-              <Image src="/assets/icon/menu.png"
-              alt="menu"
-              width={64}
-              height={64} className="size-6"
-              loading="lazy"/>
+              <Image
+                src="/assets/icon/menu.png"
+                alt="menu"
+                width={64}
+                height={64}
+                className="size-6"
+                loading="lazy"
+              />
             )}
           </div>
           <Link href="/">
