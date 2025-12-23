@@ -11,16 +11,13 @@ import { Suspense } from "react";
 export default function Home() {
   return (
     <Suspense fallback={<SuspenseLoader />}>
-      {/* <HeroSection /> */}
-      <InsightSection/>
-      <ServiceSection/>
-
+      <InsightSection />
+      <ServiceSection />
       <PricingSection />
-      <RoadmapSection/>
+      <RoadmapSection />
       <FeaturesSection />
-      <AssociatedSection/>
+      <AssociatedSection />
       <TestimonialsSection />
-      
     </Suspense>
   );
 }

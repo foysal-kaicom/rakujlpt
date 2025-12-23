@@ -55,6 +55,7 @@ export default function Footer() {
                 src="/assets/logo/logo.png"
                 alt="Logo"
                 className="h-10 w-auto"
+                loading="lazy"
               />
             </Link>
             <p className="text-sm text-gray-500">

@@ -122,6 +122,7 @@ export default function Header() {
               height={40}
               width={40}
               className="size-8 rounded-full object-cover aspect-auto ring-2 ring-purple-400"
+              loading="lazy"
             />
           ) : (
             <FaUser className="size-8 rounded-full object-cover aspect-auto ring-3 ring-purple-400 text-white bg-purple-400" />
@@ -210,6 +211,7 @@ export default function Header() {
                         height={100}
                         width={100}
                         className="size-30 rounded-full object-cover aspect-auto border-3 border-white"
+                        loading="lazy"
                       />
                     ) : (
                       <FaUser className="size-30 rounded-full object-cover aspect-auto border-5 border-purple-400 bg-purple-400 text-white" />
@@ -418,7 +420,8 @@ export default function Header() {
               <Image src="/assets/icon/menu.png"
               alt="menu"
               width={64}
-              height={64} className="size-6"/>
+              height={64} className="size-6"
+              loading="lazy"/>
             )}
           </div>
           <Link href="/">
@@ -428,6 +431,7 @@ export default function Header() {
               width={600}
               height={160}
               className="w-30 md:w-36"
+              loading="lazy"
             />
           </Link>
           <MainHeader />

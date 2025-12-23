@@ -569,6 +569,7 @@ export default function PracticeQuestion() {
                           width={80}
                           height={60}
                           className="flex-shrink-0 mt-0.5 absolute top-[-78px]"
+                          loading="lazy"
                         />
                       </>
                     ) : (
@@ -580,6 +581,7 @@ export default function PracticeQuestion() {
                           width={89}
                           height={60}
                           className="flex-shrink-0 mt-0.5 absolute top-[-87px]"
+                          loading="lazy"
                         />
                       </>
                     )}
