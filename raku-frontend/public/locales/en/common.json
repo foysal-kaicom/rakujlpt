@@ -1,7 +1,76 @@
 {
-  "welcome": "Welcome to our website",
-  "description": "This is a multilingual Next.js application",
+  "nav": {
+    "home": "Home",
+    "pricing": "Pricing",
+    "test": "Test",
+    "mockTest": "Mock Test",
+    "practice": "Practice",
+    "verifyCertificate": "Verify Certificate",
+    "about": "About",
+    "aboutRaku": "About Raku",
+    "ourTeam": "Our Team",
+    "questionComposition": "Question Composition",
+    "faq": "FAQ",
+    "blog": "Blog"
+  },
+  "premium": "Premium",
   "mocktest_exp": "Mock Test Experience",
-  "prepare_for_your_exams": "Prepare for your Japanese language exams with interactive mock tests, real-time results, and AI-driven feedback — designed to boost your confidence and accuracy before the real exam.",
-  "premium": "Premium"
+  "prepare_for_your_exams": "Prepare smartly with realistic mock tests, detailed analytics, and flexible practice options.",
+
+  "start_mock_test": "Start Mock Test",
+  "start_practice": "Start Practice",
+
+  "feature_real_exam_title": "Real Exam Experience",
+  "feature_real_exam_desc": "Practice with the official JPT & JLPT test format, timing, and scoring.",
+
+  "feature_ai_title": "AI Score Booster",
+  "feature_ai_desc": "Get instant reports showing exactly where to focus your study.",
+
+  "feature_certificate_title": "Exam Certificates",
+  "feature_certificate_desc": "Earn digital certificates and share your results online.",
+
+  "feature_flexible_title": "Flexible Study Access",
+  "feature_flexible_desc": "Take your practice tests anytime, anywhere and your progress always syncs.",
+
+  "level_up_title": "Level up your Japanese skills today",
+  "level_up_desc": "Join thousands preparing for JPT & JLPT with real-time mock tests.",
+  "active_learners": "Active Learners",
+  "mock_tests": "Mock Tests",
+  "avg_rating": "Avg. Rating",
+  "service": {
+    "title": "Mock Test for",
+    "description": "Guarantee Your pass! Practice with our interactive mock tests like the real exam. Our system is built to boost your skills from N5 beginners to N1 experts.",
+
+    "brands": {
+      "jpt": "Practice real-time JPT mock exams to enhance your test-taking speed, accuracy, confidence & score.",
+      "jlpt": "Practice real-time JLPT mock exams and prepare for all levels (N5–N1) with focused grammar, reading, and listening exercises.",
+      "nat": "Take full-length NAT practice tests to simulate the actual exam environment."
+    },
+
+    "coming_soon": "Coming soon",
+    "cta": "Start Mock test Now"
+  },
+  "pricing": {
+    "title": "Choose Your",
+    "highlight": "Learning Path",
+    "subtitle": "Select the perfect plan to accelerate your Japanese language learning journey.",
+    "cta_packages": "See All Packages",
+    "modal": {
+      "title": "Confirm Subscription",
+      "confirm_question": "Are you sure you want to subscribe to",
+      "agree_terms": "I agree to the",
+      "terms_link": "Terms and Conditions",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
+    "footer_note": "No cards required",
+    "footer_features": ["No monthly fees", "Cancel anytime", "24/7 support"]
+  },
+  "pricing_card": {
+    "most_popular": "Most Popular",
+    "current_plan": "Current Plan",
+    "upcoming": "Upcoming",
+    "subscribe": "Subscribe",
+    "renew": "Renew"
+  }
 }

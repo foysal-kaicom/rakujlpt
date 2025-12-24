@@ -22,8 +22,10 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import { useBusinessSettingsStore } from "@/stores/useBusinessStore";
 import Notification from "./notificationComponent";
 import LanguageSwitcher from "../LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 export default function Header() {
+  const { t } = useTranslation("common");
   const [scrollCount, setScrollCount] = useState(0);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
@@ -82,7 +84,7 @@ export default function Header() {
               href={item.to}
               className={`font-semibold text-base lg:text-lg flex items-center gap-1`}
             >
-              {item.label}
+              {t(item.labelKey)}
               {Array.isArray(item.links) && (
                 <IoMdArrowDropdown className="size-6 group-hover:-rotate-180 duration-300" />
               )}
@@ -96,7 +98,7 @@ export default function Header() {
                         link.to === path ? "text-[#570d69] bg-purple-100" : ""
                       }`}
                     >
-                      {link.label}
+                      {t(link.labelKey)}
                     </div>
                   </Link>
                 ))}
@@ -270,7 +272,7 @@ export default function Header() {
                           isActive ? "text-[#d400ff]" : "text-indigo-800"
                         }`}
                       >
-                        <p className="w-[calc(100%-24px)]">{item.label}</p>
+                        <p className="w-[calc(100%-24px)]">{t(item.labelKey)}</p>
                         <span>
                           {isOpen ? (
                             <IoMdArrowDropdown className="size-6" />
@@ -287,7 +289,7 @@ export default function Header() {
                           isActive ? "text-[#d400ff]" : "text-indigo-800"
                         }`}
                       >
-                        {item.label}
+                        {t(item.labelKey)}
                       </Link>
                     )}
 
@@ -297,14 +299,14 @@ export default function Header() {
                           onClick={toggleSidebar}
                           href={item.to}
                           className={`mb-3 text-sm ${
-                            item.label == "About" || item.label == "Test"
+                            item.labelKey == "nav.about" || item.labelKey == "nav.test"
                               ? "hidden"
                               : item.to == path
                               ? "text-[#d400ff]"
                               : ""
                           }`}
                         >
-                          {item.label}
+                          {t(item.labelKey)}
                         </Link>
                         {item.links.map((link, i) => (
                           <Link
@@ -315,7 +317,7 @@ export default function Header() {
                               link.to === path ? "text-[#d400ff]" : "text-indigo-800"
                             }`}
                           >
-                            {link.label}
+                            {t(link.labelKey)}
                           </Link>
                         ))}
                       </div>
