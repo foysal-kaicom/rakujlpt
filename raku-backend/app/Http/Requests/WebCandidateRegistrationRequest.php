@@ -27,6 +27,7 @@ class WebCandidateRegistrationRequest extends FormRequest
             'email'         => 'nullable|email|unique:candidates|required_without:phone_number|max:150',
             'phone_number'  => 'nullable|string|unique:candidates|required_without:email|max:20',
             'password'      => 'required|min:6|confirmed',
+            'referral_candidate_id'    => 'nullable|exists:candidates,id',
         ];
     }
 }

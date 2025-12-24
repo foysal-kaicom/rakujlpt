@@ -19,6 +19,7 @@ use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MockTestModuleController;
 use App\Http\Controllers\BusinessSettingController;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\OurTeamController;
 
@@ -200,6 +201,15 @@ Route::group(['middleware' => 'auth', 'checkPermission'], function () {
         Route::resource('', StageController::class)->parameters(['' => 'stage']);
         Route::post('{stage}/toggle-status', [StageController::class, 'toggleStatus'])->name('toggleStatus');
     });
+
+    // Route::group(['prefix' => 'coupon', 'as' => 'coupon.'], function () {
+    //     Route::get('/', [CouponController::class, 'list'])->name('list');
+    //     Route::get('/create', [CouponController::class, 'create'])->name('create');
+    //     Route::post('/store', [CouponController::class, 'store'])->name('store');
+    //     Route::get('/edit/{id}', [CouponController::class, 'edit'])->name('edit');
+    //     Route::post('/update/{id}', [CouponController::class, 'update'])->name('update');
+    //     Route::post('{id}/toggle-status', [CouponController::class, 'toggleStatus'])->name('toggleStatus');
+    // });
 
     Route::get('user-payments', [PackageController::class, 'userSubscriptions'])->name('user-payments');
 
