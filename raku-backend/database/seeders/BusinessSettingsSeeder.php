@@ -36,7 +36,8 @@ class BusinessSettingsSeeder extends Seeder
                 'authorized_docs' => 'Path/To/AuthorizedDocs.pdf',
     
                 // Branding
-                'logo' => 'Path/To/Logo.png',
+                'header_logo' => 'Path/To/Logo.png',
+                'footer_logo' => 'Path/To/FooterLogo.png',
                 'favicon_icon' => 'Path/To/Favicon.ico',
     
                 // Policies
