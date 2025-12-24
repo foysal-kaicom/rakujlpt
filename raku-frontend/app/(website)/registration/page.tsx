@@ -26,7 +26,7 @@ export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [method, setMethod] = useState("email");
+  const [method, setMethod] = useState<"email" | "phone">("email");
   const [formData, setFormData] = useState<FormData>({
     first_name: "",
     last_name: "",
@@ -52,9 +52,18 @@ export default function SignUpPage() {
     // console.log("Form submitted:", formData);
     try {
       setLoading(true);
+      const payload = {
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        password: formData.password,
+        password_confirmation: formData.password_confirmation,
+        ...(method === "email"
+          ? { email: formData.email }
+          : { phone_number: formData.phone_number }),
+      };
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/candidate/register`,
-        formData
+        payload
       );
       router.push("/sign_in");
       toast.success(response.data.message || "Sign up completed");
@@ -225,7 +234,7 @@ export default function SignUpPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  className="absolute top-3 right-3 text-gray-500 hover:text-pink-600 transition-colors"
+                  className="absolute top-3 right-3 text-gray-500 hover:text-pink-600 transition-colors cursor-pointer"
                 >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
@@ -246,7 +255,7 @@ export default function SignUpPage() {
                 <button
                   type="button"
                   onClick={() => setShowConfirm((prev) => !prev)}
-                  className="absolute top-3 right-3 text-gray-500 hover:text-green-600 transition-colors"
+                  className="absolute top-3 right-3 text-gray-500 hover:text-green-600 transition-colors cursor-pointer"
                 >
                   {showConfirm ? <FaEyeSlash /> : <FaEye />}
                 </button>
@@ -255,7 +264,7 @@ export default function SignUpPage() {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-pink-500  to-indigo-500 hover:from-pink-600 hover:to-indigo-600 text-white font-extrabold rounded-full py-3 shadow-lg hover:shadow-[0_0_25px_rgba(255,105,180,0.4)] transition-all duration-300 active:scale-95"
+                className="w-full bg-gradient-to-r from-pink-500  to-indigo-500 hover:from-pink-600 hover:to-indigo-600 text-white font-extrabold rounded-full py-3 shadow-lg hover:shadow-[0_0_25px_rgba(255,105,180,0.4)] transition-all duration-300 active:scale-95 cursor-pointer"
               >
                 Sign Up ✨
               </button>
@@ -272,7 +281,7 @@ export default function SignUpPage() {
               <button
                 type="button"
                 onClick={() => handleGoogleLogin()}
-                className="w-full flex items-center justify-center gap-3 bg-white border border-pink-300 hover:bg-pink-50 text-gray-700 font-semibold rounded-full py-2.5 transition-all duration-300 shadow-[0_0_10px_rgba(255,105,180,0.3)] hover:shadow-[0_0_20px_rgba(255,105,180,0.4)]"
+                className="w-full flex items-center justify-center gap-3 bg-white border border-pink-300 hover:bg-pink-50 text-gray-700 font-semibold rounded-full py-2.5 transition-all duration-300 shadow-[0_0_10px_rgba(255,105,180,0.3)] hover:shadow-[0_0_20px_rgba(255,105,180,0.4)] cursor-pointer"
               >
                 <img
                   src="https://www.svgrepo.com/show/475656/google-color.svg"

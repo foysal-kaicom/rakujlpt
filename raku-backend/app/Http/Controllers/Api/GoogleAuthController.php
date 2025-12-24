@@ -8,6 +8,7 @@ use App\Models\Candidate;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Throwable;
 
@@ -23,22 +24,24 @@ class GoogleAuthController extends Controller
         ]);
 
         if ($validated->fails()) {
+            Log::info($validated->getMessageBag());
             return $this->responseWithError("Validation failed", $validated->getMessageBag());
         }
 
         try {
-            $response = Http::get("https://www.googleapis.com/oauth2/v3/userinfo", [
-                'access_token' => $request->token,
-            ]);
+            // $response = Http::get("https://www.googleapis.com/oauth2/v3/userinfo", [
+            //     'access_token' => $request->token,
+            // ]);
 
-            if (!$response->ok()) {
-                return $this->responseWithError("Error", "Invalid Google token");
+            // if (!$response->ok()) {
+            //     Log::info($response);
+            //     return $this->responseWithError("Error", "Invalid Google token");
 
-            }
+            // }
 
-            $googleUser = $response->json();
+            // $googleUser = $response->json();
 
-            $fullName = $googleUser['name'] ?? 'Unknown User';
+            $fullName = $request->name ?? 'Unknown User';
 
             // Split on the first space
             $nameParts = explode(' ', $fullName, 2);
@@ -46,12 +49,12 @@ class GoogleAuthController extends Controller
             $lastName  = $nameParts[1] ?? ''; 
             // Find or create candidate
             $candidate = Candidate::updateOrCreate(
-                ['email' => $googleUser['email']],
+                ['email' => $request->email],
                 [
                     'first_name' => $firstName,
                     'last_name' => $lastName,
-                    'google_id' => $googleUser['sub'] ?? Str::uuid(),
-                    'photo' => $googleUser['picture'] ?? $validated['image'] ?? null,
+                    'google_id' =>  Str::uuid(),
+                    'photo' =>  $request->image ?? null,
                 ]
             );
 
@@ -70,6 +73,7 @@ class GoogleAuthController extends Controller
                 'token' => $token,
             ]);
         } catch (Throwable $e) {
+            Log::error($e->getMessage());
             return response()->json([
                 'error' => 'Something went wrong.',
                 'message' => $e->getMessage(),

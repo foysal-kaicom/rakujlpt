@@ -64,7 +64,7 @@ export default function UpdatePassword() {
       <div className="min-h-[60vh]">
         <BreadCrumb breadCrumbData={breadCrumbData} />
 
-        <div className="mt-5 ">
+        <div className="mt-5 flex items-center justify-center min-h-[calc(100vh-180px)]">
           <form
             onSubmit={handleSubmit}
             className="max-w-md w-full mx-auto space-y-6 bg-white p-6 rounded-md shadow"
@@ -135,7 +135,7 @@ export default function UpdatePassword() {
 
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-800 text-white text-sm font-semibold py-2 rounded-md"
+              className="w-full bg-purple-600 hover:bg-purple-800 text-white text-sm font-semibold py-2 rounded-md cursor-pointer"
             >
               Update Password
             </button>

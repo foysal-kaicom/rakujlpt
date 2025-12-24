@@ -203,6 +203,7 @@ export default function ProfileNew() {
               width={500}
               alt="cover image"
               className="w-full h-[200px] rounded-t-md rounded-b-4xl object-cover aspect-auto"
+              loading="lazy"
             />
 
             {/* Profile Info */}
@@ -219,6 +220,7 @@ export default function ProfileNew() {
                     width={500}
                     alt="profile image"
                     className="size-30 rounded-full object-cover aspect-auto ring-6 ring-white shadow-md bg-white"
+                    loading="lazy"
                   />
                 ) : (
                   <FaUser className="size-30 rounded-full object-cover aspect-auto ring-6 text-purple-500 bg-pink-50 ring-white shadow-md" />
@@ -502,7 +504,7 @@ export default function ProfileNew() {
                 />
               )}
 
-              {profile.phone_number ? (
+              {user?.phone_number ? (
                 <p className="text-sm text-gray-500">
                   Phone:{" "}
                   <span className="font-medium">{profile?.phone_number}</span>{" "}
@@ -609,6 +611,7 @@ export default function ProfileNew() {
                     width={100}
                     alt=""
                     className="w-[70%] mx-auto"
+                    loading="lazy"
                   />
                 </div>
               )}

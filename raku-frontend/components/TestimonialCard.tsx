@@ -1,57 +1,48 @@
-import Image from "next/image";
-import Link from "next/link";
+import { Star } from "lucide-react";
+import { FaUser } from "react-icons/fa";
 
-import { FaQuoteLeft, FaQuoteRight } from "react-icons/fa";
-import { IoPersonCircleOutline } from "react-icons/io5";
-
-interface TestimonialItem {
-  id: number | string;
-  candidate_name: string;
-  candidate_designation: string;
-  candidate_image: string;
-  content: string;
-  created_at: string;
+interface Testimonial {
+  id: null | number;
+  body: string;
+  reviewer_name: string;
+  reviewer_designation: string;
+  rating: number;
+  image: string;
 }
 
 interface TestimonialCardProps {
-  item: TestimonialItem;
+  testimonial: Testimonial;
 }
 
-export default function TestimonialCard({ item }: TestimonialCardProps) {
+export default function TestimonialCard({ testimonial }: TestimonialCardProps) {
   return (
-    <Link href={`/testimonial/${item.id}`}>
-      <div className="flex flex-col justify-center items-center text-center group p-5">
-        {item.candidate_image ? (
-          <Image
-            src={item.candidate_image}
-            width={573}
-            height={435}
-            alt="overlay"
-            className="size-36 aspect-square object-cover rounded-full relative z-10 p-2 bg-white shadow-md"
+    <div key={testimonial.id} className="bg-linear-to-br from-gray-50 to-white rounded-2xl p-8 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 m-3">
+      <div className="flex items-center mb-6">
+        {[...Array(testimonial.rating)].map((_, i) => (
+          <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+        ))}
+      </div>
+      <p className="text-gray-700 mb-6 leading-relaxed">"{testimonial.body}"</p>
+      <div className="flex items-center">
+        {testimonial.image ? (
+          <img
+            src={testimonial.image}
+            alt={testimonial.reviewer_name}
+            className="w-12 h-12 rounded-full mr-4 object-cover"
           />
         ) : (
-          <IoPersonCircleOutline className="size-36 aspect-square object-cover rounded-full relative z-10 bg-white shadow-md  text-blue-300" />
+          <FaUser className="w-12 h-12 rounded-full mr-4 object-cover text-purple-400 ring-2" />
         )}
 
-        <div className="bg-blue-50 shadow p-5 rounded-md pt-20 -mt-16 group-hover:shadow-lg duration-500 min-h-[280px]">
-          <div>
-            <FaQuoteLeft className="size-2 sm:size-3 md:size-4 mr-1 text-blue-900" />
-            <div
-              className="text-sm sm:text-base md:text-lg line-clamp-2 text-gray-600"
-              dangerouslySetInnerHTML={{
-                __html: item?.content ?? "",
-              }}
-            />
-            <FaQuoteRight className="size-2 sm:size-3 md:size-4 ml-1 text-blue-900 float-end" />
-          </div>
-          <p className="sm:text-sm md:text-base font-semibold primary-text-color mt-5 mb-1">
-            {item.candidate_name}
-          </p>
-          <p className="text-xs sm:text-sm tracking-wide text-gray-600">
-            {item.candidate_designation}
+        <div>
+          <h4 className="font-semibold text-gray-900">
+            {testimonial.reviewer_name}
+          </h4>
+          <p className="text-gray-600 text-sm">
+            {testimonial.reviewer_designation}
           </p>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }

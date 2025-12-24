@@ -8,23 +8,18 @@
         <h3 class="text-lg font-semibold">Filters</h3>
     </div>
     <form method="GET" action="{{ route('mock-tests.exam.list') }}">
-        <div class="py-3 px-4 d-flex justify-content-between border align-items-center">
-            <div class="col-md-12">
-                <div class="row g-3">
-                    <!-- Search Filter -->
-                    <div class="col-md-3">
-                        <label class="form-label">Search</label>
-                        <input type="text" name="title" value="{{ old('title', request()->title) }}" class="form-control" placeholder="Search a title..." />
-                        @error('title')
-                        <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
+        <div class="py-3 px-4 lg:flex justify-between border items-end space-y-3">
+            <div class="w-full lg:w-[330px]">
+                <label class="form-label">Search</label>
+                <input type="text" name="title" value="{{ old('title', request()->title) }}" class="form-control" placeholder="Search a title..." />
+                @error('title')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-                    <div class="flex justify-end items-center gap-3 mt-3">
-                        <a href="{{ route('mock-tests.exam.list') }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium border shadow-md transition">Reset Filters</a>
-                        <button type="submit" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-green-500 text-white hover:bg-green-600 shadow-md transition">Apply Filters</button>
-                    </div>
-                </div>
+            <div class="flex justify-end items-center gap-3">
+                <a href="{{ route('mock-tests.exam.list') }}" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium border shadow-md transition">Reset Filters</a>
+                <button type="submit" class="flex items-center gap-2 px-8 py-2 rounded-xl text-sm font-medium bg-green-500 text-white hover:bg-green-600 shadow-md transition">Apply Filters</button>
             </div>
         </div>
     </form>
@@ -89,6 +84,12 @@
                     <td class="px-4 py-1">{{ $exam->id }}</td>
                     <td class="d-none d-sm-table-cell px-4 py-1">
                         {{ $exam->title }}
+
+                        @if($exam->type =='custom')
+                        <span class="inline-flex items-center rounded-full bg-blue-500 px-2.5 py-0.5 text-xs font-medium text-white ring-1 ring-inset ring-blue-700/10">
+                            Custom
+                        </span>
+                        @endif
                     </td>
                     <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->name }}</td>
                     <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->duration }}</td>

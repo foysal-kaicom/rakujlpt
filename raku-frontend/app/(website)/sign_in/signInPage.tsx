@@ -122,7 +122,7 @@ export default function LoginPage() {
   return (
     <>
       {loading && <Loader />}
-      <div className="bg-gradient-to-br from-slate-200 via-blue-100 pt-5 pb-15 min-h-screen relative overflow-hidden">
+      <div className="bg-linear-to-br from-slate-200 via-blue-100 pt-5 pb-15 min-h-screen relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-20 left-10 w-40 h-40 bg-yellow-300 rounded-full opacity-20 blur-3xl animate-pulse"></div>
         <div className="absolute bottom-40 right-20 w-56 h-56 bg-blue-300 rounded-full opacity-20 blur-3xl animate-pulse"></div>
@@ -156,7 +156,7 @@ export default function LoginPage() {
             <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl max-w-md w-full p-8 border-4 border-white/50 transform transition-all duration-300">
               {/* Header */}
               <div className="text-center mb-8">
-                <div className="bg-gradient-to-r from-indigo-400 to-purple-400 rounded-3xl p-4 inline-block mb-4 shadow-lg transform -rotate-2">
+                <div className="bg-linear-to-r from-indigo-400 to-purple-400 rounded-3xl p-4 inline-block mb-4 shadow-lg transform -rotate-2">
                   <h2 className="text-4xl font-bold text-white">👋 Welcome</h2>
                 </div>
                 {/* <p className="text-gray-600 mt-3 font-medium">
@@ -176,7 +176,7 @@ export default function LoginPage() {
                   <div className="flex border-3 border-purple-300 rounded-2xl overflow-hidden shadow-lg bg-white transform hover:scale-105 transition-all duration-300 focus-within:border-purple-500 focus-within:shadow-xl">
                     <button
                       type="button"
-                      className="px-4 flex items-center text-white bg-gradient-to-br from-purple-400 to-indigo-500 hover:from-purple-500 hover:to-indigo-600 focus:outline-none transition-all duration-300"
+                      className="px-4 flex items-center text-white bg-linear-to-br from-purple-400 to-indigo-500 hover:from-purple-500 hover:to-indigo-600 focus:outline-none transition-all duration-300"
                     >
                       <MdEmail className="size-6" />
                     </button>
@@ -187,7 +187,7 @@ export default function LoginPage() {
                       value={formData.email_or_phone}
                       onChange={handleChange}
                       required
-                      placeholder="you@example.com"
+                      placeholder="Enter email or phone number"
                       className="w-full px-4 py-3 focus:outline-none text-gray-700 font-medium"
                     />
                   </div>
@@ -205,7 +205,7 @@ export default function LoginPage() {
                     <button
                       type="button"
                       onClick={() => setShowPassword((show) => !show)}
-                      className="px-4 flex items-center text-white bg-gradient-to-br from-pink-400 to-rose-500 hover:from-pink-500 hover:to-rose-600 focus:outline-none transition-all duration-300"
+                      className="px-4 flex items-center text-white bg-linear-to-br from-pink-400 to-rose-500 hover:from-pink-500 hover:to-rose-600 focus:outline-none transition-all duration-300 cursor-pointer"
                       aria-label={
                         showPassword ? "Hide password" : "Show password"
                       }
@@ -233,12 +233,12 @@ export default function LoginPage() {
                 <button
                   type="submit"
                   // onClick={handleSubmit}
-                  className="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white font-bold rounded-2xl py-4 transition-all duration-300 shadow-xl transform hover:scale-105 hover:-rotate-1 text-lg border-4 border-white/50"
+                  className="w-full bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white font-bold rounded-2xl py-4 transition-all duration-300 shadow-xl transform hover:scale-105 hover:-rotate-1 text-lg border-4 border-white/50 cursor-pointer"
                 >
                   ✨ Sign In ✨
                 </button>
                 <div className="relative flex items-center justify-center my-5">
-                  <div className="w-full h-px bg-gradient-to-r from-pink-300 via-yellow-300 to-indigo-300"></div>
+                  <div className="w-full h-px bg-linear-to-r from-pink-300 via-yellow-300 to-indigo-300"></div>
                   <span className="absolute bg-white px-3 text-gray-600 text-sm">
                     or
                   </span>
@@ -246,7 +246,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => handleGoogleLogin()}
-                  className="w-full flex items-center justify-center gap-3 bg-white border border-pink-300 hover:bg-pink-50 text-gray-700 font-semibold rounded-full py-2.5 transition-all duration-300 shadow-[0_0_10px_rgba(255,105,180,0.3)] hover:shadow-[0_0_20px_rgba(255,105,180,0.4)]"
+                  className="w-full flex items-center justify-center gap-3 bg-white border border-pink-300 hover:bg-pink-50 text-gray-700 font-semibold rounded-full py-2.5 transition-all duration-300 shadow-[0_0_10px_rgba(255,105,180,0.3)] hover:shadow-[0_0_20px_rgba(255,105,180,0.4)] cursor-pointer"
                 >
                   <img
                     src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -259,7 +259,7 @@ export default function LoginPage() {
 
               {/* Footer Links */}
               <div className="mt-8 space-y-3">
-                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-4 text-center border-2 border-purple-200 transform hover:scale-105 transition-all duration-300">
+                <div className="bg-linear-to-r from-blue-50 to-purple-50 rounded-2xl p-4 text-center border-2 border-purple-200 transform hover:scale-105 transition-all duration-300">
                   <p className="text-gray-700 text-sm font-medium">
                     Don't have an account?{" "}
                     <Link
@@ -270,7 +270,7 @@ export default function LoginPage() {
                     </Link>
                   </p>
                 </div>
-                <div className="bg-gradient-to-r from-pink-50 to-rose-50 rounded-2xl p-4 text-center border-2 border-pink-200 transform hover:scale-105 transition-all duration-300">
+                <div className="bg-linear-to-r from-pink-50 to-rose-50 rounded-2xl p-4 text-center border-2 border-pink-200 transform hover:scale-105 transition-all duration-300">
                   <p className="text-gray-700 text-sm font-medium">
                     Don't remember password?{" "}
                     <Link

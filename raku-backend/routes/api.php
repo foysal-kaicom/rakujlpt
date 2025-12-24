@@ -20,6 +20,8 @@ use App\Http\Controllers\Api\DemoQuestionController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\CandidateProgressController;
 use App\Http\Controllers\Api\SslCommerzPaymentController;
+use App\Http\Controllers\Api\CertificateController;
+use App\Http\Controllers\Api\ReviewController;
 
 Route::prefix('v1')->group(function () {
         
@@ -79,9 +81,9 @@ Route::prefix('v1')->group(function () {
     
         });
 
-        // Route::group(['prefix' => 'exam', 'as' => 'exam.'], function () {
-        //     Route::post('/booking/store/{slug}', [BookingController::class, 'book']);
-        // });
+        Route::group(['prefix' => 'review'], function () {
+            Route::post('/submit', [ReviewController::class, 'submitReview']);
+        });
 
 
         Route::group(['prefix' => 'notifications', 'as' => 'notifications.'], function () {
@@ -103,6 +105,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/stages/{stageId}/start', [CandidateProgressController::class, 'showStage']);
         Route::post('/stages/{stageId}/complete', [CandidateProgressController::class, 'completeStage']);
         Route::get('/candidate/current-roadmap', [RoadmapController::class, 'get_current_roadmap']);
+        Route::get('/certificate-download', [CertificateController::class, 'download']);
 
     });
 
@@ -113,13 +116,25 @@ Route::prefix('v1')->group(function () {
     Route::post('/send-password-reset-otp', [CandidateController::class, 'sendPasswordResetOtp']);
     Route::post('/verify-password-reset-otp', [CandidateController::class, 'verifyResetPasswordOtp']);
 
+    Route::post('/news-letter-subscribe', [NotificationController::class, 'storeNewsLetter']);
 
     Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
     Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
 
+    Route::get('/verify-certificate', [CertificateController::class, 'verifyCertificate']);
 
+    Route::post('/send-query-mail', [HomeController::class, 'sendQueryMail']);
 
     Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
     //SSLCOMMERZ END
 
 });
+
+
+
+// Route for step 1: Getting modules by exam ID
+Route::get('/get-modules-by-exam/{examId}', [ExamController::class, 'getModulesByExam']);
+
+// Route for step 2: Getting sections by selected module IDs
+// Note: Use POST if you're sending multiple IDs in the request body
+Route::post('/get-sections-by-modules', [ExamController::class, 'getSectionsByModules']);
