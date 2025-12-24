@@ -292,8 +292,8 @@ const PackagesComponent = () => {
           <div className="text-center mt-12">
             <p className="text-gray-600 mb-4">No credit card required</p>
             <div className="flex justify-center items-center space-x-4 text-sm text-gray-500">
+              <span>✓ No monthly fees</span>
               <span>✓ Cancel anytime</span>
-              {/* <span>✓ Money-back guarantee</span> */}
               <span>✓ 24/7 support</span>
             </div>
           </div>

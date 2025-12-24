@@ -18,9 +18,9 @@ export const metadata: Metadata = {
 
 export default function OurTeamPage() {
   return (
-    <section className="py-20 bg-gradient-to-b from-blue-50 via-purple-50 to-white">
+    <section className="py-20 bg-linear-to-b from-blue-50 via-purple-50 to-white">
       <div className="container mx-auto px-6 text-center">
-        <h2 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text mb-4">
+        <h2 className="text-4xl md:text-5xl font-extrabold bg-linear-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text mb-4">
           Meet Our Team
         </h2>
         <p className="text-gray-600 max-w-2xl mx-auto mb-16">

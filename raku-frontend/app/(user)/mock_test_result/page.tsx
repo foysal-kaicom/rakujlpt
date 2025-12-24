@@ -126,10 +126,10 @@ export default function MockExamResult() {
               {currentResult.length > 0 ? (
                 <>
                   {/* Desktop Table */}
-                  <div className="hidden md:block overflow-auto rounded-xl shadow-lg border border-gray-200 bg-white/50 backdrop-blur-lg">
+                  <div className="hidden md:block overflow-auto rounded-xl border border-violet-200 bg-white/50 backdrop-blur-lg">
                     <table className="w-full text-sm relative">
                       <thead>
-                        <tr className="bg-gradient-to-r from-purple-700 via-violet-700 to-blue-700 text-white">
+                        <tr className="bg-linear-to-r from-purple-700 via-violet-700 to-blue-700 text-white">
                           <th className="p-3 text-left font-bold border-r border-gray-200">
                             Date
                           </th>
@@ -337,9 +337,9 @@ export default function MockExamResult() {
                 <div className="text-center text-gray-500 py-6 flex flex-col gap-3 justify-center items-center">
                   You have not participated in any mock test !!
                   <Link href="/mock_test_select">
-                    <button className="relative overflow-hidden text-sm md:text-base inline-block px-10 py-2 font-semibold text-white rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg shadow-purple-500/40 hover:shadow-purple-500/60 hover:scale-105 transition-all duration-300 ease-out">
+                    <button className="relative overflow-hidden text-sm md:text-base inline-block px-10 py-2 font-semibold text-white rounded-full bg-linear-to-r from-purple-600 to-blue-600 shadow-lg shadow-purple-500/40 hover:shadow-purple-500/60 hover:scale-105 transition-all duration-300 ease-out">
                       <span className="relative z-10"> Start Now</span>
-                      <span className="absolute inset-0 bg-gradient-to-r from-purple-400/30 via-pink-400/30 to-blue-400/30 blur-xl opacity-60 transition-opacity duration-300 group-hover:opacity-90"></span>
+                      <span className="absolute inset-0 bg-linear-to-r from-purple-400/30 via-pink-400/30 to-blue-400/30 blur-xl opacity-60 transition-opacity duration-300 group-hover:opacity-90"></span>
                     </button>
                   </Link>
                 </div>

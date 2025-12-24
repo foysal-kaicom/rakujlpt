@@ -30,24 +30,38 @@ export default function MyAgent() {
       id: 101,
       title: "JLPT N5 Full Mock Test",
       total_questions: 80,
+      exam_start_at: "2025-12-24T10:40:00+06:00",
       duration_minutes: 120,
-      created_at: "2024-12-01T08:30:00Z",
     },
     {
       id: 102,
       title: "JLPT N4 Grammar Practice",
       total_questions: 60,
+      exam_start_at: "2025-01-10T15:30:00+06:00",
       duration_minutes: 90,
-      created_at: "2024-12-05T11:15:00Z",
     },
     {
       id: 103,
       title: "JLPT N3 Vocabulary Drill",
       total_questions: 50,
+      exam_start_at: "2024-12-01T09:00:00+06:00",
       duration_minutes: 60,
-      created_at: "2024-12-10T14:00:00Z",
     },
   ];
+
+  function getExamEndTime(exam: any) {
+    return new Date(
+      new Date(exam.exam_start_at).getTime() + exam.duration_minutes * 60 * 1000
+    );
+  }
+
+  function canJoinExam(exam: any) {
+    const now = new Date();
+    const start = new Date(exam.exam_start_at);
+    const end = getExamEndTime(exam);
+
+    return now >= start && now <= end;
+  }
 
   //    useEffect(() => {
   //     fetch(`/api/agents/${params.agentId}/exams`)
@@ -58,26 +72,26 @@ export default function MyAgent() {
   //       });
   //   }, [params.agentId]);
 
-//   const removeAgent = async () => {
-//     const ok = confirm(
-//       "This will permanently remove the agent and all related exams. Continue?"
-//     );
-//     if (!ok) return;
+  //   const removeAgent = async () => {
+  //     const ok = confirm(
+  //       "This will permanently remove the agent and all related exams. Continue?"
+  //     );
+  //     if (!ok) return;
 
-//     setRemoving(true);
+  //     setRemoving(true);
 
-//     const res = await fetch(`/api/agents/${params.agentId}`, {
-//       method: "DELETE",
-//     });
+  //     const res = await fetch(`/api/agents/${params.agentId}`, {
+  //       method: "DELETE",
+  //     });
 
-//     if (!res.ok) {
-//       alert("Failed to remove agent");
-//       setRemoving(false);
-//       return;
-//     }
+  //     if (!res.ok) {
+  //       alert("Failed to remove agent");
+  //       setRemoving(false);
+  //       return;
+  //     }
 
-//     router.push("/user/agents");
-//   };
+  //     router.push("/user/agents");
+  //   };
 
   return (
     <div className="min-h-[60vh]">
@@ -117,7 +131,9 @@ export default function MyAgent() {
         {/* Collapsible Content */}
         <div
           className={`grid transition-all duration-300 ease-in-out ${
-            open ? "grid-rows-[1fr] opacity-100 mt-6" : "grid-rows-[0fr] opacity-0"
+            open
+              ? "grid-rows-[1fr] opacity-100 mt-6"
+              : "grid-rows-[0fr] opacity-0"
           }`}
         >
           <div className="overflow-hidden px-6 pb-6">
@@ -145,7 +161,7 @@ export default function MyAgent() {
 
               <div className="pt-4 flex justify-end">
                 <button
-                //   onClick={removeAgent}
+                  //   onClick={removeAgent}
                   className="rounded-xl bg-red-600 px-4 py-2.5 text-xs sm:text-sm font-semibold text-white transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 cursor-pointer"
                 >
                   Leave Agent
@@ -183,18 +199,35 @@ export default function MyAgent() {
                 <span className="inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-600">
                   {exam.total_questions} Questions
                 </span>
+              </div>
 
-                <span className="text-xs text-gray-500">
-                  {new Date(exam.created_at).toLocaleDateString()}
-                </span>
+              <div className="text-sm text-gray-500 space-y-1 flex justify-between flex-wrap">
+                <div>
+                  📅 {new Date(exam.exam_start_at).toLocaleDateString()}
+                </div>
+                <div>
+                  ⏰{" "}
+                  {new Date(exam.exam_start_at).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </div>
+                <div>⏳ {exam.duration_minutes} minutes</div>
               </div>
 
               {/* Divider */}
               <div className="mb-4 h-px w-full bg-gray-100" />
 
               {/* Action */}
-              <button className="w-full rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 cursor-pointer">
-                Join Exam
+              <button
+                disabled={!canJoinExam(exam)}
+                className={`w-full rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
+                  canJoinExam(exam)
+                    ? "bg-violet-600 text-white hover:bg-violet-700 cursor-pointer"
+                    : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                }`}
+              >
+                {canJoinExam(exam) ? "Join Exam" : "Not Available"}
               </button>
             </div>
           ))}

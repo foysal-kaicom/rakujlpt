@@ -109,7 +109,7 @@ export default function Dashboard() {
           <UserHeadline mainText="Dashboard" subText="" preText="" />
         </section>
 
-        <div className="relative bg-gradient-to-t from-purple-400 to-pink-400 text-white rounded-xl overflow-hidden px-8 py-4 lg:py-0 lg:px-16 flex justify-between items-center gap-8 shadow-md hover:shadow-lg transition-shadow duration-500 mb-5">
+        <div className="relative bg-linear-to-t from-purple-400 to-pink-400 text-white rounded-xl overflow-hidden px-8 py-4 lg:py-0 lg:px-16 flex justify-between items-center gap-8 shadow-md hover:shadow-lg transition-shadow duration-500 mb-5">
           {/* Animated Floating Orbs */}
           <div className="absolute -top-20 -left-20 w-56 h-56 rounded-full bg-purple-500 blur-3xl"></div>
           <div className="absolute -bottom-24 -right-24 w-72 h-72 rounded-full bg-pink-400 blur-3xl"></div>

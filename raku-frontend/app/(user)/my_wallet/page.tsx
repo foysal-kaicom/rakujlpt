@@ -134,13 +134,13 @@ export default function WalletSystem() {
 
           <div className="relative w-full col-span-3 lg:col-span-1">
             {/* Bank Card */}
-            <div className="relative p-6 rounded-2xl shadow-xl bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 text-white overflow-hidden">
+            <div className="relative p-6 rounded-2xl shadow-xl bg-linear-to-br from-purple-600 via-purple-700 to-indigo-800 text-white overflow-hidden">
               {/* Gloss Effect */}
               <div
                 className="absolute inset-0 bg-white/10 rounded-2xl pointer-events-none"
                 style={{
                   maskImage:
-                    "linear-gradient(120deg, transparent 0%, white 60%, transparent 100%)",
+                    "linear-linear(120deg, transparent 0%, white 60%, transparent 100%)",
                 }}
               ></div>
 
@@ -156,12 +156,6 @@ export default function WalletSystem() {
               <div className="mt-6 mb-4">
                 <div className="w-12 h-9 bg-yellow-300 rounded-md shadow-inner border border-yellow-600"></div>
               </div>
-
-              {/* Balance */}
-              {/* <h2 className="text-4xl font-extrabold drop-shadow-md">
-              {points}
-              <span className="text-lg ml-1 font-medium opacity-80">pts</span>
-            </h2> */}
 
               {/* Card Number (fake formatting) */}
               <p className="mt-3 tracking-widest text-sm opacity-80">
