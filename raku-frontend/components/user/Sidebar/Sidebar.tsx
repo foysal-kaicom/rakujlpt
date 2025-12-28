@@ -30,6 +30,7 @@ export default function Sidebar() {
                 height={100}
                 width={100}
                 className="rounded-full size-24 aspect-auto object-cover relative z-10 ring-5 ring-white bg-white"
+                loading="lazy"
               />
             ) : (
               <FaUser className="rounded-full size-24 aspect-auto object-cover text-purple-400 relative z-10 ring-5 ring-white bg-white" />
@@ -89,7 +90,7 @@ export default function Sidebar() {
 
     return (
       <div className="fixed bottom-0 inset-x-0 z-30 bg-white shadow-t border-t border-gray-200 flex justify-evenly gap-3 items-center py-4 rounded-t-2xl xl:hidden">
-        {SidebarData.slice(0, 4).map((item, i) => (
+        {SidebarData.slice(0, 5).map((item, i) => (
           <Link
             key={i}
             href={item.to}

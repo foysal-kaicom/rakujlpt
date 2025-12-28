@@ -137,6 +137,7 @@ export default function Dashboard() {
               height={400}
               width={400}
               className="w-full max-w-[300px]"
+              loading="lazy"
             />
           </div>
         </div>

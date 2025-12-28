@@ -70,6 +70,7 @@ export default function NewsComponent() {
                 alt={featuredNews?.title.slice(0, 10) || ""}
                 fill
                 className="object-cover"
+                loading="lazy"
               />
             </div>
             <div>
@@ -110,6 +111,7 @@ export default function NewsComponent() {
                     alt={item.title.slice(0, 10)}
                     fill
                     className="object-cover"
+                    loading="lazy"
                   />
                 </div>
                 <div className="p-5">

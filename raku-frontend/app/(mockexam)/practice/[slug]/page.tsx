@@ -218,6 +218,7 @@ export default function Roadmap() {
                                   width={60}
                                   height={60}
                                   alt={stage.title}
+                                  loading="lazy"
                                 />
                               ) : (
                                 "📍"
