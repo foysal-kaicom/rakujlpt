@@ -113,10 +113,10 @@ Route::prefix('v1')->group(function () {
 
     });
 
-    // Route::group(['prefix' => 'coupon', 'as' => 'coupon.'], function () {
-    //     Route::get('/', [CouponController::class, 'activeCoupons']);
-    //     Route::get('/check', [CouponController::class, 'checkCoupon']);
-    // });
+    Route::group(['prefix' => 'coupon', 'as' => 'coupon.'], function () {
+        Route::get('/', [CouponController::class, 'activeCoupons']);
+        Route::get('/check', [CouponController::class, 'checkCoupon']);
+    });
  
     Route::post('/success', [SslCommerzPaymentController::class, 'success'])->name('ssl.success');
     Route::post('/fail', [SslCommerzPaymentController::class, 'fail'])->name('ssl.fail');

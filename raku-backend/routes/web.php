@@ -202,14 +202,14 @@ Route::group(['middleware' => 'auth', 'checkPermission'], function () {
         Route::post('{stage}/toggle-status', [StageController::class, 'toggleStatus'])->name('toggleStatus');
     });
 
-    // Route::group(['prefix' => 'coupon', 'as' => 'coupon.'], function () {
-    //     Route::get('/', [CouponController::class, 'list'])->name('list');
-    //     Route::get('/create', [CouponController::class, 'create'])->name('create');
-    //     Route::post('/store', [CouponController::class, 'store'])->name('store');
-    //     Route::get('/edit/{id}', [CouponController::class, 'edit'])->name('edit');
-    //     Route::post('/update/{id}', [CouponController::class, 'update'])->name('update');
-    //     Route::post('{id}/toggle-status', [CouponController::class, 'toggleStatus'])->name('toggleStatus');
-    // });
+    Route::group(['prefix' => 'coupon', 'as' => 'coupon.'], function () {
+        Route::get('/', [CouponController::class, 'list'])->name('list');
+        Route::get('/create', [CouponController::class, 'create'])->name('create');
+        Route::post('/store', [CouponController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [CouponController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [CouponController::class, 'update'])->name('update');
+        Route::post('{id}/toggle-status', [CouponController::class, 'toggleStatus'])->name('toggleStatus');
+    });
 
     Route::get('user-payments', [PackageController::class, 'userSubscriptions'])->name('user-payments');
 
