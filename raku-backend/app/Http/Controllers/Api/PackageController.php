@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Coupon;
 use App\Models\Package;
 use Illuminate\Http\Request;
 use App\Models\UserSubscription;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserSubscriptionDetails;
 use App\Notifications\CandidateNotification;
 use App\Http\Resources\PackageDetailResource;
-use Illuminate\Support\Facades\DB;
 
 class PackageController extends Controller
 {
@@ -91,6 +92,7 @@ class PackageController extends Controller
     {
         $request->validate([
             'package_id' => 'required|exists:packages,id',
+            'coupon_code' => 'nullable|string',
         ]);
 
         $candidate = Auth::guard('candidate')->user();
@@ -101,6 +103,30 @@ class PackageController extends Controller
         $existingSubscription = UserSubscription::where('id', $candidate->user_subscriptions_id)
             ->where('package_id', $package->id)
             ->exists();
+
+        $coupon = null;
+
+        if ($request->has('coupon_code')) {
+            //here title = coupon code and need to check coupon validity:
+            $coupon = Coupon::where('title', trim($request->coupon_code))->first();
+            // $coupon = CouponController::validateCouponCode($request->coupon_code, $package->price);
+            if (!$coupon) {
+                return $this->responseWithError(
+                    'Invalid Coupon',
+                    'The provided coupon code is invalid.',
+                    400
+                );
+            }
+            // Coupon validity checks
+            $now = now();
+            if ($coupon->status !== 'active' || $coupon->start_date > $now || $coupon->end_date < $now) {
+                return $this->responseWithError(
+                    'Invalid Coupon',
+                    'The provided coupon code is not valid at this time.',
+                    400
+                );
+            }   
+        }
 
         // ============================
         // FREE PACKAGE (Only once)
@@ -193,13 +219,28 @@ class PackageController extends Controller
             $package->id .
             str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
 
+        // total_payable calculation with coupon
+        $totalPayable = $package->price;
+        if ($coupon) {
+            //check coupon type and calculate discount
+            if ($coupon->type === 'percentage') {
+                $discountAmount = ($package->price * $coupon->discount_value) / 100;
+                if ($coupon->max_discount > 0 && $discountAmount > $coupon->max_discount) {
+                    $discountAmount = $coupon->max_discount;
+                }
+            } else {
+                $discountAmount = $coupon->discount_value;
+            }
+            $totalPayable = $package->price - $discountAmount;
+        }
+
         $userSubscription = UserSubscription::create([
             'candidate_id'   => $candidate->id,
             'package_id'     => $package->id,
             'tran_id'        => $tranId,
             'status'         => 'pending',
             'payment_status' => 'pending',
-            'total_payable'  => $package->price,
+            'total_payable'  => $totalPayable,
             'title'          => $existingSubscription ? 'renewal' : 'subscription',
         ]);
 
