@@ -1,34 +1,85 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-import { IoIosRemoveCircle } from "react-icons/io";
+import { IoMdAddCircle, IoIosRemoveCircle } from "react-icons/io";
+
+import axios from "axios";
+
+interface Coupon {
+  id: number;
+  title: string;
+  description: string;
+  type: string;
+  discount_value: string;
+  max_discount: string;
+  end_date: string;
+}
 
 export default function CheckoutPage() {
   const BASE_AMOUNT = 53;
-
+  const [couponId, setCouponId] = useState(null);
   const [coupon, setCoupon] = useState("");
+  const [selectedCoupon, setSelectedCoupon] = useState("");
+  const [couponList, setcouponList] = useState<Coupon[]>([]);
   const [discount, setDiscount] = useState(0);
+  const [discountType, setDiscountType] = useState("");
+  const [maxDiscount, setMaxDiscount] = useState(0);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const finalAmount = BASE_AMOUNT - discount;
+  const calculateFinalAmount = () => {
+    let calculatedDiscount = 0;
 
-  const applyCoupon = () => {
+    if (discountType === "percentage") {
+      calculatedDiscount = (BASE_AMOUNT * discount) / 100;
+    } else if (discountType === "fixed") {
+      calculatedDiscount = discount;
+    }
+
+    if (maxDiscount && calculatedDiscount > maxDiscount) {
+      calculatedDiscount = maxDiscount;
+    }
+
+    return Math.max(BASE_AMOUNT - calculatedDiscount, 0);
+  };
+
+  const finalAmount = calculateFinalAmount();
+
+  const applyCoupon = async () => {
     setError("");
 
-    // UI-only validation (backend MUST re-check)
-    if (coupon.trim().toUpperCase() === "JPT10") {
-      setDiscount(10);
-    } else {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/coupon/check`,
+        { params: { coupon: selectedCoupon } }
+      );
+      setCouponId(res.data.data.data.id);
+      setCoupon(res.data.data.data.title);
+      setDiscount(res.data.data.data.discount_value);
+      setDiscountType(res.data.data.data?.type);
+      setMaxDiscount(res.data.data.data.max_discount);
+    } catch (error) {
+      setCoupon("");
       setDiscount(0);
+      setDiscountType("");
+      setMaxDiscount("");
       setError("Invalid coupon code");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const removeCoupon = () =>{
-    setCoupon("")
-    setDiscount(0)
-  }
+  const addCoupon = (coupon: Coupon) => {
+    setSelectedCoupon(coupon?.title);
+  };
+
+  const removeCoupon = () => {
+    setSelectedCoupon("");
+    setCoupon("");
+    setDiscount(0);
+    setDiscountType("");
+    setMaxDiscount("");
+  };
 
   const handlePayNow = async () => {
     setLoading(true);
@@ -55,6 +106,23 @@ export default function CheckoutPage() {
     }
   };
 
+  const getCouponList = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/coupon`
+      );
+      setcouponList(res?.data?.data?.data || []);
+    } catch (error) {
+      setcouponList([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getCouponList();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-100 via-white to-indigo-100 flex items-center justify-center p-4">
       {/* Gradient Border Wrapper */}
@@ -75,24 +143,26 @@ export default function CheckoutPage() {
           <div className="rounded-2xl border-2 border-fuchsia-100 bg-gradient-to-br from-gray-50/30 to-white/30 p-5 space-y-3">
             <div className="flex justify-between text-sm">
               <span>Exam Fee</span>
-              <span>$49.00</span>
+              <span>BDT {BASE_AMOUNT}</span>
             </div>
-            <div className="flex justify-between text-sm">
+            {/* <div className="flex justify-between text-sm">
               <span>Tax</span>
-              <span>$4.00</span>
-            </div>
+              <span>BDT 4.00</span>
+            </div> */}
 
             {discount > 0 && (
               <div className="flex justify-between text-sm font-medium text-violet-600">
-                <span>Coupon Applied</span>
-                <span>- ${discount}.00</span>
+                <span>{coupon}</span>
+                <span>
+                  - {discount} {discountType != "percentage" ? "BDT" : "%"}
+                </span>
               </div>
             )}
 
             <div className="border-t border-fuchsia-400 pt-3 flex justify-between items-center">
               <span className="text-lg font-semibold">Total</span>
               <span className="text-xl font-bold text-fuchsia-600">
-                ${finalAmount}.00
+               BDT {finalAmount}
               </span>
             </div>
           </div>
@@ -100,13 +170,9 @@ export default function CheckoutPage() {
           {/* Coupon */}
           <div className="space-y-2">
             <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="🎁 Coupon code"
-                value={coupon}
-                onChange={(e) => setCoupon(e.target.value)}
-                className="flex-1 rounded-xl px-4 py-2 focus:outline-none outline outline-fuchsia-300/50 focus:ring-2 focus:ring-indigo-500 bg-white/50"
-              />
+              <p className="flex-1 rounded-xl text-gray-600 px-4 py-2 focus:outline-none outline outline-fuchsia-300/50 focus:ring-2 focus:ring-indigo-500 bg-white/50">
+                {selectedCoupon ? selectedCoupon : "🎁 Select Coupon"}
+              </p>
               <button
                 type="button"
                 onClick={applyCoupon}
@@ -115,16 +181,34 @@ export default function CheckoutPage() {
                 Apply
               </button>
             </div>
-            {discount != 0 && (
+            {couponList && (
               <div className="font-medium text-violet-600 mt-3">
-                <span className="font-semibold">Applied Coupon</span>
-                <div className="text-sm flex items-center justify-between mt-1 bg-white/40 py-2 px-4 rounded-md">
-                  <span>{coupon}</span>
-                  <div className="flex items-center gap-1">
-                    <span>- ${discount}.00</span>
-                    <IoIosRemoveCircle onClick={removeCoupon} className="size-6 text-red-600 hover:scale-105 duration-300 cursor-pointer" />
+                <span className="font-semibold">Available Coupon</span>
+                {couponList.map((coupon) => (
+                  <div
+                    key={coupon?.id}
+                    className="flex items-center justify-between mt-1 bg-white/40 py-2 px-4 rounded-md"
+                  >
+                    <span>{coupon.title}</span>
+                    <div className="flex items-center gap-1">
+                      <span>
+                        - {Math.round(Number(coupon?.discount_value))}{" "}
+                        {coupon?.type == "percentage" ? "%" : "BDT"}
+                      </span>
+                      {selectedCoupon != coupon?.title ? (
+                        <IoMdAddCircle
+                          onClick={() => addCoupon(coupon)}
+                          className="size-6 text-violet-600 hover:scale-105 duration-300 cursor-pointer"
+                        />
+                      ) : (
+                        <IoIosRemoveCircle
+                          onClick={removeCoupon}
+                          className="size-6 text-red-600 hover:scale-105 duration-300 cursor-pointer"
+                        />
+                      )}
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
             )}
             {error && <p className="text-sm text-red-600">{error}</p>}
