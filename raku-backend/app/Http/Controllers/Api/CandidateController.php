@@ -55,8 +55,8 @@ class CandidateController extends Controller
                 $data['photo'] = $imageUploadResponse['public_path'];
             }
 
-            // phone number needs to sanitize
             $data['password'] = bcrypt($data['password']);
+            $data['candidate_code'] = strtoupper(Str::random(7));
 
             $candidate = Candidate::create($data);
 
@@ -420,5 +420,121 @@ class CandidateController extends Controller
         $candidate->save();
 
         return $this->responseWithSuccess([], 'Password has been reset successfully.');
+    }
+
+    public function sendOtp(Request $request)
+    {
+        $data = $request->validate([
+            'type'  => 'required|in:email,phone',
+            'value' => 'required|string',
+        ]);
+        try {
+            $isEmail = $data['type'] === 'email';
+
+            $candidate = Candidate::query()
+                ->when($isEmail, fn ($q) => $q->where('email', $data['value']))
+                ->when(!$isEmail, fn ($q) => $q->where('phone_number', $data['value']))
+                ->first();
+
+            if (!$candidate) {
+                return response()->json(['message' => 'Candidate not found.'], 404);
+            }
+
+            if ($isEmail && $candidate->is_email_verified) {
+                return response()->json(['message' => 'Email already verified.'], 200);
+            }
+            if (!$isEmail && $candidate->is_phone_verified) {
+                return response()->json(['message' => 'Phone already verified.'], 200);
+            }
+
+            $otp = (string) random_int(100000, 999999);
+
+            $candidate->otp = $otp;
+            $candidate->otp_expired_at = Carbon::now()->addMinutes(5);
+            $candidate->save();
+
+            if ($isEmail) {
+                Mail::send('emails.verify-otp', [
+                    'otp' => $otp,
+                    'candidate_name' => $candidate->full_name ?? trim(($candidate->first_name ?? '').' '.($candidate->last_name ?? '')),
+                ], function ($message) use ($candidate) {
+                    $message->to($candidate->email)
+                        ->subject('Your Verification OTP');
+                });
+            } else {
+                $sanitizeNumber = sanitizePhoneNumber($candidate->phone_number);
+                if (!$sanitizeNumber) {
+                    throw new \Exception("Invalid phone number");
+                }
+
+                $message = "Your verification OTP is {$otp}. It will expire in 5 minutes.";
+                $sms = new SmsService();
+
+                if (!$sms->send($sanitizeNumber, $message)) {
+                    Log::warning("Failed to send OTP to {$candidate->phone_number}");
+                    throw new \Exception("Failed to send OTP SMS");
+                }
+            }
+
+            return $this->responseWithSuccess(['otp_expired_at'=>$candidate->otp_expired_at], 'OTP sent successfully.');
+
+        } catch (Throwable $e) {
+            Log::error('Failed to send OTP: ' . $e->getMessage());
+            return $this->responseWithError('Failed to send OTP. Please try again later.', []);
+        }
+    }
+
+    public function verifyOtp(Request $request)
+    {
+        $data = $request->validate([
+            'type'  => 'required|in:email,phone',
+            'value' => 'required|string',
+            'otp'   => 'required|digits:6',
+        ]);
+
+        try {
+            $isEmail = $data['type'] === 'email';
+
+            $candidate = Candidate::query()
+                ->when($isEmail, fn ($q) => $q->where('email', $data['value']))
+                ->when(!$isEmail, fn ($q) => $q->where('phone_number', $data['value']))
+                ->first();
+
+            if (!$candidate) {
+                return response()->json(['message' => 'Candidate not found.'], 404);
+            }
+
+            if (!$candidate->otp || !$candidate->otp_expired_at) {
+                return response()->json(['message' => 'No OTP found. Please request OTP again.'], 422);
+            }
+
+            if (Carbon::now()->gt(Carbon::parse($candidate->otp_expired_at))) {
+                $candidate->otp = null;
+                $candidate->otp_expired_at = null;
+                $candidate->save();
+
+                return response()->json(['message' => 'OTP expired. Please request a new OTP.'], 422);
+            }
+
+            if ($candidate->otp !== $data['otp']) {
+                return response()->json(['message' => 'Invalid OTP.'], 422);
+            }
+
+            // Mark verified + clear OTP
+            if ($isEmail) {
+                $candidate->is_email_verified = true;
+            } else {
+                $candidate->is_phone_verified = true;
+            }
+
+            $candidate->otp = null;
+            $candidate->otp_expired_at = null;
+            $candidate->save();
+
+            return $this->responseWithSuccess('OTP sent successfully.');
+
+        } catch (Throwable $e) {
+            return $this->responseWithError($e->getMessage(), 'Something went wrong.');
+        }
     }
 }
