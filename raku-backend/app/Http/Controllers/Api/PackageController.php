@@ -49,6 +49,43 @@ class PackageController extends Controller
 
         return $this->responseWithSuccess($packages, 'Packages retrieved successfully');
     }
+    public function getDetails($id)
+    {
+        $package = Package::with(['package_details.exam'])
+            ->where('status', 1)
+            ->find($id);
+
+        if (!$package) {
+            return $this->responseWithError(
+                'Not Found',
+                'Package not found.',
+                404
+            );
+        }
+
+        $data = [
+            'id' => $package->id,
+            'name' => $package->name,
+            'price' => $package->is_free ? 'FREE' : 'BDT ' . (int) $package->price,
+            'short_description' => $package->short_description,
+            'description' => $package->description,
+            'status' => $package->status,
+            'is_popular' => $package->is_popular,
+            'is_home' => $package->is_home,
+            'is_free' => $package->is_free,
+            'is_active' => $package->is_active,
+            'sequence' => $package->order,
+            'package_details' => PackageDetailResource::collection(
+                $package->package_details
+            ),
+        ];
+
+        return $this->responseWithSuccess(
+            $data,
+            'Package details retrieved successfully'
+        );
+    }
+
 
     public function subscribe(Request $request, SslCommerzPaymentController $sslController)
     {
