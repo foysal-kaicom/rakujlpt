@@ -33,6 +33,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/roadmaps', [RoadmapController::class, 'getRoadmaps']);
     Route::get('/roadmaps/{slug}/stages', [RoadmapController::class, 'getStages']);
     Route::get('/subscriptions', [PackageController::class, 'show']);
+    Route::get('/package/{id}', [PackageController::class, 'getDetails']);
 
 
     Route::get('/settings', [HomeController::class, 'settingsData']);
