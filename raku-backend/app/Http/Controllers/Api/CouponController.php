@@ -17,10 +17,7 @@ class CouponController extends Controller
             ->orderByDesc('id')
             ->get(['id', 'title', 'description', 'type', 'discount_value', 'max_discount', 'end_date']);
 
-        return $this->responseWithSuccess([
-            'success' => true,
-            'count' => $coupons->count(),
-            'data'    => $coupons ], "All coupons fetched");
+        return $this->responseWithSuccess($coupons , "All coupons fetched");
     }
 
     public function checkCoupon(Request $request){

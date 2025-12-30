@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('candidates', function (Blueprint $table) {
-            $table->string('candidate_code')->unique()->after('currently_living_country');
+            $table->string('candidate_code')->nullable()->unique()->after('currently_living_country');
             $table->unsignedBigInteger('referral_id')->nullable()->after('candidate_code');
             $table->foreign('referral_id')->references('id')->on('candidates')->nullOnDelete();
         });
