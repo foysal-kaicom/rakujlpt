@@ -10,8 +10,10 @@ import { IoLogoYoutube } from "react-icons/io";
 import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 import HTMLReactParser from "html-react-parser/lib/index";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export default function ContactSocialComponent() {
+  const { t } = useTranslation();
   const settings = useBusinessSettingsStore((state) => state.settings);
   const [formData, setFormData] = useState({
     first_name: "",
@@ -41,9 +43,9 @@ export default function ContactSocialComponent() {
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/send-query-mail`,
         formData
       );
-      toast.success(res.data.data || "Mail sent successfully");
+      toast.success(res.data.data || t("contact.success"));
     } catch (err: any) {
-      toast.error("Something went wrong");
+      toast.error(t("contact.error"));
     } finally {
       setLoading(false);
       setFormData({ first_name: "", last_name: "", email: "", body: "" });
@@ -55,20 +57,20 @@ export default function ContactSocialComponent() {
       {/* Left Info Card */}
       <div className="p-10 rounded-2xl backdrop-blur-md bg-white/70 shadow-xl border border-white/50">
         <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-          Our Contact Info 📍
+          {t("contact.info_title")} 📍
         </h2>
 
         <div className="space-y-5 text-gray-700">
           <div>
-            <p className="text-lg font-semibold">Address</p>
+            <p className="text-lg font-semibold">{t("contact.address")}</p>
             <p>{HTMLReactParser(settings?.address || "")}</p>
           </div>
           <div>
-            <p className="text-lg font-semibold">Email</p>
+            <p className="text-lg font-semibold">{t("contact.email")}</p>
             <p>{settings?.business_email || ""}</p>
           </div>
           <div>
-            <p className="text-lg font-semibold">Phone</p>
+            <p className="text-lg font-semibold">{t("contact.phone")}</p>
             <p>{HTMLReactParser(settings?.business_phone || "")}</p>
           </div>
         </div>
@@ -102,7 +104,7 @@ export default function ContactSocialComponent() {
       <div className="relative p-10 bg-white rounded-2xl shadow-xl border border-gray-100">
         <h2 className="text-2xl font-semibold mb-4">
           <span className="bg-linear-to-r from-purple-600 to-pink-500 text-transparent bg-clip-text">
-            Send Us a Message
+            {t("contact.form_title")}
           </span>{" "}
           ✉️
         </h2>
@@ -111,7 +113,7 @@ export default function ContactSocialComponent() {
             <input
               type="text"
               name="first_name"
-              placeholder="First name"
+              placeholder={t("contact.first_name")}
               required
               value={formData.first_name}
               onChange={handleChange}
@@ -120,7 +122,7 @@ export default function ContactSocialComponent() {
             <input
               type="text"
               name="last_name"
-              placeholder="Last name"
+              placeholder={t("contact.last_name")}
               required
               value={formData.last_name}
               onChange={handleChange}
@@ -130,7 +132,7 @@ export default function ContactSocialComponent() {
           <input
             type="email"
             name="email"
-            placeholder="Enter your email"
+            placeholder={t("contact.email_placeholder")}
             required
             value={formData.email}
             onChange={handleChange}
@@ -138,7 +140,7 @@ export default function ContactSocialComponent() {
           />
           <textarea
             name="body"
-            placeholder="Write your message here..."
+            placeholder={t("contact.message_placeholder")}
             required
             rows={6}
             value={formData.body}
@@ -150,7 +152,7 @@ export default function ContactSocialComponent() {
             disabled={loading}
             className="w-full py-3 font-semibold rounded-lg bg-linear-to-r from-purple-600 to-pink-500 text-white hover:opacity-90 shadow-lg duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? "Sending..." : "Submit Message"}
+            {loading ? t("contact.sending") : t("contact.submit")}
           </button>
         </form>
       </div>

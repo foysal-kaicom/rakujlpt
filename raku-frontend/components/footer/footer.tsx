@@ -10,8 +10,10 @@ import { useBusinessSettingsStore } from "@/stores/useBusinessStore";
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
+  const { t } = useTranslation("common");
   const settings = useBusinessSettingsStore((state) => state.settings);
   const [newLetterEmail, setNewsLetterEmail] = useState("");
 
@@ -26,11 +28,14 @@ export default function Footer() {
         form
       );
       if (res.data.success) {
-        toast.success(res.data.message || "Your subscription in completed");
+        toast.success(
+          res.data.message || t("footer.newsletter_success")
+        );
       }
     } catch (error: any) {
       toast.error(
-        error.response?.data.message || "There was a problem while subscribing"
+        error.response?.data.message ||
+          t("footer.newsletter_error")
       );
     } finally {
       setNewsLetterEmail("");
@@ -46,7 +51,7 @@ export default function Footer() {
 
       <footer className="px-6 lg:px-8 relative container mx-auto">
         <div className="py-16 grid grid-cols-2 xl:grid-cols-4 gap-8">
-          {/* Column 1: Logo + brief */}
+          {/* Column 1 */}
           <div>
             <Link href="/" className="flex items-center mb-4">
               <Image
@@ -59,9 +64,9 @@ export default function Footer() {
               />
             </Link>
             <p className="text-sm text-gray-500">
-              Empowering Japanese learners with modern, high-quality e-learning
-              solutions and real-time mock tests.
+              {t("footer.description")}
             </p>
+
             <div className="mt-6 flex space-x-4">
               <a
                 href={settings?.facebook_url || ""}
@@ -87,91 +92,80 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Column 2: Company Links */}
+          {/* Column 2 */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Company</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              {t("footer.company")}
+            </h3>
             <ul className="space-y-2 text-gray-500 text-sm">
               <li>
-                <Link
-                  href="/about_us"
-                  className="hover:text-purple-500 transition"
-                >
-                  About Raku
+                <Link href="/about_us" className="hover:text-purple-500 transition">
+                  {t("footer.about")}
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/contact_us"
-                  className="hover:text-purple-500 transition"
-                >
-                  Contact Us
+                <Link href="/contact_us" className="hover:text-purple-500 transition">
+                  {t("footer.contact")}
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/certificate"
-                  className="hover:text-purple-500 transition"
-                >
-                  Verify Certificate
+                <Link href="/certificate" className="hover:text-purple-500 transition">
+                  {t("footer.verify_certificate")}
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/terms_condition"
-                  className="hover:text-purple-500 transition"
-                >
-                  Terms & Condition
+                <Link href="/terms_condition" className="hover:text-purple-500 transition">
+                  {t("footer.terms")}
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 3: Resources Links */}
+          {/* Column 3 */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Resources</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              {t("footer.resources")}
+            </h3>
             <ul className="space-y-2 text-gray-500 text-sm">
               <li>
                 <Link href="/faq" className="hover:text-purple-500 transition">
-                  FAQ
+                  {t("footer.faq")}
                 </Link>
               </li>
               <li>
                 <Link href="/news" className="hover:text-purple-500 transition">
-                  Blog
+                  {t("footer.blog")}
                 </Link>
               </li>
               <li>
-                <a
-                  href="/refund_and_cancellation"
-                  className="hover:text-purple-500 transition"
-                >
-                  Refund & Cancellation
+                <a href="/refund_and_cancellation" className="hover:text-purple-500 transition">
+                  {t("footer.refund")}
                 </a>
               </li>
               <li>
-                <a
-                  href="/privacy_policy"
-                  className="hover:text-purple-500 transition"
-                >
-                  Privacy Policy
+                <a href="/privacy_policy" className="hover:text-purple-500 transition">
+                  {t("footer.privacy")}
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* Column 4: Newsletter */}
+          {/* Column 4 */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Subscribe</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              {t("footer.subscribe")}
+            </h3>
             <p className="text-gray-500 text-sm mb-4">
-              Get latest updates and offers.
+              {t("footer.subscribe_text")}
             </p>
+
             <form
               onSubmit={(e) => postNewsLetter(e)}
               className="flex flex-col sm:flex-row sm:space-x-2"
             >
               <input
                 type="email"
-                placeholder="Your email"
+                placeholder={t("footer.email_placeholder")}
                 required
                 value={newLetterEmail}
                 onChange={(e) => setNewsLetterEmail(e.target.value)}
@@ -181,15 +175,17 @@ export default function Footer() {
                 type="submit"
                 className="mt-2 sm:mt-0 px-8 py-2 bg-linear-to-r from-indigo-500 to-purple-500 text-white font-semibold rounded-full hover:scale-105 transition drop-shadow-md drop-shadow-violet-400 border-b border-white/50 cursor-pointer"
               >
-                Subscribe
+                {t("footer.subscribe_button")}
               </button>
             </form>
           </div>
         </div>
 
         <div className="border-t border-purple-300 text-gray-500 text-sm py-6">
-          <div className="flex flex-col md:flex-row justify-center items-center">
-            <p>© {new Date().getFullYear()} RAKU JLPT. All rights reserved.</p>
+          <div className="flex justify-center">
+            <p>
+              © {new Date().getFullYear()} RAKU JLPT. {t("footer.rights")}
+            </p>
           </div>
         </div>
       </footer>

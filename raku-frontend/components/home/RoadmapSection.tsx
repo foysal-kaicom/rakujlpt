@@ -1,35 +1,37 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function RoadmapSection() {
+  const { t } = useTranslation("common");
   const [activeIndex, setActiveIndex] = useState(1);
 
   const steps = [
     {
-      title: "Step 1 — Practice",
+      title: t("roadmap.steps.step1.title"),
       icon: "🚀",
-      desc: "Explore structured mock tests with AI-driven hints.",
+      desc: t("roadmap.steps.step1.desc"),
     },
     {
-      title: "Step 2 — Track Progress",
+      title: t("roadmap.steps.step2.title"),
       icon: "📊",
-      desc: "Analytics to measure growth and weak areas.",
+      desc: t("roadmap.steps.step2.desc"),
     },
     {
-      title: "Step 3 — Improve Fast",
+      title: t("roadmap.steps.step3.title"),
       icon: "⚡",
-      desc: "Fix mistakes with guided solutions.",
+      desc: t("roadmap.steps.step3.desc"),
     },
     {
-      title: "Step 4 — Achieve Excellence",
+      title: t("roadmap.steps.step4.title"),
       icon: "🏆",
-      desc: "Reach your target score confidently.",
+      desc: t("roadmap.steps.step4.desc"),
     },
     {
-      title: "Step 5 — Master the Exam",
+      title: t("roadmap.steps.step5.title"),
       icon: "🎓",
-      desc: "Be fully prepared for real exam day.",
+      desc: t("roadmap.steps.step5.desc"),
     },
   ];
 
@@ -54,31 +56,29 @@ export default function RoadmapSection() {
   };
 
   useEffect(() => {
-  const timer = setTimeout(() => {
-    setActiveIndex(prev => (prev === 5 ? 1 : prev + 1));
-  }, 4000);
+    const timer = setTimeout(() => {
+      setActiveIndex((prev) => (prev === 5 ? 1 : prev + 1));
+    }, 4000);
 
-  return () => clearTimeout(timer);
-}, [activeIndex]);
+    return () => clearTimeout(timer);
+  }, [activeIndex]);
 
   return (
     <section className="py-20 relative overflow-hidden bg-gradient-to-r from-pink-50/50 via-indigo-50/50 to-blue-50/50">
-      {/* Soft Pastel Glow */}
-
       <div className="relative container mx-auto">
         {/* Heading */}
         <div className="text-center pb-5 lg:pb-8 px-6 lg:px-8">
           <h2 className="text-4xl font-bold mb-6">
-            Your {""}
+            {t("roadmap.title_prefix")}{" "}
             <span className="bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Learning {""}
-            </span>
+              {t("roadmap.title_highlight")}
+            </span>{" "}
             <span className="bg-linear-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent">
-              Roadmap
+              {t("roadmap.title_suffix")}
             </span>
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            A beautifully structured journey to help you master every exam.
+            {t("roadmap.subtitle")}
           </p>
         </div>
 
@@ -121,12 +121,13 @@ export default function RoadmapSection() {
             );
           })}
         </div>
-         <div className="flex justify-center pt-5 px-6 lg:px-8">
+
+        <div className="flex justify-center pt-5 px-6 lg:px-8">
           <Link
             href="/practice"
             className="px-8 py-3 rounded-full bg-linear-to-r from-blue-500 to-purple-500 text-white font-semibold hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] transition-all duration-300 drop-shadow-sm drop-shadow-violet-600 border-b border-white/50"
           >
-            Start Practice Now
+            {t("roadmap.cta")}
           </Link>
         </div>
       </div>

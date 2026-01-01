@@ -1,62 +1,60 @@
-const navdata = [
+export const navdata = [
   {
     id: "home",
-    label: "Home",
+    labelKey: "nav.home",
     to: "/",
     links: "",
   },
   {
     id: "packages",
-    label: "Pricing",
+    labelKey: "nav.pricing",
     to: "/packages",
     links: "",
   },
   {
     id: "test",
-    label: "Test",
+    labelKey: "nav.test",
     to: "/mock_test_select",
     links: [
       {
         to: "/mock_test_select",
-        label: "Mock Test",
+        labelKey: "nav.mockTest",
       },
       {
         to: "/practice",
-        label: "Practice",
+        labelKey: "nav.practice",
       },
       {
         to: "/certificate",
-        label: "Verify Certificate",
-      }
+        labelKey: "nav.verifyCertificate",
+      },
     ],
   },
   {
     id: "aboutUs",
-    label: "About",
+    labelKey: "nav.about",
     to: "/about_us",
     links: [
       {
         to: "/about_us",
-        label: "About Raku",
+        labelKey: "nav.aboutRaku",
       },
       {
         to: "/our_team",
-        label: "Our Team",
+        labelKey: "nav.ourTeam",
       },
       {
         to: "/question_composition",
-        label: "Question Composition",
+        labelKey: "nav.questionComposition",
       },
       {
         to: "/faq",
-        label: "FAQ",
+        labelKey: "nav.faq",
       },
       {
         to: "/news",
-        label: "Blog",
+        labelKey: "nav.blog",
       },
     ],
   },
 ];
-
-export { navdata };

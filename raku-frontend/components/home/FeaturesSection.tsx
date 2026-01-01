@@ -2,7 +2,8 @@
 
 import axios from "axios";
 import { BookOpen } from "lucide-react";
-import { useEffect , useState } from "react";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface feature {
   id: null | number;
@@ -12,35 +13,37 @@ interface feature {
 }
 
 export default function FeaturesSection() {
-
-  const [features , setFeatures] = useState<feature[]>([])
+  const { t } = useTranslation();
+  const [features, setFeatures] = useState<feature[]>([]);
 
   const featureList = async () => {
-  try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/feature/list`,
-    );
-     setFeatures(res?.data?.data || [])
-  } catch (error) {
-   setFeatures([]);
-  }
-};
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/feature/list`,
+      );
+      setFeatures(res?.data?.data || []);
+    } catch (error) {
+      setFeatures([]);
+    }
+  };
 
-useEffect(()=>{
-  featureList()
-},[])
+  useEffect(() => {
+    featureList();
+  }, []);
 
   return (
     <section id="features" className="py-20 bg-white">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Everything You Need to{" "}
-            <span className="text-blue-600">Succeed</span>
+            {t("features.title")}{" "}
+            <span className="text-blue-600">
+              {t("features.highlight")}
+            </span>
           </h2>
+
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Our comprehensive platform provides all the tools and resources you
-            need to master Japanese language tests.
+            {t("features.subtitle")}
           </p>
         </div>
 
@@ -63,6 +66,7 @@ useEffect(()=>{
               <h3 className="text-xl font-bold text-gray-900 mb-4">
                 {feature.title}
               </h3>
+
               <p className="text-gray-600 leading-relaxed">
                 {feature.description}
               </p>

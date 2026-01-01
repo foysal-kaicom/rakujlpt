@@ -11,6 +11,7 @@ import "swiper/css/pagination";
 // import required modules
 import { Autoplay, Pagination } from "swiper/modules";
 import TestimonialCard from "../TestimonialCard";
+import { useTranslation } from "react-i18next";
 
 interface Testimonial {
   id: null | number;
@@ -22,6 +23,7 @@ interface Testimonial {
 }
 
 export default function TestimonialsSection() {
+  const { t } = useTranslation("common");
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
 
   const reviewList = async () => {
@@ -48,11 +50,10 @@ export default function TestimonialsSection() {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Success <span className="text-blue-600">Stories</span>
+            {t("success")} <span className="text-blue-600">{t("stories")}</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Explore real stories of learners who advanced their Japanese
-            proficiency through our Mock Test platform.
+            {t("testimonialText")}
           </p>
         </div>
 

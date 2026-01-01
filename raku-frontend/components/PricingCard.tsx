@@ -1,11 +1,14 @@
+"use client";
 import parse from "html-react-parser";
 import { useEffect } from "react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import axiosInstance from "@/utils/axios";
+import { useTranslation } from "react-i18next";
 
 export default function PricingCard({ plan, subscribeModal }: any) {
   const { isAuthenticated, token, user } = useAuthStore();
   const updateUser = useAuthStore((state) => state.updateUser);
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     if (token && isAuthenticated) {
@@ -13,11 +16,9 @@ export default function PricingCard({ plan, subscribeModal }: any) {
     }
   }, []);
 
-  // API Calls
   const getUserData = async () => {
     try {
       const response = await axiosInstance.get("/candidate/profile");
-      console.log(response.data.data);
       const {
         user_subscriptions_id,
         current_package_id,
@@ -27,11 +28,11 @@ export default function PricingCard({ plan, subscribeModal }: any) {
       } = response?.data?.data;
 
       updateUser({
-        user_subscriptions_id: user_subscriptions_id,
-        current_package_id: current_package_id,
-        current_package_name: current_package_name,
-        is_subscribed: is_subscribed,
-        is_free: is_free,
+        user_subscriptions_id,
+        current_package_id,
+        current_package_name,
+        is_subscribed,
+        is_free,
       });
     } catch (error: any) {
       console.log(error);
@@ -51,21 +52,24 @@ export default function PricingCard({ plan, subscribeModal }: any) {
       {plan.is_popular && (
         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
           <span className="bg-linear-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-md">
-            Most Popular
+            {t("pricing_card.most_popular")}
           </span>
         </div>
       )}
+
       <div className="bg-white rounded-3xl p-8 size-full relative overflow-clip">
         {/* Current Plan Ribbon */}
         {(user?.current_package_id == plan.id || !plan.is_active) && (
           <div
-            className={`absolute top-6 -left-18 -rotate-45  text-white text-sm font-semibold px-20 py-1 text-center shadow-md ${
+            className={`absolute top-6 -left-18 -rotate-45 text-white text-sm font-semibold px-20 py-1 text-center shadow-md ${
               user?.current_package_id == plan.id
                 ? "bg-linear-to-r from-blue-600 to-purple-600"
                 : "bg-red-600"
             }`}
           >
-            {user?.current_package_id == plan.id ? "Current Plan" : "Upcoming"}
+            {user?.current_package_id == plan.id
+              ? t("pricing_card.current_plan")
+              : t("pricing_card.upcoming")}
           </div>
         )}
 
@@ -95,7 +99,7 @@ export default function PricingCard({ plan, subscribeModal }: any) {
             <button
               className={`w-full py-4 px-6 rounded-full font-semibold transition-all duration-300 cursor-not-allowed bg-linear-to-r from-blue-100 to-purple-100 drop-shadow-sm drop-shadow-violet-600 border-b border-white/50`}
             >
-              Subscribe
+              {t("pricing_card.subscribe")}
             </button>
           ) : (
             <button
@@ -106,7 +110,9 @@ export default function PricingCard({ plan, subscribeModal }: any) {
               }`}
               onClick={() => subscribeModal(plan)}
             >
-              {user?.current_package_id == plan.id ? "Renew" : "Subscribe"}
+              {user?.current_package_id == plan.id
+                ? t("pricing_card.renew")
+                : t("pricing_card.subscribe")}
             </button>
           )}
         </div>
