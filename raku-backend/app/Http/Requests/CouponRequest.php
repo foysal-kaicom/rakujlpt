@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Requests;
+use Illuminate\Validation\Rule;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -16,6 +17,12 @@ class CouponRequest extends FormRequest
         return [
             'title'          => ['required', 'string', 'max:255'],
             'description'    => ['nullable', 'string'],
+            'coupon_code'    => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('coupons', 'coupon_code')->ignore($this->route('id')),
+            ],
             'type'           => ['required', 'in:fixed,percentage'],
             'discount_value' => ['required', 'numeric', 'min:0.01'],
             'max_discount'   => ['nullable', 'numeric', 'min:0'],
