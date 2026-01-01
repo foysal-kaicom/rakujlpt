@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\CandidateProgressController;
 use App\Http\Controllers\Api\SslCommerzPaymentController;
 use App\Http\Controllers\Api\CertificateController;
+use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\ReviewController;
 
 Route::prefix('v1')->group(function () {
@@ -33,6 +34,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/roadmaps', [RoadmapController::class, 'getRoadmaps']);
     Route::get('/roadmaps/{slug}/stages', [RoadmapController::class, 'getStages']);
     Route::get('/subscriptions', [PackageController::class, 'show']);
+    Route::get('/package/{id}', [PackageController::class, 'getDetails']);
 
 
     Route::get('/settings', [HomeController::class, 'settingsData']);
@@ -55,6 +57,9 @@ Route::prefix('v1')->group(function () {
     Route::get('/feature/list', [CMSController::class, 'getFeatureList']);
 
     Route::get('/our-member/list', [CMSController::class, 'getTeamMemberList']);
+
+    Route::post('/send-otp-verify', [CandidateController::class, 'sendOtp']);
+    Route::post('/verify-otp', [CandidateController::class, 'verifyOtp']);
 
 
     // Route::group(['prefix' => 'center', 'as' => 'center.'], function () {
@@ -109,6 +114,11 @@ Route::prefix('v1')->group(function () {
 
     });
 
+    Route::group(['prefix' => 'coupon', 'as' => 'coupon.'], function () {
+        Route::get('/', [CouponController::class, 'activeCoupons']);
+        Route::get('/check', [CouponController::class, 'checkCoupon']);
+    });
+ 
     Route::post('/success', [SslCommerzPaymentController::class, 'success'])->name('ssl.success');
     Route::post('/fail', [SslCommerzPaymentController::class, 'fail'])->name('ssl.fail');
     Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel'])->name('ssl.cancel');
