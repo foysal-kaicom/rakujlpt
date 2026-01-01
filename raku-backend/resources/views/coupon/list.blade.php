@@ -47,11 +47,11 @@
             <thead class="table-light">
                 <tr>
                     <th class="small text-secondary">ID</th>
+                    <th class="small text-secondary text-center d-none d-lg-table-cell">Coupon Code</th>
                     <th class="small text-secondary">Title</th>
                     <th class="small text-secondary d-none d-md-table-cell">Type</th>
                     <th class="small text-secondary text-center d-none d-lg-table-cell">Discount</th>
                     <th class="small text-secondary text-center d-none d-lg-table-cell">Max Discount</th>
-                    <th class="small text-secondary text-center d-none d-lg-table-cell">Usage Limit</th>
                     <th class="small text-secondary d-none d-md-table-cell">Start</th>
                     <th class="small text-secondary d-none d-md-table-cell">End</th>
                     <th class="small text-secondary text-center d-none d-lg-table-cell">Status</th>
@@ -63,9 +63,11 @@
                 @forelse($coupons as $coupon)
                     <tr>
                         <td>{{ $coupon->id }}</td>
-
                         <td>
-                            <div class="fw-semibold">{{ $coupon->title }}</div>
+                            <div class="fw-semibold">{{ $coupon->coupon_code }}</div>
+                        </td>
+                        <td>
+                            <div class="">{{ $coupon->title }}</div>
                         </td>
 
                         <td class="d-none d-md-table-cell text-capitalize">{{ $coupon->type }}</td>
@@ -85,11 +87,6 @@
                                 —
                             @endif
                         </td>
-
-                        <td class="text-center d-none d-lg-table-cell">
-                            {{ (int)$coupon->usage_limit === 0 ? 'Unlimited' : $coupon->usage_limit }}
-                        </td>
-
                         <td class="d-none d-md-table-cell">
                             {{ \Carbon\Carbon::parse($coupon->start_date)->format('d M, Y h:i A') }}
                         </td>

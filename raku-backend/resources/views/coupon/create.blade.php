@@ -13,9 +13,11 @@
 
         <div class="row g-4">
             <div class="col-md-12">
+                
+                <!-- First Row -->
                 <div class="row g-3">
                     <!-- Title -->
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Title</label>
                         <input required type="text" name="title" class="form-control" placeholder="e.g. Winter Sale" value="{{ old('title') }}" />
                         @error('title')
@@ -23,8 +25,19 @@
                         @enderror
                     </div>
 
+                    <!-- Coupon Code -->
+                    <div class="col-md-3">
+                        <label class="form-label">Coupon Code</label>
+                        <input required type="text" name="coupon_code" id="couponCode" class="form-control"
+                               placeholder="e.g. NEWYEAR26" value="{{ old('coupon_code') }}" />
+                        <small class="text-muted">Auto formatted (NEWYEAR26)</small>
+                        @error('coupon_code')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <!-- Type -->
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Type</label>
                         <select required name="type" id="couponType" class="form-select">
                             <option value="" disabled {{ old('type') ? '' : 'selected' }}>Select Type</option>
@@ -37,7 +50,7 @@
                     </div>
 
                     <!-- Status -->
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Status</label>
                         <select required name="status" class="form-select">
                             <option value="active" {{ old('status', 'active') == 'active' ? 'selected' : '' }}>Active</option>
@@ -49,6 +62,7 @@
                     </div>
                 </div>
 
+                <!-- Second Row -->
                 <div class="row g-3 mt-3">
                     <!-- Discount Value -->
                     <div class="col-md-4">
@@ -85,6 +99,7 @@
                     </div>
                 </div>
 
+                <!-- Third Row -->
                 <div class="row g-3 mt-3">
                     <!-- Start Date -->
                     <div class="col-md-6">
@@ -105,6 +120,7 @@
                     </div>
                 </div>
 
+                <!-- Fourth Row -->
                 <div class="row g-3 mt-3">
                     <!-- Description -->
                     <div class="col-md-12">
@@ -123,6 +139,7 @@
                     </div>
                 </div>
                 @endHasPermission
+
             </div>
         </div>
     </form>
@@ -151,6 +168,17 @@
 
     typeEl.addEventListener('change', applyTypeUI);
     applyTypeUI(); // initial
+
+    const codeEl = document.getElementById('couponCode');
+
+    function formatCouponCode() {
+        codeEl.value = codeEl.value
+            .replace(/[^a-zA-Z0-9]/g, '')
+            .toUpperCase();
+    }
+
+    codeEl.addEventListener('input', formatCouponCode);
+    formatCouponCode(); // initial
 </script>
 
 @endsection
