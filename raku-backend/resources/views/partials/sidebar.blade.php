@@ -289,6 +289,12 @@
                         <i class="fas fa-briefcase text-xs"></i>
                         <span>Business Setting</span>
                     </a>
+                    <!-- page-policies -->
+                    <a href="{{ route('business-settings.page.edit') }}"
+                        class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('page.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
+                        <i class="fa-solid fa-file-contract text-xs"></i>
+                        <span>Page Policies</span>
+                    </a>
                     @endHasPermission
                 </div>
             </div>

@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\ExamController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\CenterController;
+use App\Http\Controllers\Api\CouponController;
+use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\PackageController;
 use App\Http\Controllers\Api\RoadmapController;
@@ -15,14 +17,13 @@ use App\Http\Controllers\Api\SupportController;
 use App\Http\Controllers\Api\MockTestController;
 use App\Http\Controllers\Api\CandidateController;
 use App\Http\Controllers\Api\GoogleAuthController;
+use App\Http\Controllers\Api\PolicyPageController;
+use App\Http\Controllers\Api\CertificateController;
 use App\Http\Controllers\Api\TestimonialController;
 use App\Http\Controllers\Api\DemoQuestionController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\CandidateProgressController;
 use App\Http\Controllers\Api\SslCommerzPaymentController;
-use App\Http\Controllers\Api\CertificateController;
-use App\Http\Controllers\Api\CouponController;
-use App\Http\Controllers\Api\ReviewController;
 
 Route::prefix('v1')->group(function () {
         
@@ -38,6 +39,7 @@ Route::prefix('v1')->group(function () {
 
 
     Route::get('/settings', [HomeController::class, 'settingsData']);
+    Route::get('/policy/page', [PolicyPageController::class, 'show']);
     Route::post('/candidate/register', [CandidateController::class, 'register']);
 
     Route::group(['prefix' => 'exam', 'as' => 'exam.'], function () {
