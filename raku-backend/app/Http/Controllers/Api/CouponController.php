@@ -15,43 +15,35 @@ class CouponController extends Controller
             ->where('start_date', '<=', $now)
             ->where('end_date', '>=', $now)
             ->orderByDesc('id')
-            ->get(['id', 'title', 'description', 'type', 'discount_value', 'max_discount', 'end_date']);
+            ->get(['id', 'title', 'coupon_code', 'description', 'type', 'discount_value', 'max_discount', 'end_date']);
 
         return $this->responseWithSuccess($coupons , "All coupons fetched");
     }
 
     public function checkCoupon(Request $request){
         $request->validate([
-            'coupon' => ['required', 'string'],
+            'coupon_code' => ['required', 'string'],
         ]);
 
         $now = now();
-        $coupon = Coupon::where('title', trim($request->coupon))->first();
+        $coupon = Coupon::where('coupon_code', trim($request->coupon_code))->first();
 
-        $success = true;
-        $message = 'Coupon is valid.';
-        $data    = null;
-
-        $success = true;
         $message = 'Coupon is valid.';
         $data    = null;
 
         if (!$coupon) {
-            $success = false;
             $message = 'Coupon not found.';
         } elseif ($coupon->status !== 'active') {
-            $success = false;
             $message = 'This coupon is currently not active.';
         } elseif ($coupon->start_date > $now) {
-            $success = false;
             $message = 'This coupon is not started yet.';
         } elseif ($coupon->end_date < $now) {
-            $success = false;
             $message = 'This coupon has expired.';
         } else {
             $data = [
                 'id'             => $coupon->id,
                 'title'          => $coupon->title,
+                'coupon_code'    => $coupon->coupon_code,
                 'description'    => $coupon->description,
                 'type'           => $coupon->type,
                 'discount_value' => (float) $coupon->discount_value,
@@ -60,10 +52,6 @@ class CouponController extends Controller
             ];
         }
 
-        return $this->responseWithSuccess([
-            'success' => $success,
-            'message' => $message,
-            'data'    => $data,
-        ], "Coupon data fetched");    
+        return $this->responseWithSuccess($data, $message);    
     }
 }
