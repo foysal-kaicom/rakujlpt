@@ -3,6 +3,8 @@ import { useState } from "react";
 
 import { FaPaperPlane } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
+import { RiBarChartBoxAiFill } from "react-icons/ri";
+
 
 import CircularProgress from "@/components/CircularProgress";
 
@@ -42,7 +44,7 @@ export default function MocktestResultModal({
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: any) => {
+  const handleReviewSubmit = async (e: any) => {
     e.preventDefault();
     if (rating === 0) {
       toast.error("Please add a rating");
@@ -143,6 +145,12 @@ export default function MocktestResultModal({
             </div>
           </div>
 
+          <button
+            className="text-lg text-violet-500 hover:text-purple-500 hover:underline mb-2 flex justify-center items-center gap-1 cursor-pointer mx-auto"
+          >
+            <RiBarChartBoxAiFill className="animate-bounce"/> Evaluate you result with AI
+          </button>
+
           <Link
             href="/mock_test_result"
             className="text-sm text-gray-500 hover:text-purple-500 hover:underline block mb-4"
@@ -203,7 +211,7 @@ export default function MocktestResultModal({
             />
 
             <button
-              onClick={handleSubmit}
+              onClick={handleReviewSubmit}
               className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 w-full cursor-pointer"
             >
               {loading ? "Submiting .." : "Submit"}

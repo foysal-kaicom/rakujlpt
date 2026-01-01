@@ -1,12 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 
 import axios from "@/utils/axios";
 import { toast } from "sonner";
-import { useAuthStore } from "@/stores/useAuthStore";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
