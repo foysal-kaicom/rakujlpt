@@ -68,7 +68,7 @@ export default function Header() {
 
   const MainHeader = () => {
     return (
-      <div className="hidden xl:flex gap-5 lg:gap-15 h-full xl:items-center">
+      <div className="hidden xl:flex gap-5 lg:gap-8 h-full xl:items-center">
         {navdata.map((item, index) => (
           <div
             key={index}
@@ -171,21 +171,21 @@ export default function Header() {
       <LanguageSwitcher />
         <Link
           href="/registration"
-          className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-5 2xl:py-4 2xl:px-7 text-indigo-700 bg-white rounded-full border-4 border-indigo-300 hover:border-orange-400 duration-300 shadow-2xl transform hover:scale-110 hover:-rotate-2 font-bold group relative overflow-hidden max-w-42"
+          className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-4 text-indigo-700 bg-white rounded-full border-4 border-indigo-300 hover:border-orange-400 duration-300 shadow-2xl transform hover:scale-110 hover:-rotate-2 font-bold group relative overflow-hidden max-w-44"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-30 group-hover:translate-x-full transition-all duration-700 -skew-x-12"></div>
           <span className="relative z-10 group-hover:text-orange-600 transition-colors duration-300">
-            🎪 Sign Up
+            🎪 {t("nav.sign_up")}
           </span>
           <IoLogIn className="size-5 relative z-10 group-hover:text-orange-600 group-hover:scale-125 transition-all duration-300" />
         </Link>
 
         <Link
           href="/sign_in"
-          className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-5 2xl:py-4 2xl:px-7 rounded-full border-4 border-white/50 bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-pink-500 hover:to-rose-500 hover:border-pink-300 duration-300 shadow-2xl transform hover:scale-110 hover:rotate-2 font-bold group relative overflow-hidden max-w-42"
+          className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-4 rounded-full border-4 border-white/50 bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-pink-500 hover:to-rose-500 hover:border-pink-300 duration-300 shadow-2xl transform hover:scale-110 hover:rotate-2 font-bold group relative overflow-hidden max-w-44"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 group-hover:translate-x-full transition-all duration-700 -skew-x-12"></div>
-          <span className="relative z-10">🔑 Sign In</span>
+          <span className="relative z-10">🔑 {t("nav.sign_in")}</span>
           <IoLogIn className="size-5 relative z-10 group-hover:scale-125 transition-all duration-300" />
         </Link>
       </>
@@ -325,6 +325,7 @@ export default function Header() {
                   </div>
                 );
               })}
+              <LanguageSwitcher />
             </div>
 
             {isAuthenticated && token && user ? (
@@ -340,18 +341,18 @@ export default function Header() {
                 <Link
                   onClick={toggleSidebar}
                   href="/registration"
-                  className="text-sm font-medium flex items-center gap-1 py-1 px-3 2xl:py-2 2xl:px-5 rounded-full border-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-pink-500 hover:to-rose-500 hover:border-pink-300 duration-300 w-[100px]"
+                  className="text-sm font-medium flex items-center gap-1 py-2 px-3 2xl:py-2 2xl:px-5 rounded-full border-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-pink-500 hover:to-rose-500 hover:border-pink-300 duration-300 w-[104px]"
                 >
-                  Register
+                  {t("nav.sign_up")}
                   <IoLogIn className="size-5" />
                 </Link>
 
                 <Link
                   onClick={toggleSidebar}
                   href="/sign_in"
-                  className="text-sm font-medium flex items-center gap-1 py-1 px-3 2xl:py-2 2xl:px-5 rounded-full border-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-pink-500 hover:to-rose-500 hover:border-pink-300 duration-300 w-[100px]"
+                  className="text-sm font-medium flex items-center gap-1 py-2 px-3 2xl:py-2 2xl:px-5 rounded-full border-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-pink-500 hover:to-rose-500 hover:border-pink-300 duration-300 w-[104px]"
                 >
-                  Sign In
+                  {t("nav.sign_in")}
                   <IoLogIn className="size-5" />
                 </Link>
               </div>

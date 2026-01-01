@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { googleLoginUtils } from "@/utils/googleLoginUtils";
 
 import Loader from "@/components/Loader";
+import { useTranslation } from "react-i18next";
 
 interface FormData {
   first_name: string;
@@ -23,6 +24,7 @@ interface FormData {
 }
 
 export default function SignUpPage() {
+  const { t } = useTranslation("common");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -46,7 +48,7 @@ export default function SignUpPage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.password_confirmation) {
-      toast.error("Passwords do not match!");
+      toast.error(t("signup.password_mismatch"));
       return;
     }
     // console.log("Form submitted:", formData);
@@ -66,10 +68,10 @@ export default function SignUpPage() {
         payload
       );
       router.push("/sign_in");
-      toast.success(response.data.message || "Sign up completed");
+      toast.success(response.data.message || t("signup.success"));
     } catch (error: any) {
       toast.error(
-        error?.response?.data?.message || error.message || "Sign up failed"
+        error?.response?.data?.message || error.message || t("signup.failed")
       );
     } finally {
       setLoading(false);
@@ -96,7 +98,7 @@ export default function SignUpPage() {
             {/* Header */}
             <div className="text-center mb-8">
               <h2 className="text-4xl font-extrabold bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                Create Your Account
+                {t("signup.title")}
               </h2>
             </div>
 
@@ -111,7 +113,7 @@ export default function SignUpPage() {
                     value={formData.first_name}
                     onChange={handleChange}
                     required
-                    placeholder="First name"
+                    placeholder={t("signup.first_name")}
                     className="w-full pl-10 pr-3 py-2.5 rounded-xl border-2 border-transparent bg-gradient-to-r from-pink-50 to-purple-50 focus:border-pink-400 focus:ring-2 focus:ring-pink-300 outline-none text-gray-700 transition-all duration-300"
                   />
                 </div>
@@ -123,7 +125,7 @@ export default function SignUpPage() {
                     value={formData.last_name}
                     onChange={handleChange}
                     required
-                    placeholder="Last name"
+                    placeholder={t("signup.last_name")}
                     className="w-full pl-10 pr-3 py-2.5 rounded-xl border-2 border-transparent bg-gradient-to-r from-purple-50 to-indigo-50 focus:border-purple-400 focus:ring-2 focus:ring-purple-300 outline-none text-gray-700 transition-all duration-300"
                   />
                 </div>
@@ -154,7 +156,9 @@ export default function SignUpPage() {
                       <div className="w-2.5 h-2.5 bg-pink-500 rounded-full"></div>
                     )}
                   </div>
-                  <span className="text-sm font-medium">Email</span>
+                  <span className="text-sm font-medium">
+                    {t("signup.email")}
+                  </span>
                 </label>
 
                 <label
@@ -181,7 +185,9 @@ export default function SignUpPage() {
                       <div className="w-2.5 h-2.5 bg-pink-500 rounded-full"></div>
                     )}
                   </div>
-                  <span className="text-sm font-medium">Phone</span>
+                  <span className="text-sm font-medium">
+                    {t("signup.phone")}
+                  </span>
                 </label>
               </div>
 
@@ -195,7 +201,7 @@ export default function SignUpPage() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    placeholder="you@example.com"
+                    placeholder={t("signup.email_placeholder")}
                     className="w-full pl-10 pr-3 py-2.5 rounded-xl border-2 border-transparent bg-gradient-to-r from-pink-50 to-rose-50 focus:border-pink-400 focus:ring-2 focus:ring-pink-200 outline-none text-gray-700 transition-all duration-300"
                   />
                 </div>
@@ -209,11 +215,14 @@ export default function SignUpPage() {
                     onChange={(e) => {
                       let value = e.target.value.replace(/\D/g, "");
                       if (value.length > 11) value = value.slice(0, 11);
-                      setFormData((prev) => ({ ...prev, phone_number: value }));
+                      setFormData((prev) => ({
+                        ...prev,
+                        phone_number: value,
+                      }));
                     }}
                     required
                     pattern="[0-9]{11}"
-                    placeholder="01xxxxxxxxx"
+                    placeholder={t("signup.phone_placeholder")}
                     className="w-full pl-10 pr-3 py-2.5 rounded-xl border-2 border-transparent bg-gradient-to-r from-pink-50 to-rose-50 focus:border-pink-400 focus:ring-2 focus:ring-pink-200 outline-none text-gray-700 transition-all duration-300"
                   />
                 </div>
@@ -228,7 +237,7 @@ export default function SignUpPage() {
                   value={formData.password}
                   onChange={handleChange}
                   required
-                  placeholder="Enter password"
+                  placeholder={t("signup.password")}
                   className="w-full pl-10 pr-10 py-2.5 rounded-xl border-2 border-transparent bg-gradient-to-r from-yellow-50 to-pink-50 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-300 outline-none text-gray-700 transition-all duration-300"
                 />
                 <button
@@ -249,7 +258,7 @@ export default function SignUpPage() {
                   value={formData.password_confirmation}
                   onChange={handleChange}
                   required
-                  placeholder="Confirm password"
+                  placeholder={t("signup.confirm_password")}
                   className="w-full pl-10 pr-10 py-2.5 rounded-xl border-2 border-transparent bg-gradient-to-r from-green-50 to-indigo-50 focus:border-green-400 focus:ring-2 focus:ring-green-300 outline-none text-gray-700 transition-all duration-300"
                 />
                 <button
@@ -266,14 +275,14 @@ export default function SignUpPage() {
                 type="submit"
                 className="w-full bg-gradient-to-r from-pink-500  to-indigo-500 hover:from-pink-600 hover:to-indigo-600 text-white font-extrabold rounded-full py-3 shadow-lg hover:shadow-[0_0_25px_rgba(255,105,180,0.4)] transition-all duration-300 active:scale-95 cursor-pointer"
               >
-                Sign Up ✨
+                {t("signup.submit")}
               </button>
 
               {/* Divider */}
               <div className="relative flex items-center justify-center my-5">
                 <div className="w-full h-px bg-gradient-to-r from-pink-300 via-yellow-300 to-indigo-300"></div>
                 <span className="absolute bg-white px-3 text-gray-600 text-sm">
-                  or
+                  {t("signup.or")}
                 </span>
               </div>
 
@@ -288,18 +297,18 @@ export default function SignUpPage() {
                   alt="Google"
                   className="w-5 h-5"
                 />
-                <span>Sign up with Google</span>
+                <span>{t("signup.google")}</span>
               </button>
             </form>
 
             {/* Footer */}
             <p className="text-center text-sm text-gray-600 mt-6">
-              Already have an account?{" "}
+              {t("signup.have_account")}{" "}
               <Link
                 href="/sign_in"
                 className="text-pink-600 hover:underline font-semibold"
               >
-                Sign In
+                {t("signup.sign_in")}
               </Link>
             </p>
           </div>

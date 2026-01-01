@@ -34,8 +34,11 @@ export default function LanguageSwitcher() {
         className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-slate-200 rounded-lg hover:border-blue-400 hover:shadow-md transition-all duration-200 cursor-pointer"
       >
         <Globe className="w-4 h-4 text-slate-600" />
-        <span className="font-medium text-slate-700">
+        <span className="hidden xl:block font-medium text-slate-700">
           {languages[currentLang].short}
+        </span>
+        <span className="xl:hidden font-medium text-slate-700">
+          {languages[currentLang].label}
         </span>
         <ChevronDown
           className={`w-4 h-4 text-slate-600 transition-transform duration-200 ${
@@ -50,7 +53,7 @@ export default function LanguageSwitcher() {
             className="fixed inset-0 z-10"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 mt-2 w-48 bg-white border-2 border-slate-200 rounded-lg shadow-xl z-20">
+          <div className="absolute xl:right-0 xl:mt-2 w-48 bg-white border-2 border-slate-200 rounded-lg shadow-xl z-20">
             {(Object.keys(languages) as Lang[]).map((lang) => (
               <button
                 key={lang}

@@ -11,7 +11,9 @@
     "ourTeam": "Our Team",
     "questionComposition": "Question Composition",
     "faq": "FAQ",
-    "blog": "Blog"
+    "blog": "Blog",
+    "sign_in": "Sign In",
+    "sign_up": "Sign Up"
   },
   "premium": "Premium",
   "mocktest_exp": "Mock Test Experience",
@@ -72,5 +74,270 @@
     "upcoming": "Upcoming",
     "subscribe": "Subscribe",
     "renew": "Renew"
+  },
+  "breadcrumb": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "my_practice": "My Practice",
+    "select_mock_test": "Select Mock Test",
+    "practice": "Practice",
+    "about_raku": "About Raku",
+    "sign_in": "Sign In"
+  },
+  "practice": {
+    "headline": "Your Learning Roadmap",
+    "complete": "Complete",
+    "resume": "Resume",
+    "completed": "Completed",
+    "empty_message": "You have not started any practice !!",
+    "start_now": "Start Now",
+    "toast_loaded": "Showing practice"
+  },
+  "roadmap": {
+    "title_prefix": "Your",
+    "title_highlight": "Learning",
+    "title_suffix": "Roadmap",
+    "subtitle": "A beautifully structured journey to help you master every exam.",
+    "cta": "Start Practice Now",
+    "steps": {
+      "step1": {
+        "title": "Step 1 — Practice",
+        "desc": "Explore structured mock tests with AI-driven hints."
+      },
+      "step2": {
+        "title": "Step 2 — Track Progress",
+        "desc": "Analytics to measure growth and weak areas."
+      },
+      "step3": {
+        "title": "Step 3 — Improve Fast",
+        "desc": "Fix mistakes with guided solutions."
+      },
+      "step4": {
+        "title": "Step 4 — Achieve Excellence",
+        "desc": "Reach your target score confidently."
+      },
+      "step5": {
+        "title": "Step 5 — Master the Exam",
+        "desc": "Be fully prepared for real exam day."
+      }
+    }
+  },
+  "features": {
+    "title": "Everything You Need to",
+    "highlight": "Succeed",
+    "subtitle": "Our comprehensive platform provides all the tools and resources you need to master Japanese language tests."
+  },
+  "success": "Success",
+  "stories": "Stories",
+  "testimonialText": "Explore real stories of learners who advanced their Japanese proficiency through our Mock Test platform.",
+  "footer": {
+    "description": "Empowering Japanese learners with modern, high-quality e-learning solutions and real-time mock tests.",
+    "company": "Company",
+    "about": "About Raku",
+    "contact": "Contact Us",
+    "verify_certificate": "Verify Certificate",
+    "terms": "Terms & Condition",
+    "resources": "Resources",
+    "faq": "FAQ",
+    "blog": "Blog",
+    "refund": "Refund & Cancellation",
+    "privacy": "Privacy Policy",
+    "subscribe": "Subscribe",
+    "subscribe_text": "Get latest updates and offers.",
+    "email_placeholder": "Your email",
+    "subscribe_button": "Subscribe",
+    "rights": "All rights reserved.",
+    "newsletter_success": "Your subscription is completed",
+    "newsletter_error": "There was a problem while subscribing"
+  },
+  "mock": {
+    "title": "Test Your Progress",
+    "subtitle_prefix": "Ready to level up your",
+    "japanese": "Japanese?",
+    "subtitle_suffix": "Pick your exam and start practicing with real exam-style mock tests—anytime, anywhere.",
+    "select_exam": "Select an Exam",
+    "duration": "Duration",
+    "passing_point": "Passing Point",
+    "choose_test": "Choose Test",
+    "all": "All",
+    "fetch_error": "Can not get exams at this moment"
+  },
+  "practicePage": {
+    "badge": "STUDENT PRACTICE ZONE",
+    "hero_title": "Master Your Skills with",
+    "hero_highlight": "Interactive Practice Tests",
+    "hero_description": "Boost your confidence, improve accuracy, and get ready for the real exam.",
+    "cta": "Practice Free",
+    "choose_roadmap": "Choose Your Practice Roadmap",
+    "stages": "Stages Included",
+    "start_now": "Start Now"
+  },
+  "errors": {
+    "fetch_roadmaps": "Cannot fetch Roadmaps right now"
+  },
+  "about": {
+    "hero_title": "Your Exciting Journey to Japan Starts Here!",
+    "hero_description": "Dreaming of Japan? Start here! Enjoy interactive lessons, track your progress, and prepare for",
+    "hero_highlight": "JPT & JLPT with RakuJLPT — your perfect study partner.",
+    "features": {
+      "mock_tests": {
+        "title": "Mock Tests",
+        "desc": "Fun practice anytime, anywhere!"
+      },
+      "subscription": {
+        "title": "Easy Subscription",
+        "desc": "Plans that fit your learning style!"
+      },
+      "progress": {
+        "title": "Track Progress",
+        "desc": "See your improvement in real time!"
+      }
+    },
+    "cta": "Start Practicing Now",
+    "image_alt": "Japanese learning illustration"
+  },
+  "meet_the_team": {
+    "title": "Meet the Team Behind RakuJLPT",
+    "description": "Get to know the passionate individuals dedicated to helping you succeed in your Japanese language journey through RakuJLPT."
+  },
+  "composition": {
+    "levels": "Levels",
+    "duration": "Duration",
+
+    "jlpt": {
+      "default_title": "JLPT",
+      "heading": "Question Composition",
+      "description": {
+        "before": "The JLPT measures Japanese proficiency through ",
+        "and": "and",
+        "after": " sections."
+      },
+      "sections": {
+        "language": "Language Knowledge",
+        "reading": "Reading",
+        "listening": "Listening"
+      },
+      "cards": {
+        "language": {
+          "title": "Language Knowledge",
+          "items": {
+            "vocab": "Vocabulary",
+            "kanji": "Kanji Reading",
+            "grammar": "Grammar"
+          }
+        },
+        "reading": {
+          "title": "Reading",
+          "items": {
+            "short": "Short & medium passages",
+            "practical": "Practical texts (ads, notices, etc.)",
+            "long": "Long comprehension questions"
+          }
+        },
+        "listening": {
+          "title": "Listening",
+          "items": {
+            "task": "Task comprehension",
+            "key": "Key point understanding",
+            "comp": "Comprehensive listening"
+          }
+        }
+      },
+      "default_duration": "90–170 minutes (varies by level)"
+    },
+
+    "jpt": {
+      "heading": "JPT Question Composition",
+      "description": "The JPT is a comprehensive assessment of practical Japanese proficiency, consisting of a 200-point exam divided into two sections: Listening and Reading.",
+      "listening": {
+        "title": "Listening Section (25 mins)",
+        "items": {
+          "photo": "📸 Photo Description — 10 questions",
+          "qa": "💬 Question & Answer — 09 questions",
+          "dialogue": "🗣 Dialogue — 13 questions",
+          "text": "🎙 Explanatory Text — 08 questions"
+        }
+      },
+      "reading": {
+        "title": "Reading Section (25 mins)",
+        "items": {
+          "choose": "📝 Choose Correct Answer — 06 questions",
+          "correct": "🔤 Correct Wrong Sentences — 11 questions",
+          "fill": "🧩 Fill In The Blanks — 13 questions",
+          "comp": "📖 Reading Comprehension — 10 questions"
+        }
+      },
+      "footer": "🕒 Total Time: 50 minutes | 🔢 Total Questions: 80 | 🏆 Max Score: 200"
+    }
+  },
+  "faq": {
+    "title": "Got Questions?",
+    "subtitle": "We’ve got answers! Check out the most common questions below — clear, simple.",
+    "cta": "Still Need Help? Contact Us 💬"
+  },
+  "contactUsPage": {
+    "title": "Get in Touch",
+    "description": "We’d love to hear your ideas, feedback, or collaboration requests!"
+  },
+  "contact": {
+    "info_title": "Our Contact Info",
+    "address": "Address",
+    "email": "Email",
+    "phone": "Phone",
+    "form_title": "Send Us a Message",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "email_placeholder": "Enter your email",
+    "message_placeholder": "Write your message here...",
+    "submit": "Submit Message",
+    "sending": "Sending...",
+    "success": "Mail sent successfully",
+    "error": "Something went wrong"
+  },
+  "signup": {
+    "title": "Create Your Account",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "email": "Email",
+    "phone": "Phone",
+    "email_placeholder": "you@example.com",
+    "phone_placeholder": "01xxxxxxxxx",
+    "password": "Enter password",
+    "confirm_password": "Confirm password",
+    "submit": "Sign Up ✨",
+    "or": "or",
+    "google": "Sign up with Google",
+    "have_account": "Already have an account?",
+    "sign_in": "Sign In",
+    "password_mismatch": "Passwords do not match!",
+    "success": "Sign up completed successfully",
+    "failed": "Sign up failed"
+  },
+  "login": {
+    "success": "Login successful",
+    "failed": "Login failed",
+    "google_failed": "Google login failed",
+    "reg_success_title": "🎉 Registration Successful!",
+    "reg_success_desc": "You will receive an email shortly with your login credentials. Please use the provided email and password to sign in.",
+    "welcome": "👋 Welcome",
+    "email_label": "📧 Email or Phone",
+    "email_placeholder": "Enter email or phone number",
+    "password_label": "🔒 Password",
+    "password_placeholder": "Enter your password",
+    "hide_password": "Hide password",
+    "show_password": "Show password",
+    "submit": "✨ Sign In ✨",
+    "or": "or",
+    "google": "Sign In with Google",
+    "no_account": "Don't have an account?",
+    "sign_up_link": "🚀 Sign up",
+    "forgot_password_text": "Don't remember password?",
+    "forgot_password_link": "🔑 Forget Password"
+  },
+  "certificate": {
+    "title": "Verify Your Certificate !",
+    "description": "Scan the Certificate's QR code to verify its authenticity instantly.",
+    "tip": "Tip: Allow camera access for scanning. Works on desktop and mobile.",
+    "info": "No QR code scanned yet"
   }
 }
