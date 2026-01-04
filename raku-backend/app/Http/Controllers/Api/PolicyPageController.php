@@ -31,19 +31,28 @@ class PolicyPageController extends Controller
         $policy = $model::latest()->first();
 
         if (!$policy) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Content not found'
-            ], 404);
+            return $this->responseWithError(
+                'Content not found',
+                404
+            );
         }
 
         // return localized content
         $content = $policy->content[$lang] ?? $policy->content[app()->getLocale()] ?? '';
 
-        return response()->json([
-            'status' => true,
-            'type' => $type,
-            'content' => $content,
-        ]);
+        // return response()->json([
+        //     'status' => true,
+        //     'type' => $type,
+        //     'content' => $content,
+        // ]);
+        return $this->responseWithSuccess(
+            [
+                'type' => $type,
+                'content' => $content,
+            ],
+            'Data fetched successfully',
+            200
+        );
+
     }
 }
