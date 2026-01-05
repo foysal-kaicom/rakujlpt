@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface CounterOptions {
   start: number;
@@ -10,6 +11,8 @@ interface CounterOptions {
 }
 
 export default function InsightSectionCounter() {
+  const { t } = useTranslation("common");
+
   const [learners, setLearners] = useState<number>(0);
   const [tests, setTests] = useState<number>(0);
   const [rating, setRating] = useState<number>(0);
@@ -40,21 +43,27 @@ export default function InsightSectionCounter() {
         <span className="text-2xl sm:text-4xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           {Math.floor(learners).toLocaleString()}+
         </span>
-        <span className="text-sm text-gray-500 mt-1">Active Learners</span>
+        <span className="text-sm text-gray-500 mt-1">
+          {t("active_learners")}
+        </span>
       </div>
 
       <div className="flex flex-col">
         <span className="text-2xl sm:text-4xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           {Math.floor(tests)}+
         </span>
-        <span className="text-sm text-gray-500 mt-1">Mock Tests</span>
+        <span className="text-sm text-gray-500 mt-1">
+          {t("mock_tests")}
+        </span>
       </div>
 
       <div className="flex flex-col">
         <span className="text-2xl sm:text-4xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           {rating.toFixed(1)}/5
         </span>
-        <span className="text-sm text-gray-500 mt-1">Avg. Rating</span>
+        <span className="text-sm text-gray-500 mt-1">
+          {t("avg_rating")}
+        </span>
       </div>
     </div>
   );

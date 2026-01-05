@@ -1,5 +1,6 @@
-import Link from "next/link";
+"use client";
 
+import Link from "next/link";
 import { PiExam } from "react-icons/pi";
 import { TbAugmentedReality2 } from "react-icons/tb";
 import { FaRegStar } from "react-icons/fa";
@@ -7,10 +8,10 @@ import { BsFileText } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa6";
 import { GiStairsGoal } from "react-icons/gi";
 import InsightSectionCounter from "../InsightSectionCounter";
-
+import { useTranslation } from "react-i18next";
 
 export default function InsightSection() {
-  
+  const { t } = useTranslation("common");
 
   return (
     <section className="py-16 min-h-[70vh] flex items-center">
@@ -24,17 +25,15 @@ export default function InsightSection() {
             </p>
 
             <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
-              Premium{" "}
+              {t("premium")}{" "}
               <span className="bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 JPT & JLPT
               </span>{" "}
-              Mock Test Experience
+              {t("mocktest_exp")}
             </h2>
 
             <p className="text-gray-600 text-sm sm:text-base mb-8">
-              Prepare for your Japanese language exams with interactive mock
-              tests, real-time results, and AI-driven feedback — designed to
-              boost your confidence and accuracy before the real exam.
+              {t("prepare_for_your_exams")}
             </p>
 
             <div className="flex flex-wrap gap-3">
@@ -42,7 +41,7 @@ export default function InsightSection() {
                 href="/mock_test_select"
                 className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-linear-to-r from-blue-600 to-purple-600 text-white font-semibold shadow hover:opacity-85 transition drop-shadow-sm drop-shadow-violet-600 border-b border-white/50"
               >
-                Start Mock Test
+                {t("start_mock_test")}
                 <FaArrowRight />
               </Link>
 
@@ -51,78 +50,68 @@ export default function InsightSection() {
                 className="inline-flex items-center gap-2 px-5 py-3 rounded-full border ring ring-indigo-400 font-semibold text-gray-800 bg-white hover:scale-105 duration-500 transition drop-shadow-sm drop-shadow-violet-400 border-b border-white/50"
               >
                 <GiStairsGoal className="text-2xl text-purple-800" />
-                Start Practice
+                {t("start_practice")}
               </Link>
             </div>
 
-            <InsightSectionCounter/>
+            <InsightSectionCounter />
           </div>
 
           {/* RIGHT CONTENT */}
           <div className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Feature 1 */}
               <article className="flex gap-4 p-4 bg-white rounded-2xl border border-gray-200">
                 <div className="shrink-0 flex items-center justify-center w-12 h-12 rounded-lg bg-blue-50">
                   <TbAugmentedReality2 className="size-6 text-gray-700" />
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-gray-900">
-                    Real Exam Experience
+                    {t("feature_real_exam_title")}
                   </h3>
                   <p className="text-xs text-gray-500 font-medium">
-                    Practice with the official{" "}
-                    <span className="bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                      JPT & JLPT
-                    </span>{" "}
-                    test format, timing, and scoring.
+                    {t("feature_real_exam_desc")}
                   </p>
                 </div>
               </article>
 
-              {/* Feature 2 */}
               <article className="flex gap-4 p-4 bg-white rounded-2xl border border-gray-200">
                 <div className="shrink-0 flex items-center justify-center w-12 h-12 rounded-lg bg-green-50">
                   <FaRegStar className="size-6 text-gray-700" />
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-gray-900">
-                    AI Score Booster
+                    {t("feature_ai_title")}
                   </h3>
                   <p className="text-xs text-gray-500 font-medium">
-                    Get instant reports showing exactly where to focus your
-                    study.
+                    {t("feature_ai_desc")}
                   </p>
                 </div>
               </article>
 
-              {/* Feature 3 */}
               <article className="flex gap-4 p-4 bg-white rounded-2xl border border-gray-200">
                 <div className="shrink-0 flex items-center justify-center w-12 h-12 rounded-lg bg-yellow-50">
                   <PiExam className="size-6 text-gray-700" />
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-gray-900">
-                    Exam Certificates
+                    {t("feature_certificate_title")}
                   </h3>
                   <p className="text-xs text-gray-500 font-medium">
-                    Earn digital certificates and share your results online.
+                    {t("feature_certificate_desc")}
                   </p>
                 </div>
               </article>
 
-              {/* Feature 4 */}
               <article className="flex gap-4 p-4 bg-white rounded-2xl border border-gray-200">
                 <div className="shrink-0 flex items-center justify-center w-12 h-12 rounded-lg bg-purple-50">
                   <BsFileText className="size-6 text-gray-700" />
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-gray-900">
-                    Flexible Study Access
+                    {t("feature_flexible_title")}
                   </h3>
                   <p className="text-xs text-gray-500 font-medium">
-                    Take your practice tests anytime, anywhere and your progress
-                    always syncs.
+                    {t("feature_flexible_desc")}
                   </p>
                 </div>
               </article>
@@ -132,11 +121,10 @@ export default function InsightSection() {
               <div className="flex items-center justify-between">
                 <div>
                   <h4 className="text-lg font-semibold text-gray-900">
-                    Level up your Japanese skills today
+                    {t("level_up_title")}
                   </h4>
                   <p className="text-sm text-gray-500 mt-1 font-medium">
-                    Join thousands preparing for JPT & JLPT with real-time mock
-                    tests.
+                    {t("level_up_desc")}
                   </p>
                 </div>
                 <img

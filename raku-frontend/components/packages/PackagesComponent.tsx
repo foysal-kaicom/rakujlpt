@@ -13,6 +13,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import BreadCrumb from "../BreadCrumb";
 import PricingCard from "../PricingCard";
 import PackagesSkeleton from "@/app/(website)/packages/PackageSkeleton";
+import { useTranslation } from "react-i18next";
 
 // Define plan type
 interface Plan {
@@ -22,7 +23,7 @@ interface Plan {
   description: string;
   short_description: string;
   is_popular?: boolean;
-  is_active:number
+  is_active: number;
 }
 
 const breadCrumbData = [
@@ -39,6 +40,7 @@ const breadCrumbData = [
 const ITEMS_PER_PAGE = 3;
 
 const PackagesComponent = () => {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = decodeURIComponent(
@@ -132,17 +134,15 @@ const PackagesComponent = () => {
           <BreadCrumb breadCrumbData={breadCrumbData} />
           <div className="text-center mb-16 mt-15">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Choose Your <span className="text-blue-600">Learning Path</span>
+              {t("pricing.title")}{" "}
+              <span className="text-blue-600">{t("pricing.highlight")}</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Select the perfect plan to accelerate your Japanese language
-              learning journey.
+              {t("pricing.subtitle")}
             </p>
           </div>
 
-          <div
-            className={`gap-8 flex flex-wrap justify-center`}
-          >
+          <div className={`gap-8 flex flex-wrap justify-center`}>
             {paginatedPlans.map((plan, index) => (
               <PricingCard
                 key={index}
@@ -290,11 +290,15 @@ const PackagesComponent = () => {
           {/* Modal End */}
 
           <div className="text-center mt-12">
-            <p className="text-gray-600 mb-4">No credit card required</p>
+            <p className="text-gray-600 mb-4">{t("pricing.footer_note")}</p>
             <div className="flex justify-center items-center space-x-4 text-sm text-gray-500">
-              <span>✓ Cancel anytime</span>
-              {/* <span>✓ Money-back guarantee</span> */}
-              <span>✓ 24/7 support</span>
+              {(
+                t("pricing.footer_features", {
+                  returnObjects: true,
+                }) as string[]
+              ).map((item, idx) => (
+                <span key={idx}>✓ {item}</span>
+              ))}
             </div>
           </div>
         </div>
