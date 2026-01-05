@@ -31,18 +31,20 @@ export default function LanguageSwitcher() {
     <div className="relative inline-block">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-slate-200 rounded-lg hover:border-blue-400 hover:shadow-md transition-all duration-200 cursor-pointer"
+        className="group flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/80 backdrop-blur border border-slate-200 shadow-sm hover:shadow-lg hover:border-purple-400 active:scale-[0.97] transition-all duration-200 cursor-pointer"
       >
-        <Globe className="w-4 h-4 text-slate-600" />
-        <span className="hidden xl:block font-medium text-slate-700">
+        <Globe className="w-4 h-4 text-purple-500 group-hover:rotate-12 transition" />
+
+        <span className="hidden xl:block text-sm font-semibold text-slate-800">
           {languages[currentLang].short}
         </span>
-        <span className="xl:hidden font-medium text-slate-700">
+        <span className="xl:hidden text-sm font-semibold text-slate-800">
           {languages[currentLang].label}
         </span>
+
         <ChevronDown
-          className={`w-4 h-4 text-slate-600 transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
+          className={`w-4 h-4 text-slate-500 transition-transform duration-300 ${
+            isOpen ? "rotate-180 text-purple-500" : ""
           }`}
         />
       </button>
@@ -53,21 +55,27 @@ export default function LanguageSwitcher() {
             className="fixed inset-0 z-10"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute xl:right-0 xl:mt-2 w-48 bg-white border-2 border-slate-200 rounded-lg shadow-xl z-20">
+
+          <div className="absolute xl:right-0 mt-3 w-52 z-20 rounded-2xl overflow-clip bg-white/90 backdrop-blur border border-slate-200 shadow-2xl origin-top">
             {(Object.keys(languages) as Lang[]).map((lang) => (
               <button
                 key={lang}
                 onClick={() => changeLanguage(lang)}
-                className={`w-full px-4 py-3 text-left flex items-center gap-3 cursor-pointer ${
-                  currentLang === lang
-                    ? "bg-blue-50 text-blue-700 font-medium"
-                    : "text-slate-700 hover:bg-slate-50"
-                }`}
+                className={`group w-full px-4 py-3 flex items-center gap-3 text-sm transition-all cursor-pointer
+              ${
+                currentLang === lang
+                  ? "bg-purple-50 text-purple-700 font-semibold"
+                  : "text-slate-700 hover:bg-slate-100"
+              }`}
               >
-                <span className="text-lg">{languages[lang].short}</span>
+                <span className="text-xs px-2 py-0.5 rounded-md bg-slate-100 group-hover:bg-white">
+                  {languages[lang].short}
+                </span>
+
                 <span>{languages[lang].label}</span>
+
                 {currentLang === lang && (
-                  <span className="ml-auto text-blue-600">✓</span>
+                  <span className="ml-auto text-purple-600 scale-110">✓</span>
                 )}
               </button>
             ))}

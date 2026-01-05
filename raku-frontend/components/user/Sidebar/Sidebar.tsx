@@ -94,10 +94,10 @@ export default function Sidebar() {
           <Link
             key={i}
             href={item.to}
-            className={`flex flex-col items-center text-xs tracking-wide p-1 transition-colors duration-200 rounded-lg ${
+            className={`flex flex-col items-center text-xs tracking-wide p-1 transition-colors duration-200 rounded-lg md:w-[120px] ${
               path.startsWith(item.to)
-                ? "bg-gradient-to-tr from-purple-500 to-indigo-500 text-white "
-                : " bg-white text-purple-600 border"
+                ? "bg-linear-to-tr from-purple-500 to-indigo-500 text-white scale-130"
+                : "bg-white text-purple-600 border"
             }`}
           >
             <span className="text-3xl">{item.icon}</span>

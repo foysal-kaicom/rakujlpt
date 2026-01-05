@@ -3,12 +3,14 @@ import parse from "html-react-parser";
 import { useEffect } from "react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import axiosInstance from "@/utils/axios";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
-export default function PricingCard({ plan, subscribeModal }: any) {
+export default function PricingCard({ plan }: any) {
   const { isAuthenticated, token, user } = useAuthStore();
   const updateUser = useAuthStore((state) => state.updateUser);
   const { t } = useTranslation("common");
+  const router = useRouter()
 
   useEffect(() => {
     if (token && isAuthenticated) {
@@ -36,6 +38,15 @@ export default function PricingCard({ plan, subscribeModal }: any) {
       });
     } catch (error: any) {
       console.log(error);
+    }
+  };
+
+  const gotoCheckout = (id: number) => {
+    if (!isAuthenticated) {
+      router.push(`/sign_in?callbackUrl=${encodeURIComponent("/packages")}`);
+      return;
+    }else{
+      router.push(`/checkout/${id}`);
     }
   };
 
@@ -108,7 +119,7 @@ export default function PricingCard({ plan, subscribeModal }: any) {
                   ? "bg-linear-to-r from-blue-600 to-purple-600 text-white drop-shadow-sm drop-shadow-violet-600 border-b border-white/50"
                   : "bg-linear-to-r from-blue-500 to-blue-700 text-white drop-shadow-sm drop-shadow-violet-600 border-b border-white/50"
               }`}
-              onClick={() => subscribeModal(plan)}
+              onClick={() => gotoCheckout(plan.id)}
             >
               {user?.current_package_id == plan.id
                 ? t("pricing_card.renew")

@@ -86,16 +86,16 @@ export default function LoginPage() {
           email: data.email,
           phone_number: data.phone_number,
           photo: data.photo,
-          user_subscriptions_id: data.user_subscriptions_id,
-          is_subscribed: data.is_subscribed,
-          current_package_id: data.current_package_id,
-          current_package_name: data.current_package_name,
-          is_free: data.is_free,
+          user_subscriptions_id:data.user_subscriptions_id,
+          is_subscribed:data.is_subscribed,
+          current_package_id:data.current_package_id,
+          current_package_name:data.current_package_name,
+          is_free:data.is_free,
+          candidate_code:data?.candidate_code,
         };
 
         login(user, token);
         router.push(callbackUrl);
-        console.log(callbackUrl);
       }
     } catch (error: any) {
       toast.error(

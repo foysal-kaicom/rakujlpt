@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/stores/useAuthStore";
 import Link from "next/link";
 import axiosInstance from "@/utils/axios";
 import PricingCard from "../PricingCard";
 import { useTranslation } from "react-i18next";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 interface Plan {
   id: number;
@@ -124,7 +124,6 @@ const PricingSection = () => {
             <PricingCard
               key={index}
               plan={plan}
-              subscribeModal={subscribeModal}
             />
           ))}
         </div>

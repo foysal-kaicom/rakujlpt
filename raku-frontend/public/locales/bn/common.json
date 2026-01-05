@@ -86,7 +86,8 @@
     "select_mock_test": "মক টেস্ট নির্বাচন",
     "practice": "প্র্যাকটিস",
     "about_raku": "Raku সম্পর্কে",
-    "sign_in": "সাইন ইন"
+    "sign_in": "সাইন ইন",
+    "our_team": "আমাদের টিম"
   },
   "practice": {
     "headline": "আপনার শেখার রোডম্যাপ",

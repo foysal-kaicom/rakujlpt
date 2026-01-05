@@ -406,10 +406,10 @@ export default function ExamPage() {
         clearAnswers();
         toast.success("Exam submitted successfully!");
 
-        timeoutRef.current = setTimeout(() => {
-          setIsSubmitted(false);
-          router.back();
-        }, 3 * 60 * 1000);
+        // timeoutRef.current = setTimeout(() => {
+        //   setIsSubmitted(false);
+        //   router.back();
+        // }, 3 * 60 * 1000);
       } catch (error: any) {
         toast.error(
           error?.response?.data?.message || "Cannot submit your answer"

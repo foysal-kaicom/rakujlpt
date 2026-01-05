@@ -75,7 +75,7 @@ export default function MocktestSidebar({
             </div>
             <div className={`${sidebarShow ? "" : "hidden lg:block"}`}>
               <div className="p-4 bg-linear-to-l from-purple-600 to-indigo-600 rounded-lg text-white my-4">
-                <div className="flex items-center space-x-2 mb-2">
+                <div className="flex items-center space-x-2">
                   {currentSection.module_name === "Listening" && (
                     <FaVolumeUp className="size-6" />
                   )}
@@ -108,7 +108,7 @@ export default function MocktestSidebar({
                 <p className="text-sm font-medium text-gray-700">
                   Overall Progress
                 </p>
-                <div className="mt-2 bg-gray-200 rounded-full h-2">
+                <div className="mt-2 bg-purple-200 rounded-full h-2">
                   <div
                     className="bg-purple-600 h-2 rounded-full transition-all"
                     style={{
@@ -146,7 +146,7 @@ export default function MocktestSidebar({
                                 block: "center",
                               });
                           }}
-                          className={`w-8 h-8 rounded-full text-xs flex items-center justify-center font-medium ${
+                          className={`w-8 h-8 rounded-full text-xs flex items-center justify-center font-medium cursor-pointer ${
                             isAnswered
                               ? "bg-purple-500 text-white"
                               : "bg-gray-200 text-gray-700"

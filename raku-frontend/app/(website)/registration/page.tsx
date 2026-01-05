@@ -2,7 +2,7 @@
 
 import { useState, FormEvent, ChangeEvent } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter,useSearchParams } from "next/navigation";
 
 import { MdEmail } from "react-icons/md";
 import { FaUser, FaLock, FaEye, FaEyeSlash, FaPhone } from "react-icons/fa";
@@ -39,6 +39,7 @@ export default function SignUpPage() {
   });
 
   const router = useRouter();
+  const refCode = useSearchParams().get("ref");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -62,6 +63,7 @@ export default function SignUpPage() {
         ...(method === "email"
           ? { email: formData.email }
           : { phone_number: formData.phone_number }),
+        ...(refCode && { referral_code: refCode }),
       };
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/candidate/register`,
