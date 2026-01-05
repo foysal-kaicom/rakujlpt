@@ -180,7 +180,7 @@ export default function MockTestSelect() {
 
                           <button
                             onClick={() => handleChooseTest(test)}
-                            className="px-6 py-3 inline-block rounded-full font-semibold text-white text-sm shadow-md bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400"
+                            className="px-6 py-3 inline-block rounded-full font-semibold text-white text-sm shadow-md bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400 cursor-pointer"
                           >
                             🎯 {t("mock.choose_test")}
                           </button>
