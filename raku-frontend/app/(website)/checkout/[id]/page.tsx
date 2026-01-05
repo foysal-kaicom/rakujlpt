@@ -11,6 +11,7 @@ import axiosInstance from "@/utils/axios";
 
 import BreadCrumb from "@/components/BreadCrumb";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
+import { useTranslation } from "react-i18next";
 
 interface Package {
   name: string;
@@ -30,19 +31,20 @@ interface Coupon {
 }
 
 export default function CheckoutPage() {
+  const { t } = useTranslation("common");
   const id = useParams().id;
 
   const breadCrumbData = [
     {
-      name: "Home",
+      name: t("breadcrumb.home"),
       to: "/",
     },
     {
-      name: "Pricing",
+      name: t("breadcrumb.pricing"),
       to: "/packages",
     },
     {
-      name: "Checkout",
+      name: t("breadcrumb.checkout"),
       to: `/checkout/${id}`,
     },
   ];
@@ -96,7 +98,7 @@ export default function CheckoutPage() {
       setDiscount(0);
       setDiscountType("");
       setMaxDiscount(0);
-      setError("Invalid coupon code");
+      setError(t("checkout.coupon_error"));
     } finally {
       setLoading(false);
     }
@@ -151,7 +153,7 @@ export default function CheckoutPage() {
 
   const handleSubscribe = async () => {
     if (!agreed) {
-      toast.error("You must agree to the terms and conditions");
+      toast.error(t("checkout.agreement_error"));
       return;
     }
     try {
@@ -167,13 +169,13 @@ export default function CheckoutPage() {
         /^https?:\/\/.+/.test(url)
       ) {
         window.location.href = url;
-        toast.success(response?.data?.message || "Subscription successful");
+        toast.success(response?.data?.message || t("checkout.success"));
       } else {
-        toast.success(response?.data?.message || "Subscription successful");
+        toast.success(response?.data?.message || t("checkout.success"));
       }
     } catch (error: any) {
       toast.error(
-        error?.response?.data?.message || error.message || "Subscription failed"
+        error?.response?.data?.message || error.message || t("checkout.failed")
       );
     }
   };
@@ -192,37 +194,44 @@ export default function CheckoutPage() {
             {/* Header */}
             <div className="text-center space-y-1">
               <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
-                Confirm Checkout !!
+                {t("checkout.title")}
               </h1>
               <p className="text-sm text-gray-700 font-medium">
-                🚀 Fast · 🔒 Secure · 💳 Trusted
+                {t("checkout.subtitle")}
               </p>
             </div>
 
             {/* Order Summary */}
             <div className="rounded-2xl border-2 border-fuchsia-100 bg-gradient-to-br from-gray-50/30 to-white/30 p-5 space-y-3 font-medium text-gray-700">
               <div className="flex justify-between text-sm">
-                <span>Package</span>
+                <span>{t("checkout.package_label")}</span>
                 <span>{packageDetails?.name}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span>Price</span>
-                <span>BDT {BASE_AMOUNT || "Free"}</span>
+                <span>{t("checkout.price_label")}</span>
+                <span>
+                  {t("checkout.currency")} {BASE_AMOUNT || t("checkout.free")}
+                </span>
               </div>
 
               {discount > 0 && (
                 <div className="flex justify-between text-sm font-medium text-violet-600">
                   <span>{couponCode}</span>
                   <span>
-                    - {discount} {discountType != "percentage" ? "BDT" : "%"}
+                    - {discount}{" "}
+                    {discountType != "percentage"
+                      ? t("checkout.currency")
+                      : "%"}
                   </span>
                 </div>
               )}
 
               <div className="border-t border-fuchsia-400 pt-3 flex justify-between items-center">
-                <span className="text-lg font-semibold">Total</span>
+                <span className="text-lg font-semibold">
+                  {t("checkout.total_label")}
+                </span>
                 <span className="text-xl font-bold text-fuchsia-600">
-                  BDT {finalAmount || "Free"}
+                  {t("checkout.currency")} {finalAmount || t("checkout.free")}
                 </span>
               </div>
             </div>
@@ -230,19 +239,23 @@ export default function CheckoutPage() {
               <div className="space-y-2">
                 <div className="flex gap-2">
                   <p className="flex-1 rounded-xl text-gray-600 px-4 py-2 focus:outline-none outline outline-fuchsia-300/50 focus:ring-2 focus:ring-indigo-500 bg-white/50 w-[calc(100%-250px)] overflow-clip">
-                    {selectedCoupon ? selectedCoupon : "🎁 Select Coupon"}
+                    {selectedCoupon
+                      ? selectedCoupon
+                      : t("checkout.select_coupon")}
                   </p>
                   <button
                     type="button"
                     onClick={applyCoupon}
                     className="rounded-xl border px-5 py-3 text-sm font-semibold text-white bg-gradient-to-br from-fuchsia-600 to-violet-600 hover:scale-105 duration-300 cursor-pointer"
                   >
-                    Apply
+                    {t("checkout.apply_btn")}
                   </button>
                 </div>
                 {couponList && (
                   <div className="font-medium text-violet-600 mt-3">
-                    <span className="font-semibold">Available Coupon</span>
+                    <span className="font-semibold">
+                      {t("checkout.available_coupon")}
+                    </span>
                     {couponList.map((coupon) => (
                       <div
                         key={coupon?.id}
@@ -254,7 +267,9 @@ export default function CheckoutPage() {
                         <div className="flex items-center gap-1">
                           <span>
                             - {Math.round(Number(coupon?.discount_value))}{" "}
-                            {coupon?.type == "percentage" ? "%" : "BDT"}
+                            {coupon?.type == "percentage"
+                              ? "%"
+                              : t("checkout.currency")}
                           </span>
                           {selectedCoupon != coupon?.coupon_code ? (
                             <IoMdAddCircle
@@ -284,7 +299,7 @@ export default function CheckoutPage() {
                 onChange={(e) => setAgreed(e.target.checked)}
                 className="accent-purple-600 size-4"
               />
-              I agree to the terms and conditions
+              {t("checkout.agreement_label")}
             </label>
 
             {/* CTA */}
@@ -295,12 +310,12 @@ export default function CheckoutPage() {
                 agreed ? "cursor-pointer" : "cursor-not-allowed"
               }`}
             >
-              {loading ? "Redirecting…" : "Pay Now"}
+              {loading ? t("checkout.loading") : t("checkout.pay_btn")}
             </button>
 
             {/* Trust */}
             <p className="text-center text-xs text-gray-700 font-medium">
-              🔐 SSLCommerz secure payment · No card data stored
+              {t("checkout.trust_text")}
             </p>
           </div>
         </div>
