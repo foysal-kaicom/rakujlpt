@@ -48,22 +48,32 @@ class CandidateController extends Controller
             $data['first_name'] = sanitizeName($data['first_name']);
             $data['last_name']  = sanitizeName($data['last_name']);
 
+            if (!empty($data['referral_code'])) {
+                $referrer = Candidate::where('candidate_code', $data['referral_code'])->first();
+
+                if ($referrer) {
+                    $data['referral_id'] = $referrer->id;
+                } else {
+                    return $this->responseWithError(null, "The referral code is invalid. Please try the correct one to continue.");
+                }
+            }
+
             if ($request->hasFile('photo')) {
                 $image = $request->file('photo');
-
                 $imageUploadResponse = $this->fileStorageService->uploadImageToCloud($image, 'candidate');
                 $data['photo'] = $imageUploadResponse['public_path'];
             }
 
             $data['password'] = bcrypt($data['password']);
             $data['candidate_code'] = strtoupper(Str::random(7));
-
+            unset($data['referral_code']);
+            
             $candidate = Candidate::create($data);
 
-            //send congratulation email with password
             dispatch(new SendRegistrationEmailJob($candidate));
 
             return $this->responseWithSuccess($candidate, "Candidate registered successfully", 201);
+
         } catch (Throwable $e) {
             return $this->responseWithError($e->getMessage(), 'Something went wrong.');
         }

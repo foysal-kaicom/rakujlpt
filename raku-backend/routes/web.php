@@ -8,7 +8,10 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StageController;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\FeatureController;
+use App\Http\Controllers\OurTeamController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\PaymentController;
@@ -17,11 +20,9 @@ use App\Http\Controllers\MockTestController;
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PagePolicyController;
 use App\Http\Controllers\MockTestModuleController;
 use App\Http\Controllers\BusinessSettingController;
-use App\Http\Controllers\CouponController;
-use App\Http\Controllers\FeatureController;
-use App\Http\Controllers\OurTeamController;
 
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/do-login', [LoginController::class, 'doLogin'])->name('doLogin');
@@ -45,6 +46,14 @@ Route::group(['middleware' => 'auth', 'checkPermission'], function () {
         Route::post('/legal', [BusinessSettingController::class, 'updateLegalInfo'])->name('legal');
         Route::post('/social', [BusinessSettingController::class, 'updateSocialLinks'])->name('social');
         Route::post('/policies', [BusinessSettingController::class, 'updatePolicies'])->name('policies');
+
+
+
+        Route::get('page-policies', [PagePolicyController::class, 'edit'])->name('page.edit');
+        Route::post('page-policies/privacy', [PagePolicyController::class, 'updatePrivacy'])->name('updatePrivacy');
+        Route::post('page-policies/terms', [PagePolicyController::class, 'updateTerms'])->name('updateTerms');
+        Route::post('page-policies/return', [PagePolicyController::class, 'updateReturn'])->name('updateReturn');
+
     });
 
     Route::group(['prefix' => 'users', 'as' => 'users.', 'module' => 'users'], function () {

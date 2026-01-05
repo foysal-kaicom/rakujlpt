@@ -13,7 +13,7 @@ import BreadCrumb from "@/components/BreadCrumb";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
 import Loader from "@/components/Loader";
 import SuspenseLoader from "@/components/SuspenseLoader";
-
+import { useTranslation } from "react-i18next";
 
 interface Practice {
   current_module_slug: string;
@@ -26,22 +26,23 @@ interface Practice {
 }
 
 export default function MyPractice() {
+  const { t } = useTranslation("common");
+  const router = useRouter();
+
   const breadCrumbData = [
-    { name: "Dashboard", to: "/dashboard" },
-    { name: "My Practice", to: "/my_practice" },
+    { name: t("breadcrumb.dashboard"), to: "/dashboard" },
+    { name: t("breadcrumb.my_practice"), to: "/my_practice" },
   ];
 
   const [loading, setLoading] = useState(true);
   const [practiceData, setPracticeData] = useState<Practice[]>([]);
-
-  const router = useRouter();
 
   const getPracticetData = async () => {
     try {
       const response = await axiosInstance.get("/candidate/current-roadmap");
       const data: Practice[] = response?.data?.data || [];
       setPracticeData(data);
-      toast.success("Showing practice ");
+      toast.success(t("practice.toast_loaded"));
     } catch (error: any) {
       console.error(error);
     } finally {
@@ -64,7 +65,7 @@ export default function MyPractice() {
             <section className="flex items-center gap-2">
               🌈{" "}
               <UserHeadline
-                mainText="Your Learning Roadmap"
+                mainText={t("practice.headline")}
                 preText=""
                 subText=""
               />
@@ -85,12 +86,14 @@ export default function MyPractice() {
                           {item?.current_module_name}
                         </h3>
                         <span className="text-sm text-white font-medium">
-                          {item?.complete}% Complete
+                          {item?.complete}% {t("practice.complete")}
                         </span>
                       </div>
+
                       <h4 className="text-xl font-semibold mb-2 text-white">
                         {item?.current_stage_name}
                       </h4>
+
                       <p className="text-gray-50 font-medium mb-6">
                         {item?.description}
                       </p>
@@ -98,10 +101,11 @@ export default function MyPractice() {
                       {/* Progress Bar */}
                       <div className="w-full h-2 bg-purple-200 rounded-full overflow-hidden">
                         <div
-                          className={`h-full bg-green-300`}
+                          className="h-full bg-green-300"
                           style={{ width: `${item?.complete}%` }}
-                        ></div>
+                        />
                       </div>
+
                       <div className="flex justify-end mt-5">
                         <button
                           onClick={() =>
@@ -117,7 +121,9 @@ export default function MyPractice() {
                           }`}
                         >
                           <span className="relative z-10 text-white group-hover:text-black duration-300">
-                            {item.complete == 100 ? "Completed" : "Resume"}
+                            {item.complete == 100
+                              ? t("practice.completed")
+                              : t("practice.resume")}
                           </span>
                           <div className="size-full absolute top-0 left-0 bg-violet-700 group-hover:translate-x-full duration-300"></div>
                         </button>
@@ -127,11 +133,13 @@ export default function MyPractice() {
                 </div>
               ) : (
                 <div className="text-center text-gray-500 py-6 flex flex-col gap-3 justify-center items-center">
-                  You have not started any practice !!
+                  {t("practice.empty_message")}
                   <Link href="/practice">
-                    <button className="relative overflow-hidden text-sm md:text-base inline-block px-10 py-2 font-semibold text-white rounded-full bg-linear-to-r from-purple-600 to-blue-600 shadow-lg shadow-purple-500/40 hover:shadow-purple-500/60 hover:scale-105 transition-all duration-300 ease-out">
-                      <span className="relative z-10">Start Now</span>
-                      <span className="absolute inset-0 bg-linear-to-r from-purple-400/30 via-pink-400/30 to-blue-400/30 blur-xl opacity-60 transition-opacity duration-300 group-hover:opacity-90"></span>
+                    <button className="relative overflow-hidden text-sm md:text-base inline-block px-10 py-2 font-semibold text-white rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg shadow-purple-500/40 hover:shadow-purple-500/60 hover:scale-105 transition-all duration-300 ease-out">
+                      <span className="relative z-10">
+                        {t("practice.start_now")}
+                      </span>
+                      <span className="absolute inset-0 bg-gradient-to-r from-purple-400/30 via-pink-400/30 to-blue-400/30 blur-xl opacity-60 transition-opacity duration-300 group-hover:opacity-90"></span>
                     </button>
                   </Link>
                 </div>

@@ -4,6 +4,7 @@ import axios from "axios";
 import Image from "next/image";
 
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { FaLinkedinIn, FaFacebookF, FaGithub } from "react-icons/fa";
 import { IoPersonCircle } from "react-icons/io5";
@@ -22,6 +23,7 @@ interface Member {
 }
 
 export default function OurTeamsComponent() {
+  const { t } = useTranslation("common");
   const [teams, setTeams] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
 

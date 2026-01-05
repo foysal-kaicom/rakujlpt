@@ -3,6 +3,7 @@ import "../css/globals.css";
 import { Toaster } from "sonner";
 import RouteLoader from "@/components/RouteLoader";
 import MetaPixel from "@/components/MetaPixel";
+import I18nProvider from "./i18n-provider";
 
 export const metadata: Metadata = {
   title:
@@ -54,15 +55,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="max-w-[2000px] mx-auto">
-        <RouteLoader />
-        <MetaPixel />
-        {children}
-        <Toaster
-          position="top-center"
-          richColors
-          duration={3000}
-          closeButton={true}
-        />
+        <I18nProvider>
+          <RouteLoader />
+          <MetaPixel />
+          {children}
+          <Toaster
+            position="top-center"
+            richColors
+            duration={3000}
+            closeButton={true}
+          />
+        </I18nProvider>
       </body>
     </html>
   );
