@@ -82,7 +82,8 @@
     "select_mock_test": "Select Mock Test",
     "practice": "Practice",
     "about_raku": "About Raku",
-    "sign_in": "Sign In"
+    "sign_in": "Sign In",
+    "our_team": "Our Team"
   },
   "practice": {
     "headline": "Your Learning Roadmap",
