@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import axiosInstance from "@/utils/axios";
 
 import BreadCrumb from "@/components/BreadCrumb";
+import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 
 interface Package {
   name: string;
@@ -20,7 +21,7 @@ interface Package {
 
 interface Coupon {
   id: number;
-  coupon_code:string;
+  coupon_code: string;
   description: string;
   type: string;
   discount_value: number;
@@ -28,25 +29,23 @@ interface Coupon {
   end_date: string;
 }
 
-
-
 export default function CheckoutPage() {
   const id = useParams().id;
 
   const breadCrumbData = [
-  {
-    name: "Home",
-    to: "/",
-  },
-  {
-    name: "Pricing",
-    to: "/packages",
-  },
-  {
-    name: "Checkout",
-    to: `/checkout/${id}`,
-  },
-];
+    {
+      name: "Home",
+      to: "/",
+    },
+    {
+      name: "Pricing",
+      to: "/packages",
+    },
+    {
+      name: "Checkout",
+      to: `/checkout/${id}`,
+    },
+  ];
 
   const [packageDetails, setPackageDetails] = useState<Package | null>();
   const [couponCode, setCouponCode] = useState(null);
@@ -181,7 +180,10 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-[75vh] bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 px-4 lg:px-8 py-5">
-      <BreadCrumb breadCrumbData={breadCrumbData} />
+      <WebpageWrapper>
+        <BreadCrumb breadCrumbData={breadCrumbData} />
+      </WebpageWrapper>
+
       {/* Gradient Border Wrapper */}
       <div className="flex items-center justify-center mt-5">
         <div className="relative w-full max-w-lg rounded-[28px] p-[1px] bg-gradient-to-r from-indigo-500 via-violet-500 to-pink-500">
@@ -246,7 +248,9 @@ export default function CheckoutPage() {
                         key={coupon?.id}
                         className="flex items-center justify-between mt-1 bg-white/40 py-2 px-4 rounded-md"
                       >
-                        <span className="w-[calc(100%-100px)] overflow-clip">{coupon.coupon_code}</span>
+                        <span className="w-[calc(100%-100px)] overflow-clip">
+                          {coupon.coupon_code}
+                        </span>
                         <div className="flex items-center gap-1">
                           <span>
                             - {Math.round(Number(coupon?.discount_value))}{" "}

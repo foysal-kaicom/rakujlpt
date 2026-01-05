@@ -66,7 +66,7 @@ export default function Practice() {
         <div className="absolute w-96 h-96 bg-blue-200 opacity-40 blur-[140px] rounded-full bottom-[10%] right-[5%]" />
         <div className="absolute w-72 h-72 bg-purple-200 opacity-40 blur-[150px] rounded-full top-[40%] left-1/2 -translate-x-1/2" />
 
-        <div className="container mx-auto px-4 lg:px-8 relative z-10 py-14">
+        <div className="container mx-auto px-4 lg:px-8 relative z-10 pt-5 py-14">
           <BreadCrumb breadCrumbData={breadCrumbData} />
 
           {/* HERO SECTION */}

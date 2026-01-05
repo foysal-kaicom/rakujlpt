@@ -57,7 +57,7 @@ export default function OurTeamsComponent() {
           {teams.map((member, index) => (
             <div
               key={index}
-              className="group relative bg-white rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 border border-blue-100 hover:-translate-y-2"
+              className="group relative bg-white rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 border border-blue-100 hover:-translate-y-2 text-center"
             >
               {/* Avatar */}
               <div className="relative w-32 h-32 mx-auto">
