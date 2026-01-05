@@ -5,11 +5,11 @@ import { FaPaperPlane } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import { RiBarChartBoxAiFill } from "react-icons/ri";
 
-
 import CircularProgress from "@/components/CircularProgress";
 
 import axiosInstance from "@/utils/axios";
 import { toast } from "sonner";
+import MocktestAnsEvaluation from "./MocktestAnsEvaluation";
 
 interface ExamResult {
   readingAnswered: number;
@@ -25,10 +25,9 @@ interface ModuleQuestionCounts {
   [key: string]: number;
 }
 
-// Props interface
 interface MocktestResultModalProps {
-  result: ExamResult | null; // can be null
-  setIsSubmitted: (value: boolean) => void; // because you call setIsSubmitted
+  result: ExamResult | null;
+  setIsSubmitted: (value: boolean) => void;
   moduleQuestionCounts: ModuleQuestionCounts;
   id: number | string;
 }
@@ -43,6 +42,7 @@ export default function MocktestResultModal({
   const [comment, setComment] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showAnsEval, setShowAnsEval] = useState(false);
 
   const handleReviewSubmit = async (e: any) => {
     e.preventDefault();
@@ -146,9 +146,11 @@ export default function MocktestResultModal({
           </div>
 
           <button
+            onClick={() => setShowAnsEval(true)}
             className="text-lg text-violet-500 hover:text-purple-500 hover:underline mb-2 flex justify-center items-center gap-1 cursor-pointer mx-auto"
           >
-            <RiBarChartBoxAiFill className="animate-bounce"/> Evaluate you result with AI
+            <RiBarChartBoxAiFill className="animate-bounce" /> Evaluate you
+            result with AI
           </button>
 
           <Link
@@ -219,6 +221,7 @@ export default function MocktestResultModal({
           </div>
         </div>
       )}
+      {showAnsEval && <MocktestAnsEvaluation setShowAnsEval={setShowAnsEval}/>}
     </>
   );
 }

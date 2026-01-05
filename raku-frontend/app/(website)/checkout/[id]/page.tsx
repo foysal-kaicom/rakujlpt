@@ -20,11 +20,11 @@ interface Package {
 
 interface Coupon {
   id: number;
-  title: string;
+  coupon_code:string;
   description: string;
   type: string;
-  discount_value: string;
-  max_discount: string;
+  discount_value: number;
+  max_discount: string | number;
   end_date: string;
 }
 
@@ -49,8 +49,7 @@ export default function CheckoutPage() {
 ];
 
   const [packageDetails, setPackageDetails] = useState<Package | null>();
-  const [couponId, setCouponId] = useState(null);
-  const [coupon, setCoupon] = useState("");
+  const [couponCode, setCouponCode] = useState(null);
   const [selectedCoupon, setSelectedCoupon] = useState("");
   const [couponList, setcouponList] = useState<Coupon[]>([]);
   const [discount, setDiscount] = useState(0);
@@ -88,18 +87,16 @@ export default function CheckoutPage() {
     try {
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/coupon/check`,
-        { params: { coupon: selectedCoupon } }
+        { params: { coupon_code: selectedCoupon } }
       );
-      setCouponId(res.data.data.data.id);
-      setCoupon(res.data.data.data.title);
-      setDiscount(res.data.data.data.discount_value);
-      setDiscountType(res.data.data.data?.type);
-      setMaxDiscount(res.data.data.data.max_discount);
+      setCouponCode(res.data.data.coupon_code);
+      setDiscount(res.data.data.discount_value);
+      setDiscountType(res.data.data?.type);
+      setMaxDiscount(res.data.data.max_discount);
     } catch (error) {
-      setCoupon("");
       setDiscount(0);
       setDiscountType("");
-      setMaxDiscount("");
+      setMaxDiscount(0);
       setError("Invalid coupon code");
     } finally {
       setLoading(false);
@@ -107,15 +104,14 @@ export default function CheckoutPage() {
   };
 
   const addCoupon = (coupon: Coupon) => {
-    setSelectedCoupon(coupon?.title);
+    setSelectedCoupon(coupon?.coupon_code);
   };
 
   const removeCoupon = () => {
     setSelectedCoupon("");
-    setCoupon("");
     setDiscount(0);
     setDiscountType("");
-    setMaxDiscount("");
+    setMaxDiscount(0);
   };
 
   const getCouponList = async () => {
@@ -123,7 +119,7 @@ export default function CheckoutPage() {
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/coupon`
       );
-      setcouponList(res?.data?.data?.data || []);
+      setcouponList(res?.data?.data || []);
     } catch (error) {
       setcouponList([]);
     } finally {
@@ -162,7 +158,7 @@ export default function CheckoutPage() {
     try {
       const response = await axiosInstance.post(`/subscribe`, {
         package_id: id,
-        coupon_code: couponId,
+        coupon_code: couponCode,
       });
       const url = response?.data?.url;
       if (
@@ -214,7 +210,7 @@ export default function CheckoutPage() {
 
               {discount > 0 && (
                 <div className="flex justify-between text-sm font-medium text-violet-600">
-                  <span>{coupon}</span>
+                  <span>{couponCode}</span>
                   <span>
                     - {discount} {discountType != "percentage" ? "BDT" : "%"}
                   </span>
@@ -231,7 +227,7 @@ export default function CheckoutPage() {
             {BASE_AMOUNT != 0 && couponList.length > 0 && (
               <div className="space-y-2">
                 <div className="flex gap-2">
-                  <p className="flex-1 rounded-xl text-gray-600 px-4 py-2 focus:outline-none outline outline-fuchsia-300/50 focus:ring-2 focus:ring-indigo-500 bg-white/50">
+                  <p className="flex-1 rounded-xl text-gray-600 px-4 py-2 focus:outline-none outline outline-fuchsia-300/50 focus:ring-2 focus:ring-indigo-500 bg-white/50 w-[calc(100%-250px)] overflow-clip">
                     {selectedCoupon ? selectedCoupon : "🎁 Select Coupon"}
                   </p>
                   <button
@@ -250,13 +246,13 @@ export default function CheckoutPage() {
                         key={coupon?.id}
                         className="flex items-center justify-between mt-1 bg-white/40 py-2 px-4 rounded-md"
                       >
-                        <span>{coupon.title}</span>
+                        <span className="w-[calc(100%-100px)] overflow-clip">{coupon.coupon_code}</span>
                         <div className="flex items-center gap-1">
                           <span>
                             - {Math.round(Number(coupon?.discount_value))}{" "}
                             {coupon?.type == "percentage" ? "%" : "BDT"}
                           </span>
-                          {selectedCoupon != coupon?.title ? (
+                          {selectedCoupon != coupon?.coupon_code ? (
                             <IoMdAddCircle
                               onClick={() => addCoupon(coupon)}
                               className="size-6 text-violet-600 hover:scale-105 duration-300 cursor-pointer"

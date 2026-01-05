@@ -62,6 +62,48 @@ export default function Header() {
     }
   };
 
+  const getSettingsData = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/settings`
+      );
+      const data = response.data?.data;
+
+      if (data) {
+        const businessData = {
+          business_name: data.business_name,
+          business_email: data.business_email,
+          business_phone: data.business_phone,
+          bkash_number: data.bkash_number,
+          website_url: data.website_url,
+          certificate_amount: data.certificate_amount,
+          address: data.address,
+          bin_number: data.bin_number,
+          tin_number: data.tin_number,
+          trade_license: data.trade_license,
+          legal_docs: data.legal_docs,
+          certification_docs: data.certification_docs,
+          authorized_docs: data.authorized_docs,
+          logo: data.logo,
+          facebook_url: data.facebook_url,
+          twitter_url: data.twitter_url,
+          linkedin_url: data.linkedin_url,
+          youtube_url: data.youtube_url,
+          instagram_url: data.instagram_url,
+        };
+
+        useBusinessSettingsStore.getState().setSettings(businessData);
+      }
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    getSettingsData();
+    setHydrated(true);
+  }, []);
+
   const MainHeader = () => {
     return (
       <div className="hidden xl:flex gap-5 lg:gap-15 h-full xl:items-center">
@@ -356,48 +398,6 @@ export default function Header() {
       </>
     );
   };
-
-  const getSettingsData = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/settings`
-      );
-      const data = response.data?.data;
-
-      if (data) {
-        const businessData = {
-          business_name: data.business_name,
-          business_email: data.business_email,
-          business_phone: data.business_phone,
-          bkash_number: data.bkash_number,
-          website_url: data.website_url,
-          certificate_amount: data.certificate_amount,
-          address: data.address,
-          bin_number: data.bin_number,
-          tin_number: data.tin_number,
-          trade_license: data.trade_license,
-          legal_docs: data.legal_docs,
-          certification_docs: data.certification_docs,
-          authorized_docs: data.authorized_docs,
-          logo: data.logo,
-          facebook_url: data.facebook_url,
-          twitter_url: data.twitter_url,
-          linkedin_url: data.linkedin_url,
-          youtube_url: data.youtube_url,
-          instagram_url: data.instagram_url,
-        };
-
-        useBusinessSettingsStore.getState().setSettings(businessData);
-      }
-    } catch (error: any) {
-      console.error(error.message);
-    }
-  };
-
-  useEffect(() => {
-    getSettingsData();
-    setHydrated(true);
-  }, []);
 
   return (
     <>

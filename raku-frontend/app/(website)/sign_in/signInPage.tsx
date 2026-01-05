@@ -87,12 +87,12 @@ export default function LoginPage() {
           is_subscribed:data.is_subscribed,
           current_package_id:data.current_package_id,
           current_package_name:data.current_package_name,
-          is_free:data.is_free
+          is_free:data.is_free,
+          candidate_code:data?.candidate_code,
         };
 
         login(user, token);
         router.push(callbackUrl);
-        console.log(callbackUrl)
       }
     } catch (error: any) {
       toast.error(
@@ -159,9 +159,6 @@ export default function LoginPage() {
                 <div className="bg-linear-to-r from-indigo-400 to-purple-400 rounded-3xl p-4 inline-block mb-4 shadow-lg transform -rotate-2">
                   <h2 className="text-4xl font-bold text-white">👋 Welcome</h2>
                 </div>
-                {/* <p className="text-gray-600 mt-3 font-medium">
-                  Sign in to continue your journey!
-                </p> */}
               </div>
 
               <form className="space-y-6" onSubmit={handleSubmit}>
