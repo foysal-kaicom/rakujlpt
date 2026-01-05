@@ -110,7 +110,7 @@ export default function Header() {
 
   const MainHeader = () => {
     return (
-      <div className="hidden xl:flex gap-5 lg:gap-8 h-full xl:items-center justify-center">
+      <div className="hidden xl:flex gap-5 lg:gap-10 h-full xl:items-center">
         {navdata.map((item, index) => (
           <div
             key={index}
