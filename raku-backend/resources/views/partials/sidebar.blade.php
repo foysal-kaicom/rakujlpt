@@ -334,11 +334,11 @@
                         <span>Add Package</span>
                     </a>
                     @endHasPermission
-                    {{-- <a href="{{ route('coupon.list') }}"
+                    <a href="{{ route('coupon.list') }}"
                     class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('packages.create') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                     <i class="fa-regular fa-note-sticky"></i>
                     <span>Coupons</span>
-                </a> --}}
+                </a>
                 </div>
             </div>
 

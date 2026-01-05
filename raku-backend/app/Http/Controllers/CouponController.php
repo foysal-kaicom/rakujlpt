@@ -22,7 +22,14 @@ class CouponController extends Controller
     public function store(CouponRequest $request)
     {
         $data = $request->validated();
-    
+
+        $formattedCode = strtoupper(preg_replace('/[^A-Za-z0-9]/', '', $data['coupon_code']));
+
+        if (Coupon::where('coupon_code', $formattedCode)->exists()) {
+            return back()->withErrors(['coupon_code' => 'This coupon code already exists.'])->withInput();
+        }
+
+        $data['coupon_code'] = $formattedCode;
         $data['max_discount'] = $data['max_discount'] ?? 0;
         $data['usage_limit']  = $data['usage_limit'] ?? 0;
     
@@ -43,6 +50,13 @@ class CouponController extends Controller
         $coupon = Coupon::findOrFail($id);
 
         $data = $request->validated();
+        $formattedCode = strtoupper(preg_replace('/[^A-Za-z0-9]/', '', $data['coupon_code']));
+
+        if (Coupon::where('coupon_code', $formattedCode)->where('id', '!=', $id)->exists()) {
+            return back()->withErrors(['coupon_code' => 'This coupon code already exists.'])->withInput();
+        }
+
+        $data['coupon_code'] = $formattedCode;
         $data['max_discount'] = $data['max_discount'] ?? 0;
         $data['usage_limit']  = $data['usage_limit'] ?? 0;
 
