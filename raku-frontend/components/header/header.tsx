@@ -194,7 +194,7 @@ export default function Header() {
                 <span className="p-1 bg-white rounded outline outline-purple-200 text-purple-500">
                   {item.icon}
                 </span>
-                {item.label}
+                {t(item.label)}
               </Link>
             ))}
             <p
@@ -204,7 +204,7 @@ export default function Header() {
               <span className="p-1 bg-white rounded outline outline-purple-200">
                 <IoLogOut />
               </span>
-              Logout
+              {t("nav.logout")}
             </p>
           </div>
         </div>
@@ -288,7 +288,7 @@ export default function Header() {
                         }`}
                       >
                         <span className="text-lg rounded-sm">{item.icon}</span>
-                        {item.label}
+                        {t(item.label)}
                       </Link>
                     ))}
                   </div>
@@ -375,7 +375,7 @@ export default function Header() {
                 onClick={handleLogout}
                 className="text-xs 2xl:text-sm flex w-[100px] items-center gap-1 py-1 px-3 2xl:py-2 2xl:px-5 text-white bg-red-600 rounded-full border-2 border-red-600 hover:bg-white hover:text-red-600 duration-300 cursor-pointer"
               >
-                Logout
+                {t("nav.logout")}
                 <IoLogOut className="size-5" />
               </button>
             ) : (

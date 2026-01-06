@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 import BreadCrumb from "@/components/BreadCrumb";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
+import { useTranslation } from "react-i18next";
 
 type Exam = {
   id: number;
@@ -14,12 +15,14 @@ type Exam = {
 };
 
 export default function MyAgent() {
+  const { t } = useTranslation("common");
+  const router = useRouter();
+
   const breadCrumbData = [
-    { name: "Dashboard", to: "/dashboard" },
-    { name: "My Agent", to: "/my_agent" },
+    { name: t("my_agent.breadcrumbs.dashboard"), to: "/dashboard" },
+    { name: t("my_agent.breadcrumbs.my_agent"), to: "/my_agent" },
   ];
 
-  const router = useRouter();
   //   const [exams, setExams] = useState<Exam[]>([]);
   const [loading, setLoading] = useState(false);
   const [removing, setRemoving] = useState(false);
@@ -63,48 +66,22 @@ export default function MyAgent() {
     return now >= start && now <= end;
   }
 
-  //    useEffect(() => {
-  //     fetch(`/api/agents/${params.agentId}/exams`)
-  //       .then(res => res.json())
-  //       .then(data => {
-  //         setExams(data.exams);
-  //         setLoading(false);
-  //       });
-  //   }, [params.agentId]);
-
-  //   const removeAgent = async () => {
-  //     const ok = confirm(
-  //       "This will permanently remove the agent and all related exams. Continue?"
-  //     );
-  //     if (!ok) return;
-
-  //     setRemoving(true);
-
-  //     const res = await fetch(`/api/agents/${params.agentId}`, {
-  //       method: "DELETE",
-  //     });
-
-  //     if (!res.ok) {
-  //       alert("Failed to remove agent");
-  //       setRemoving(false);
-  //       return;
-  //     }
-
-  //     router.push("/user/agents");
-  //   };
-
   return (
     <div className="min-h-[60vh]">
       <div className="space-y-5">
         <BreadCrumb breadCrumbData={breadCrumbData} />
-        <UserHeadline mainText="My Agent" subText="" preText="" />
+        <UserHeadline
+          mainText={t("my_agent.title")}
+          subText=""
+          preText=""
+        />
       </div>
 
       <div className="rounded-2xl border border-violet-200 bg-white">
         {/* Header (Clickable) */}
         <div
           onClick={() => setOpen(!open)}
-          className="flex w-full items-center justify-between text-left pt-6 px-6"
+          className="flex w-full items-center justify-between text-left pt-6 px-6 cursor-pointer"
         >
           <div className="flex items-center gap-4 w-[calc(100%-40px)] justify-between">
             <div className="flex size-14 items-center justify-center rounded-full bg-violet-100 text-xl font-semibold text-violet-700">
@@ -115,7 +92,9 @@ export default function MyAgent() {
               <h2 className="text-lg font-semibold text-gray-900 line-clamp-2">
                 Akib Rahman
               </h2>
-              <p className="text-sm text-gray-500">Exam Agent</p>
+              <p className="text-sm text-gray-500">
+                {t("my_agent.agent_card.role")}
+              </p>
             </div>
           </div>
 
@@ -164,7 +143,7 @@ export default function MyAgent() {
                   //   onClick={removeAgent}
                   className="rounded-xl bg-red-600 px-4 py-2.5 text-xs sm:text-sm font-semibold text-white transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 cursor-pointer"
                 >
-                  Leave Agent
+                  {t("my_agent.agent_card.leave_btn")}
                 </button>
               </div>
             </div>
@@ -174,9 +153,9 @@ export default function MyAgent() {
 
       {/* Exam List */}
       {loading ? (
-        <p>Loading exams...</p>
+        <p>{t("my_agent.status.loading")}</p>
       ) : exams.length === 0 ? (
-        <p className="text-gray-500">No exams created by this agent.</p>
+        <p className="text-gray-500">{t("my_agent.status.empty")}</p>
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-5">
           {exams.map((exam) => (
@@ -190,14 +169,15 @@ export default function MyAgent() {
                   {exam.title}
                 </h3>
                 <p className="mt-1 text-xs text-gray-400">
-                  Exam ID: #{exam.id}
+                  {t("my_agent.exam_card.exam_id")}: #{exam.id}
                 </p>
               </div>
 
               {/* Meta Info */}
               <div className="mb-5 flex items-center justify-between">
                 <span className="inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-600">
-                  {exam.total_questions} Questions
+                  {exam.total_questions}{" "}
+                  {t("my_agent.exam_card.questions_suffix")}
                 </span>
               </div>
 
@@ -212,7 +192,10 @@ export default function MyAgent() {
                     minute: "2-digit",
                   })}
                 </div>
-                <div>⏳ {exam.duration_minutes} minutes</div>
+                <div>
+                  ⏳ {exam.duration_minutes}{" "}
+                  {t("my_agent.exam_card.minutes_suffix")}
+                </div>
               </div>
 
               {/* Divider */}
@@ -227,7 +210,9 @@ export default function MyAgent() {
                     : "bg-gray-200 text-gray-400 cursor-not-allowed"
                 }`}
               >
-                {canJoinExam(exam) ? "Join Exam" : "Not Available"}
+                {canJoinExam(exam)
+                  ? t("my_agent.exam_card.join_btn")
+                  : t("my_agent.exam_card.not_available_btn")}
               </button>
             </div>
           ))}

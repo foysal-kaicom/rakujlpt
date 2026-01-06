@@ -8,12 +8,18 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import BreadCrumb from "@/components/BreadCrumb";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
 import SuspenseLoader from "@/components/SuspenseLoader";
+import { useTranslation } from "react-i18next";
 
 export default function UpdatePassword() {
+  const { t } = useTranslation("common");
+
   const breadCrumbData = [
-    { name: "Dashboard", to: "/dashboard" },
-     { name: "Settings", to: "/settings" },
-    { name: "Update Password", to: "/update_password" },
+    { name: t("update_password.breadcrumbs.dashboard"), to: "/dashboard" },
+    { name: t("update_password.breadcrumbs.settings"), to: "/settings" },
+    {
+      name: t("update_password.breadcrumbs.update_password"),
+      to: "/update_password",
+    },
   ];
 
   const [form, setForm] = useState({
@@ -32,7 +38,7 @@ export default function UpdatePassword() {
     e.preventDefault();
 
     if (form.new_password !== form.confirm_password) {
-      toast.error("New password and confirmation do not match.");
+      toast.error(t("update_password.toasts.mismatch"));
       return;
     }
 
@@ -44,7 +50,7 @@ export default function UpdatePassword() {
       });
 
       if (response.status === 200) {
-        toast.success("Password updated successfully.");
+        toast.success(t("update_password.toasts.success"));
         setForm({
           current_password: "",
           new_password: "",
@@ -69,13 +75,17 @@ export default function UpdatePassword() {
             onSubmit={handleSubmit}
             className="max-w-md w-full mx-auto space-y-6 bg-white p-6 rounded-md shadow"
           >
-            <UserHeadline mainText="Update Password" subText="" preText="" />
+            <UserHeadline
+              mainText={t("update_password.title")}
+              subText=""
+              preText=""
+            />
 
             {/* Current Password */}
             <div className="relative">
               <input
                 type={show.current ? "text" : "password"}
-                placeholder="Current Password"
+                placeholder={t("update_password.placeholders.current")}
                 required
                 value={form.current_password}
                 onChange={(e) =>
@@ -95,7 +105,7 @@ export default function UpdatePassword() {
             <div className="relative">
               <input
                 type={show.new ? "text" : "password"}
-                placeholder="New Password"
+                placeholder={t("update_password.placeholders.new")}
                 required
                 min={6}
                 value={form.new_password}
@@ -116,7 +126,7 @@ export default function UpdatePassword() {
             <div className="relative">
               <input
                 type={show.confirm ? "text" : "password"}
-                placeholder="Confirm New Password"
+                placeholder={t("update_password.placeholders.confirm")}
                 required
                 min={6}
                 value={form.confirm_password}
@@ -137,7 +147,7 @@ export default function UpdatePassword() {
               type="submit"
               className="w-full bg-purple-600 hover:bg-purple-800 text-white text-sm font-semibold py-2 rounded-md cursor-pointer"
             >
-              Update Password
+              {t("update_password.submit_btn")}
             </button>
           </form>
         </div>
