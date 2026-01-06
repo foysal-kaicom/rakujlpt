@@ -17,7 +17,7 @@
   },
   "premium": "Premium",
   "mocktest_exp": "Mock Test Experience",
-  "prepare_for_your_exams": "Prepare smartly with realistic mock tests, detailed analytics, and flexible practice options.",
+  "prepare_for_your_exams": "Prepare for your Japanese language exams with interactive mock tests, real-time results, and AI-driven feedback — designed to boost your confidence and accuracy before the real exam.",
 
   "start_mock_test": "Start Mock Test",
   "start_practice": "Start Practice",
@@ -83,7 +83,10 @@
     "practice": "Practice",
     "about_raku": "About Raku",
     "sign_in": "Sign In",
-    "our_team": "Our Team"
+    "our_team": "Our Team",
+    "faq": "FAQ",
+    "pricing": "Pricing",
+    "checkout": "Checkout"
   },
   "practice": {
     "headline": "Your Learning Roadmap",
@@ -340,5 +343,25 @@
     "description": "Scan the Certificate's QR code to verify its authenticity instantly.",
     "tip": "Tip: Allow camera access for scanning. Works on desktop and mobile.",
     "info": "No QR code scanned yet"
+  },
+  "checkout": {
+    "title": "Confirm Checkout !!",
+    "subtitle": "🚀 Fast · 🔒 Secure · 💳 Trusted",
+    "package_label": "Package",
+    "price_label": "Price",
+    "currency": "BDT",
+    "free": "Free",
+    "total_label": "Total",
+    "select_coupon": "🎁 Select Coupon",
+    "apply_btn": "Apply",
+    "available_coupon": "Available Coupon",
+    "coupon_error": "Invalid coupon code",
+    "agreement_label": "I agree to the terms and conditions",
+    "agreement_error": "You must agree to the terms and conditions",
+    "pay_btn": "Pay Now",
+    "loading": "Redirecting…",
+    "trust_text": "🔐 SSLCommerz secure payment · No card data stored",
+    "success": "Subscription successful",
+    "failed": "Subscription failed"
   }
 }
