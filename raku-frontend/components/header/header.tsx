@@ -13,7 +13,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
- 
+
 import { navdata } from "./navdata";
 import { SidebarData } from "../user/Sidebar/sidebarData";
 
@@ -34,6 +34,7 @@ export default function Header() {
 
   const path = usePathname();
   const router = useRouter();
+  console.log(path)
 
   const toggleDropdown = (index: number) => {
     setOpenDropdown(openDropdown === index ? null : index);
@@ -109,14 +110,14 @@ export default function Header() {
 
   const MainHeader = () => {
     return (
-      <div className="hidden xl:flex gap-5 lg:gap-8 h-full xl:items-center">
+      <div className="hidden xl:flex gap-5 lg:gap-10 h-full xl:items-center">
         {navdata.map((item, index) => (
           <div
             key={index}
             className={`group border-b-4 hover:border-b-purple-600 relative duration-300 h-full flex items-center ${
               item.to === path ||
               (Array.isArray(item.links) &&
-                item.links.some((link) => link.to === path))
+                item.links.some((link) => path.startsWith(link.to)))
                 ? "border-b-purple-600"
                 : "border-b-transparent"
             }`}
@@ -136,7 +137,7 @@ export default function Header() {
                   <Link href={link.to} key={i}>
                     <div
                       className={`w-[230px] px-5 py-2 hover:bg-purple-100 hover:text-[#570d69] duration-300 text-sm font-semibold ${
-                        link.to === path ? "text-[#570d69] bg-purple-100" : ""
+                        path.startsWith(link.to) ? "text-[#570d69] bg-purple-100" : ""
                       }`}
                     >
                       {t(link.labelKey)}
@@ -157,7 +158,7 @@ export default function Header() {
     }
     return isAuthenticated && token && user ? (
       <>
-      <LanguageSwitcher />
+        <LanguageSwitcher />
         <Notification />
         <div className="flex gap-2 items-center relative group cursor-pointer">
           {user?.photo ? (
@@ -178,7 +179,7 @@ export default function Header() {
               {user?.last_name}
             </p>
             <p className="line-clamp-1 text-xs font-semibold bg-linear-to-r from-blue-600  to-purple-600 bg-clip-text text-transparent">
-              {user?.email || user?.phone_number}
+              {user?.email.slice(0,14) || user?.phone_number.slice(0,14)}
             </p>
           </div>
 
@@ -211,7 +212,7 @@ export default function Header() {
       </>
     ) : (
       <>
-      <LanguageSwitcher />
+        <LanguageSwitcher />
         <Link
           href="/registration"
           className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-4 text-indigo-700 bg-white rounded-full border-4 border-indigo-300 hover:border-orange-400 duration-300 shadow-2xl transform hover:scale-110 hover:-rotate-2 font-bold group relative overflow-hidden max-w-44"
@@ -299,7 +300,7 @@ export default function Header() {
                 const isActive =
                   item.to === path ||
                   (Array.isArray(item.links) &&
-                    item.links.some((link) => link.to === path));
+                    item.links.some((link) => path.startsWith(link.to)));
 
                 const isOpen = openDropdown === index;
 
@@ -312,7 +313,9 @@ export default function Header() {
                           isActive ? "text-[#d400ff]" : "text-indigo-800"
                         }`}
                       >
-                        <p className="w-[calc(100%-24px)]">{t(item.labelKey)}</p>
+                        <p className="w-[calc(100%-24px)]">
+                          {t(item.labelKey)}
+                        </p>
                         <span>
                           {isOpen ? (
                             <IoMdArrowDropdown className="size-6" />
@@ -339,7 +342,8 @@ export default function Header() {
                           onClick={toggleSidebar}
                           href={item.to}
                           className={`mb-3 text-sm ${
-                            item.labelKey == "nav.about" || item.labelKey == "nav.test"
+                            item.labelKey == "nav.about" ||
+                            item.labelKey == "nav.test"
                               ? "hidden"
                               : item.to == path
                               ? "text-[#d400ff]"
@@ -354,7 +358,7 @@ export default function Header() {
                             key={i}
                             href={link.to}
                             className={`block hover:text-[#d400ff] text-sm duration-300 font-medium ${
-                              link.to === path
+                              path.startsWith(link.to)
                                 ? "text-[#d400ff]"
                                 : "text-indigo-800"
                             }`}
@@ -443,11 +447,7 @@ export default function Header() {
           </Link>
           <MainHeader />
 
-          <div
-            className={`hidden items-center gap-8 xl:flex justify-end
-               
-            `}
-          >
+          <div className="hidden items-center gap-5 xl:flex justify-end">
             <NavCta />
           </div>
           {isAuthenticated && token && user ? (

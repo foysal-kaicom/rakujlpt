@@ -20,7 +20,7 @@ export default function SettingsPage() {
 
   const breadCrumbData = [
     { name: t("settings.breadcrumbs.dashboard"), to: "/dashboard" },
-    { name: t("settings.breadcrumbs.exam_booking"), to: "/exam_history" },
+    { name: t("settings.breadcrumbs.exam_booking"), to: "/settings" },
   ];
 
   const settingsOptions = [
@@ -28,13 +28,13 @@ export default function SettingsPage() {
       icon: <FaUserCog className="text-blue-500 w-6 h-6" />,
       title: t("settings.options.profile.title"),
       description: t("settings.options.profile.desc"),
-      path: "/profile",
+      path: "/settings/profile",
     },
     {
       icon: <FaPalette className="text-purple-500 w-6 h-6" />,
       title: t("settings.options.password.title"),
       description: t("settings.options.password.desc"),
-      path: "/update_password",
+      path: "/settings/update_password",
     },
   ];
 
