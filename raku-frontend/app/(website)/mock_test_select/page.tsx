@@ -132,7 +132,7 @@ export default function MockTestSelect() {
                 <div
                   className={`gap-6 sm:gap-10 ${
                     mockTests.length > 2
-                      ? "grid grid-cols-1 lg:grid-cols-3"
+                      ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
                       : "grid sm:grid-cols-2 max-w-4xl mx-auto"
                   }`}
                 >
