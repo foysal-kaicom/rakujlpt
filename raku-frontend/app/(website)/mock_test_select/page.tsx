@@ -69,10 +69,7 @@ export default function MockTestSelect() {
         setExamOption(getExamOptions(response.data.data));
       }
     } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message ||
-          t("mock.fetch_error")
-      );
+      toast.error(error?.response?.data?.message || t("mock.fetch_error"));
     } finally {
       setLoader(false);
     }
@@ -145,7 +142,7 @@ export default function MockTestSelect() {
                         key={test.id}
                         className="relative group rounded-2xl bg-white border border-white shadow-lg overflow-hidden p-8 transition-all duration-500 hover:-translate-y-3"
                       >
-                        <div className="relative z-10 text-center">
+                        <div className="relative text-center">
                           <div className="w-20 h-20 mx-auto mb-5 rounded-2xl flex items-center justify-center text-white text-3xl shadow-md bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400">
                             {test.short_name}
                           </div>
@@ -184,6 +181,9 @@ export default function MockTestSelect() {
                           >
                             🎯 {t("mock.choose_test")}
                           </button>
+                        </div>
+                        <div className="absolute z-10 top-2 right-2 text-4xl opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-2 group-hover:translate-y-0">
+                          ✨
                         </div>
                       </div>
                     ))}
