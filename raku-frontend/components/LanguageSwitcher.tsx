@@ -25,6 +25,7 @@ export default function LanguageSwitcher() {
   const languages = {
     en: { label: "English", short: "EN" },
     bn: { label: "বাংলা", short: "বাং" },
+    nep: { label: "नेपाली", short: "ने" }
   };
 
   return (

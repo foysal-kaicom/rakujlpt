@@ -138,14 +138,14 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="/refund_and_cancellation" className="hover:text-purple-500 transition">
+                <Link href="/refund_and_cancellation" className="hover:text-purple-500 transition">
                   {t("footer.refund")}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/privacy_policy" className="hover:text-purple-500 transition">
+                <Link href="/privacy_policy" className="hover:text-purple-500 transition">
                   {t("footer.privacy")}
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
