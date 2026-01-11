@@ -122,13 +122,6 @@ export default function Dashboard() {
               subText=""
               preText=""
             />
-            <button
-              onClick={() => setOpen(true)}
-              className="flex items-center gap-1 font-semibold rounded-2xl bg-purple-100 hover:bg-purple-200 px-5 py-1.5 border border-purple-200 text-sm sm:text-base text-purple-700 cursor-pointer"
-            >
-              <TbRosetteDiscountFilled className="size-6 shake-pause" />{" "}
-              {t("dashboard.buttons.refer_earn")}
-            </button>
           </section>
           <div className="relative bg-linear-to-t from-purple-400 to-pink-400 text-white rounded-xl overflow-hidden px-8 py-4 lg:py-0 lg:px-16 flex justify-between items-center gap-8 shadow-md hover:shadow-lg transition-shadow duration-500 mb-5">
             {/* Animated Floating Orbs */}

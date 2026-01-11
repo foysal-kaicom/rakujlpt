@@ -34,7 +34,7 @@ export default function Header() {
 
   const path = usePathname();
   const router = useRouter();
-  console.log(path)
+  console.log(path);
 
   const toggleDropdown = (index: number) => {
     setOpenDropdown(openDropdown === index ? null : index);
@@ -137,7 +137,9 @@ export default function Header() {
                   <Link href={link.to} key={i}>
                     <div
                       className={`w-[230px] px-5 py-2 hover:bg-purple-100 hover:text-[#570d69] duration-300 text-sm font-semibold ${
-                        path.startsWith(link.to) ? "text-[#570d69] bg-purple-100" : ""
+                        path.startsWith(link.to)
+                          ? "text-[#570d69] bg-purple-100"
+                          : ""
                       }`}
                     >
                       {t(link.labelKey)}
@@ -179,7 +181,7 @@ export default function Header() {
               {user?.last_name}
             </p>
             <p className="line-clamp-1 text-xs font-semibold bg-linear-to-r from-blue-600  to-purple-600 bg-clip-text text-transparent">
-              {user?.email.slice(0,14) || user?.phone_number.slice(0,14)}
+              {user?.email.slice(0, 14) || user?.phone_number.slice(0, 14)}
             </p>
           </div>
 
@@ -309,7 +311,7 @@ export default function Header() {
                     {item.links ? (
                       <button
                         onClick={() => toggleDropdown(index)}
-                        className={`flex justify-between gap-2 w-full text-left font-semibold text-sm 2xl:text-base hover:text-[#d400ff]  ${
+                        className={`flex justify-between gap-2 w-full text-left font-semibold text-sm 2xl:text-base hover:text-[#d400ff] cursor-pointer ${
                           isActive ? "text-[#d400ff]" : "text-indigo-800"
                         }`}
                       >
@@ -435,16 +437,15 @@ export default function Header() {
               />
             )}
           </div>
-          <Link href="/">
-            <Image
-              src="/assets/logo/logo.png"
-              alt="logo"
-              width={600}
-              height={160}
-              className="w-30 md:w-36"
-              loading="lazy"
-            />
-          </Link>
+          <Image
+            src="/assets/logo/logo.png"
+            alt="logo"
+            width={600}
+            height={160}
+            className="w-30 md:w-36 cursor-pointer"
+            loading="lazy"
+            onClick={() => router.push("/")}
+          />
           <MainHeader />
 
           <div className="hidden items-center gap-5 xl:flex justify-end">

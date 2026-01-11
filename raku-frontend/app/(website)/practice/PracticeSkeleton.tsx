@@ -17,7 +17,7 @@ export default function PracticeSkeleton() {
 
         <div className="p-6">
           <div className="h-7 w-1/4 bg-gray-200 rounded mb-8 animate-pulse"></div>
-          <div className="space-y-4 grid grid-cols-3 gap-6">
+          <div className="space-y-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
