@@ -16,18 +16,21 @@ import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
 import Loader from "@/components/Loader";
 
 import { useAuthStore } from "@/stores/useAuthStore";
+import { useTranslation } from "react-i18next";
 
 export default function ProfileNew() {
+  const { t } = useTranslation("common");
+
   const breadCrumbData = [
-    { name: "Dashboard", to: "/dashboard" },
-    { name: "Settings", to: "/settings" },
-    { name: "Profile", to: "/profile" },
+    { name: t("profile.breadcrumbs.dashboard"), to: "/dashboard" },
+    { name: t("profile.breadcrumbs.settings"), to: "/settings" },
+    { name: t("profile.breadcrumbs.profile"), to: "/profile" },
   ];
 
   const [editModal, setEditModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const updateUser = useAuthStore((state) => state.updateUser);
-  const user = useAuthStore().user
+  const user = useAuthStore().user;
 
   const [profile, setProfile] = useState<{
     id: number | null;
@@ -35,8 +38,8 @@ export default function ProfileNew() {
     last_name: string;
     email: string;
     phone_number: string;
-    photo: File | string; // <-- important
-    cover_photo: File | string; // <-- important
+    photo: File | string;
+    cover_photo: File | string;
     about: string;
     facebook: string;
     linkedin: string;
@@ -74,12 +77,9 @@ export default function ProfileNew() {
     setProfile((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ─── Effects ───────────────────────────────────────────────────────
   useEffect(() => {
     getUserData();
   }, []);
-
-  // API Calls
 
   const getUserData = async () => {
     setLoading(true);
@@ -130,7 +130,7 @@ export default function ProfileNew() {
       });
     } catch (error: any) {
       console.log(error);
-      toast.error("Failed to get user data");
+      toast.error(t("profile.toasts.fetch_error"));
     } finally {
       setLoading(false);
     }
@@ -148,8 +148,6 @@ export default function ProfileNew() {
     if (!user?.phone_number) {
       payload.append("phone_number", profile.phone_number || "");
     }
-    //  payload.append("email", profile.email);
-    //  payload.append("phone_number", profile.phone_number || "");
     payload.append("about", profile.about || "");
     payload.append("gender", profile.gender || "");
     payload.append("address", profile.address || "");
@@ -159,19 +157,22 @@ export default function ProfileNew() {
     if (profile.photo instanceof File) {
       payload.append("photo", profile.photo);
     }
-   
+
     payload.append("_method", "put");
     try {
-      const response = await axiosInstance.post("/candidate/update", payload, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        // withCredentials: true,
-      });
-      toast.success("Information updated");
+      const response = await axiosInstance.post(
+        "/candidate/update",
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      toast.success(t("profile.toasts.update_success"));
     } catch (error: any) {
       console.error(error);
-      toast.error("Can not update user information");
+      toast.error(t("profile.toasts.update_failed"));
     } finally {
       setEditModal(false);
       getUserData();
@@ -181,12 +182,11 @@ export default function ProfileNew() {
 
   return (
     <>
-      {/* <Suspense fallback={<Loader />}> */}
       {loading && <Loader />}
       <div className="min-h-[60vh]">
         <BreadCrumb breadCrumbData={breadCrumbData} />
         <div className="mt-5 lg:pb-10">
-          <UserHeadline mainText="Profile" subText="" preText="" />
+          <UserHeadline mainText={t("profile.title")} subText="" preText="" />
 
           <div className="max-w-3xl bg-white p-2 rounded-md mx-auto shadow-md relative">
             <button
@@ -194,7 +194,7 @@ export default function ProfileNew() {
               className="px-4 py-2 bg-purple-600 text-white flex items-center gap-1 text-sm font-medium rounded-lg drop-shadow absolute z-10 right-5 top-5 cursor-pointer hover:bg-purple-700 duration-300"
             >
               <RiEdit2Fill className="size-5" />
-              Edit
+              {t("profile.buttons.edit")}
             </button>
             {/* Cover Image */}
             <Image
@@ -265,7 +265,7 @@ export default function ProfileNew() {
                   </div>
                   <div className="w-[calc(100%-56px)]">
                     <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold">
-                      Gender
+                      {t("profile.fields.gender")}
                     </p>
                     <p className="text-gray-800 font-medium line-clamp-1 capitalize">
                       {profile?.gender}
@@ -279,7 +279,7 @@ export default function ProfileNew() {
                   </div>
                   <div className="w-[calc(100%-56px)]">
                     <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold">
-                      Email
+                      {t("profile.fields.email")}
                     </p>
                     <p className="text-gray-800 font-medium line-clamp-1">
                       {profile?.email}
@@ -293,7 +293,7 @@ export default function ProfileNew() {
                   </div>
                   <div className="w-[calc(100%-56px)]">
                     <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold">
-                      Phone
+                      {t("profile.fields.phone")}
                     </p>
                     <p className="text-gray-800 font-medium line-clamp-1">
                       {profile?.phone_number}
@@ -307,7 +307,7 @@ export default function ProfileNew() {
                   </div>
                   <div className="w-[calc(100%-56px)]">
                     <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold">
-                      Address
+                      {t("profile.fields.address")}
                     </p>
                     <p className="text-gray-800 font-medium line-clamp-1">
                       {profile?.address}
@@ -318,13 +318,13 @@ export default function ProfileNew() {
 
               {/* Skills Section */}
               <h2 className="mt-6 mb-3 text-lg font-semibold text-purple-600">
-                Skills & Progress
+                {t("profile.skills.title")}
               </h2>
               <div className="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
                 <div className="p-2 rounded-md bg-white">
                   <div className="flex justify-between mb-1.5">
                     <span className="text-sm font-medium text-purple-700">
-                      Vocabulary
+                      {t("profile.skills.vocabulary")}
                     </span>
                     <span className="text-sm font-medium text-purple-700">
                       {profile?.vocabulary || 0}%
@@ -341,7 +341,7 @@ export default function ProfileNew() {
                 <div className="p-2 rounded-md bg-white">
                   <div className="flex justify-between mb-1.5">
                     <span className="text-sm font-medium text-purple-700">
-                      Grammer
+                      {t("profile.skills.grammar")}
                     </span>
                     <span className="text-sm font-medium text-purple-700">
                       {profile?.grammar || 0}%
@@ -358,7 +358,7 @@ export default function ProfileNew() {
                 <div className="p-2 rounded-md bg-white">
                   <div className="flex justify-between mb-1.5">
                     <span className="text-sm font-medium text-purple-700">
-                      Reading
+                      {t("profile.skills.reading")}
                     </span>
                     <span className="text-sm font-medium text-purple-700">
                       {profile?.reading || 0}%
@@ -375,7 +375,7 @@ export default function ProfileNew() {
                 <div className="p-2 rounded-md bg-white">
                   <div className="flex justify-between mb-1.5">
                     <span className="text-sm font-medium text-purple-700">
-                      Listening
+                      {t("profile.skills.listening")}
                     </span>
                     <span className="text-sm font-medium text-purple-700">
                       {profile?.listening || 0}%
@@ -401,14 +401,14 @@ export default function ProfileNew() {
             {/* Close Button */}
             <button
               onClick={() => setEditModal(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition text-2xl"
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition text-2xl cursor-pointer"
             >
               ✕
             </button>
 
             {/* Header */}
             <h2 className="text-xl font-bold text-purple-600 mb-5 text-center">
-              Edit Profile
+              {t("profile.modal.title")}
             </h2>
 
             {/* Form */}
@@ -416,7 +416,7 @@ export default function ProfileNew() {
               {/* first name */}
               <div className="flex flex-col">
                 <label className="text-sm font-medium text-gray-600 mb-1">
-                  First Name
+                  {t("profile.fields.first_name")}
                 </label>
                 <input
                   type="text"
@@ -430,7 +430,7 @@ export default function ProfileNew() {
               {/* last name */}
               <div className="flex flex-col">
                 <label className="text-sm font-medium text-gray-600 mb-1">
-                  Last name
+                  {t("profile.fields.last_name")}
                 </label>
                 <input
                   type="text"
@@ -444,14 +444,14 @@ export default function ProfileNew() {
               {/* About */}
               <div className="flex flex-col relative group">
                 <label className="text-sm font-medium text-gray-600 mb-1">
-                  About
+                  {t("profile.fields.about")}
                 </label>
                 <textarea
                   name="about"
                   value={profile?.about ?? ""}
                   onChange={handleEditChange}
                   rows={3}
-                  placeholder="About"
+                  placeholder={t("profile.placeholders.about")}
                   className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none transition resize-none"
                 />
               </div>
@@ -459,7 +459,7 @@ export default function ProfileNew() {
               {/* Gender */}
               <div className="flex flex-col">
                 <label className="text-sm font-medium text-gray-600 mb-1">
-                  Gender
+                  {t("profile.fields.gender")}
                 </label>
                 <select
                   name="gender"
@@ -467,20 +467,20 @@ export default function ProfileNew() {
                   onChange={handleEditChange}
                   className="w-full border border-gray-200 rounded-xl p-2 text-sm focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none transition"
                 >
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
+                  <option value="male">{t("profile.gender_options.male")}</option>
+                  <option value="female">{t("profile.gender_options.female")}</option>
                 </select>
               </div>
 
               {/* Address */}
               <div className="flex flex-col">
                 <label className="text-sm font-medium text-gray-600 mb-1">
-                  Address
+                  {t("profile.fields.address")}
                 </label>
                 <input
                   type="text"
                   name="address"
-                  placeholder="Enter address"
+                  placeholder={t("profile.placeholders.address")}
                   value={profile?.address ?? ""}
                   onChange={handleEditChange}
                   className="w-full border border-gray-200 rounded-xl p-2 text-sm focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none transition"
@@ -490,14 +490,14 @@ export default function ProfileNew() {
               {/* Conditional Email / Phone */}
               {profile.email ? (
                 <p className="text-sm text-gray-500">
-                  Email: <span className="font-medium">{profile?.email}</span>{" "}
-                  (not editable)
+                  {t("profile.fields.email")}: <span className="font-medium">{profile?.email}</span>{" "}
+                  {t("profile.fields.not_editable")}
                 </p>
               ) : (
                 <input
                   type="email"
                   name="email"
-                  placeholder="Enter email"
+                  placeholder={t("profile.placeholders.email")}
                   value={profile?.email ?? ""}
                   onChange={handleEditChange}
                   className="w-full border border-gray-200 rounded-xl p-2 text-sm focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none transition"
@@ -506,19 +506,19 @@ export default function ProfileNew() {
 
               {user?.phone_number ? (
                 <p className="text-sm text-gray-500">
-                  Phone:{" "}
+                  {t("profile.fields.phone")}:{" "}
                   <span className="font-medium">{profile?.phone_number}</span>{" "}
-                  (not editable)
+                  {t("profile.fields.not_editable")}
                 </p>
               ) : (
                 <div className="flex flex-col">
                   <label className="text-sm font-medium text-gray-600 mb-1">
-                    Phone
+                    {t("profile.fields.phone")}
                   </label>
                   <input
                     type="tel"
                     name="phone_number"
-                    placeholder="Enter phone number"
+                    placeholder={t("profile.placeholders.phone")}
                     value={profile?.phone_number ?? ""}
                     onChange={handleEditChange}
                     className="w-full border border-gray-200 rounded-xl p-2 text-sm focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none transition"
@@ -529,12 +529,12 @@ export default function ProfileNew() {
               {/* social link */}
               <div className="flex flex-col">
                 <label className="text-sm font-medium text-gray-600 mb-1">
-                  Facebook Url
+                  {t("profile.fields.facebook_url")}
                 </label>
                 <input
                   type="url"
                   name="facebook"
-                  placeholder="Enter facebook url"
+                  placeholder={t("profile.placeholders.facebook")}
                   value={profile?.facebook ?? ""}
                   onChange={handleEditChange}
                   className="w-full border border-gray-200 rounded-xl p-2 text-sm focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none transition"
@@ -542,12 +542,12 @@ export default function ProfileNew() {
               </div>
               <div className="flex flex-col">
                 <label className="text-sm font-medium text-gray-600 mb-1">
-                  Linkedin Url
+                  {t("profile.fields.linkedin_url")}
                 </label>
                 <input
                   type="url"
                   name="linkedin"
-                  placeholder="Enter linkedin url"
+                  placeholder={t("profile.placeholders.linkedin")}
                   value={profile?.linkedin ?? ""}
                   onChange={handleEditChange}
                   className="w-full border border-gray-200 rounded-xl p-2 text-sm focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none transition"
@@ -556,7 +556,7 @@ export default function ProfileNew() {
               {/* Profile Image */}
               <div className="flex flex-col">
                 <label className="text-sm font-medium text-gray-600 mb-1">
-                  Profile Image
+                  {t("profile.fields.profile_image")}
                 </label>
                 <input
                   type="file"
@@ -576,7 +576,7 @@ export default function ProfileNew() {
                       // Check file type
                       if (!validTypes.includes(file.type)) {
                         toast.error(
-                          "Invalid file type. Please select a JPG, JPEG, or PNG image."
+                          t("profile.toasts.invalid_file_type")
                         );
                         e.target.value = "";
                         return;
@@ -585,7 +585,7 @@ export default function ProfileNew() {
                       // Check file size
                       if (file.size > maxSize) {
                         toast.error(
-                          "File size exceeds 2MB. Please choose a smaller image."
+                          t("profile.toasts.file_too_large")
                         );
                         e.target.value = "";
                         return;
@@ -615,19 +615,6 @@ export default function ProfileNew() {
                   />
                 </div>
               )}
-
-              {/* Cover Image */}
-              {/* <div className="flex flex-col">
-                  <label className="text-sm font-medium text-gray-600 mb-1">
-                    Cover Image
-                  </label>
-                  <input
-                    type="file"
-                    name="cover_photo"
-                    accept="image/*"
-                    className="w-full border border-gray-200 rounded-xl p-2 text-sm focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none transition"
-                  />
-                </div> */}
             </div>
 
             {/* Save Button */}
@@ -636,12 +623,11 @@ export default function ProfileNew() {
               disabled={loading}
               className="w-full mt-6 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium rounded-xl hover:from-purple-600 hover:to-pink-600 transition cursor-pointer"
             >
-              Save Changes
+              {t("profile.buttons.save")}
             </button>
           </div>
         </div>
       )}
-      {/* </Suspense> */}
     </>
   );
 }

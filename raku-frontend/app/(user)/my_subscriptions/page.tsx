@@ -14,6 +14,7 @@ import BreadCrumb from "@/components/BreadCrumb";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
 import Loader from "@/components/Loader";
 import PaginatedComponent from "@/components/PaginateComponent";
+import { useTranslation } from "react-i18next";
 
 interface SubscriptionItem {
   id: number;
@@ -33,9 +34,11 @@ interface PlanItem {
 }
 
 export default function SubscriptionPage() {
+  const { t } = useTranslation("common");
+
   const breadCrumbData = [
-    { name: "Dashboard", to: "/dashboard" },
-    { name: "My Subscriptions", to: "/my_subscriptions" },
+    { name: t("subscription.breadcrumbs.dashboard"), to: "/dashboard" },
+    { name: t("subscription.breadcrumbs.my_subscriptions"), to: "/my_subscriptions" },
   ];
 
   const [subscriptionData, setSubscriptionData] = useState<SubscriptionItem[]>(
@@ -71,7 +74,7 @@ export default function SubscriptionPage() {
       setSubscriptionData(response?.data?.data || []);
     } catch (error: any) {
       console.error(error);
-      toast.error("Failed to get subscription data");
+      toast.error(t("subscription.toasts.fetch_error"));
     } finally {
       setLoading(false);
     }
@@ -86,7 +89,7 @@ export default function SubscriptionPage() {
       setShowDetailModal(true);
     } catch (error: any) {
       console.error(error);
-      toast.error("Failed to get subscription details");
+      toast.error(t("subscription.toasts.details_error"));
     }
   };
 
@@ -108,13 +111,13 @@ export default function SubscriptionPage() {
         /^https?:\/\/.+/.test(url)
       ) {
         window.location.href = url;
-        toast.success(response?.data?.message || "Subscription successful");
+        toast.success(response?.data?.message || t("subscription.toasts.success"));
       } else {
-        toast.success(response?.data?.message || "Subscription successful");
+        toast.success(response?.data?.message || t("subscription.toasts.success"));
       }
     } catch (error: any) {
       toast.error(
-        error?.response?.data?.message || error.message || "Subscription failed"
+        error?.response?.data?.message || error.message || t("subscription.toasts.failed")
       );
     }
   };
@@ -125,7 +128,7 @@ export default function SubscriptionPage() {
       <div className="space-y-10">
         <div className="space-y-5">
           <BreadCrumb breadCrumbData={breadCrumbData} />
-          <UserHeadline mainText="My Subscriptions" subText="" preText="" />
+          <UserHeadline mainText={t("subscription.title")} subText="" preText="" />
         </div>
         {subscriptionData.length > 0 && (
           <div className="flex flex-col md:flex-row gap-10 items-center mt-10 max-w-5xl mx-auto relative">
@@ -136,24 +139,24 @@ export default function SubscriptionPage() {
                   <CheckCircle className="w-10 h-10 text-white" />
                 </div>
                 <h2 className="text-2xl font-extrabold text-gray-800 tracking-tight">
-                  Current Plan:{" "}
+                  {t("subscription.current_plan.title")}:{" "}
                   <span className="text-blue-600">
                     {subscriptionData[0].package_name}
                   </span>
                 </h2>
                 <p className="text-sm text-gray-500 max-w-sm">
-                  You are currently enjoying the{" "}
+                  {t("subscription.current_plan.desc_start")}{" "}
                   <span className="font-medium text-blue-600">
-                    {subscriptionData[0].package_name} plan
+                    {subscriptionData[0].package_name} {t("subscription.current_plan.plan_text")}
                   </span>{" "}
-                  with limited access to premium feature.
+                  {t("subscription.current_plan.desc_end")}
                 </p>
               </div>
 
               {/* subtle glowing ring */}
               <div className="absolute inset-0 rounded-3xl border border-transparent bg-linear-to-tr from-blue-400/10 to-transparent pointer-events-none"></div>
               <span className="absolute top-3 right-4 bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
-                Active
+                {t("subscription.badges.active")}
               </span>
             </div>
 
@@ -169,16 +172,15 @@ export default function SubscriptionPage() {
                   <Sparkles className="w-10 h-10 text-yellow-300" />
                 </div>
                 <h3 className="text-2xl font-extrabold tracking-tight">
-                  Upgrade to <span className="text-yellow-300">Premium 🚀</span>
+                  {t("subscription.upgrade_card.title_start")} <span className="text-yellow-300">{t("subscription.upgrade_card.title_highlight")} 🚀</span>
                 </h3>
                 <p className="text-sm text-white/90 max-w-sm">
-                  Gain full access to all features, priority support, and
-                  advanced tools that elevate your experience.
+                  {t("subscription.upgrade_card.description")}
                 </p>
                 <Link href="/packages">
                   <button className="mt-5 inline-flex items-center gap-2 bg-white text-pink-600 font-semibold px-6 py-2.5 rounded-xl hover:bg-pink-50 transition duration-300 shadow-md hover:shadow-lg cursor-pointer">
                     <ArrowUpCircle className="w-5 h-5" />
-                    Upgrade Now
+                    {t("subscription.upgrade_card.btn")}
                   </button>
                 </Link>
               </div>
@@ -189,7 +191,7 @@ export default function SubscriptionPage() {
               {/* decorative blur */}
               <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-pink-400/40 blur-3xl rounded-full pointer-events-none"></div>
               <span className="absolute top-3 right-4 bg-yellow-400 text-gray-800 text-xs font-semibold px-3 py-1 rounded-full shadow">
-                Recommended
+                 {t("subscription.badges.recommended")}
               </span>
             </div>
           </div>
@@ -198,26 +200,26 @@ export default function SubscriptionPage() {
         {subscriptionData.length > 0 ? (
           <>
             <h3 className="text-lg font-semibold mb-4 text-gray-800">
-              Subscription History
+               {t("subscription.history.title")}
             </h3>
             <div className="overflow-clip rounded-2xl hidden md:block">
               <table className="w-full border-separate border-spacing-0 rounded-xl bg-white border border-gray-200 shadow text-sm">
                 <thead>
                   <tr className="bg-linear-to-r from-purple-700 via-violet-700 to-blue-700 text-white text-xs sm:text-sm">
                     <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
-                      Package
+                      {t("subscription.history.table.package")}
                     </th>
                     <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200 hidden sm:table-cell">
-                      Price
+                      {t("subscription.history.table.price")}
                     </th>
                     <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
-                      Payment Status
+                      {t("subscription.history.table.status")}
                     </th>
                     <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
-                      Last Updated
+                      {t("subscription.history.table.updated")}
                     </th>
                     <th className="p-2 sm:p-3 text-left font-bold border-r border-gray-200">
-                      Action
+                      {t("subscription.history.table.action")}
                     </th>
                   </tr>
                 </thead>
@@ -257,7 +259,7 @@ export default function SubscriptionPage() {
                                 onClick={() => handleRenew(subscription.id)}
                                 className="inline-block px-4 py-2 bg-linear-to-r from-purple-700 via-violet-700 to-blue-700 font-medium text-white rounded-lg hover:opacity-80 transition cursor-pointer"
                               >
-                                Renew
+                                {t("subscription.buttons.renew")}
                               </button>
                             )}
 
@@ -267,7 +269,7 @@ export default function SubscriptionPage() {
                               }
                               className="inline-block px-4 py-2 bg-purple-600 font-medium text-white rounded-lg hover:opacity-80 transition cursor-pointer"
                             >
-                              Details
+                               {t("subscription.buttons.details")}
                             </button>
                           </div>
                         ) : (
@@ -311,7 +313,7 @@ export default function SubscriptionPage() {
                     {/* Package name */}
                     <div className="flex items-center gap-2">
                       <span className="text-purple-600 text-sm font-medium">
-                        Package:
+                        {t("subscription.history.mobile.package")}:
                       </span>
                       <span className="text-gray-900 font-semibold capitalize">
                         {subscription.package_name || "N/A"}
@@ -325,7 +327,7 @@ export default function SubscriptionPage() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">
-                          Price
+                          {t("subscription.history.mobile.price")}
                         </div>
                         <div className="text-2xl font-bold text-transparent bg-clip-text bg-linear-to-r from-purple-600 to-pink-600">
                           {subscription.total_payable}
@@ -333,7 +335,7 @@ export default function SubscriptionPage() {
                       </div>
                       <div>
                         <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">
-                          Date
+                          {t("subscription.history.mobile.date")}
                         </div>
                         <div className="text-sm font-semibold text-gray-900">
                           {subscription.date}
@@ -348,13 +350,13 @@ export default function SubscriptionPage() {
                           }
                           className="inline-block px-6 py-1.5 bg-purple-600 font-medium text-white rounded-full hover:opacity-80 transition cursor-pointer"
                         >
-                          Details
+                          {t("subscription.buttons.details")}
                         </button>
                         <button
                           onClick={() => handleRenew(subscription.id)}
                           className="inline-block px-6 py-1.5 bg-linear-to-r from-purple-700 via-violet-700 to-blue-700 font-medium text-white rounded-full hover:opacity-80 transition cursor-pointer"
                         >
-                          Renew
+                          {t("subscription.buttons.renew")}
                         </button>
                       </div>
                     )}
@@ -371,10 +373,10 @@ export default function SubscriptionPage() {
           </>
         ) : (
           <div className="text-center text-gray-500 py-6 flex flex-col gap-3 justify-center items-center">
-            You have not purchased any subscription yet !!
+            {t("subscription.empty_state.message")}
             <Link href="/packages">
-              <button className="relative overflow-hidden text-sm md:text-base inline-block px-10 py-2 font-semibold text-white rounded-full bg-linear-to-r from-purple-600 to-blue-600 shadow-lg shadow-purple-500/40 hover:shadow-purple-500/60 hover:scale-105 transition-all duration-300 ease-out">
-                <span className="relative z-10"> Buy Now</span>
+              <button className="relative overflow-hidden text-sm md:text-base inline-block px-10 py-2 font-semibold text-white rounded-full bg-linear-to-r from-purple-600 to-blue-600 shadow-lg shadow-purple-500/40 hover:shadow-purple-500/60 hover:scale-105 transition-all duration-300 ease-out cursor-pointer">
+                <span className="relative z-10"> {t("subscription.empty_state.btn")}</span>
                 <span className="absolute inset-0 bg-linear-to-r from-purple-400/30 via-pink-400/30 to-blue-400/30 blur-xl opacity-60 transition-opacity duration-300 group-hover:opacity-90"></span>
               </button>
             </Link>
@@ -395,17 +397,17 @@ export default function SubscriptionPage() {
                   <CheckCircle className="size-6 lg:size-10 text-white" />
                 </div>
                 <h2 className="text-2xl font-extrabold text-gray-800 tracking-tight">
-                  Current Plan:{" "}
+                  {t("subscription.current_plan.title")}:{" "}
                   <span className="text-blue-600">
                     {subscriptionData[0].package_name}
                   </span>
                 </h2>
                 <p className="text-sm text-gray-500 max-w-sm">
-                  You are currently enjoying the{" "}
+                  {t("subscription.current_plan.desc_start")}{" "}
                   <span className="font-medium text-blue-600">
-                    {subscriptionData[0].package_name} plan
+                    {subscriptionData[0].package_name} {t("subscription.current_plan.plan_text")}
                   </span>{" "}
-                  with limited access to premium feature.
+                  {t("subscription.current_plan.desc_end")}
                 </p>
               </div>
               <div className="grid grid-cols-1 gap-6 mt-5">
@@ -420,14 +422,14 @@ export default function SubscriptionPage() {
 
                     <div className="space-y-1 text-sm">
                       <p className="flex justify-between text-gray-700">
-                        <span>Total Exams:</span>{" "}
+                        <span>{t("subscription.modal.total_exams")}:</span>{" "}
                         <span>{exam.max_attempts}</span>
                       </p>
                       <p className="flex justify-between text-gray-700">
-                        <span>Used:</span> <span>{exam.used_attempts}</span>
+                        <span>{t("subscription.modal.used")}:</span> <span>{exam.used_attempts}</span>
                       </p>
                       <p className="flex justify-between font-medium text-blue-600">
-                        <span>Remaining:</span>{" "}
+                        <span>{t("subscription.modal.remaining")}:</span>{" "}
                         <span>{exam.remaining_attempts}</span>
                       </p>
                     </div>

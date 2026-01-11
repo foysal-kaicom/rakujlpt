@@ -23,6 +23,7 @@ import { FaRocket, FaBook, FaBrain, FaTrophy } from "react-icons/fa";
 import DashboardSkeleton from "./dashboardSkeleton";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
 import ReferralModal from "./ReferralModal";
+import { useTranslation } from "react-i18next";
 
 interface ExamItem {
   title: string;
@@ -42,8 +43,9 @@ interface DashboardItem {
 }
 
 export default function Dashboard() {
+  const { t } = useTranslation("common");
   const settings = useBusinessSettingsStore((state) => state.settings);
-  const user = useAuthStore().user
+  const user = useAuthStore().user;
 
   const [loading, setLoading] = useState(true);
   const [allExam, setAllExam] = useState<ExamItem[]>([]);
@@ -83,25 +85,25 @@ export default function Dashboard() {
 
   const steps = [
     {
-      title: "Getting Started",
+      title: t("dashboard.steps.getting_started"),
       icon: <FaRocket />,
       color: "from-purple-500 to-pink-500",
       status: "completed",
     },
     {
-      title: "Basics",
+      title: t("dashboard.steps.basics"),
       icon: <FaBook />,
       color: "from-blue-500 to-yellow-400",
       status: "current",
     },
     {
-      title: "Intermediate",
+      title: t("dashboard.steps.intermediate"),
       icon: <FaBrain />,
       color: "from-pink-500 to-blue-500",
       status: "upcoming",
     },
     {
-      title: "Mastery",
+      title: t("dashboard.steps.mastery"),
       icon: <FaTrophy />,
       color: "from-yellow-400 to-purple-500",
       status: "upcoming",
@@ -115,14 +117,11 @@ export default function Dashboard() {
       ) : (
         <div className="">
           <section className="flex items-center justify-between gap-2 mb-3 flex-wrap">
-            <UserHeadline mainText="Dashboard" subText="" preText="" />
-            {/* <button
-              onClick={() => setOpen(true)}
-              className="flex items-center gap-1 font-semibold rounded-2xl bg-purple-100 hover:bg-purple-200 px-5 py-1.5 border border-purple-200 text-sm sm:text-base text-purple-700 cursor-pointer"
-            >
-              <TbRosetteDiscountFilled className="size-6 shake-pause" /> Refer &
-              earn
-            </button> */}
+            <UserHeadline
+              mainText={t("dashboard.title")}
+              subText=""
+              preText=""
+            />
           </section>
           <div className="relative bg-linear-to-t from-purple-400 to-pink-400 text-white rounded-xl overflow-hidden px-8 py-4 lg:py-0 lg:px-16 flex justify-between items-center gap-8 shadow-md hover:shadow-lg transition-shadow duration-500 mb-5">
             {/* Animated Floating Orbs */}
@@ -131,17 +130,16 @@ export default function Dashboard() {
 
             <div className="relative z-10 w-2/3">
               <h1 className="text-lg sm:text-3xl lg:text-4xl xl:text-5xl font-semibold mb-4">
-                📝 Boost Your Japanese Skills!
+                {t("dashboard.hero.title")}
               </h1>
               <p className="text-sm sm:text-base mb-6 text-white font-medium hidden sm:block">
-                Take interactive mock tests for JPT (N5 & N4). Track your
-                progress, improve fast, and achieve your goals!
+                {t("dashboard.hero.description")}
               </p>
               <Link
                 href="/mock_test_select"
                 className="px-5 sm:px-10 py-1.5 lg:py-2.5 rounded-lg text-white bg-purple-600 text-xs sm:text-sm md:text-base font-bold shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300 animate-pulse"
               >
-                Take Mock Test
+                {t("dashboard.buttons.take_mock_test")}
               </Link>
             </div>
 
@@ -158,11 +156,13 @@ export default function Dashboard() {
           </div>
           <section className="space-y-4 md:space-y-10">
             <section className="space-y-2 mt-3 md:mt-10 ">
-              <h1 className="font-bold sm:text-xl">Exam Solution</h1>
+              <h1 className="font-bold sm:text-xl">
+                {t("dashboard.sections.exam_solution.title")}
+              </h1>
               <section className="grid grid-cols-4 sm:grid-cols-4 lg:flex flex-wrap gap-2 sm:gap-6">
                 {[
                   {
-                    title: "Practice",
+                    title: t("dashboard.sections.exam_solution.items.practice"),
                     value: dashboard?.total_bookings,
                     icon: <GiStairsGoal className="size-8 sm:size-14" />,
                     iconBg: "bg-purple-600",
@@ -170,15 +170,19 @@ export default function Dashboard() {
                     extranal: false,
                   },
                   {
-                    title: "Learn",
+                    title: t("dashboard.sections.exam_solution.items.learn"),
                     value: dashboard?.total_success_payments,
-                    icon: <BiSolidBookBookmark className="size-8 sm:size-14" />,
+                    icon: (
+                      <BiSolidBookBookmark className="size-8 sm:size-14" />
+                    ),
                     iconBg: "bg-purple-600",
                     link: "",
                     extranal: false,
                   },
                   {
-                    title: "Metarials",
+                    title: t(
+                      "dashboard.sections.exam_solution.items.materials"
+                    ),
                     value: dashboard?.pending_booking,
                     icon: <PiNotebookFill className="size-8 sm:size-14" />,
                     iconBg: "bg-purple-600",
@@ -186,7 +190,7 @@ export default function Dashboard() {
                     extranal: false,
                   },
                   {
-                    title: "Tips",
+                    title: t("dashboard.sections.exam_solution.items.tips"),
                     value: dashboard?.total_results_published,
                     icon: <MdTipsAndUpdates className="size-8 sm:size-14" />,
                     iconBg: "bg-purple-600",
@@ -194,7 +198,7 @@ export default function Dashboard() {
                     extranal: false,
                   },
                   {
-                    title: "JPT Exam",
+                    title: t("dashboard.sections.exam_solution.items.jpt_exam"),
                     value: dashboard?.total_bookings,
                     icon: <IoIosAlarm className="size-8 sm:size-14" />,
                     iconBg: "bg-purple-600",
@@ -202,7 +206,9 @@ export default function Dashboard() {
                     extranal: true,
                   },
                   {
-                    title: "JLPT Exam",
+                    title: t(
+                      "dashboard.sections.exam_solution.items.jlpt_exam"
+                    ),
                     value: dashboard?.total_success_payments,
                     icon: <IoIosAlarm className="size-8 sm:size-14" />,
                     iconBg: "bg-purple-600",
@@ -210,7 +216,9 @@ export default function Dashboard() {
                     extranal: true,
                   },
                   {
-                    title: "Mock Test",
+                    title: t(
+                      "dashboard.sections.exam_solution.items.mock_test"
+                    ),
                     value: dashboard?.pending_booking,
                     icon: <GiRingingAlarm className="size-8 sm:size-14" />,
                     iconBg: "bg-purple-600",
@@ -218,7 +226,9 @@ export default function Dashboard() {
                     extranal: false,
                   },
                   {
-                    title: "Exam Pattern",
+                    title: t(
+                      "dashboard.sections.exam_solution.items.exam_pattern"
+                    ),
                     value: dashboard?.total_results_published,
                     icon: <LuComponent className="size-8 sm:size-14" />,
                     iconBg: "bg-purple-600",
@@ -248,11 +258,15 @@ export default function Dashboard() {
               </section>
             </section>
             <div className="space-y-2 sm:bg-white sm:p-5 rounded-xl sm:border border-gray-200">
-              <h1 className="font-bold sm:text-xl">Daily Practice</h1>
+              <h1 className="font-bold sm:text-xl">
+                {t("dashboard.sections.daily_practice.title")}
+              </h1>
               <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
                 {[
                   {
-                    title: "Vocabulary",
+                    title: t(
+                      "dashboard.sections.daily_practice.items.vocabulary"
+                    ),
                     value: dashboard?.total_bookings,
                     icon: (
                       <RxLetterCaseCapitalize className="size-6 2xl:size-10" />
@@ -261,21 +275,25 @@ export default function Dashboard() {
                     cardBg: "bg-sky-200",
                   },
                   {
-                    title: "Grammer",
+                    title: t(
+                      "dashboard.sections.daily_practice.items.grammar"
+                    ),
                     value: dashboard?.total_success_payments,
                     icon: <LuLetterText className="size-6 2xl:size-10" />,
                     iconBg: "bg-green-600",
                     cardBg: "bg-green-200",
                   },
                   {
-                    title: "Listening",
+                    title: t(
+                      "dashboard.sections.daily_practice.items.listening"
+                    ),
                     value: dashboard?.pending_booking,
                     icon: <SiAudiobookshelf className="size-6 2xl:size-10" />,
                     iconBg: "bg-yellow-500",
                     cardBg: "bg-amber-100",
                   },
                   {
-                    title: "Reading",
+                    title: t("dashboard.sections.daily_practice.items.reading"),
                     value: dashboard?.total_results_published,
                     icon: <IoIosBookmarks className="size-6 2xl:size-10" />,
                     iconBg: "bg-cyan-600",
@@ -314,7 +332,9 @@ export default function Dashboard() {
           <ReferralModal
             isOpen={open}
             onClose={() => setOpen(false)}
-            referralLink={`${settings?.website_url}/registration/?ref=${user?.candidate_code || ""}`}
+            referralLink={`${settings?.website_url}/registration/?ref=${
+              user?.candidate_code || ""
+            }`}
           />
         </div>
       )}

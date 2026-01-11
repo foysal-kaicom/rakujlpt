@@ -11,11 +11,13 @@ import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 
 import { FaUser } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 export default function Sidebar() {
   const path = usePathname();
   const router = useRouter();
   const user = useAuthStore().user;
+  const { t } = useTranslation("common");
 
   const MainSidebar = () => {
     return (
@@ -64,7 +66,7 @@ export default function Sidebar() {
                 >
                   {data.icon}
                 </p>
-                <p>{data.label}</p>
+                <p>{t(data.label)}</p>
               </div>
             </Link>
           ))}
@@ -78,7 +80,7 @@ export default function Sidebar() {
               >
                 <FaSignOutAlt />
               </p>
-              <p>Logout</p>
+              <p>{t("nav.logout")}</p>
             </div>
           </button>
         </div>
