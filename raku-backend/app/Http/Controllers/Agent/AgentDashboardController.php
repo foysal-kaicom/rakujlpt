@@ -11,7 +11,7 @@ class AgentDashboardController extends Controller
     public function showDashboard()
     {
         $exam_count = 0;
-        return view('agent.dashboard.dashboard', compact('exam_count'));
+        return view('agent-panel.dashboard.dashboard', compact('exam_count'));
     }
 
     public function logoutAgent(Request $request)

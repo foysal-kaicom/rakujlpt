@@ -1,4 +1,4 @@
-@extends('agent.layout.agent_master')
+@extends('agent-panel.layout.agent_master')
 
 @section('contents')
     <div class="space-y-6">

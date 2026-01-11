@@ -124,13 +124,13 @@
         <!-- Sidebar -->
 
 
-        @include('agent.layout.sidebar')
+        @include('agent-panel.layout.sidebar')
 
         <!-- Main Content -->
         <div id="mainContent" class="main-content h-screen bg-slate-100">
 
 
-            @include('agent.layout.header')
+            @include('agent-panel.layout.header')
             <!-- main content  -->
 
             <div class="p-4 bg-white min-h-full rounded-xl">
