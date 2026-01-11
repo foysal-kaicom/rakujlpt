@@ -74,5 +74,9 @@ class Candidate extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo(Package::class, 'current_package_id');
     }
+    public function agent()
+    {
+        return $this->belongsTo(Agent::class, 'agent_id');
+    }
     
 }
