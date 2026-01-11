@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('nationality')->nullable();
             $table->string('national_id')->nullable();
             $table->string('google_id')->nullable();
+            $table->foreignId('agent_id')->nullable()->constrained('agents')->onDelete('cascade');
 
             $table->enum('gender', ['male', 'female',null])->default(null);
             $table->text('photo')->nullable(); // path to uploaded image

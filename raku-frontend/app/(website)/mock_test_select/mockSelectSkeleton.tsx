@@ -6,11 +6,12 @@ export default function MockTestSelectSkeleton() {
       <WebpageWrapper>
         <div className="md:w-2/3 xl:w-1/2 mb-8 text-center mx-auto animate-pulse">
           {/* Title skeleton */}
-          <div className="mx-auto w-3/4 h-10 sm:h-12 bg-linear-to-r from-indigo-100 via-pink-100 to-purple-100 rounded-lg mb-4"></div>
+          <div className="mx-auto w-3/4 h-10 sm:h-12 bg-linear-to-r from-indigo-100 via-pink-100 to-purple-100 rounded-lg mb-4 animate-pulse"></div>
 
           {/* Subtitle skeleton lines */}
-          <div className="mx-auto w-5/6 h-4 bg-gray-200/80 rounded-full mb-2"></div>
-          <div className="mx-auto w-2/3 h-4 bg-gray-200/80 rounded-full"></div>
+          <div className="mx-auto w-5/6 h-4 bg-gray-200/80 rounded-full mb-2 animate-pulse"></div>
+          <div className="mx-auto w-2/3 h-4 bg-gray-200/80 rounded-full mb-5 animate-pulse"></div>
+          <div className="mx-auto max-w-50 h-8 bg-purple-200/80 rounded-full animate-pulse"></div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-10">

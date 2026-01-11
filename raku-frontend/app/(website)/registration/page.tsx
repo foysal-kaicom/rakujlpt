@@ -94,7 +94,7 @@ export default function SignUpPage() {
   return (
     <>
       {loading && <Loader />}
-      <div className="min-h-screen flex items-center justify-center bg-white px-4">
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-fuchsia-200 via-blue-100 px-4">
         <div className="w-full max-w-md relative p-[2px] rounded-3xl bg-gradient-to-r from-pink-200 to-indigo-200 shadow-[0_0_40px_rgba(255,255,255,0.3)]">
           <div className="bg-white backdrop-blur-xl rounded-3xl p-8">
             {/* Header */}

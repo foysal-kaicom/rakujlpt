@@ -53,7 +53,7 @@
                                 class="flex items-center justify-center w-9 h-9 rounded-lg {{ $packagesActive ? 'bg-white/20' : 'bg-gradient-to-br from-amber-500 to-amber-600' }} text-white shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
                                 <i class="fa-solid fa-box-open text-sm"></i>
                             </div>
-                            <span class="font-semibold text-sm">Packages</span>
+                            <span class="font-semibold text-sm">Example Menu</span>
                         </div>
                         <i
                             class="fas fa-chevron-down drop-arrow text-xs {{ $packagesActive ? 'text-white/80' : 'text-slate-400' }} transition-transform duration-300 {{ $packagesActive ? 'rotated' : '-rotate-90' }}"></i>
@@ -65,21 +65,8 @@
                     <a href="{{ route('packages.index') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('packages.index') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fa-solid fa-list text-xs"></i>
-                        <span>All Packages</span>
+                        <span>Example Submenu</span>
                     </a>
-                  
-              
-                    <a href="{{ route('packages.create') }}"
-                        class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('packages.create') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
-                        <i class="fa-solid fa-plus text-xs"></i>
-                        <span>Add Package</span>
-                    </a>
-              
-                    <a href="{{ route('coupon.list') }}"
-                    class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('packages.create') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
-                    <i class="fa-regular fa-note-sticky"></i>
-                    <span>Coupons</span>
-                </a>
                 </div>
             </div>
 
@@ -90,7 +77,7 @@
                         class="flex items-center justify-center w-9 h-9 rounded-lg {{ request()->routeIs('user-payments') ? 'bg-white/20' : 'bg-gradient-to-br from-orange-500 to-orange-600' }} text-white shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
                         <i class="fas fa-credit-card text-sm"></i>
                     </div>
-                    <span class="font-semibold text-sm">User Payments</span>
+                    <span class="font-semibold text-sm">Example Route</span>
                 </a>
             </div>
 
@@ -99,7 +86,7 @@
 
     <!-- Logout Section - Fixed at bottom -->
     <div class="sticky w-full bottom-0 bg-white/95 backdrop-blur-sm border-t border-slate-200 px-2 py-1">
-        <a href="{{ route('logout') }}"
+        <a href="{{ route('agent.logout') }}"
             class="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-700 hover:text-red-600 hover:bg-red-50 transition-all duration-200">
             <div
                 class="flex items-center justify-center w-9 h-9 rounded-lg bg-gradient-to-br from-red-500 to-red-600 text-white shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">

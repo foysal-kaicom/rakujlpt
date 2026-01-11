@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\ExamController;
@@ -210,6 +211,16 @@ Route::group(['middleware' => 'auth', 'checkPermission'], function () {
         Route::resource('', StageController::class)->parameters(['' => 'stage']);
         Route::post('{stage}/toggle-status', [StageController::class, 'toggleStatus'])->name('toggleStatus');
     });
+
+    Route::group(['prefix' => 'agents', 'as' => 'agents.', 'module' => 'agents'], function () {
+        Route::get('/', [AgentController::class, 'list'])->name('list');
+        Route::get('/create', [AgentController::class, 'showCreate'])->name('create');
+        Route::post('/store', [AgentController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [AgentController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [AgentController::class, 'update'])->name('update');
+        Route::post('{id}/toggle-status', [AgentController::class, 'toggleStatus'])->name('toggleStatus');
+    });
+
 
     Route::group(['prefix' => 'coupon', 'as' => 'coupon.'], function () {
         Route::get('/', [CouponController::class, 'list'])->name('list');

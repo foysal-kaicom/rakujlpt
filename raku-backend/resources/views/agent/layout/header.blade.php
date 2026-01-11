@@ -73,7 +73,7 @@
                     <!-- Logout Link -->
                     <li>
                         <a class="dropdown-item flex items-center gap-3 px-4 py-2.5 text-red-600 hover:bg-red-50 transition-all duration-200" 
-                           href="{{ route('logout') }}">
+                           href="{{ route('agent.logout') }}">
                             <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-red-100 text-red-600">
                                 <i class="fas fa-sign-out-alt text-sm"></i>
                             </div>
