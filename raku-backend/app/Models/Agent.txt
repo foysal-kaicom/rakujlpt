@@ -17,9 +17,4 @@ class Agent extends Authenticatable
         'password',
         'remember_token',
     ];
-
-    public function getPhotoUrlAttribute()
-    {
-        return asset('storage/' . $this->photo);
-    }
 }

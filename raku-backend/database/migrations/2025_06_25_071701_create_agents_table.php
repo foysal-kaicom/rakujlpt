@@ -19,6 +19,9 @@ class CreateAgentsTable extends Migration
             $table->string('phone');
             $table->string('location');
             $table->boolean('status')->default(true);
+            $table->string('last_login_ip')->nullable();
+            $table->dateTime('last_login')->nullable();
+            $table->rememberToken();
             $table->timestamps();
         });
     }
