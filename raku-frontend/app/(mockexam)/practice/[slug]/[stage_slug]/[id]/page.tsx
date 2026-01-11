@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   X,
   Clock,
@@ -66,7 +66,13 @@ export default function PracticeQuestion() {
   const [aiHint, setAiHint] = useState("");
   const [loadingHint, setLoadingHint] = useState(false);
 
-  // console.log(totalDuration);
+  const currentQuestion = questionsData[currentQuestionIndex];
+  const totalQuestions = questionsData.length;
+  const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+  const clickSoundRef = useRef<HTMLAudioElement | null>(null);
+  const correctSoundRef = useRef<HTMLAudioElement | null>(null);
+  const wrongSoundRef = useRef<HTMLAudioElement | null>(null);
+  const stageCompleteSoundRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -96,10 +102,6 @@ export default function PracticeQuestion() {
     fetchQuestions();
   }, []);
 
-  const currentQuestion = questionsData[currentQuestionIndex];
-  const totalQuestions = questionsData.length;
-  const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
-
   // Timer
   useEffect(() => {
     if (totalDuration <= 0) return;
@@ -121,6 +123,23 @@ export default function PracticeQuestion() {
     return () => clearInterval(timer);
   }, [totalDuration]);
 
+  useEffect(() => {
+    clickSoundRef.current = new Audio("/assets/audio/click_sound.mp3");
+    correctSoundRef.current = new Audio("/assets/audio/correct.mp3");
+    wrongSoundRef.current = new Audio("/assets/audio/wrong.mp3");
+    stageCompleteSoundRef.current = new Audio(
+      "/assets/audio/stage_complete.mp3"
+    );
+
+    [clickSoundRef, correctSoundRef, wrongSoundRef].forEach((ref) => {
+      if (ref.current) {
+        ref.current.volume = 0.9;
+        ref.current.preload = "auto";
+        ref.current.load();
+      }
+    });
+  }, []);
+
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -128,15 +147,14 @@ export default function PracticeQuestion() {
   };
 
   const handleAnswerSelect = (answer: string) => {
-    try {
-      const audio = new Audio("/assets/audio/click_sound.mp3");
-      audio.volume = 0.9;
-      void audio.play();
-    } catch (e) {
-      // ignore play errors
+    if (!isAnswered) {
+      const audio = clickSoundRef.current;
+      if (audio) {
+        audio.currentTime = 0; // instant replay
+        void audio.play();
+      }
+      setSelectedAnswer(answer);
     }
-    if (isAnswered) return;
-    setSelectedAnswer(answer);
   };
 
   const handleMultipleAnswerSelect = (index: number) => {
@@ -149,28 +167,25 @@ export default function PracticeQuestion() {
   };
 
   const checkAnswer = () => {
-    let correct = false;
-    if (selectedAnswer !== null) {
-      correct = selectedAnswer === currentQuestion.answer;
-    }
+    if (isAnswered) return;
+
+    const correct = selectedAnswer === currentQuestion.answer;
+
     if (correct) {
       setCorrectAnswerCount((prev) => prev + 1);
-      try {
-        const audio = new Audio("/assets/audio/correct.mp3");
-        audio.volume = 0.9;
+      const audio = correctSoundRef.current;
+      if (audio) {
+        audio.currentTime = 0;
         void audio.play();
-      } catch (e) {
-        // ignore play errors
       }
     } else {
-      try {
-        const audio = new Audio("/assets/audio/wrong.mp3");
-        audio.volume = 0.9;
+      const audio = wrongSoundRef.current;
+      if (audio) {
+        audio.currentTime = 0;
         void audio.play();
-      } catch (e) {
-        // ignore play errors
       }
     }
+
     setIsCorrect(correct);
     setShowExplanation(true);
     setIsAnswered(true);
@@ -181,12 +196,10 @@ export default function PracticeQuestion() {
       setCurrentQuestionIndex((prev) => prev + 1);
       resetQuestion();
     } else {
-      try {
-        const audio = new Audio("/assets/audio/stage_complete.mp3");
-        audio.volume = 0.9;
+      const audio = stageCompleteSoundRef.current;
+      if (audio) {
+        audio.currentTime = 0;
         void audio.play();
-      } catch (e) {
-        // ignore play errors
       }
       const completeStage = async () => {
         try {
@@ -231,10 +244,9 @@ export default function PracticeQuestion() {
       // }
 
       const data = await res.json();
-      setAiHint(data.hint || "No hints available.");
+      setAiHint(data.hint || currentQuestion.hints || "No hints available.");
       return data.hint;
     } catch (err: any) {
-      console.error("Failed to get AI hint:", err);
       setAiHint("Failed to get hint. Please try again.");
       return null;
     } finally {
@@ -535,7 +547,7 @@ export default function PracticeQuestion() {
                       <div className="flex gap-3">
                         <Lightbulb className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5 shake-pause" />
                         {currentQuestion?.question_type === "audio" ? (
-                          <AIHint hint={currentQuestion.hints || ''} />
+                          <AIHint hint={currentQuestion.hints || ""} />
                         ) : loadingHint ? (
                           <p className="text-gray-800 font-medium">
                             Thinking

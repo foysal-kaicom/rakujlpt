@@ -157,10 +157,12 @@ export default function CheckoutPage() {
       return;
     }
     try {
-      const response = await axiosInstance.post(`/subscribe`, {
+      const payload = {
         package_id: id,
-        coupon_code: couponCode,
-      });
+        ...(couponCode ? { coupon_code: couponCode } : {}),
+      };
+
+      const response = await axiosInstance.post(`/subscribe`, payload);
       const url = response?.data?.url;
       if (
         response.status === 200 &&

@@ -28,16 +28,16 @@ const SidebarData = [
     to: "/my_subscriptions",
     icon: <MdSubscriptions />,
   },
-  {
-    label: "My Wallet",
-    to: "/my_wallet",
-    icon: <FaWallet />,
-  },
-  {
-    label: "My Agent",
-    to: "/my_agent",
-    icon: <HiMiniUserGroup />,
-  },
+  // {
+  //   label: "My Wallet",
+  //   to: "/my_wallet",
+  //   icon: <FaWallet />,
+  // },
+  // {
+  //   label: "My Agent",
+  //   to: "/my_agent",
+  //   icon: <HiMiniUserGroup />,
+  // },
   {
     label: "Settings",
     to: "/settings",

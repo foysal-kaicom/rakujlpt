@@ -3,8 +3,9 @@ import BreadCrumb from "@/components/BreadCrumb";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import HeadLine2 from "@/components/HeadLine2";
 import { Suspense } from "react";
-import SuspenseLoader from "@/components/SuspenseLoader";
+
 import NewsComponent from "./NewsComponent";
+import NewsSketeton from "./NewsSkeleton";
 
 export const metadata: Metadata = {
   title: "Raku JLPT News – Updates on JLPT, JPT & NAT Exams",
@@ -22,7 +23,6 @@ export const metadata: Metadata = {
   ],
 };
 
-
 export default function AllNewsPage() {
   const breadCrumbData = [
     { name: "Home", to: "/" },
@@ -30,7 +30,7 @@ export default function AllNewsPage() {
   ];
 
   return (
-    <Suspense fallback={<SuspenseLoader />}>
+    <Suspense fallback={<NewsSketeton />}>
       <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 min-h-[70vh]">
         <WebpageWrapper>
           <div className="pt-5">
@@ -39,9 +39,8 @@ export default function AllNewsPage() {
               <HeadLine2 preText="" subText="" mainText="Blogs" />
             </div>
           </div>
-
-          <NewsComponent />
         </WebpageWrapper>
+        <NewsComponent />
       </div>
     </Suspense>
   );
