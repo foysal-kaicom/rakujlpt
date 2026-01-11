@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import PaginatedComponent from "@/components/PaginateComponent";
 import Link from "next/link";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 interface FAQ {
   id: null | number;
@@ -17,13 +18,15 @@ interface FAQ {
 }
 
 export default function FAQ() {
+  const { t } = useTranslation();
+
   const breadCrumbData = [
     {
-      name: "Home",
+      name: t("breadcrumb.home"),
       to: "/",
     },
     {
-      name: "FAQ",
+      name: t("breadcrumb.faq"),
       to: "/faq",
     },
   ];
@@ -37,7 +40,6 @@ export default function FAQ() {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  // Calculate pagination
   const totalExams = faqs.length;
   const totalPages = Math.ceil(totalExams / itemsPerPage);
 
@@ -69,21 +71,24 @@ export default function FAQ() {
         <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-gradient-to-br from-purple-400/30 to-pink-400/30 rounded-full blur-[120px] animate-float"></div>
         <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-gradient-to-tr from-indigo-400/30 to-pink-400/20 rounded-full blur-[140px] animate-float-slow"></div>
       </div>
+
       <WebpageWrapper>
         <BreadCrumb breadCrumbData={breadCrumbData} />
+
         <div className="relative z-10 max-w-3xl mx-auto text-center pt-15">
           <h1 className="text-5xl md:text-6xl font-extrabold pb-6 bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent drop-shadow-sm">
-            Got Questions?
+            {t("faq.title")}
           </h1>
+
           <p className="text-gray-700 mb-16 text-lg">
-            We’ve got answers! Check out the most common questions below —
-            clear, simple.
+            {t("faq.subtitle")}
           </p>
 
           {/* FAQ Accordion */}
           <div className="space-y-6 text-left mb-8">
             {currentFAQ.map((faq, index) => {
               const isOpen = openIndex === index;
+
               return (
                 <div
                   key={index}
@@ -93,13 +98,14 @@ export default function FAQ() {
                 >
                   <button
                     onClick={() => toggle(index)}
-                    className={`w-full flex justify-between items-center bg-white/70 backdrop-blur-xl px-6 py-5  text-left duration-400 border-b border-gray-200 ${
-                      isOpen ? "rounded-t-2xl " : "rounded-2xl"
+                    className={`w-full flex justify-between items-center bg-white/70 backdrop-blur-xl px-6 py-5 text-left duration-400 border-b border-gray-200 ${
+                      isOpen ? "rounded-t-2xl" : "rounded-2xl"
                     }`}
                   >
                     <h3 className="text-lg md:text-xl font-semibold text-gray-800">
                       {faq.question}
                     </h3>
+
                     <span
                       className={`text-xl text-purple-600 transition-transform duration-300 ${
                         isOpen ? "rotate-180" : ""
@@ -122,6 +128,7 @@ export default function FAQ() {
               );
             })}
           </div>
+
           {faqs.length > itemsPerPage && (
             <PaginatedComponent
               handlePageChange={handlePageChange}
@@ -130,13 +137,13 @@ export default function FAQ() {
             />
           )}
 
-          {/* CTA Button */}
+          {/* CTA */}
           <div className="mt-8">
             <Link
               href="/contact_us"
               className="relative inline-block px-10 py-4 test-xs sm:text-lg font-bold text-white rounded-full bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-pink-500 hover:to-indigo-500 transition-all duration-500 hover:scale-105 shadow-[0_0_25px_rgba(168,85,247,0.5)]"
             >
-              Still Need Help? Contact Us 💬
+              {t("faq.cta")}
             </Link>
           </div>
         </div>

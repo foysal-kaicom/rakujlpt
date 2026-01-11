@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import BreadCrumb from "@/components/BreadCrumb";
 import PracticeSkeleton from "./PracticeSkeleton";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
 interface Roadmap {
   id: number;
@@ -19,9 +20,11 @@ interface Roadmap {
 }
 
 export default function Practice() {
+  const { t } = useTranslation();
+
   const breadCrumbData = [
-    { name: "Home", to: "/" },
-    { name: "Practice", to: "/practice" },
+    { name: t("breadcrumb.home"), to: "/" },
+    { name: t("breadcrumb.practice"), to: "/practice" },
   ];
 
   const practiceLevelRef = useRef<HTMLDivElement | null>(null);
@@ -44,13 +47,13 @@ export default function Practice() {
           setPracticeTestsData(response.data.data);
         }
       } catch (error: any) {
-        toast.error("Cannot fetch Roadmaps right now");
+        toast.error(t("errors.fetch_roadmaps"));
       } finally {
         setLoader(false);
       }
     };
     fetchRoadmaps();
-  }, []);
+  }, [t]);
 
   return (
     <>
@@ -63,34 +66,33 @@ export default function Practice() {
         <div className="absolute w-96 h-96 bg-blue-200 opacity-40 blur-[140px] rounded-full bottom-[10%] right-[5%]" />
         <div className="absolute w-72 h-72 bg-purple-200 opacity-40 blur-[150px] rounded-full top-[40%] left-1/2 -translate-x-1/2" />
 
-        <div className="container mx-auto px-4 lg:px-8 relative z-10 py-14">
+        <div className="container mx-auto px-4 lg:px-8 relative z-10 pt-5 py-14">
           <BreadCrumb breadCrumbData={breadCrumbData} />
 
           {/* HERO SECTION */}
           <div className="mt-6 text-center">
             <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/70 backdrop-blur-md border border-white/40 rounded-full text-pink-600 text-sm font-medium shadow">
               <Sparkles className="w-4 h-4" />
-              STUDENT PRACTICE ZONE
+              {t("practicePage.badge")}
             </span>
 
             <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mt-6 leading-tight">
-              Master Your Skills with
+              {t("practicePage.hero_title")}
               <span className="bg-linear-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
                 {" "}
-                Interactive Practice Tests
+                {t("practicePage.hero_highlight")}
               </span>
             </h1>
 
             <p className="text-gray-600 max-w-2xl mx-auto mt-4 text-lg">
-              Boost your confidence, improve accuracy, and get ready for the
-              real exam.
+              {t("practicePage.hero_description")}
             </p>
 
             <button
               onClick={scrollToPractice}
               className="mt-8 px-10 py-4 text-lg bg-linear-to-r from-blue-500 to-purple-500 text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer ring-2 ring-purple-300 border-b border-b-white"
             >
-              Practice Free
+              {t("practicePage.cta")}
             </button>
 
             {/* Hero Illustration */}
@@ -104,7 +106,7 @@ export default function Practice() {
           {/* PRACTICE LEVEL SECTION */}
           <div className="mt-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">
-              Choose Your Practice Roadmap
+              {t("practicePage.choose_roadmap")}
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
@@ -116,7 +118,12 @@ export default function Practice() {
                   <div className="flex justify-center mb-4">
                     {test.image ? (
                       <div className="p-5 bg-purple-100 rounded-xl shadow group-hover:bg-purple-200 transition-all">
-                        <Image src={test.image} alt="" className="w-12 h-12" loading="lazy" />
+                        <Image
+                          src={test.image}
+                          alt={test.title}
+                          className="w-12 h-12"
+                          loading="lazy"
+                        />
                       </div>
                     ) : (
                       <div className="p-5 bg-purple-100 rounded-xl shadow group-hover:bg-purple-200 transition-all">
@@ -134,12 +141,12 @@ export default function Practice() {
                   </p>
 
                   <div className="mt-4 text-center text-blue-600 font-medium text-sm">
-                    {test.total_stages} Stages Included
+                    {test.total_stages} {t("practicePage.stages")}
                   </div>
 
                   <Link href={`/practice/${test.slug}`}>
                     <button className="mt-6 w-full py-3 bg-linear-to-r from-blue-500 to-purple-500 text-white rounded-xl font-semibold shadow-md hover:shadow-lg transition-all cursor-pointer">
-                      Start Now
+                      {t("practicePage.start_now")}
                     </button>
                   </Link>
                 </div>

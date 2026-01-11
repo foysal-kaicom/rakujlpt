@@ -17,7 +17,7 @@ export default function SettingsPage() {
   const router = useRouter();
   const breadCrumbData = [
     { name: "Dashboard", to: "/dashboard" },
-    { name: "Exam Booking", to: "/exam_history" },
+    { name: "Settings", to: "/settings" },
   ];
 
   const settingsOptions = [
@@ -25,13 +25,13 @@ export default function SettingsPage() {
       icon: <FaUserCog className="text-blue-500 w-6 h-6" />,
       title: "Profile Settings",
       description: "Manage your profile, email and phone number",
-      path: "/profile",
+      path: "/settings/profile",
     },
     {
       icon: <FaPalette className="text-purple-500 w-6 h-6" />,
       title: "Password Settings",
       description: "Change your password",
-      path: "/update_password",
+      path: "/settings/update_password",
     },
   ];
 

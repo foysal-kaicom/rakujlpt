@@ -5,8 +5,10 @@ import { Html5QrcodeScanner } from "html5-qrcode";
 import BreadCrumb from "@/components/BreadCrumb";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 export default function QRScannerPage() {
+  const { t } = useTranslation("common");
   const breadCrumbData = [
     { name: "Home", to: "/" },
     { name: "Verify Certificate", to: "/certificate" },
@@ -58,10 +60,10 @@ export default function QRScannerPage() {
           {/* Header */}
           <div className="text-center mb-10">
             <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent pb-2">
-              Verify Certificate !
+              {t("certificate.title")}
             </h1>
             <p className="text-gray-700 mt-2 max-w-md mx-auto">
-              Scan the Certificate's QR code to verify
+              {t("certificate.description")}
             </p>
           </div>
 
@@ -75,13 +77,13 @@ export default function QRScannerPage() {
 
             {/* Scanned Result */}
             <div className="mt-6 p-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl shadow-lg text-center break-words w-[90%] lg:w-[80%] mx-auto mb-6">
-              {scannedData || "No QR code scanned yet"}
+              {scannedData || t("certificate.info")}
             </div>
           </div>
 
           {/* Hint / Footer */}
           <p className="mt-6 text-gray-500 italic text-sm font-medium text-center max-w-md">
-            Tip: Allow camera access for scanning. Works on desktop and mobile.
+            {t("certificate.tip")}
           </p>
         </div>
       </WebpageWrapper>

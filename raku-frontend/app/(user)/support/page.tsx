@@ -108,7 +108,7 @@ export default function SupportForm() {
                   }`}
                 >
                   <div
-                    className={`relative px-4 py-2 rounded-2xl max-w-xs sm:max-w-sm text-sm break-words shadow-md transition-all duration-300 ${
+                    className={`relative px-4 py-2 rounded-2xl max-w-xs sm:max-w-sm text-sm wrap-break-word shadow-md transition-all duration-300 ${
                       msg.user_id === null
                         ? "bg-blue-600 text-white rounded-br-none"
                         : "bg-gray-200 text-gray-800 rounded-bl-none"

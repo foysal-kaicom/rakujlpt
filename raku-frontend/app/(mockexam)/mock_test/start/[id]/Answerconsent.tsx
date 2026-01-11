@@ -104,12 +104,11 @@ export default function AnswerConsent({
                   <button
                     key={q.id}
                     onClick={() => handleQuestionClick(q.id)}
-                    className={`size-10 rounded-full flex items-center justify-center text-sm font-semibold shadow-[0_0_10px_rgba(255,255,255,0.3)] transition-all duration-200 hover:scale-110 
-                  ${
-                    isAnswered
-                      ? "bg-purple-800 text-white shadow-purple-500/40"
-                      : "border border-purple-500 text-purple-800"
-                  }`}
+                    className={`size-10 rounded-full flex items-center justify-center text-sm font-semibold shadow-[0_0_10px_rgba(255,255,255,0.3)] transition-all duration-200 hover:scale-110 cursor-pointer ${
+                      isAnswered
+                        ? "bg-purple-800 text-white shadow-purple-500/40"
+                        : "border border-purple-500 text-purple-800"
+                    }`}
                   >
                     {getGlobalQuestionNumber(q.id)}
                   </button>
@@ -122,14 +121,14 @@ export default function AnswerConsent({
         <div className="flex justify-center gap-5 mt-8">
           <button
             onClick={() => setShowConsent(false)}
-            className="px-6 py-3 rounded-xl bg-red-500/90 text-white font-semibold shadow-lg hover:bg-red-600 hover:scale-105 transition"
+            className="px-6 py-3 rounded-xl bg-red-500/90 text-white font-semibold shadow-lg hover:bg-red-600 hover:scale-105 transition cursor-pointer"
           >
             Cancel
           </button>
 
           <button
             onClick={handleSubmit}
-            className="px-6 py-3 rounded-xl bg-linear-to-br from-purple-400 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 hover:brightness-110 transition"
+            className="px-6 py-3 rounded-xl bg-linear-to-br from-purple-400 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 hover:brightness-110 transition cursor-pointer"
           >
             Confirm
           </button>

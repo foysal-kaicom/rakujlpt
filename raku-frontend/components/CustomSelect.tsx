@@ -44,7 +44,7 @@ export default function CustomSelect({
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="w-full flex justify-between items-center px-5 py-3 text-white text-sm rounded-full shadow-md bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400 hover:scale-105 transition-transform duration-300 font-medium"
+        className="w-full flex justify-between items-center px-5 py-3 text-white text-sm rounded-full shadow-md bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400 hover:scale-105 transition-transform duration-300 font-medium cursor-pointer"
       >
         <span className="truncate">
           {selectedOption ? (

@@ -7,6 +7,7 @@ import Link from "next/link";
 
 // Third-party libraries
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next"; // Import added
 
 // Icons
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -25,10 +26,12 @@ import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import Loader from "@/components/Loader";
 
 export default function LoginPage() {
-  // Breadcrumb data
+  const { t } = useTranslation("common"); // Hook initialization
+
+  // Breadcrumb data (Now using translation)
   const breadCrumbData = [
-    { name: "Home", to: "/" },
-    { name: "Sign In", to: "/sign_in" },
+    { name: t("breadcrumb.home"), to: "/" },
+    { name: t("breadcrumb.sign_in"), to: "/sign_in" },
   ];
 
   // Hooks
@@ -72,7 +75,7 @@ export default function LoginPage() {
       const response = await axiosInstance.post("/login", formData);
 
       if (response.status === 200) {
-        toast.success(response?.data?.message || "Login successful");
+        toast.success(response?.data?.message || t("login.success"));
 
         const { token, data } = response.data;
 
@@ -87,16 +90,16 @@ export default function LoginPage() {
           is_subscribed:data.is_subscribed,
           current_package_id:data.current_package_id,
           current_package_name:data.current_package_name,
-          is_free:data.is_free
+          is_free:data.is_free,
+          candidate_code:data?.candidate_code,
         };
 
         login(user, token);
         router.push(callbackUrl);
-        console.log(callbackUrl)
       }
     } catch (error: any) {
       toast.error(
-        error?.response?.data?.message || error.message || "Login failed"
+        error?.response?.data?.message || error.message || t("login.failed")
       );
     } finally {
       setLoading(false);
@@ -110,7 +113,7 @@ export default function LoginPage() {
       const userData = await googleLoginUtils();
 
       if (!userData) {
-        toast.error("Google login failed");
+        toast.error(t("login.google_failed"));
       }
     } catch (err) {
       console.log(err);
@@ -142,12 +145,10 @@ export default function LoginPage() {
                 </div>
                 <div className="text-sm text-blue-700 w-[calc(100%-46px)]">
                   <p className="font-bold text-lg mb-1">
-                    🎉 Registration Successful!
+                    {t("login.reg_success_title")}
                   </p>
                   <p className="leading-relaxed">
-                    You will receive an email shortly with your login
-                    credentials. Please use the provided email and password to
-                    sign in.
+                    {t("login.reg_success_desc")}
                   </p>
                 </div>
               </div>
@@ -157,11 +158,10 @@ export default function LoginPage() {
               {/* Header */}
               <div className="text-center mb-8">
                 <div className="bg-linear-to-r from-indigo-400 to-purple-400 rounded-3xl p-4 inline-block mb-4 shadow-lg transform -rotate-2">
-                  <h2 className="text-4xl font-bold text-white">👋 Welcome</h2>
+                  <h2 className="text-4xl font-bold text-white">
+                    {t("login.welcome")}
+                  </h2>
                 </div>
-                {/* <p className="text-gray-600 mt-3 font-medium">
-                  Sign in to continue your journey!
-                </p> */}
               </div>
 
               <form className="space-y-6" onSubmit={handleSubmit}>
@@ -171,7 +171,7 @@ export default function LoginPage() {
                     htmlFor="email_or_phone"
                     className="block text-gray-700 font-bold mb-3 text-lg"
                   >
-                    📧 Email or Phone
+                    {t("login.email_label")}
                   </label>
                   <div className="flex border-3 border-purple-300 rounded-2xl overflow-hidden shadow-lg bg-white transform hover:scale-105 transition-all duration-300 focus-within:border-purple-500 focus-within:shadow-xl">
                     <button
@@ -187,7 +187,7 @@ export default function LoginPage() {
                       value={formData.email_or_phone}
                       onChange={handleChange}
                       required
-                      placeholder="Enter email or phone number"
+                      placeholder={t("login.email_placeholder")}
                       className="w-full px-4 py-3 focus:outline-none text-gray-700 font-medium"
                     />
                   </div>
@@ -199,7 +199,7 @@ export default function LoginPage() {
                     htmlFor="password"
                     className="block text-gray-700 font-bold mb-3 text-lg"
                   >
-                    🔒 Password
+                    {t("login.password_label")}
                   </label>
                   <div className="flex border-3 border-pink-300 rounded-2xl overflow-hidden shadow-lg bg-white transform hover:scale-105 transition-all duration-300 focus-within:border-pink-500 focus-within:shadow-xl">
                     <button
@@ -207,7 +207,9 @@ export default function LoginPage() {
                       onClick={() => setShowPassword((show) => !show)}
                       className="px-4 flex items-center text-white bg-linear-to-br from-pink-400 to-rose-500 hover:from-pink-500 hover:to-rose-600 focus:outline-none transition-all duration-300 cursor-pointer"
                       aria-label={
-                        showPassword ? "Hide password" : "Show password"
+                        showPassword
+                          ? t("login.hide_password")
+                          : t("login.show_password")
                       }
                     >
                       {showPassword ? (
@@ -223,7 +225,7 @@ export default function LoginPage() {
                       value={formData.password}
                       onChange={handleChange}
                       required
-                      placeholder="Enter your password"
+                      placeholder={t("login.password_placeholder")}
                       className="w-full px-4 py-3 focus:outline-none text-gray-700 font-medium"
                     />
                   </div>
@@ -232,15 +234,14 @@ export default function LoginPage() {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  // onClick={handleSubmit}
                   className="w-full bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white font-bold rounded-2xl py-4 transition-all duration-300 shadow-xl transform hover:scale-105 hover:-rotate-1 text-lg border-4 border-white/50 cursor-pointer"
                 >
-                  ✨ Sign In ✨
+                  {t("login.submit")}
                 </button>
                 <div className="relative flex items-center justify-center my-5">
                   <div className="w-full h-px bg-linear-to-r from-pink-300 via-yellow-300 to-indigo-300"></div>
                   <span className="absolute bg-white px-3 text-gray-600 text-sm">
-                    or
+                    {t("login.or")}
                   </span>
                 </div>
                 <button
@@ -253,7 +254,7 @@ export default function LoginPage() {
                     alt="Google"
                     className="w-5 h-5"
                   />
-                  <span>Sign In with Google</span>
+                  <span>{t("login.google")}</span>
                 </button>
               </form>
 
@@ -261,23 +262,23 @@ export default function LoginPage() {
               <div className="mt-8 space-y-3">
                 <div className="bg-linear-to-r from-blue-50 to-purple-50 rounded-2xl p-4 text-center border-2 border-purple-200 transform hover:scale-105 transition-all duration-300">
                   <p className="text-gray-700 text-sm font-medium">
-                    Don't have an account?{" "}
+                    {t("login.no_account")}{" "}
                     <Link
                       href="/registration"
                       className="text-indigo-600 hover:text-indigo-800 font-bold hover:underline"
                     >
-                      🚀 Sign up
+                      {t("login.sign_up_link")}
                     </Link>
                   </p>
                 </div>
                 <div className="bg-linear-to-r from-pink-50 to-rose-50 rounded-2xl p-4 text-center border-2 border-pink-200 transform hover:scale-105 transition-all duration-300">
                   <p className="text-gray-700 text-sm font-medium">
-                    Don't remember password?{" "}
+                    {t("login.forgot_password_text")}{" "}
                     <Link
                       href="/password-reset"
                       className="text-pink-600 hover:text-pink-800 font-bold hover:underline"
                     >
-                      🔑 Forget Password
+                      {t("login.forgot_password_link")}
                     </Link>
                   </p>
                 </div>
