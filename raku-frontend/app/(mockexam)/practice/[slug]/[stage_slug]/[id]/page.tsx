@@ -30,16 +30,8 @@ interface Question {
   explanation?: string;
   audio_file?: string;
 }
-interface Stage {
-  stage_id: number;
-  slug: string;
-  title: string;
-  image: string;
-  order: number;
-  total_questions: number;
-  status: string;
-  questions: Question[];
-}
+
+type Lang = "en" | "bn";
 
 export default function PracticeQuestion() {
   const params = useParams();
@@ -73,6 +65,14 @@ export default function PracticeQuestion() {
   const correctSoundRef = useRef<HTMLAudioElement | null>(null);
   const wrongSoundRef = useRef<HTMLAudioElement | null>(null);
   const stageCompleteSoundRef = useRef<HTMLAudioElement | null>(null);
+  const [language, setLanguage] = useState<Lang>("en");
+
+  useEffect(() => {
+    const lang = localStorage.getItem("lang") as Lang | null;
+    if (lang === "bn" || lang === "en") {
+      setLanguage(lang);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -80,7 +80,7 @@ export default function PracticeQuestion() {
         setLoader(true);
         const response = await axiosInstance.get(`/stages/${id}/start`);
         if (response?.data?.success) {
-          console.log(response.data);
+          // console.log(response.data);
           if (response?.data?.data?.questions.length === 0) {
             toast.error("No questions available for this stage.");
             router.push(`/practice/${slug}`);
@@ -227,6 +227,7 @@ export default function PracticeQuestion() {
     questionText?: string;
     audioUrl?: string;
     imageUrl?: string;
+    language?: string;
   }) => {
     if (aiHint) return;
     setLoadingHint(true);
@@ -236,7 +237,10 @@ export default function PracticeQuestion() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(question),
+        body: JSON.stringify({
+          ...question,
+          lang: language,
+        }),
       });
 
       // if (!res.ok) {
