@@ -47,40 +47,40 @@ export default function Practice() {
     try {
       const response = await axiosInstance.get(`/roadmaps`);
       if (response?.data?.success) {
-        // setPracticeTestsData(response.data.data);
-        setPracticeTestsData([
-          {
-            id: 1,
-            title: "JLPT",
-            slug: "jlpt",
-            description:
-              "Learn the fundamentals of web development, including HTML, CSS, JavaScript, and popular frameworks.",
-            image: "",
-            total_stages: "3",
-            is_free: 1,
-            unlock_coins: "0.00",
-          },
-          {
-            id: 2,
-            title: "Test 1",
-            slug: "test-1",
-            description: "Description",
-            image: "",
-            total_stages: "0",
-            is_free: 0,
-            unlock_coins: "20.00",
-          },
-          {
-            id: 3,
-            title: "Test 2",
-            slug: "test-2",
-            description: "Description",
-            image: "",
-            total_stages: "0",
-            is_free: 0,
-            unlock_coins: "50.00",
-          },
-        ]);
+        setPracticeTestsData(response.data.data);
+        // setPracticeTestsData([
+        //   {
+        //     id: 1,
+        //     title: "JLPT",
+        //     slug: "jlpt",
+        //     description:
+        //       "Learn the fundamentals of web development, including HTML, CSS, JavaScript, and popular frameworks.",
+        //     image: "",
+        //     total_stages: "3",
+        //     is_free: 1,
+        //     unlock_coins: "0.00",
+        //   },
+        //   {
+        //     id: 2,
+        //     title: "Test 1",
+        //     slug: "test-1",
+        //     description: "Description",
+        //     image: "",
+        //     total_stages: "0",
+        //     is_free: 0,
+        //     unlock_coins: "20.00",
+        //   },
+        //   {
+        //     id: 3,
+        //     title: "Test 2",
+        //     slug: "test-2",
+        //     description: "Description",
+        //     image: "",
+        //     total_stages: "0",
+        //     is_free: 0,
+        //     unlock_coins: "50.00",
+        //   },
+        // ]);
       }
     } catch (error: any) {
       toast.error(t("errors.fetch_roadmaps"));
@@ -92,18 +92,14 @@ export default function Practice() {
     fetchRoadmaps();
   }, [t]);
 
-  const handleUnlock = (roadmapId: number) => {
+  const handleUnlock = async (roadmapId: number) => {
     try {
-      // const response = axiosInstance.post(`/unlock-roadmap/${roadmapId}`, {
-      //   body: comment,
-      //   rating: rating,
-      //   exam_id: id,
-      // });
-      // if (response?.data?.success) {
-      //   toast.success(t("practicePage.unlock_success"));
-      // } else {
-      //   toast.error(t("errors.unlock_roadmap"));
-      // }
+      const response = await axiosInstance.post(`/candidate/unlock-roadmaps/?roadmap_id=${roadmapId}`);
+      if (response?.data?.success) {
+        toast.success(t("practicePage.unlock_success"));
+      } else {
+        toast.error(t("errors.unlock_roadmap"));
+      }
       setPracticeTestsData([]);
       fetchRoadmaps();
       toast.success(`Unlock roadmap with ID: ${roadmapId}`);
