@@ -72,6 +72,12 @@ class CandidateController extends Controller
 
             dispatch(new SendRegistrationEmailJob($candidate));
 
+            // add coin here using WalletHelper
+            // WalletHelper::addCoinOnRegistration($candidate->id);
+            // walletCredit($candidate, 'new_registration', 50);
+            walletCredit($candidate, 'new_registration');
+
+
             return $this->responseWithSuccess($candidate, "Candidate registered successfully", 201);
 
         } catch (Throwable $e) {
