@@ -1,19 +1,18 @@
 "use client";
 import BreadCrumb from "@/components/BreadCrumb";
 import HeadLine2 from "@/components/HeadLine2";
-import Loader from "@/components/Loader";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import axiosInstance from "@/utils/axios";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
-interface TermsCondition {
+interface Refund {
   type: string;
   content: string;
 }
 
-export default function TermsConditionComponent() {
+export default function RefundComponent() {
   const { t, i18n } = useTranslation("common");
   const breadCrumbData = [
     {
@@ -21,25 +20,23 @@ export default function TermsConditionComponent() {
       to: "/",
     },
     {
-      name: t("footer.terms"),
-      to: "/terms_condition",
+      name: t("footer.refund"),
+      to: "/refund_and_cancellation",
     },
   ];
-
   const currentLanguage = i18n.language;
-
-  const [termsConditionData, setTermsConditionData] =
-    useState<TermsCondition>();
+  const [refundData, setRefundData] =
+    useState<Refund>();
   const [loading, setLoading] = useState(true);
 
-  const getTermsConditionData = async () => {
+  const getRefundData = async () => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        `/policy/page?type=terms&lang=${currentLanguage ?? "en"}`
+        `/policy/page?type=return_policy&lang=${currentLanguage ?? "en"}`
       );
-      const data: TermsCondition = response?.data?.data || {};
-      setTermsConditionData(data);
+      const data: Refund = response?.data?.data || {};
+      setRefundData(data);
     } catch (error: any) {
       console.error(error);
       toast.error(t("contact.error"));
@@ -49,26 +46,26 @@ export default function TermsConditionComponent() {
   };
 
   useEffect(() => {
-    getTermsConditionData();
+    getRefundData();
   }, [currentLanguage]);
-
   return (
-    <>
-      {loading && <Loader />}
       <div className="pt-5 pb-15">
         <WebpageWrapper>
           <BreadCrumb breadCrumbData={breadCrumbData} />
           <div className="w-2/3 mt-5">
-            <HeadLine2 mainText={`${t("footer.terms")}`} preText="" subText="" />
+            <HeadLine2
+              mainText={t("footer.refund")}
+              preText=""
+              subText=""
+            />
           </div>
           <div
-            className="mt-3"
-            dangerouslySetInnerHTML={{
-              __html: termsConditionData?.content ?? "",
-            }}
-          />
+          className="mt-3"
+          dangerouslySetInnerHTML={{
+            __html: refundData?.content ?? "",
+          }}
+        />
         </WebpageWrapper>
       </div>
-    </>
   );
 }

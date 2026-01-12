@@ -13,11 +13,15 @@ class CreateAgentsTable extends Migration
             $table->string('name');
             $table->string('business_name');
             $table->string('photo')->nullable();
-            $table->decimal('commission_percentage', 5, 2)->nullable();
+            $table->decimal('commission_amount', 5, 2)->nullable();
             $table->string('email')->unique();
+            $table->string('password');
             $table->string('phone');
             $table->string('location');
             $table->boolean('status')->default(true);
+            $table->string('last_login_ip')->nullable();
+            $table->dateTime('last_login')->nullable();
+            $table->rememberToken();
             $table->timestamps();
         });
     }

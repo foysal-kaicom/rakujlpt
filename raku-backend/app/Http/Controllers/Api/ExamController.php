@@ -13,7 +13,7 @@ class ExamController extends Controller
 {
     public function list()
     {
-        $exams=Exam::where('status',1)->get();
+        $exams=Exam::where('status',1)->whereNotIn('type', ['agent'])->get();
 
         return $this->responseWithSuccess(ExamResource::collection($exams),'Exam List.');
     }

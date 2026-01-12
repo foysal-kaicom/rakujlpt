@@ -44,6 +44,10 @@ return [
             'driver' => 'jwt',
             'provider' => 'candidates',
         ],
+        'agent' => [
+            'driver' => 'session',
+            'provider' => 'agents',
+        ],
     ],
 
     /*
@@ -72,6 +76,11 @@ return [
         'candidates' => [
             'driver' => 'eloquent',
             'model' => App\Models\Candidate::class,
+        ],
+
+        'agents' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Agent::class, // Make sure you have an Agent model
         ],
 
         // 'users' => [

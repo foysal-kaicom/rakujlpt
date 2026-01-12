@@ -3,6 +3,7 @@ import { initReactI18next } from "react-i18next";
 
 import en from "@/public/locales/en/common.json";
 import bn from "@/public/locales/bn/common.json";
+import nep from "@/public/locales/nep/common.json";
 
 const savedLang =
   typeof window !== "undefined" ? localStorage.getItem("lang") || "en" : "en";
@@ -17,6 +18,9 @@ if (!i18n.isInitialized) {
       },
       bn: {
         common: bn,
+      },
+      nep: {
+        common: nep,
       },
     },
     ns: ["common"],
