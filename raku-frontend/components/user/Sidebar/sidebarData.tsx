@@ -7,7 +7,7 @@ import { HiMiniUserGroup } from "react-icons/hi2";
 
 const SidebarData = [
   {
-    label: "sidebar.dashboard", // Key
+    label: "sidebar.dashboard",
     to: "/dashboard",
     icon: <FaTachometerAlt />,
   },
