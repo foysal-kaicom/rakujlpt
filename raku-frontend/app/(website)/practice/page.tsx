@@ -9,6 +9,8 @@ import BreadCrumb from "@/components/BreadCrumb";
 import PracticeSkeleton from "./PracticeSkeleton";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
+import { FaRoad } from "react-icons/fa";
+import { ConfirmUnlockModal } from "./ConfirmUnlockModal";
 
 interface Roadmap {
   id: number;
@@ -17,6 +19,8 @@ interface Roadmap {
   image: string;
   description: string;
   total_stages: string;
+  is_free: number;
+  unlock_coins: string;
 }
 
 export default function Practice() {
@@ -26,8 +30,9 @@ export default function Practice() {
     { name: t("breadcrumb.home"), to: "/" },
     { name: t("breadcrumb.practice"), to: "/practice" },
   ];
-
   const practiceLevelRef = useRef<HTMLDivElement | null>(null);
+  const [showUnlockModal, setShowUnlockModal] = useState(false);
+  const [selectedRoadmap, setSelectedRoadmap] = useState<Roadmap | null>(null);
 
   const scrollToPractice = () => {
     practiceLevelRef.current?.scrollIntoView({
@@ -38,22 +43,74 @@ export default function Practice() {
 
   const [loader, setLoader] = useState(true);
   const [practiceTestsData, setPracticeTestsData] = useState<Roadmap[]>([]);
-
-  useEffect(() => {
-    const fetchRoadmaps = async () => {
-      try {
-        const response = await axiosInstance.get(`/roadmaps`);
-        if (response?.data?.success) {
-          setPracticeTestsData(response.data.data);
-        }
-      } catch (error: any) {
-        toast.error(t("errors.fetch_roadmaps"));
-      } finally {
-        setLoader(false);
+  const fetchRoadmaps = async () => {
+    try {
+      const response = await axiosInstance.get(`/roadmaps`);
+      if (response?.data?.success) {
+        // setPracticeTestsData(response.data.data);
+        setPracticeTestsData([
+          {
+            id: 1,
+            title: "JLPT",
+            slug: "jlpt",
+            description:
+              "Learn the fundamentals of web development, including HTML, CSS, JavaScript, and popular frameworks.",
+            image: "",
+            total_stages: "3",
+            is_free: 1,
+            unlock_coins: "0.00",
+          },
+          {
+            id: 2,
+            title: "Test 1",
+            slug: "test-1",
+            description: "Description",
+            image: "",
+            total_stages: "0",
+            is_free: 0,
+            unlock_coins: "20.00",
+          },
+          {
+            id: 3,
+            title: "Test 2",
+            slug: "test-2",
+            description: "Description",
+            image: "",
+            total_stages: "0",
+            is_free: 0,
+            unlock_coins: "50.00",
+          },
+        ]);
       }
-    };
+    } catch (error: any) {
+      toast.error(t("errors.fetch_roadmaps"));
+    } finally {
+      setLoader(false);
+    }
+  };
+  useEffect(() => {
     fetchRoadmaps();
   }, [t]);
+
+  const handleUnlock = (roadmapId: number) => {
+    try {
+      // const response = axiosInstance.post(`/unlock-roadmap/${roadmapId}`, {
+      //   body: comment,
+      //   rating: rating,
+      //   exam_id: id,
+      // });
+      // if (response?.data?.success) {
+      //   toast.success(t("practicePage.unlock_success"));
+      // } else {
+      //   toast.error(t("errors.unlock_roadmap"));
+      // }
+      setPracticeTestsData([]);
+      fetchRoadmaps();
+      toast.success(`Unlock roadmap with ID: ${roadmapId}`);
+    } catch (error) {
+      toast.error(t("errors.unlock_roadmap"));
+    }
+  };
 
   return (
     <>
@@ -110,51 +167,137 @@ export default function Practice() {
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
-              {practiceTestsData.map((test, index) => (
-                <div
-                  key={index}
-                  className="group bg-white rounded-2xl p-6 shadow-[0_10px_40px_rgba(0,0,0,0.08)] hover:shadow-[0_10px_60px_rgba(0,0,0,0.12)] transition-all hover:-translate-y-2 border border-blue-100"
-                >
-                  <div className="flex justify-center mb-4">
-                    {test.image ? (
-                      <div className="p-5 bg-purple-100 rounded-xl shadow group-hover:bg-purple-200 transition-all">
-                        <Image
-                          src={test.image}
-                          alt={test.title}
-                          className="w-12 h-12"
-                          loading="lazy"
-                        />
-                      </div>
-                    ) : (
-                      <div className="p-5 bg-purple-100 rounded-xl shadow group-hover:bg-purple-200 transition-all">
-                        <BookOpen className="w-12 h-12 text-blue-600" />
+              {practiceTestsData.map((test, index) => {
+                const isFree = Number(test.is_free) === 1;
+                const unlockCoins = Number(test.unlock_coins);
+
+                return (
+                  <div
+                    key={index}
+                    className={`group relative bg-gradient-to-br ${
+                      isFree
+                        ? "from-blue-50 via-purple-50 to-pink-50"
+                        : "from-gray-50 to-gray-100"
+                    } rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-3 border-2 ${
+                      isFree
+                        ? "border-blue-200 hover:border-blue-300"
+                        : "border-gray-300"
+                    } overflow-hidden`}
+                  >
+                    {/* Decorative corner accent */}
+                    {isFree && (
+                      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-400 to-purple-500 opacity-10 rounded-bl-full" />
+                    )}
+
+                    {/* Lock badge for locked tests */}
+                    {!isFree && (
+                      <div className="absolute top-4 right-4 bg-gray-800 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                        <span>🔒</span>
+                        <span>Locked</span>
                       </div>
                     )}
+
+                    {/* Icon */}
+                    <div className="flex justify-center mb-6">
+                      <div
+                        className={`relative p-6 rounded-2xl shadow-md transition-all duration-300 ${
+                          isFree
+                            ? "bg-gradient-to-br from-blue-500 to-purple-600 group-hover:from-blue-600 group-hover:to-purple-700"
+                            : "bg-gray-300 group-hover:bg-gray-400"
+                        }`}
+                      >
+                        {test.image ? (
+                          <Image
+                            src={test.image}
+                            alt={test.title}
+                            className="w-14 h-14"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <FaRoad
+                            className={`w-14 h-14 ${
+                              isFree ? "text-white" : "text-gray-600"
+                            }`}
+                          />
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Title */}
+                    <h3
+                      className={`text-2xl font-bold text-center mb-3 ${
+                        isFree
+                          ? "text-gray-900 group-hover:text-blue-600"
+                          : "text-gray-700"
+                      } transition-colors`}
+                    >
+                      {test.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p
+                      className={`text-center mt-3 min-h-20 leading-relaxed ${
+                        isFree ? "text-gray-700" : "text-gray-600"
+                      }`}
+                    >
+                      {test.description}
+                    </p>
+
+                    {/* Stages badge */}
+                    <div className="mt-6 flex justify-center">
+                      <div
+                        className={`px-4 py-2 rounded-full font-semibold text-sm ${
+                          isFree
+                            ? "bg-blue-100 text-blue-700 border border-blue-200"
+                            : "bg-gray-200 text-gray-600 border border-gray-300"
+                        }`}
+                      >
+                        📚 {test.total_stages} {t("practicePage.stages")}
+                      </div>
+                    </div>
+
+                    {/* Action */}
+                    <div className="mt-8">
+                      {isFree ? (
+                        <Link href={`/practice/${test.slug}`}>
+                          <button className="w-full py-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white rounded-2xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 text-lg cursor-pointer">
+                            {t("practicePage.start_now")} →
+                          </button>
+                        </Link>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            setSelectedRoadmap(test);
+                            setShowUnlockModal(true);
+                          }}
+                          className="w-full py-4 bg-gradient-to-r from-gray-700 to-gray-900 text-white rounded-2xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex flex-col items-center gap-2 group cursor-pointer"
+                        >
+                          <span className="flex items-center gap-2 text-lg">
+                            <span className="text-2xl group-hover:scale-110 transition-transform">
+                              🔒
+                            </span>
+                            <span>{t("practicePage.unlock_now")}</span>
+                          </span>
+                          <span className="flex items-center gap-1.5 text-sm bg-yellow-400 text-gray-900 px-3 py-1 rounded-full font-bold">
+                            <span className="text-base">🪙</span>
+                            <span>{unlockCoins} coins</span>
+                          </span>
+                        </button>
+                      )}
+                    </div>
                   </div>
-
-                  <h3 className="text-xl font-bold text-gray-900 text-center">
-                    {test.title}
-                  </h3>
-
-                  <p className="text-gray-600 text-center mt-2 min-h-20">
-                    {test.description}
-                  </p>
-
-                  <div className="mt-4 text-center text-blue-600 font-medium text-sm">
-                    {test.total_stages} {t("practicePage.stages")}
-                  </div>
-
-                  <Link href={`/practice/${test.slug}`}>
-                    <button className="mt-6 w-full py-3 bg-linear-to-r from-blue-500 to-purple-500 text-white rounded-xl font-semibold shadow-md hover:shadow-lg transition-all cursor-pointer">
-                      {t("practicePage.start_now")}
-                    </button>
-                  </Link>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
       </div>
+      <ConfirmUnlockModal
+        isOpen={showUnlockModal}
+        onClose={() => setShowUnlockModal(false)}
+        onConfirm={() => handleUnlock(selectedRoadmap?.id ?? 0)}
+        selectedRoadmap={selectedRoadmap ?? null}
+      />
     </>
   );
 }

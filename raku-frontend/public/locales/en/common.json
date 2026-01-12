@@ -175,7 +175,11 @@
     "cta": "Practice Free",
     "choose_roadmap": "Choose Your Practice Roadmap",
     "stages": "Stages Included",
-    "start_now": "Start Now"
+    "start_now": "Start Now",
+    "unlock_now": "Unlock Now",
+    "are_you_sure": "Are you sure you want to unlock",
+    "coins": "coins",
+    "will_deduct": "will be deducted from your wallet"
   },
   "errors": {
     "fetch_roadmaps": "Cannot fetch Roadmaps right now"
