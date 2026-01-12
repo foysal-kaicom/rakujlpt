@@ -12,26 +12,29 @@ import {
 
 import BreadCrumb from "@/components/BreadCrumb";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
+import { useTranslation } from "react-i18next";
 
 export default function SettingsPage() {
+  const { t } = useTranslation("common");
   const router = useRouter();
+
   const breadCrumbData = [
-    { name: "Dashboard", to: "/dashboard" },
-    { name: "Exam Booking", to: "/exam_history" },
+    { name: t("settings.breadcrumbs.dashboard"), to: "/dashboard" },
+    { name: t("settings.breadcrumbs.exam_booking"), to: "/settings" },
   ];
 
   const settingsOptions = [
     {
       icon: <FaUserCog className="text-blue-500 w-6 h-6" />,
-      title: "Profile Settings",
-      description: "Manage your profile, email and phone number",
-      path: "/profile",
+      title: t("settings.options.profile.title"),
+      description: t("settings.options.profile.desc"),
+      path: "/settings/profile",
     },
     {
       icon: <FaPalette className="text-purple-500 w-6 h-6" />,
-      title: "Password Settings",
-      description: "Change your password",
-      path: "/update_password",
+      title: t("settings.options.password.title"),
+      description: t("settings.options.password.desc"),
+      path: "/settings/update_password",
     },
   ];
 
@@ -40,7 +43,11 @@ export default function SettingsPage() {
       <BreadCrumb breadCrumbData={breadCrumbData} />
 
       <div className="mt-5">
-        <UserHeadline mainText="Settings" subText="" preText="" />
+        <UserHeadline
+          mainText={t("settings.title")}
+          subText=""
+          preText=""
+        />
         <div className="w-full bg-white rounded-2xl border border-purple-200 p-8 mt-5">
           <div className="grid sm:grid-cols-2 gap-6">
             {settingsOptions.map((option, index) => (

@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Models;
+
+// use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+
+class Agent extends Authenticatable
+{
+    use Notifiable;
+    protected $guard = 'agent';
+
+    protected $guarded = [];
+    
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    public function getPhotoUrlAttribute()
+    {
+        return asset('storage/' . $this->photo);
+    }
+}

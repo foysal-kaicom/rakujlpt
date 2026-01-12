@@ -85,7 +85,7 @@ export default function TestimonialsSection() {
           modules={[Pagination, Autoplay]}
           className="mySwiper"
         >
-          {testimonials.slice(0, 3).map((testimonial) => (
+          {testimonials.map((testimonial) => (
             <SwiperSlide>
               <TestimonialCard testimonial={testimonial} />
             </SwiperSlide>

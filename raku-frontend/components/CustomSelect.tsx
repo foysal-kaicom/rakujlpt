@@ -44,7 +44,7 @@ export default function CustomSelect({
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="w-full flex justify-between items-center px-5 py-3 text-white text-sm rounded-full shadow-md bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400 hover:scale-105 transition-transform duration-300 font-medium"
+        className="w-full flex justify-between items-center px-5 py-3 text-white text-sm rounded-full shadow-md bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400 hover:scale-105 transition-transform duration-300 font-medium cursor-pointer"
       >
         <span className="truncate">
           {selectedOption ? (
@@ -69,7 +69,7 @@ export default function CustomSelect({
 
       {/* Dropdown */}
       {open && (
-        <ul className="absolute z-20 mt-1 w-full bg-gradient-to-r from-indigo-200 to-purple-200 font-medium rounded-md shadow-lg max-h-60 overflow-auto">
+        <ul className="absolute z-20 mt-1 w-full bg-gradient-to-r from-indigo-100 to-fuchsia-200 font-medium rounded-md shadow-lg max-h-60 overflow-auto">
           {options.length === 0 && (
             <li className="px-3 py-2 text-gray-500">No options</li>
           )}

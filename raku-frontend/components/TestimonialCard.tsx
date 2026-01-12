@@ -39,7 +39,7 @@ export default function TestimonialCard({ testimonial }: TestimonialCardProps) {
             {testimonial.reviewer_name}
           </h4>
           <p className="text-gray-600 text-sm">
-            {testimonial.reviewer_designation}
+            {testimonial.reviewer_designation || 'Student'}
           </p>
         </div>
       </div>

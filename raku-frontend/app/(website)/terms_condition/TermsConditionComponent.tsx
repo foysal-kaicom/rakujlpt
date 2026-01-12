@@ -32,7 +32,7 @@ export default function TermsConditionComponent() {
     useState<TermsCondition>();
   const [loading, setLoading] = useState(true);
 
-  const getPracticetData = async () => {
+  const getTermsConditionData = async () => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
@@ -49,7 +49,7 @@ export default function TermsConditionComponent() {
   };
 
   useEffect(() => {
-    getPracticetData();
+    getTermsConditionData();
   }, [currentLanguage]);
 
   return (

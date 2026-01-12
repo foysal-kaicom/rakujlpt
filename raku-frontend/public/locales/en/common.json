@@ -13,11 +13,12 @@
     "faq": "FAQ",
     "blog": "Blog",
     "sign_in": "Sign In",
-    "sign_up": "Sign Up"
+    "sign_up": "Sign Up",
+    "logout": "Logout"
   },
   "premium": "Premium",
   "mocktest_exp": "Mock Test Experience",
-  "prepare_for_your_exams": "Prepare smartly with realistic mock tests, detailed analytics, and flexible practice options.",
+  "prepare_for_your_exams": "Prepare for your Japanese language exams with interactive mock tests, real-time results, and AI-driven feedback — designed to boost your confidence and accuracy before the real exam.",
 
   "start_mock_test": "Start Mock Test",
   "start_practice": "Start Practice",
@@ -82,7 +83,11 @@
     "select_mock_test": "Select Mock Test",
     "practice": "Practice",
     "about_raku": "About Raku",
-    "sign_in": "Sign In"
+    "sign_in": "Sign In",
+    "our_team": "Our Team",
+    "faq": "FAQ",
+    "pricing": "Pricing",
+    "checkout": "Checkout"
   },
   "practice": {
     "headline": "Your Learning Roadmap",
@@ -339,5 +344,324 @@
     "description": "Scan the Certificate's QR code to verify its authenticity instantly.",
     "tip": "Tip: Allow camera access for scanning. Works on desktop and mobile.",
     "info": "No QR code scanned yet"
+  },
+  "checkout": {
+    "title": "Confirm Checkout !!",
+    "subtitle": "🚀 Fast · 🔒 Secure · 💳 Trusted",
+    "package_label": "Package",
+    "price_label": "Price",
+    "currency": "BDT",
+    "free": "Free",
+    "total_label": "Total",
+    "select_coupon": "🎁 Select Coupon",
+    "apply_btn": "Apply",
+    "available_coupon": "Available Coupon",
+    "coupon_error": "Invalid coupon code",
+    "agreement_label": "I agree to the terms and conditions",
+    "agreement_error": "You must agree to the terms and conditions",
+    "pay_btn": "Pay Now",
+    "loading": "Redirecting…",
+    "trust_text": "🔐 SSLCommerz secure payment · No card data stored",
+    "success": "Subscription successful",
+    "failed": "Subscription failed"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "my_practice": "My Practice",
+    "my_mock_test": "My Mock Test",
+    "my_subscriptions": "My Subscriptions",
+    "my_wallet": "My Wallet",
+    "my_agent": "My Agent",
+    "settings": "Settings"
+  },
+  "mock_exam_result": {
+    "title": "Mock Exam Result",
+    "breadcrumbs": {
+      "dashboard": "Dashboard",
+      "result": "Mock Exam Result"
+    },
+    "table": {
+      "date": "Date",
+      "exam": "Exam",
+      "listening": "Listening",
+      "reading": "Reading",
+      "total_score": "Total Score",
+      "certificate": "Certificate",
+      "answered": "Answered",
+      "correct": "Correct",
+      "wrong": "Wrong",
+      "score": "Score",
+      "total": "Total",
+      "generate_btn": "Generate",
+      "download_btn": "Download",
+      "not_passed": "Not Passed"
+    },
+    "status": {
+      "download_complete": "Download Complete",
+      "download_failed": "Download Failed",
+      "fetch_error": "Failed to get exam data"
+    },
+    "empty_state": {
+      "message": "You have not participated in any mock test !!",
+      "btn": "Start Now"
+    }
+  },
+  "subscription": {
+    "title": "My Subscriptions",
+    "breadcrumbs": {
+      "dashboard": "Dashboard",
+      "my_subscriptions": "My Subscriptions"
+    },
+    "current_plan": {
+      "title": "Current Plan",
+      "desc_start": "You are currently enjoying the",
+      "plan_text": "plan",
+      "desc_end": "with limited access to premium feature."
+    },
+    "badges": {
+      "active": "Active",
+      "recommended": "Recommended"
+    },
+    "upgrade_card": {
+      "title_start": "Upgrade to",
+      "title_highlight": "Premium",
+      "description": "Gain full access to all features, priority support, and advanced tools that elevate your experience.",
+      "btn": "Upgrade Now"
+    },
+    "history": {
+      "title": "Subscription History",
+      "table": {
+        "package": "Package",
+        "price": "Price",
+        "status": "Payment Status",
+        "updated": "Last Updated",
+        "action": "Action"
+      },
+      "mobile": {
+        "package": "Package",
+        "price": "Price",
+        "date": "Date"
+      }
+    },
+    "buttons": {
+      "renew": "Renew",
+      "details": "Details"
+    },
+    "empty_state": {
+      "message": "You have not purchased any subscription yet !!",
+      "btn": "Buy Now"
+    },
+    "modal": {
+      "total_exams": "Total Exams",
+      "used": "Used",
+      "remaining": "Remaining"
+    },
+    "toasts": {
+      "fetch_error": "Failed to get subscription data",
+      "details_error": "Failed to get subscription details",
+      "success": "Subscription successful",
+      "failed": "Subscription failed"
+    }
+  },
+  "wallet": {
+    "title": "My Wallet",
+    "breadcrumbs": {
+      "dashboard": "Dashboard",
+      "my_wallet": "My Wallet"
+    },
+    "milestones": {
+      "top_tier": "🔥 You're at the top tier! Keep dominating!",
+      "almost_there": "🔥 Almost there! Just a few points left!",
+      "keep_pushing": "💪 Keep pushing, you're getting close!",
+      "great_job": "🚀 Great job! Keep earning and level up!"
+    },
+    "features": {
+      "reading_analysis": "Reading Analysis",
+      "listening_boost": "Listening Booster",
+      "ai_suggestions": "AI Answer Suggestions"
+    },
+    "subscriptions": {
+      "basic": "Basic Pass",
+      "pro": "Pro Pass",
+      "elite": "Elite VIP"
+    },
+    "ui": {
+      "pts": "pts",
+      "points_full": "points",
+      "next_goal": "Next Goal",
+      "no_milestones": "No more milestones",
+      "points_to_reward": "points to reach your next reward 🎉",
+      "required": "Required",
+      "unlocked": "Unlocked",
+      "unlock": "Unlock",
+      "buy": "Buy",
+      "purchased": "You purchased"
+    },
+    "card": {
+      "title": "RAKU Wallet",
+      "member": "Member",
+      "user_id": "User ID",
+      "premium_balance": "Premium Balance"
+    },
+    "sections": {
+      "unlock_features": "Unlock Features",
+      "buy_subscription": "Buy Subscription"
+    },
+    "alerts": {
+      "not_enough": "Not enough points!",
+      "already_unlocked": "Already unlocked!"
+    }
+  },
+  "my_agent": {
+    "title": "My Agent",
+    "breadcrumbs": {
+      "dashboard": "Dashboard",
+      "my_agent": "My Agent"
+    },
+    "agent_card": {
+      "role": "Exam Agent",
+      "leave_btn": "Leave Agent"
+    },
+    "status": {
+      "loading": "Loading exams...",
+      "empty": "No exams created by this agent."
+    },
+    "exam_card": {
+      "exam_id": "Exam ID",
+      "questions_suffix": "Questions",
+      "minutes_suffix": "minutes",
+      "join_btn": "Join Exam",
+      "not_available_btn": "Not Available"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "breadcrumbs": {
+      "dashboard": "Dashboard",
+      "exam_booking": "Exam Booking"
+    },
+    "options": {
+      "profile": {
+        "title": "Profile Settings",
+        "desc": "Manage your profile, email and phone number"
+      },
+      "password": {
+        "title": "Password Settings",
+        "desc": "Change your password"
+      }
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "breadcrumbs": {
+      "dashboard": "Dashboard",
+      "settings": "Settings",
+      "profile": "Profile"
+    },
+    "buttons": {
+      "edit": "Edit",
+      "save": "Save Changes"
+    },
+    "fields": {
+      "gender": "Gender",
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Address",
+      "first_name": "First Name",
+      "last_name": "Last name",
+      "about": "About",
+      "facebook_url": "Facebook Url",
+      "linkedin_url": "Linkedin Url",
+      "profile_image": "Profile Image",
+      "not_editable": "(not editable)"
+    },
+    "placeholders": {
+      "about": "About",
+      "address": "Enter address",
+      "email": "Enter email",
+      "phone": "Enter phone number",
+      "facebook": "Enter facebook url",
+      "linkedin": "Enter linkedin url"
+    },
+    "gender_options": {
+      "male": "Male",
+      "female": "Female"
+    },
+    "skills": {
+      "title": "Skills & Progress",
+      "vocabulary": "Vocabulary",
+      "grammar": "Grammar",
+      "reading": "Reading",
+      "listening": "Listening"
+    },
+    "modal": {
+      "title": "Edit Profile"
+    },
+    "toasts": {
+      "fetch_error": "Failed to get user data",
+      "update_success": "Information updated",
+      "update_failed": "Can not update user information",
+      "invalid_file_type": "Invalid file type. Please select a JPG, JPEG, or PNG image.",
+      "file_too_large": "File size exceeds 2MB. Please choose a smaller image."
+    }
+  },
+  "update_password": {
+    "title": "Update Password",
+    "breadcrumbs": {
+      "dashboard": "Dashboard",
+      "settings": "Settings",
+      "update_password": "Update Password"
+    },
+    "placeholders": {
+      "current": "Current Password",
+      "new": "New Password",
+      "confirm": "Confirm New Password"
+    },
+    "submit_btn": "Update Password",
+    "toasts": {
+      "mismatch": "New password and confirmation do not match.",
+      "success": "Password updated successfully."
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "buttons": {
+      "refer_earn": "Refer & earn",
+      "take_mock_test": "Take Mock Test"
+    },
+    "hero": {
+      "title": "📝 Boost Your Japanese Skills!",
+      "description": "Take interactive mock tests for JPT (N5 & N4). Track your progress, improve fast, and achieve your goals!"
+    },
+    "sections": {
+      "exam_solution": {
+        "title": "Exam Solution",
+        "items": {
+          "practice": "Practice",
+          "learn": "Learn",
+          "materials": "Materials",
+          "tips": "Tips",
+          "jpt_exam": "JPT Exam",
+          "jlpt_exam": "JLPT Exam",
+          "mock_test": "Mock Test",
+          "exam_pattern": "Exam Pattern"
+        }
+      },
+      "daily_practice": {
+        "title": "Daily Practice",
+        "items": {
+          "vocabulary": "Vocabulary",
+          "grammar": "Grammar",
+          "listening": "Listening",
+          "reading": "Reading"
+        }
+      }
+    },
+    "steps": {
+      "getting_started": "Getting Started",
+      "basics": "Basics",
+      "intermediate": "Intermediate",
+      "mastery": "Mastery"
+    }
   }
 }

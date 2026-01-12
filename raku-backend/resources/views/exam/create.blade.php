@@ -108,15 +108,15 @@
                 </div>
             </div>
             <div class="pt-4 flex justify-end">
-            <button type="submit"
-                class="w-full md:w-auto px-6 py-2 bg-indigo-500 text-white font-semibold rounded-xl shadow hover:bg-indigo-600 transition flex items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-4" fill="currentColor">
-                    <path d="M18 21V13H6V21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3H17L21 7V20C21 20.5523 20.5523 21 20 21H18ZM16 21H8V15H16V21Z"></path>
-                </svg> Save Exam
-        </div>
+                <button type="submit"
+                    class="w-full md:w-auto px-6 py-2 bg-indigo-500 text-white font-semibold rounded-xl shadow hover:bg-indigo-600 transition flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-4" fill="currentColor">
+                        <path d="M18 21V13H6V21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3H17L21 7V20C21 20.5523 20.5523 21 20 21H18ZM16 21H8V15H16V21Z"></path>
+                    </svg> Save Exam
+            </div>
         </div>
 
-        
+
 
     </form>
     <form action="{{ route('mock-tests.exam.store',['type'=>'custom']) }}" method="POST" enctype="multipart/form-data" class="p-4">
@@ -245,17 +245,17 @@
                     </div>
                 </div>
             </div>
-             <div class="pt-4 flex justify-end">
-            <button type="submit"
-                class="w-full md:w-auto px-6 py-2 bg-indigo-500 text-white font-semibold rounded-xl shadow hover:bg-indigo-600 transition flex items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-4" fill="currentColor">
-                    <path d="M18 21V13H6V21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3H17L21 7V20C21 20.5523 20.5523 21 20 21H18ZM16 21H8V15H16V21Z"></path>
-                </svg> Save Custom Exam
-        </div>
+            <div class="pt-4 flex justify-end">
+                <button type="submit"
+                    class="w-full md:w-auto px-6 py-2 bg-indigo-500 text-white font-semibold rounded-xl shadow hover:bg-indigo-600 transition flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-4" fill="currentColor">
+                        <path d="M18 21V13H6V21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3H17L21 7V20C21 20.5523 20.5523 21 20 21H18ZM16 21H8V15H16V21Z"></path>
+                    </svg> Save Custom Exam
+            </div>
         </div>
 
 
-       
+
     </form>
 </div>
 
@@ -399,16 +399,16 @@
                                 const sectionId = `section_${section.id}`; // Unique ID for checkbox and label
 
                                 sectionsHtml += `
-                <div class="pl-5 flex justify-between items-center gap-2 mb-2">
-                    <div class="w-[calc(100%-84px)]">
-                        <input type="checkbox" id="${sectionId}" class="section-checkbox" 
-                               data-target-weight="#weight_${section.id}">
-                        <label for="${sectionId}">${section.title}</label>
-                    </div>
-                    <input required type="number" name="${weightInputName}" id="weight_${section.id}"
-                           class="border rounded p-1 ml-2 w-20 bg-white" placeholder="quantity" disabled>
-                </div>
-            `;
+                                    <div class="pl-5 flex justify-between items-center gap-2 mb-2">
+                                        <div class="w-[calc(100%-84px)] flex gap-1.5">
+                                            <input type="checkbox" id="${sectionId}" class="section-checkbox" 
+                                                data-target-weight="#weight_${section.id}">
+                                            <label class="w-[calc(100%-18px)]" for="${sectionId}">${section.title}</label>
+                                        </div>
+                                        <input required type="number" name="${weightInputName}" id="weight_${section.id}"
+                                            class="border rounded p-1 ml-2 w-20 bg-white" placeholder="quantity" disabled>
+                                    </div>
+                                `;
                             });
                             $sectionsList.html(sectionsHtml);
                             $sectionsContainer.removeClass('hidden');

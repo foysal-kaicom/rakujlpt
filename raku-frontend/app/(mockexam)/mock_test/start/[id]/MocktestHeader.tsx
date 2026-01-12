@@ -95,12 +95,12 @@ export default function MocktestHeader({
             <button
               key={module}
               onClick={() => handleModuleClick(module)}
-              className={`flex items-center gap-1 ${
+              className={`flex items-center gap-1 cursor-pointer ${
                 module === currentModule ? "text-purple-700" : "text-gray-400"
               }`}
             >
               {/* {module === currentModule && <p className="size-4 bg-purple-700 rounded-full"></p>} */}
-              <p className={`size-2 rounded-full ${module === currentModule ? "bg-purple-700 animate-ping" : "bg-gray-200"}`}></p>
+              <p className={`size-2 rounded-full  ${module === currentModule ? "bg-purple-700 animate-ping" : "bg-gray-200"}`}></p>
               {module}
             </button>
           ))}
@@ -111,7 +111,7 @@ export default function MocktestHeader({
             {/* Left arrow */}
             <button
               onClick={() => scroll("left")}
-              className="absolute -left-3 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100 z-10"
+              className="absolute -left-3 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100 z-10 cursor-pointer"
             >
               <FaChevronLeft />
             </button>
@@ -168,7 +168,7 @@ export default function MocktestHeader({
             {/* Right arrow */}
             <button
               onClick={() => scroll("right")}
-              className="absolute -right-3 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100 z-10"
+              className="absolute -right-3 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100 z-10 cursor-pointer"
             >
               <FaChevronRight />
             </button>

@@ -11,11 +11,13 @@ import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 
 import { FaUser } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 export default function Sidebar() {
   const path = usePathname();
   const router = useRouter();
   const user = useAuthStore().user;
+  const { t } = useTranslation("common");
 
   const MainSidebar = () => {
     return (
@@ -64,7 +66,7 @@ export default function Sidebar() {
                 >
                   {data.icon}
                 </p>
-                <p>{data.label}</p>
+                <p>{t(data.label)}</p>
               </div>
             </Link>
           ))}
@@ -78,7 +80,7 @@ export default function Sidebar() {
               >
                 <FaSignOutAlt />
               </p>
-              <p>Logout</p>
+              <p>{t("nav.logout")}</p>
             </div>
           </button>
         </div>
@@ -94,10 +96,10 @@ export default function Sidebar() {
           <Link
             key={i}
             href={item.to}
-            className={`flex flex-col items-center text-xs tracking-wide p-1 transition-colors duration-200 rounded-lg ${
+            className={`flex flex-col items-center text-xs tracking-wide p-1 transition-colors duration-200 rounded-lg md:w-[120px] ${
               path.startsWith(item.to)
-                ? "bg-gradient-to-tr from-purple-500 to-indigo-500 text-white "
-                : " bg-white text-purple-600 border"
+                ? "bg-linear-to-tr from-purple-500 to-indigo-500 text-white scale-130"
+                : "bg-white text-purple-600 border"
             }`}
           >
             <span className="text-3xl">{item.icon}</span>

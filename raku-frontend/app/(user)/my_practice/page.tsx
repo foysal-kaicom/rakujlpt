@@ -73,7 +73,8 @@ export default function MyPractice() {
 
             <section className="w-full mt-5">
               {practiceData.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
+                  {/* Current Module */}
                   {practiceData.map((item, index) => (
                     <div
                       key={index}
@@ -134,7 +135,7 @@ export default function MyPractice() {
                 <div className="text-center text-gray-500 py-6 flex flex-col gap-3 justify-center items-center">
                   {t("practice.empty_message")}
                   <Link href="/practice">
-                    <button className="relative overflow-hidden text-sm md:text-base inline-block px-10 py-2 font-semibold text-white rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg shadow-purple-500/40 hover:shadow-purple-500/60 hover:scale-105 transition-all duration-300 ease-out">
+                    <button className="relative overflow-hidden text-sm md:text-base inline-block px-10 py-2 font-semibold text-white rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg shadow-purple-500/40 hover:shadow-purple-500/60 hover:scale-105 transition-all duration-300 ease-out cursor-pointer">
                       <span className="relative z-10">
                         {t("practice.start_now")}
                       </span>

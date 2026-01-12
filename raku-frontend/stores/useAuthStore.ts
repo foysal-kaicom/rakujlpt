@@ -13,7 +13,8 @@ interface User {
   is_subscribed: number;
   current_package_id: number | null;
   current_package_name: string | null;
-  is_free:number
+  is_free:number,
+  candidate_code:string
   // Add more fields as needed
 }
 

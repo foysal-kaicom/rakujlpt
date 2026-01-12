@@ -1,38 +1,43 @@
-import { FaTachometerAlt, FaHeadset, FaWallet } from "react-icons/fa";
+import { FaTachometerAlt, FaWallet } from "react-icons/fa";
 import { PiExamFill } from "react-icons/pi";
 import { MdSubscriptions } from "react-icons/md";
 import { FaGear } from "react-icons/fa6";
 import { GiStairsGoal } from "react-icons/gi";
+import { HiMiniUserGroup } from "react-icons/hi2";
 
 const SidebarData = [
   {
-    label: "Dashboard",
+    label: "sidebar.dashboard", // Key
     to: "/dashboard",
     icon: <FaTachometerAlt />,
   },
   {
-    label: "My Practice",
+    label: "sidebar.my_practice",
     to: "/my_practice",
     icon: <GiStairsGoal />,
   },
-
   {
-    label: "My Mock Test",
+    label: "sidebar.my_mock_test",
     to: "/mock_test_result",
     icon: <PiExamFill />,
   },
   {
-    label: "My Subscriptions",
+    label: "sidebar.my_subscriptions",
     to: "/my_subscriptions",
     icon: <MdSubscriptions />,
   },
-  // {
-  //   label: "Wallet",
-  //   to: "/my_wallet",
-  //   icon: <FaWallet />,
-  // },
   {
-    label: "Settings",
+    label: "sidebar.my_wallet",
+    to: "/my_wallet",
+    icon: <FaWallet />,
+  },
+  {
+    label: "sidebar.my_agent",
+    to: "/my_agent",
+    icon: <HiMiniUserGroup />,
+  },
+  {
+    label: "sidebar.settings",
     to: "/settings",
     icon: <FaGear />,
   },

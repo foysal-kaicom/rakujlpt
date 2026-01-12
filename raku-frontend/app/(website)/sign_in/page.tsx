@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 import { Suspense } from "react";
 import LoginPage from "./signInPage";
-import SuspenseLoader from "@/components/SuspenseLoader";
+import SignInSingUpSkeleton from "@/components/SignInSignUpSkeleton";
 
 // Metadata
 export const metadata: Metadata = {
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function SignInPageWrapper() {
   return (
-    <Suspense fallback={<SuspenseLoader/>}>
+    <Suspense fallback={<SignInSingUpSkeleton/>}>
       <LoginPage />
     </Suspense>
   );

@@ -5,12 +5,12 @@ import PricingSection from "@/components/home/PricingSection";
 import ServiceSection from "@/components/home/ServiceSection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import RoadmapSection from "@/components/home/RoadmapSection";
-import SuspenseLoader from "@/components/SuspenseLoader";
+import HomePageSkeleton from "@/components/home/HomePageSkeleton";
 import { Suspense } from "react";
 
 export default function Home() {
   return (
-    <Suspense fallback={<SuspenseLoader />}>
+    <Suspense fallback={<HomePageSkeleton />}>
       <InsightSection />
       <ServiceSection />
       <PricingSection />

@@ -349,6 +349,23 @@
                 </a>
                 </div>
             </div>
+            <div>
+                <a href="{{ route('agents.list') }}"
+                    class="menu-link group flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 
+                    {{ request()->routeIs('agent.list') ? 'bg-purple-500 text-white shadow-lg' : 'text-slate-700 hover:text-purple-600 hover:bg-purple-50' }}">
+                    
+                    <div
+                        class="flex items-center justify-center w-9 h-9 rounded-lg 
+                        {{ request()->routeIs('agent.list') ? 'bg-white/20' : 'bg-gradient-to-br from-orange-500 to-purple-600' }} 
+                        text-white shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                        
+                        <i class="fas fa-people-group text-sm"></i>
+                    </div>
+            
+                    <span class="font-semibold text-sm">Agents</span>
+                </a>
+            </div>
+            
 
             <div>
                 <a href="{{ route('user-payments') }}"
