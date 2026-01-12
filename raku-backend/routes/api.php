@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\CenterController;
 use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\ReviewController;
+use App\Http\Controllers\Api\WalletController;
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\PackageController;
 use App\Http\Controllers\Api\RoadmapController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\Api\CertificateController;
 use App\Http\Controllers\Api\TestimonialController;
 use App\Http\Controllers\Api\DemoQuestionController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\RoadmapUnlockController;
 use App\Http\Controllers\Api\CandidateProgressController;
 use App\Http\Controllers\Api\SslCommerzPaymentController;
 
@@ -33,6 +35,8 @@ Route::prefix('v1')->group(function () {
     Route::post('/test', [HomeController::class, 'test']);
 
     Route::get('/roadmaps', [RoadmapController::class, 'getRoadmaps']);
+    
+
     Route::get('/roadmaps/{slug}/stages', [RoadmapController::class, 'getStages']);
     Route::get('/subscriptions', [PackageController::class, 'show']);
     Route::get('/package/{id}', [PackageController::class, 'getDetails']);
@@ -85,6 +89,15 @@ Route::prefix('v1')->group(function () {
 
             Route::post('/subscription-renew', [PackageController::class, 'renewSubscription']);
             Route::get('/subscription-details', [PackageController::class, 'subscriptionDetails']);
+
+
+
+            // Wallet
+            Route::get('/wallet', [WalletController::class, 'summary']);
+            Route::get('/wallet/transactions', [WalletController::class, 'transactions']);
+
+            // Roadmap Unlock
+            Route::post('/unlock-roadmaps', [RoadmapUnlockController::class, 'unlock']);
     
         });
 

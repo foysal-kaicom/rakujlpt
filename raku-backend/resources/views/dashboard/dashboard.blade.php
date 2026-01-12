@@ -223,7 +223,7 @@
                     <div class="flex items-start gap-3 p-3 rounded-lg border {{$activity->payment_status=='pending' ? 'bg-yellow-50 border-yellow-200' : ''}}{{$activity->payment_status=='success' ? 'bg-green-50 border-green-200' : ''}}{{$activity->payment_status=='failed' ? 'bg-red-50 border-red-200' : ''}}">
                         <div class="w-2 h-2 {{$activity->payment_status=='pending' ? 'bg-yellow-500' : ''}}{{$activity->payment_status=='success' ? 'bg-green-500' : ''}}{{$activity->payment_status=='failed' ? 'bg-red-500' : ''}} rounded-full mt-2 flex-shrink-0"></div>
                         <div class="flex-1">
-                            <p class="text-sm font-semibold text-gray-800">{{$activity->candidate->first_name}} subscribed to {{$activity->package->name}}</p>
+                            <p class="text-sm font-semibold text-gray-800">{{$activity->candidate->first_name ?? ''}} subscribed to {{$activity->package->name}}</p>
                             <p class="text-xs text-gray-600 mt-1">Payment Status: {{ucfirst($activity->payment_status)}} • {{ \Carbon\Carbon::parse($activity->created_at)->diffForHumans() }}</p>
                         </div>
                     </div>

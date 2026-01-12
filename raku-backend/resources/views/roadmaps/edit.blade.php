@@ -40,7 +40,7 @@
             <div class="col-md-9">
                 <div class="row g-3">
                     <!-- Roadmap Title -->
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <label class="form-label fw-semibold">Roadmap Title</label>
                         <input type="text" name="title" id="titleInput" value="{{ old('title', $roadmap->title) }}"
                             class="form-control form-control-lg shadow-sm rounded-2" placeholder="Enter roadmap title"
@@ -49,11 +49,31 @@
                     </div>
 
                     <!-- Slug -->
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <label class="form-label fw-semibold">Slug</label>
                         <input type="text" name="slug" id="slugInput" value="{{ old('slug', $roadmap->slug) }}"
                             class="form-control form-control-lg shadow-sm rounded-2" placeholder="Slug" readonly required />
                         @error('slug') <div class="text-danger small">{{ $message }}</div> @enderror
+                    </div>
+
+                    <!-- is_free need check box (yes or no) no need select tag -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold"></label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="is_free" id="requiresCoinsCheckbox" value="1" {{ old('is_free', $roadmap->is_free) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="requiresCoinsCheckbox">
+                                Free Roadmap    
+                            </label>
+                        </div>
+                        @error('is_free') <div class="text-danger small">{{ $message }}</div> @enderror
+                    </div>
+
+                    <!-- unlock_coins -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Unlock Coins</label>
+                        <input type="number" name="unlock_coins" id="unlockCoinsInput" value="{{ old('unlock_coins', $roadmap->unlock_coins) }}"
+                            class="form-control form-control-lg shadow-sm rounded-2" placeholder="Enter coins required to unlock" min="0" />
+                        @error('unlock_coins') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
             
                     <!-- Description -->
