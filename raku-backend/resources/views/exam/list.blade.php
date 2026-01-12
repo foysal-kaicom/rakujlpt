@@ -73,6 +73,7 @@
                         </a>
                     </th>
                     <th scope="col" class="d-none d-md-table-cell text-secondary small py-3">Created By</th>
+                    <th scope="col" class="d-none d-md-table-cell text-secondary small py-3">Type</th>
                     <th scope="col" class="d-none d-md-table-cell text-secondary small py-3">Status</th>
                     <th scope="col" class="d-none d-md-table-cell text-secondary small py-3">Action</th>
                 </tr>
@@ -95,7 +96,11 @@
                     <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->duration }}</td>
                     <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->total_point }}</td>
                     <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->answer_value }}</td>
-                    <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->creator->name }}</td>
+                    <td class="d-none d-sm-table-cell py-1 text-nowrap">
+                        {{ $exam->creator?->name ?? $exam->agent?->name ?? '-' }}
+                    </td>
+                    <td class="d-none d-sm-table-cell py-1 text-nowrap">{{ $exam->type }}</td>
+                    
 
                     <td class="d-none d-sm-table-cell py-1">
                         @hasPermission('mock-tests.exam.toggleStatus')

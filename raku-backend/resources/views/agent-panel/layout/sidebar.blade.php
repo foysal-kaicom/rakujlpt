@@ -53,7 +53,7 @@
                                 class="flex items-center justify-center w-9 h-9 rounded-lg {{ $packagesActive ? 'bg-white/20' : 'bg-gradient-to-br from-amber-500 to-amber-600' }} text-white shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
                                 <i class="fa-solid fa-box-open text-sm"></i>
                             </div>
-                            <span class="font-semibold text-sm">Example Menu</span>
+                            <span class="font-semibold text-sm">Mock Test</span>
                         </div>
                         <i
                             class="fas fa-chevron-down drop-arrow text-xs {{ $packagesActive ? 'text-white/80' : 'text-slate-400' }} transition-transform duration-300 {{ $packagesActive ? 'rotated' : '-rotate-90' }}"></i>
@@ -62,10 +62,10 @@
                 <div class="submenu mt-1 ml-12 space-y-1 {{ $packagesActive ? '' : 'hidden' }}"
                     data-target="packages">
          
-                    <a href="{{ route('packages.index') }}"
+                    <a href="{{ route('agent.exam.list') }}"
                         class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('packages.index') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
-                        <i class="fa-solid fa-list text-xs"></i>
-                        <span>Example Submenu</span>
+                        <i class="fas fa-file-alt text-xs"></i>
+                        <span>Exam</span>
                     </a>
                 </div>
             </div>
