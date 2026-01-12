@@ -87,6 +87,7 @@
                         </a>
                     </th>
                     <th scope="col" class="text-secondary small py-3">Slug</th>
+                    <th scope="col" class="text-secondary small py-3">Unlock Coins</th>
                     <th scope="col" class="text-secondary small py-3">Created At</th>
                     <th scope="col" class="text-secondary small py-3">Action</th>
                 </tr>
@@ -98,6 +99,7 @@
                         <td>{{ $roadmaps->firstItem() + $index }}</td>
                         <td>{{ $roadmap->title }}</td>
                         <td>{{ $roadmap->slug }}</td>
+                        <td>{{ $roadmap->unlock_coins }}</td>
                         <td>{{ $roadmap->created_at?->format('Y-m-d') }}</td>
                         <td>
                             @hasPermission('roadmaps.edit')
