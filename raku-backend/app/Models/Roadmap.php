@@ -21,4 +21,8 @@ class Roadmap extends Model
     {
         return $this->hasMany(Practice::class)->orderBy('order');
     }
+    public function unlocks()
+    {
+        return $this->hasMany(RoadmapUnlock::class);
+    }
 }

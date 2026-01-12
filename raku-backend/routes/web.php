@@ -11,12 +11,14 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StageController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\WalletController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\OurTeamController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RoadmapController;
+use App\Http\Controllers\CoinRuleController;
 use App\Http\Controllers\MockTestController;
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\CandidateController;
@@ -31,6 +33,18 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::group(['middleware' => 'auth', 'checkPermission'], function () {
     Route::get('/', [DashboardController::class, 'showDashboard'])->name('user.dashboard');
+
+    // Wallets
+    Route::get('/wallets', [WalletController::class, 'index']);
+    Route::get('/wallets/{candidate}/transactions', [WalletController::class, 'transactions']);
+
+    // Coin Rules
+    // Route::resource('/coin-rules', CoinRuleController::class)->only([
+    //     'index', 'update'
+    // ]);
+
+
+
 
     Route::group(['prefix' => 'roles', 'as' => 'user.roles.', 'module' => 'Role'], function () {
         Route::get('/', [RoleController::class, 'index'])->name('list')->middleware('checkPermission:user.roles.list');
@@ -54,6 +68,10 @@ Route::group(['middleware' => 'auth', 'checkPermission'], function () {
         Route::post('page-policies/privacy', [PagePolicyController::class, 'updatePrivacy'])->name('updatePrivacy');
         Route::post('page-policies/terms', [PagePolicyController::class, 'updateTerms'])->name('updateTerms');
         Route::post('page-policies/return', [PagePolicyController::class, 'updateReturn'])->name('updateReturn');
+
+        Route::get('/coin-rules', [CoinRuleController::class, 'index'])->name('coin-rules.index');
+        Route::get('/coin-rules/{coinRule}/edit', [CoinRuleController::class, 'edit'])->name('coin-rules.edit');
+        Route::put('/coin-rules/{coinRule}', [CoinRuleController::class, 'update'])->name('coin-rules.update');
 
     });
 

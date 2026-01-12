@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Stage;
 use App\Models\Roadmap;
 use Illuminate\Http\Request;
+use App\Models\RoadmapUnlock;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CandidateStageProgress;
@@ -39,6 +40,14 @@ class RoadmapController extends Controller
 
         if (!$roadmap) {
             return $this->responseWithSuccess([], 'Roadmap not found', 404);
+        }
+
+        $hasAccess = $roadmap->is_free || RoadmapUnlock::where('candidate_id', $candidate->id)
+        ->where('roadmap_id', $roadmap->id)
+        ->exists();
+
+        if (!$hasAccess) {
+            return $this->responseWithSuccess([], 'You have not unlocked this roadmap', 403);
         }
 
         // Get stages only, flatten not needed since it's a single roadmap

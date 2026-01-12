@@ -57,6 +57,8 @@ class RoadmapController extends Controller
             'slug' => 'required|string|max:255|unique:roadmaps,slug',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'is_free' => 'nullable|boolean',
+            'unlock_coins' => 'nullable|numeric|min:0',
         ]);
 
         // Handle Image Upload
@@ -76,7 +78,18 @@ class RoadmapController extends Controller
      */
     public function show(Roadmap $roadmap)
     {
-        $roadmap = Roadmap::with('practices')->findOrFail($roadmap);
+        // $candidate = auth()->user()->candidate;
+        $candidate = auth()->guard('candidate')->user();
+
+        // if (!canAccessRoadmap($candidate, $roadmap)) {
+        //     return redirect()
+        //         ->route('roadmaps.index')
+        //         ->with('error', 'Please unlock this roadmap to access it.');
+        // }
+
+        $roadmap = Roadmap::with('practices')->findOrFail($roadmap->id);
+
+        // $roadmap = Roadmap::with('practices')->findOrFail($roadmap);
 
         // Decode stage pattern and group practices
         $pattern = $roadmap->stage_pattern ? json_decode($roadmap->stage_pattern, true) : [];
@@ -115,6 +128,8 @@ class RoadmapController extends Controller
             'slug' => 'required|string|max:255|unique:roadmaps,slug,' . $roadmap->id,
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'is_free' => 'nullable|boolean',
+            'unlock_coins' => 'nullable|numeric|min:0',
         ]);
 
         // Handle Image Update
@@ -143,4 +158,5 @@ class RoadmapController extends Controller
 
         return redirect()->route('roadmaps.index')->with('success', 'Roadmap deleted successfully.');
     }
+    
 }
