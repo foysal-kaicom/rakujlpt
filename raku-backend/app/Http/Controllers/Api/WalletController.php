@@ -24,7 +24,7 @@ class WalletController extends Controller
         //     'balance' => $wallet->balance,
         // ]);
         return $this->responseWithSuccess('Wallet summary fetched successfully', [
-            'balance' => $wallet->balance,
+            'balance' => (int) $wallet->balance,
             'transactions' => $walletTransactions
         ]);
     }
