@@ -103,8 +103,9 @@ export default function Practice() {
       setPracticeTestsData([]);
       fetchRoadmaps();
       toast.success(`Unlock roadmap with ID: ${roadmapId}`);
-    } catch (error) {
-      toast.error(t("errors.unlock_roadmap"));
+    } catch (error: any) {
+      
+      toast.error((error?.response?.data?.message || "") + t("errors.unlock_roadmap"));
     }
   };
 
@@ -274,7 +275,7 @@ export default function Practice() {
                             </span>
                             <span>{t("practicePage.unlock_now")}</span>
                           </span>
-                          <span className="flex items-center gap-1.5 text-sm bg-yellow-400 text-gray-900 px-3 py-1 rounded-full font-bold">
+                          <span className="flex items-center gap-1.5 text-sm bg-gray-200 text-gray-900 px-3 py-1 rounded-full font-bold">
                             <span className="text-base">🪙</span>
                             <span>{unlockCoins} coins</span>
                           </span>
