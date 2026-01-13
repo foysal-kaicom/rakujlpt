@@ -35,7 +35,7 @@ class RoadmapController extends Controller
                     $query->where('status', 1);
                 }
             ])
-            ->get(['id', 'title', 'slug', 'description', 'image', 'is_free'])
+            ->get(['id', 'title', 'slug', 'description', 'image', 'is_free', 'unlock_coins'])
             ->map(function ($roadmap) use ($candidate) {
 
                 $isUnlocked = false;
@@ -59,6 +59,7 @@ class RoadmapController extends Controller
                     'image'        => $roadmap->image ? asset('storage/' . $roadmap->image) : null,
                     'total_stages' => $roadmap->total_stages,
                     'is_free'      => (bool) $roadmap->is_free,
+                    'unlock_coins' => $roadmap->unlock_coins,
                     'is_unlocked'  => $isUnlocked,
                 ];
             });
