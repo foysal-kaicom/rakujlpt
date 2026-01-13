@@ -35,21 +35,20 @@ class SendBatchRegistrationEmailJob implements ShouldQueue
     public function handle(): void
     {
         $chunkedCandidates = array_chunk($this->candidates, 50);
-
-        foreach ($chunkedCandidates as $candidateData) {
-            $candidate = Candidate::where('email', $candidateData['email'])->first();
-        
-            if ($candidate) {
-                try {
-                    Mail::to($candidate->email)->send(
-                        new NewRegistrationEmail($candidate, $candidateData['password'])
-                    );
-                } catch (\Throwable $e) {
-                    Log::error("Mail failed for {$candidate->email}: " . $e->getMessage());
-                    continue;
+    
+        foreach ($chunkedCandidates as $chunk) {
+            foreach ($chunk as $candidateData) {
+                $candidate = Candidate::where('email', $candidateData['email'])->first();
+    
+                if ($candidate) {
+                    Mail::to($candidate->email)
+                        ->send(new NewRegistrationEmail(
+                            $candidate,
+                            $candidateData['password']
+                        ));
                 }
             }
         }
-        
     }
+    
 }
