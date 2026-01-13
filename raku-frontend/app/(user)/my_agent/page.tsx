@@ -77,7 +77,7 @@ export default function MyAgent() {
         />
       </div>
 
-      <div className="rounded-2xl border border-violet-200 bg-white">
+      <div className="rounded-2xl border border-violet-200 bg-white mt-5">
         {/* Header (Clickable) */}
         <div
           onClick={() => setOpen(!open)}

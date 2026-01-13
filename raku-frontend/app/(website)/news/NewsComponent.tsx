@@ -1,24 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import NewsSketeton from "./NewsSkeleton";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 
-interface NewsItem {
-  id: number;
-  title: string;
-  slug: string;
-  category_name: string;
-  content: string;
-  featured_image: string | null;
-  is_featured: number;
-  published_at: string;
-  author_name: string;
-  author_designation: string;
-}
+import { NewsItem } from "@/types/index.types"
+import { newsService } from "@/services/website/blogs/blog.service";
 
 export default function NewsComponent() {
   const [allNews, setAllNews] = useState<NewsItem[]>([]);
@@ -36,15 +25,11 @@ export default function NewsComponent() {
     return date.toLocaleDateString("en-UK", options);
   }
 
-  const getNewsData = async () => {
+  const getNewsList = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/news/list`
-      );
+      const response = await newsService.list();
 
-      const allNews = response.data.data || [];
-
-      setAllNews(allNews);
+      setAllNews(response || []);
     } catch (error) {
       console.error("Failed to fetch news data:", error);
       setAllNews([]);
@@ -54,7 +39,7 @@ export default function NewsComponent() {
   };
 
   useEffect(() => {
-    getNewsData();
+    getNewsList();
   }, []);
 
   return (

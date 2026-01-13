@@ -5,30 +5,14 @@ import { useParams } from "next/navigation";
 
 import { IoMdAddCircle, IoIosRemoveCircle } from "react-icons/io";
 
-import axios from "axios";
 import { toast } from "sonner";
-import axiosInstance from "@/utils/axios";
+import { useTranslation } from "react-i18next";
 
 import BreadCrumb from "@/components/BreadCrumb";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
-import { useTranslation } from "react-i18next";
 
-interface Package {
-  name: string;
-  price: string;
-  description: string;
-  is_free: boolean;
-}
-
-interface Coupon {
-  id: number;
-  coupon_code: string;
-  description: string;
-  type: string;
-  discount_value: number;
-  max_discount: string | number;
-  end_date: string;
-}
+import { subscriptionService } from "@/services/website/subscription/subscription.service";
+import { Coupon , Plan } from "@/types/subscription/package.type";
 
 export default function CheckoutPage() {
   const { t } = useTranslation("common");
@@ -49,13 +33,13 @@ export default function CheckoutPage() {
     },
   ];
 
-  const [packageDetails, setPackageDetails] = useState<Package | null>();
-  const [couponCode, setCouponCode] = useState(null);
+  const [packageDetails, setPackageDetails] = useState<Plan | null>();
+  const [couponCode, setCouponCode] = useState<string | null>(null);
   const [selectedCoupon, setSelectedCoupon] = useState("");
   const [couponList, setcouponList] = useState<Coupon[]>([]);
   const [discount, setDiscount] = useState(0);
   const [discountType, setDiscountType] = useState("");
-  const [maxDiscount, setMaxDiscount] = useState(0);
+  const [maxDiscount, setMaxDiscount] = useState<number>(0);
   const [agreed, setAgreed] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -82,22 +66,22 @@ export default function CheckoutPage() {
 
   const finalAmount = calculateFinalAmount();
 
-  const applyCoupon = async () => {
+  const handleApplyCoupon = async () => {
     setError("");
+    setLoading(true);
 
     try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/coupon/check`,
-        { params: { coupon_code: selectedCoupon } }
-      );
-      setCouponCode(res.data.data.coupon_code);
-      setDiscount(res.data.data.discount_value);
-      setDiscountType(res.data.data?.type);
-      setMaxDiscount(res.data.data.max_discount);
-    } catch (error) {
+      const data = await subscriptionService.applyCoupon(selectedCoupon);
+
+      setCouponCode(data.coupon_code ?? null);
+      setDiscount(Number(data.discount_value) || 0);
+      setDiscountType(data.type ?? "");
+      setMaxDiscount(Number(data.max_discount) || 0);
+    } catch (error: any) {
       setDiscount(0);
       setDiscountType("");
       setMaxDiscount(0);
+      setCouponCode(null);
       setError(t("checkout.coupon_error"));
     } finally {
       setLoading(false);
@@ -110,6 +94,7 @@ export default function CheckoutPage() {
 
   const removeCoupon = () => {
     setSelectedCoupon("");
+    setCouponCode(null);
     setDiscount(0);
     setDiscountType("");
     setMaxDiscount(0);
@@ -117,11 +102,9 @@ export default function CheckoutPage() {
 
   const getCouponList = async () => {
     try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/coupon`
-      );
-      setcouponList(res?.data?.data || []);
-    } catch (error) {
+      const list = await subscriptionService.getCouponList();
+      setcouponList(list);
+    } catch {
       setcouponList([]);
     } finally {
       setLoading(false);
@@ -129,12 +112,11 @@ export default function CheckoutPage() {
   };
 
   const getpackageData = async () => {
+    if (!id) return;
     try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/package/${id}`
-      );
-      setPackageDetails(res?.data?.data || {});
-    } catch (error) {
+      const data = await subscriptionService.getPackageDetails(id);
+      setPackageDetails(data);
+    } catch {
       setPackageDetails(null);
     } finally {
       setLoading(false);
@@ -156,25 +138,18 @@ export default function CheckoutPage() {
       toast.error(t("checkout.agreement_error"));
       return;
     }
-    try {
-      const payload = {
-        package_id: id,
-        ...(couponCode ? { coupon_code: couponCode } : {}),
-      };
 
-      const response = await axiosInstance.post(`/subscribe`, payload);
-      const url = response?.data?.url;
-      if (
-        response.status === 200 &&
-        response?.data?.status === "success" &&
-        typeof url === "string" &&
-        /^https?:\/\/.+/.test(url)
-      ) {
+    try {
+      const response = await subscriptionService.subscribePackage(
+        id,
+        couponCode
+      );
+
+      const url = response?.url;
+      if (url && /^https?:\/\/.+/.test(url)) {
         window.location.href = url;
-        toast.success(response?.data?.message || t("checkout.success"));
-      } else {
-        toast.success(response?.data?.message || t("checkout.success"));
       }
+      toast.success(response?.message || t("checkout.success"));
     } catch (error: any) {
       toast.error(
         error?.response?.data?.message || error.message || t("checkout.failed")
@@ -247,7 +222,7 @@ export default function CheckoutPage() {
                   </p>
                   <button
                     type="button"
-                    onClick={applyCoupon}
+                    onClick={handleApplyCoupon}
                     className="rounded-xl border px-5 py-3 text-sm font-semibold text-white bg-gradient-to-br from-fuchsia-600 to-violet-600 hover:scale-105 duration-300 cursor-pointer"
                   >
                     {t("checkout.apply_btn")}
@@ -289,7 +264,9 @@ export default function CheckoutPage() {
                     ))}
                   </div>
                 )}
-                {error && <p className="text-sm text-red-600">{error}</p>}
+                {error && (
+                  <p className="text-sm text-red-600 text-center">{error}</p>
+                )}
               </div>
             )}
 
