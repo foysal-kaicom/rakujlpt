@@ -21,6 +21,7 @@ interface Roadmap {
   total_stages: string;
   is_free: number;
   unlock_coins: string;
+  is_unlocked: number;
 }
 
 export default function Practice() {
@@ -102,10 +103,9 @@ export default function Practice() {
       }
       setPracticeTestsData([]);
       fetchRoadmaps();
-      toast.success(`Unlock roadmap with ID: ${roadmapId}`);
     } catch (error: any) {
       
-      toast.error((error?.response?.data?.message || "") + t("errors.unlock_roadmap"));
+      toast.error((error?.response?.data?.message || "") + ". " + t("errors.unlock_roadmap"));
     }
   };
 
@@ -165,7 +165,7 @@ export default function Practice() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
               {practiceTestsData.map((test, index) => {
-                const isFree = Number(test.is_free) === 1;
+                const isFree = Number(test.is_unlocked) === 1;
                 const unlockCoins = Number(test.unlock_coins);
 
                 return (

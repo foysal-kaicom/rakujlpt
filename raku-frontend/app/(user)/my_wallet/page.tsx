@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaWallet, FaLockOpen, FaLock, FaCrown } from "react-icons/fa";
 
 import BreadCrumb from "@/components/BreadCrumb";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useTranslation } from "react-i18next";
+import axiosInstance from "@/utils/axios";
+import { toast } from "sonner";
 
 export default function WalletSystem() {
   const { t } = useTranslation("common");
@@ -65,6 +67,26 @@ export default function WalletSystem() {
       ? t("wallet.milestones.keep_pushing")
       : t("wallet.milestones.great_job");
 
+  const [loader, setLoader] = useState(true);
+  const [practiceTestsData, setPracticeTestsData] = useState<any[]>([]);
+  const fetchWalletData = async () => {
+    try {
+      const response = await axiosInstance.get(`/candidate/wallet`);
+      if (response?.data?.success) {
+        setPracticeTestsData(response.data.data);
+        setPoints(response?.data?.data?.balance || 0);
+      }
+    } catch (error: any) {
+      toast.error(t("errors.fetch_roadmaps"));
+    } finally {
+      setLoader(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchWalletData();
+  }, [t]);
+
   // ----- Unlock Feature -----
   const unlockFeature = (feature: any) => {
     if (points < feature.requiredPoints)
@@ -88,11 +110,7 @@ export default function WalletSystem() {
     <div className="">
       <div className="space-y-5">
         <BreadCrumb breadCrumbData={breadCrumbData} />
-        <UserHeadline
-          mainText={t("wallet.title")}
-          subText=""
-          preText=""
-        />
+        <UserHeadline mainText={t("wallet.title")} subText="" preText="" />
       </div>
       {/* ----------------- WALLET ----------------- */}
       <div className="space-y-10 mt-5">
@@ -238,9 +256,7 @@ export default function WalletSystem() {
                     }`}
                   >
                     {unlocked ? <FaLockOpen /> : <FaLock />}
-                    {unlocked
-                      ? t("wallet.ui.unlocked")
-                      : t("wallet.ui.unlock")}
+                    {unlocked ? t("wallet.ui.unlocked") : t("wallet.ui.unlock")}
                   </button>
                 </div>
               );
