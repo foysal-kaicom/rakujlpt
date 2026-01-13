@@ -36,14 +36,14 @@ class BusinessSettingsSeeder extends Seeder
                 'authorized_docs' => 'Path/To/AuthorizedDocs.pdf',
     
                 // Branding
-                'header_logo' => 'Path/To/Logo.png',
-                'footer_logo' => 'Path/To/FooterLogo.png',
-                'favicon_icon' => 'Path/To/Favicon.ico',
+                // 'header_logo' => 'Path/To/Logo.png',
+                // 'footer_logo' => 'Path/To/FooterLogo.png',
+                // 'favicon_icon' => 'Path/To/Favicon.ico',
     
-                // Policies
-                'privacy_policy' => 'Privacy Policy content goes here...',
-                'terms_and_conditions' => 'Terms and conditions content goes here...',
-                'return_policy' => 'Return policy content goes here...',
+                // // Policies
+                // 'privacy_policy' => 'Privacy Policy content goes here...',
+                // 'terms_and_conditions' => 'Terms and conditions content goes here...',
+                // 'return_policy' => 'Return policy content goes here...',
     
                 // Social Media Links
                 'facebook_url' => 'https://www.facebook.com/yourbusiness',

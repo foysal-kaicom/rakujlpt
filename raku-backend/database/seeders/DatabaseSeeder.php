@@ -15,11 +15,11 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(FirstUserSeeder::class);
         $this->call(BusinessSettingsSeeder::class);
-        $this->call(CandidateSeeder::class);
-        $this->call(CenterSeeder::class);
-        $this->call(ExamSeeder::class);
-        $this->call(MockTestModuleSeeder::class);
-        $this->call(MockTestSectionSeeder::class);
+        // $this->call(CandidateSeeder::class);
+        // $this->call(CenterSeeder::class);
+        // $this->call(ExamSeeder::class);
+        // $this->call(MockTestModuleSeeder::class);
+        // $this->call(MockTestSectionSeeder::class);
         $this->call(RoadmapSeeder::class);
         $this->call(StageSeeder::class);
     }

@@ -1,28 +1,19 @@
 "use client";
 
-import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import Image from "next/image";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+
+import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import HeadLine2 from "@/components/HeadLine2";
 import BreadCrumb from "@/components/BreadCrumb";
-import Link from "next/link";
-import { IoPersonCircleOutline } from "react-icons/io5";
-import axios from "axios";
-import { Suspense, useEffect, useState } from "react";
 import SuspenseLoader from "@/components/SuspenseLoader";
-import { useParams } from "next/navigation";
 
-interface NewsItem {
-  id: number;
-  title: string;
-  slug: string;
-  category_name: string;
-  content: string;
-  featured_image: string | null;
-  is_featured: number;
-  published_at: string;
-  author_name: string;
-  author_designation: string;
-}
+import { IoPersonCircleOutline } from "react-icons/io5";
+
+import { NewsItem } from "@/types/index.types";
+import { newsService } from "@/services/website/blogs/blog.service";
 
 export default function NewsDetailsPage() {
   const params = useParams();
@@ -49,25 +40,21 @@ export default function NewsDetailsPage() {
     });
   };
 
-  const getNewsDetails = async () => {
+  const fetchNewsDetails = async () => {
     if (!slug) return;
-
     try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/news/${slug}`
-      );
-      setNewsDetails(res.data?.data || null);
+      const data = await newsService.details(slug);
+      setNewsDetails(data);
     } catch (error) {
+      console.error("Failed to fetch news details:", error);
       setNewsDetails(null);
     }
   };
 
-  const getNewsData = async () => {
+  const getNewsList = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/news/list`
-      );
-      setAllNews(response.data.data || []);
+      const response = await newsService.list();
+      setAllNews(response || []);
     } catch (error) {
       console.error("Failed to fetch news data:", error);
       setAllNews([]);
@@ -75,8 +62,9 @@ export default function NewsDetailsPage() {
   };
 
   useEffect(() => {
-    getNewsDetails();
-    getNewsData();
+    if (!slug) return;
+    fetchNewsDetails();
+    getNewsList();
   }, [slug]);
 
   if (!newsDetails) return <SuspenseLoader />;

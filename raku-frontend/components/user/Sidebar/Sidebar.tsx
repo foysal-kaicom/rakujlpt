@@ -103,7 +103,7 @@ export default function Sidebar() {
             }`}
           >
             <span className="text-3xl">{item.icon}</span>
-            <span className="mt-1 hidden md:block font-medium">{item.label}</span>
+            <span className="mt-1 hidden md:block font-medium">{t(item.label)}</span>
           </Link>
         ))}
       </div>
@@ -116,8 +116,8 @@ export default function Sidebar() {
 
       if (response.status === 200) {
         console.log("Logout Success:", response.data);
-        useAuthStore.getState().logout(); // Clear auth state
-        router.push("/sign_in"); // Redirect to sign-in
+        useAuthStore.getState().logout();
+        router.push("/sign_in");
       } else {
         toast.error("Logout failed. Please try again.");
       }
@@ -125,8 +125,8 @@ export default function Sidebar() {
       toast.error(
         error?.response?.data?.message || error.message || "Logout error"
       );
-      useAuthStore.getState().logout(); // Fallback: still clear auth state
-      router.push("/sign_in"); // Redirect anyway
+      useAuthStore.getState().logout();
+      router.push("/sign_in");
     }
   };
 
