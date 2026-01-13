@@ -121,18 +121,23 @@ class MockTestController extends Controller
     {
         try {
             $data = $request->all();
+          
             $request->validate([
                 'exam_id' => 'required|integer|exists:exams,id',
             ]);
 
             $examId = $data['exam_id'];
             $candidateId = Auth::guard('candidate')->id();
-            $exam = Exam::findOrFail($examId);
+            $exam = Exam::with('mockTestModules')->findOrFail($examId);
+            $modulesScore=[];
 
-            $modulesScore = [
-                'Reading' => ['answered' => 0, 'correct' => 0, 'wrong' => 0],
-                'Listening' => ['answered' => 0, 'correct' => 0, 'wrong' => 0],
-            ];
+            foreach($exam->mockTestModules as $moduleName)
+            {
+                $modulesScore[$moduleName->name] = ['answered' => 0, 'correct' => 0, 'wrong' => 0];
+                   
+            }
+
+           
             $userAnswers = [];
             foreach ($data as $key => $questionPayload) {
                 if ($key === 'exam_id') continue;
@@ -177,15 +182,16 @@ class MockTestController extends Controller
                 'candidate_id'              => $candidateId,
                 'exam_id'                   => $examId,
                 'question_set'              => 1,
-                'reading_answered'          => $modulesScore['Reading']['answered'],
-                'correct_reading_answer'    => $modulesScore['Reading']['correct'],
-                'wrong_reading_answer'      => $modulesScore['Reading']['wrong'],
-                'listening_answered'        => $modulesScore['Listening']['answered'],
-                'correct_listening_answer'  => $modulesScore['Listening']['correct'],
-                'wrong_listening_answer'    => $modulesScore['Listening']['wrong'],
+                // 'reading_answered'          => $modulesScore['Reading']['answered'],
+                // 'correct_reading_answer'    => $modulesScore['Reading']['correct'],
+                // 'wrong_reading_answer'      => $modulesScore['Reading']['wrong'],
+                // 'listening_answered'        => $modulesScore['Listening']['answered'],
+                // 'correct_listening_answer'  => $modulesScore['Listening']['correct'],
+                // 'wrong_listening_answer'    => $modulesScore['Listening']['wrong'],
                 'total_questions'           => $data['total_questions'],
                 'per_question_mark'         => $per_question_mark,
                 'answers'                   => json_encode($userAnswers),
+                'module_wise_score'         => json_encode($modulesScore),
             ]);
 
             $mockTestRecord->per_question_mark = $per_question_mark;

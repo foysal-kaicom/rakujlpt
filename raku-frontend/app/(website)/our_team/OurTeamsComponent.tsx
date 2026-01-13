@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import Image from "next/image";
 
 import { useEffect, useState } from "react";
@@ -8,21 +7,14 @@ import { useTranslation } from "react-i18next";
 
 import { FaLinkedinIn, FaFacebookF, FaGithub } from "react-icons/fa";
 import { IoPersonCircle } from "react-icons/io5";
+
 import OurTeamSkeleton from "./OurTeamSkeleton";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import BreadCrumb from "@/components/BreadCrumb";
 
-interface Member {
-  name: string;
-  email: string;
-  designation: string;
-  description: string;
-  photo: string;
-  linkedin_url: string;
-  facebook_url: string;
-  github_url: string;
-  serial_no: number;
-}
+import { TeamMember } from "@/types/index.types";
+import { ourTeamService } from "@/services/website/common.service";
+
 
 export default function OurTeamsComponent() {
   const { t } = useTranslation("common");
@@ -32,19 +24,13 @@ export default function OurTeamsComponent() {
     { name: t("breadcrumb.our_team"), to: "/our_team" },
   ];
 
-  const [teams, setTeams] = useState<Member[]>([]);
+  const [teams, setTeams] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const getTeamList = async () => {
+  const fetchTeams = async () => {
     try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/our-member/list`
-      );
-
-      const sortedMembers = res?.data?.data.sort(
-        (a: any, b: any) => a.serial_no - b.serial_no
-      );
-      setTeams(sortedMembers || []);
+      const data = await ourTeamService.getTeamList();
+      setTeams(data);
     } catch (error) {
       setTeams([]);
     } finally {
@@ -53,7 +39,7 @@ export default function OurTeamsComponent() {
   };
 
   useEffect(() => {
-    getTeamList();
+    fetchTeams();
   }, []);
 
   return (

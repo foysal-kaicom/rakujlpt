@@ -9,20 +9,8 @@ class MockTestRecords extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'candidate_id',
-        'exam_id',
-        'question_set',
-        'reading_answered',
-        'correct_reading_answer',
-        'wrong_reading_answer',
-        'listening_answered',
-        'correct_listening_answer',
-        'wrong_listening_answer',
-        'total_questions',
-        'per_question_mark',
-        'answers',
-    ];
+    protected $guarded = [];
+
 
     public function candidate() {
         return $this->belongsTo(Candidate::class, 'candidate_id');
