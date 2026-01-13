@@ -23,10 +23,10 @@ class WalletController extends Controller
         // return response()->json([
         //     'balance' => $wallet->balance,
         // ]);
-        return $this->responseWithSuccess('Wallet summary fetched successfully', [
+        return $this->responseWithSuccess([
             'balance' => (int) $wallet->balance,
             'transactions' => $walletTransactions
-        ]);
+        ], 'Wallet summary fetched successfully');
     }
 
     // public function transactions()
