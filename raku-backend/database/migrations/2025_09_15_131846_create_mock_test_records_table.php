@@ -17,14 +17,15 @@ return new class extends Migration
             $table->foreignId('exam_id')->nullable()->constrained('exams');
             $table->integer('question_set');
             // Reading module
-            $table->integer('reading_answered')->default(0);
-            $table->integer('correct_reading_answer')->default(0);
-            $table->integer('wrong_reading_answer')->default(0);
+            // $table->integer('reading_answered')->default(0);
+            // $table->integer('correct_reading_answer')->default(0);
+            // $table->integer('wrong_reading_answer')->default(0);
 
-            // Listening module
-            $table->integer('listening_answered')->default(0);
-            $table->integer('correct_listening_answer')->default(0);
-            $table->integer('wrong_listening_answer')->default(0);
+            // // Listening module
+            // $table->integer('listening_answered')->default(0);
+            // $table->integer('correct_listening_answer')->default(0);
+            // $table->integer('wrong_listening_answer')->default(0);
+            $table->json('module_wise_score')->nullable();
 
             $table->timestamps();
         });
