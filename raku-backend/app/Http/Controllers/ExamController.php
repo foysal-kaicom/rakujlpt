@@ -18,8 +18,11 @@ class ExamController extends Controller
         $orderBy = $request->order_by ?? 'id';
         $direction = $request->direction ?? 'asc';
 
-        $query = Exam::with('creator:id,name')
-            ->select('id', 'title', 'name', 'slug', 'duration', 'type', 'total_point', 'answer_value', 'created_by', 'status');
+        $query = Exam::with([
+            'creator:id,name',
+            'agent:id,name'
+        ])
+            ->select('id', 'title', 'name', 'slug', 'duration', 'type', 'total_point', 'answer_value', 'created_by', 'agent_id', 'status');
 
         if ($request->has('title') && $request->title != '') {
             $query->where('title', 'like', '%' . $request->title . '%');
