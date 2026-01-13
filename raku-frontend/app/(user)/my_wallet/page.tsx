@@ -73,8 +73,10 @@ export default function WalletSystem() {
     try {
       const response = await axiosInstance.get(`/candidate/wallet`);
       if (response?.data?.success) {
+        console.log(response.data);
+        
         setPracticeTestsData(response.data.data);
-        setPoints(Math.floor(parseFloat(response?.data?.balance) || 0));
+        setPoints(response?.data?.message?.balance);
       }
     } catch (error: any) {
       toast.error(t("errors.fetch_roadmaps"));
