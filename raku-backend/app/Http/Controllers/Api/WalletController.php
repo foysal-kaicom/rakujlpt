@@ -18,26 +18,28 @@ class WalletController extends Controller
         $wallet = Wallet::firstOrCreate([
             'candidate_id' => $candidate->id
         ]);
+        $walletTransactions = WalletTransaction::where('candidate_id', $candidate->id)->get();
 
         // return response()->json([
         //     'balance' => $wallet->balance,
         // ]);
-        return $this->responseWithSuccess('Wallet summary fetched successfully', [
-            'balance' => $wallet->balance,
-        ]);
+        return $this->responseWithSuccess([
+            'balance' => (int) $wallet->balance,
+            'transactions' => $walletTransactions
+        ], 'Wallet summary fetched successfully');
     }
 
-    public function transactions()
-    {
-        // $candidate = auth()->user()->candidate;
-        $candidate = Auth::guard('candidate')->user();
+    // public function transactions()
+    // {
+    //     // $candidate = auth()->user()->candidate;
+    //     $candidate = Auth::guard('candidate')->user();
 
-        $transactions = WalletTransaction::with('rule:id,title,action')
-            ->where('candidate_id', $candidate->id)
-            ->latest()
-            ->paginate(20);
+    //     $transactions = WalletTransaction::with('rule:id,title,action')
+    //         ->where('candidate_id', $candidate->id)
+    //         ->latest()
+    //         ->paginate(20);
 
-        // return response()->json($transactions);
-        return $this->responseWithSuccess('Wallet transactions fetched successfully', $transactions);
-    }
+    //     // return response()->json($transactions);
+    //     return $this->responseWithSuccess('Wallet transactions fetched successfully', $transactions);
+    // }
 }
