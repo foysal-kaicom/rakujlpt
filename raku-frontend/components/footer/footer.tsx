@@ -2,15 +2,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 import { IoLogoYoutube } from "react-icons/io";
 import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 
 import { useBusinessSettingsStore } from "@/stores/useBusinessStore";
-import { useState } from "react";
-import axios from "axios";
+
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+
+import { newsletterService } from "@/services/website/common.service";
 
 export default function Footer() {
   const { t } = useTranslation("common");
@@ -21,22 +23,14 @@ export default function Footer() {
     e.preventDefault();
     if (newLetterEmail == "") return;
     try {
-      const form = new FormData();
-      form.append("email", newLetterEmail);
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/news-letter-subscribe`,
-        form
-      );
-      if (res.data.success) {
+      const res = await newsletterService.subscribe(newLetterEmail);
+      if (res.success) {
         toast.success(
-          res.data.message || t("footer.newsletter_success")
+          res.message || t("footer.newsletter_success")
         );
       }
     } catch (error: any) {
-      toast.error(
-        error.response?.data.message ||
-          t("footer.newsletter_error")
-      );
+      toast.error(error.response?.data?.message || t("footer.newsletter_error"));
     } finally {
       setNewsLetterEmail("");
     }
