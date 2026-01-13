@@ -56,7 +56,7 @@
                     </li>
                     
                     <!-- Profile Link -->
-                    <li>
+                    {{-- <li>
                         <a class="dropdown-item flex items-center gap-3 px-4 py-2.5 text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition-all duration-200" 
                            href="{{ route('users.profile') }}">
                             <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600">
@@ -64,7 +64,7 @@
                             </div>
                             <span class="font-medium">Profile</span>
                         </a>
-                    </li>
+                    </li> --}}
                     
                     <li>
                         <hr class="dropdown-divider my-2 border-slate-200">
