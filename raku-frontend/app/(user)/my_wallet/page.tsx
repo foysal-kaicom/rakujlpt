@@ -10,6 +10,17 @@ import { useTranslation } from "react-i18next";
 import axiosInstance from "@/utils/axios";
 import { toast } from "sonner";
 
+interface Roadmap {
+  id: number;
+  slug: string;
+  title: string;
+  image: string;
+  description: string;
+  total_stages: string;
+  is_free: number;
+  unlock_coins: number;
+  is_unlocked: number;
+}
 export default function WalletSystem() {
   const { t } = useTranslation("common");
   const user = useAuthStore().user;
@@ -20,7 +31,7 @@ export default function WalletSystem() {
   ];
 
   // ----- MOCK USER STATE -----
-  const [points, setPoints] = useState(120); // Example: user has 120 points
+  const [points, setPoints] = useState(0); // Example: user has 120 points
   const [unlockedFeatures, setUnlockedFeatures] = useState<string[]>([]);
   const [subscription, setSubscription] = useState<null | string>(null);
 
@@ -68,18 +79,32 @@ export default function WalletSystem() {
       : t("wallet.milestones.great_job");
 
   const [loader, setLoader] = useState(true);
-  const [practiceTestsData, setPracticeTestsData] = useState<any[]>([]);
+  const [practiceTestsData, setPracticeTestsData] = useState<Roadmap[]>([]);
+  const fetchRoadmaps = async () => {
+    try {
+      const response = await axiosInstance.get(`/roadmaps`);
+      if (response?.data?.success) {
+        setPracticeTestsData(response.data.data);
+      }
+    } catch (error: any) {
+      toast.error(t("errors.fetch_roadmaps"));
+    } finally {
+      setLoader(false);
+    }
+  };
+  useEffect(() => {
+    fetchRoadmaps();
+  }, [t]);
+  const [transactionData, setTransactionData] = useState<any[]>([]);
   const fetchWalletData = async () => {
     try {
       const response = await axiosInstance.get(`/candidate/wallet`);
       if (response?.data?.success) {
-        console.log(response.data);
-        
-        setPracticeTestsData(response.data.data);
-        setPoints(response?.data?.message?.balance);
+        setTransactionData(response?.data?.data?.transactions);
+        setPoints(response?.data?.data?.balance);
       }
     } catch (error: any) {
-      toast.error(t("errors.fetch_roadmaps"));
+      toast.error(t("errors.fetch_wallet"));
     } finally {
       setLoader(false);
     }
@@ -229,8 +254,8 @@ export default function WalletSystem() {
             {t("wallet.sections.unlock_features")}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5">
-            {features.map((f) => {
-              const unlocked = unlockedFeatures.includes(f.id);
+            {practiceTestsData.map((f) => {
+              const unlocked = Number(f.is_unlocked) === 1;
 
               return (
                 <div
@@ -238,21 +263,21 @@ export default function WalletSystem() {
                   className="p-5 rounded-xl shadow bg-white flex flex-col justify-between h-45"
                 >
                   <div>
-                    <h3 className="text-lg font-semibold">{t(f.name)}</h3>
+                    <h3 className="text-lg font-semibold">{t(f.title)}</h3>
                     <p className="text-gray-500">
-                      {t("wallet.ui.required")}: {f.requiredPoints}{" "}
+                      {t("wallet.ui.required")}: {f.unlock_coins}{" "}
                       {t("wallet.ui.points_full")}
                     </p>
                   </div>
 
                   <button
-                    disabled={unlocked || points < f.requiredPoints}
+                    disabled={unlocked || points < f.unlock_coins}
                     onClick={() => unlockFeature(f)}
                     className={`mt-4 flex items-center justify-center gap-2 py-2 rounded-lg font-medium transition 
                     ${
                       unlocked
                         ? "bg-green-500 text-white"
-                        : points < f.requiredPoints
+                        : points < f.unlock_coins
                         ? "bg-gray-300 text-gray-600 cursor-not-allowed"
                         : "bg-purple-600 hover:bg-purple-700 text-white cursor-pointer"
                     }`}
@@ -267,7 +292,7 @@ export default function WalletSystem() {
         </div>
 
         {/* ----------------- SUBSCRIPTIONS ----------------- */}
-        <div>
+        {/* <div>
           <h2 className="text-xl font-bold mb-4">
             {t("wallet.sections.buy_subscription")}
           </h2>
@@ -304,6 +329,70 @@ export default function WalletSystem() {
               {t("wallet.ui.purchased")}: {subscription}
             </div>
           )}
+        </div> */}
+
+        {/* ----------------- TRANSACTION HISTORY ----------------- */}
+        <div>
+          <h2 className="text-xl font-bold mb-4">
+            {t("wallet.transaction_history")}
+          </h2>
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-gradient-to-r from-purple-700 to-purple-600">
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                      {t("wallet.table.id")}
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                      {t("wallet.table.type")}
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                      {t("wallet.table.points")}
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                      {t("wallet.table.remarks")}
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                      {t("wallet.table.date")}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-purple-50">
+                  {transactionData.map((transaction: any) => (
+                    <tr
+                      key={transaction.id}
+                      className="border-b border-purple-100 hover:bg-purple-100 transition-colors"
+                    >
+                      <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                        #{transaction.id}
+                      </td>
+                      <td className="px-6 py-4 text-sm">
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            transaction.type === "credit"
+                              ? "bg-green-100 text-green-700"
+                              : "bg-red-100 text-red-700"
+                          }`}
+                        >
+                          {transaction.type.toUpperCase()}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-sm font-semibold text-gray-900">
+                        {transaction.points}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-600">
+                        {transaction.remarks}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-600">
+                        {new Date(transaction.created_at).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
