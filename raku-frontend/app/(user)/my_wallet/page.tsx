@@ -74,7 +74,7 @@ export default function WalletSystem() {
       const response = await axiosInstance.get(`/candidate/wallet`);
       if (response?.data?.success) {
         setPracticeTestsData(response.data.data);
-        setPoints(response?.data?.data?.balance || 0);
+        setPoints(Math.floor(parseFloat(response?.data?.balance) || 0));
       }
     } catch (error: any) {
       toast.error(t("errors.fetch_roadmaps"));
