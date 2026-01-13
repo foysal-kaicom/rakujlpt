@@ -23,6 +23,10 @@
             </div>
         </div>
 
+        @php
+            $packagesActive = request()->routeIs('packages.*');
+        @endphp
+
         <div
             class="flex-1 overflow-y-auto px-2 py-1 space-y-1 scrollbar-thin scrollbar-thumb-indigo-200 scrollbar-track-transparent">
 
@@ -37,13 +41,44 @@
                     <span class="font-semibold text-sm">Dashboard</span>
                 </a>
             </div>
+            <div class="menu-section" data-toggle="packages">
+                <div class="cursor-pointer">
+                    <div
+                        class="group flex items-center justify-between px-3 py-2.5 rounded-xl transition-all duration-200 {{ $packagesActive ? 'bg-amber-500 text-white shadow-lg' : 'text-slate-700 hover:text-indigo-600 hover:bg-indigo-50' }}">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="flex items-center justify-center w-9 h-9 rounded-lg {{ $packagesActive ? 'bg-white/20' : 'bg-gradient-to-br from-amber-500 to-amber-600' }} text-white shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                                <i class="fa-solid fa-box-open text-sm"></i>
+                            </div>
+                            <span class="font-semibold text-sm">Candidate</span>
+                        </div>
+                        <i
+                            class="fas fa-chevron-down drop-arrow text-xs {{ $packagesActive ? 'text-white/80' : 'text-slate-400' }} transition-transform duration-300 {{ $packagesActive ? 'rotated' : '-rotate-90' }}"></i>
+                    </div>
+                </div>
+                <div class="submenu mt-1 ml-12 space-y-1 {{ $packagesActive ? '' : 'hidden' }}"
+                    data-target="packages">
+         
+                    <a href="{{ route('agent.candidate.import-page') }}"
+                        class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('packages.index') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
+                        <i class="fa-solid fa-file-arrow-down text-indigo-400 text-base size-5"></i>
+                        <span>Import</span>
+                    </a>
+                </div>
 
+                <div class="submenu mt-1 ml-12 space-y-1 {{ $packagesActive ? '' : 'hidden' }}" data-target="packages">
+     
+                    <a href=""
+                        class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('packages.index') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
+                        <i class="fa-solid fa-file-arrow-down text-indigo-400 text-base size-5"></i>
+                        <span>List</span>
+                    </a>
+                </div>
+            </div>
         
 
             <!-- Packages -->
-            @php
-                $packagesActive = request()->routeIs('packages.*');
-            @endphp
+
             <div class="menu-section" data-toggle="packages">
                 <div class="cursor-pointer">
                     <div
