@@ -161,7 +161,7 @@ export default function Header() {
     return isAuthenticated && token && user ? (
       <>
         <LanguageSwitcher />
-        <Notification />
+        <Notification token={token}/>
         <div className="flex gap-2 items-center relative group cursor-pointer">
           {user?.photo ? (
             <Image
