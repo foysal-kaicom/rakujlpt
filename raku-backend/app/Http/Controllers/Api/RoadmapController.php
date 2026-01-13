@@ -59,7 +59,7 @@ class RoadmapController extends Controller
                     'image'        => $roadmap->image ? asset('storage/' . $roadmap->image) : null,
                     'total_stages' => $roadmap->total_stages,
                     'is_free'      => (bool) $roadmap->is_free,
-                    'unlock_coins' => $roadmap->unlock_coins,
+                    'unlock_coins' => (int) $roadmap->unlock_coins,
                     'is_unlocked'  => $isUnlocked,
                 ];
             });
