@@ -12,18 +12,60 @@ use App\Models\CandidateStageProgress;
 
 class RoadmapController extends Controller
 {
+    // public function getRoadmaps(Request $request)
+    // {
+    //     $candidate = Auth::guard('candidate')->user();
+
+    //     $roadmaps = Roadmap::withCount([
+    //         'stages as total_stages' => function ($query) {
+    //             $query->where('status', 1);
+    //         }
+    //     ])
+    //         ->get(['id', 'title', 'slug', 'description', 'image'])
+    //         ->makeHidden(['created_at', 'updated_at']);
+
+    //     return $this->responseWithSuccess($roadmaps, 'Roadmaps fetched successfully', 200);
+    // }
     public function getRoadmaps(Request $request)
     {
+        $candidate = Auth::guard('candidate')->user();
+
         $roadmaps = Roadmap::withCount([
-            'stages as total_stages' => function ($query) {
-                $query->where('status', 1);
-            }
-        ])
-            ->get(['id', 'title', 'slug', 'description', 'image'])
-            ->makeHidden(['created_at', 'updated_at']);
+                'stages as total_stages' => function ($query) {
+                    $query->where('status', 1);
+                }
+            ])
+            ->get(['id', 'title', 'slug', 'description', 'image', 'is_free'])
+            ->map(function ($roadmap) use ($candidate) {
+
+                $isUnlocked = false;
+
+                if ($candidate) {
+                    // Free roadmap = unlocked
+                    if ($roadmap->is_free) {
+                        $isUnlocked = true;
+                    } else {
+                        $isUnlocked = RoadmapUnlock::where('candidate_id', $candidate->id)
+                            ->where('roadmap_id', $roadmap->id)
+                            ->exists();
+                    }
+                }
+
+                return [
+                    'id'           => $roadmap->id,
+                    'title'        => $roadmap->title,
+                    'slug'         => $roadmap->slug,
+                    'description'  => $roadmap->description,
+                    'image'        => $roadmap->image ? asset('storage/' . $roadmap->image) : null,
+                    'total_stages' => $roadmap->total_stages,
+                    'is_free'      => (bool) $roadmap->is_free,
+                    'is_unlocked'  => $isUnlocked,
+                ];
+            });
 
         return $this->responseWithSuccess($roadmaps, 'Roadmaps fetched successfully', 200);
     }
+
 
 
     public function getStages($slug)
