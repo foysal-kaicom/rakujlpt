@@ -510,6 +510,14 @@
     "alerts": {
       "not_enough": "पर्याप्त अंक छैन!",
       "already_unlocked": "पहिले नै अनलक गरिएको छ!"
+    },
+    "transaction_history": "लेनदेन इतिहास",
+    "table": {
+      "id": "लेनदेन ID",
+      "type": "प्रकार",
+      "points": "अंकहरू",
+      "remarks": "टिप्पणीहरू",
+      "date": "मिति"
     }
   },
   "my_agent": {
