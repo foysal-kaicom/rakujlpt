@@ -24,7 +24,8 @@ return new class extends Migration
             $table->double('total_point')->nullable();
             $table->double('answer_value')->nullable();
             $table->boolean('status')->default(true);
-            $table->foreignId('created_by')->constrained('users');
+            $table->foreignId('created_by')->nullable()->constrained('users');
+            $table->foreignId('agent_id')->nullable()->constrained('agents');
             $table->softDeletes();
             $table->timestamps();
         });

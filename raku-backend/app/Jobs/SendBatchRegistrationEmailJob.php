@@ -7,6 +7,7 @@ use App\Models\Candidate;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class SendBatchRegistrationEmailJob implements ShouldQueue
@@ -34,15 +35,20 @@ class SendBatchRegistrationEmailJob implements ShouldQueue
     public function handle(): void
     {
         $chunkedCandidates = array_chunk($this->candidates, 50);
-
+    
         foreach ($chunkedCandidates as $chunk) {
             foreach ($chunk as $candidateData) {
                 $candidate = Candidate::where('email', $candidateData['email'])->first();
-
+    
                 if ($candidate) {
-                    Mail::to($candidate->email)->send(new NewRegistrationEmail($candidate, $candidateData['password']));
+                    Mail::to($candidate->email)
+                        ->send(new NewRegistrationEmail(
+                            $candidate,
+                            $candidateData['password']
+                        ));
                 }
             }
         }
     }
+    
 }
