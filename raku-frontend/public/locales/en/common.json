@@ -516,6 +516,14 @@
     "alerts": {
       "not_enough": "Not enough points!",
       "already_unlocked": "Already unlocked!"
+    },
+    "transaction_history": "Transaction History",
+    "table": {
+      "id": "ID",
+      "type": "Type",
+      "points": "Points",
+      "remarks": "Remarks",
+      "date": "Date"
     }
   },
   "my_agent": {

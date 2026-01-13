@@ -520,6 +520,14 @@
     "alerts": {
       "not_enough": "পর্যাপ্ত পয়েন্ট নেই!",
       "already_unlocked": "ইতিমধ্যে আনলক করা হয়েছে!"
+    },
+    "transaction_history": "লেনদেনের ইতিহাস",
+    "table": {
+      "id": "আইডি",
+      "type": "টাইপ",
+      "points": "পয়েন্টস",
+      "remarks": "মন্তব্য",
+      "date": "তারিখ"
     }
   },
   "my_agent": {

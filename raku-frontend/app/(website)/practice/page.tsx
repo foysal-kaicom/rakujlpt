@@ -1,16 +1,18 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { BookOpen, Sparkles, Rocket } from "lucide-react";
+import { Sparkles, Rocket } from "lucide-react";
 import Link from "next/link";
 import axiosInstance from "@/utils/axios";
 import { toast } from "sonner";
+import { Confetti } from "@neoconfetti/react";
 import BreadCrumb from "@/components/BreadCrumb";
 import PracticeSkeleton from "./PracticeSkeleton";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { FaRoad } from "react-icons/fa";
 import { ConfirmUnlockModal } from "./ConfirmUnlockModal";
+import ConfettiComponent from "@/components/ConfettiComponent";
 
 interface Roadmap {
   id: number;
@@ -20,7 +22,8 @@ interface Roadmap {
   description: string;
   total_stages: string;
   is_free: number;
-  unlock_coins: string;
+  unlock_coins: number;
+  is_unlocked: number;
 }
 
 export default function Practice() {
@@ -43,44 +46,12 @@ export default function Practice() {
 
   const [loader, setLoader] = useState(true);
   const [practiceTestsData, setPracticeTestsData] = useState<Roadmap[]>([]);
+  const [showConfetti, setShowConfetti] = useState(false);
   const fetchRoadmaps = async () => {
     try {
       const response = await axiosInstance.get(`/roadmaps`);
       if (response?.data?.success) {
         setPracticeTestsData(response.data.data);
-        // setPracticeTestsData([
-        //   {
-        //     id: 1,
-        //     title: "JLPT",
-        //     slug: "jlpt",
-        //     description:
-        //       "Learn the fundamentals of web development, including HTML, CSS, JavaScript, and popular frameworks.",
-        //     image: "",
-        //     total_stages: "3",
-        //     is_free: 1,
-        //     unlock_coins: "0.00",
-        //   },
-        //   {
-        //     id: 2,
-        //     title: "Test 1",
-        //     slug: "test-1",
-        //     description: "Description",
-        //     image: "",
-        //     total_stages: "0",
-        //     is_free: 0,
-        //     unlock_coins: "20.00",
-        //   },
-        //   {
-        //     id: 3,
-        //     title: "Test 2",
-        //     slug: "test-2",
-        //     description: "Description",
-        //     image: "",
-        //     total_stages: "0",
-        //     is_free: 0,
-        //     unlock_coins: "50.00",
-        //   },
-        // ]);
       }
     } catch (error: any) {
       toast.error(t("errors.fetch_roadmaps"));
@@ -94,17 +65,20 @@ export default function Practice() {
 
   const handleUnlock = async (roadmapId: number) => {
     try {
-      const response = await axiosInstance.post(`/candidate/unlock-roadmaps/?roadmap_id=${roadmapId}`);
+      const response = await axiosInstance.post(
+        `/candidate/unlock-roadmaps/?roadmap_id=${roadmapId}`
+      );
       if (response?.data?.success) {
+        setShowConfetti(true);
+        setLoader(true);
         toast.success(t("practicePage.unlock_success"));
       } else {
         toast.error(t("errors.unlock_roadmap"));
       }
       setPracticeTestsData([]);
       fetchRoadmaps();
-      toast.success(`Unlock roadmap with ID: ${roadmapId}`);
-    } catch (error) {
-      toast.error(t("errors.unlock_roadmap"));
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "");
     }
   };
 
@@ -164,7 +138,7 @@ export default function Practice() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
               {practiceTestsData.map((test, index) => {
-                const isFree = Number(test.is_free) === 1;
+                const isFree = Number(test.is_unlocked) === 1;
                 const unlockCoins = Number(test.unlock_coins);
 
                 return (
@@ -274,7 +248,7 @@ export default function Practice() {
                             </span>
                             <span>{t("practicePage.unlock_now")}</span>
                           </span>
-                          <span className="flex items-center gap-1.5 text-sm bg-yellow-400 text-gray-900 px-3 py-1 rounded-full font-bold">
+                          <span className="flex items-center gap-1.5 text-sm bg-gray-200 text-gray-900 px-3 py-1 rounded-full font-bold">
                             <span className="text-base">🪙</span>
                             <span>{unlockCoins} coins</span>
                           </span>
@@ -292,8 +266,9 @@ export default function Practice() {
         isOpen={showUnlockModal}
         onClose={() => setShowUnlockModal(false)}
         onConfirm={() => handleUnlock(selectedRoadmap?.id ?? 0)}
-        selectedRoadmap={selectedRoadmap ?? null}
+        selectedRoadmap={selectedRoadmap}
       />
+      <ConfettiComponent show={showConfetti} setShow={setShowConfetti} />
     </>
   );
 }
