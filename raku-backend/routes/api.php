@@ -94,7 +94,7 @@ Route::prefix('v1')->group(function () {
 
             // Wallet
             Route::get('/wallet', [WalletController::class, 'summary']);
-            Route::get('/wallet/transactions', [WalletController::class, 'transactions']);
+            // Route::get('/wallet/transactions', [WalletController::class, 'transactions']);
 
             // Roadmap Unlock
             Route::post('/unlock-roadmaps', [RoadmapUnlockController::class, 'unlock']);
