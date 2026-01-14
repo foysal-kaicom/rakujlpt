@@ -112,6 +112,14 @@ class CandidateController extends Controller
             try {
                 $token = JWTAuth::fromUser($candidate);
 
+                $today = now()->toDateString();
+                if (!$candidate->last_login || Carbon::parse($candidate->last_login)->toDateString() !== $today) {
+                    walletCredit($candidate, 'daily_login');
+                }
+                $candidate->update([
+                    'last_login' => now(),
+                ]);
+
                 return response()->json([
                     'data' => $candidate,
                     'message' => 'Login successful',

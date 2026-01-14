@@ -9,7 +9,7 @@ interface Roadmap {
   description: string;
   total_stages: string;
   is_free: number;
-  unlock_coins: string;
+  unlock_coins: number;
 }
 
 export function ConfirmUnlockModal({

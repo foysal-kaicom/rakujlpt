@@ -98,6 +98,9 @@ Route::prefix('v1')->group(function () {
 
             // Roadmap Unlock
             Route::post('/unlock-roadmaps', [RoadmapUnlockController::class, 'unlock']);
+
+            //Transfer Coin
+            Route::post('/wallet-coin-transfer', [WalletController::class, 'transferCoin']);
     
         });
 
