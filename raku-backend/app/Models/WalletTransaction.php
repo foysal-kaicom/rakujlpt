@@ -8,6 +8,15 @@ class WalletTransaction extends Model
 {
     protected $guarded = [];
 
+    protected $casts = [
+        'points' => 'decimal:2',
+    ];
+
+    public function getPointsAttribute($value)
+    {
+        return (int) $value; // 10.00 → 10
+    }
+
     public function candidate()
     {
         return $this->belongsTo(Candidate::class);
