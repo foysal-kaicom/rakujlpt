@@ -51,6 +51,7 @@ if (!function_exists('walletCredit')) {
                 'type' => 'credit',
                 'points' => $points,
                 'reference' => $reference,
+                'remarks' => $rule->title,
             ]);
         });
 
@@ -108,6 +109,7 @@ if (!function_exists('walletDebit')) {
                 'type' => 'debit',
                 'points' => $points,
                 'reference' => $reference,
+                'remarks' => $rule->title,
             ]);
         });
     }
@@ -141,109 +143,3 @@ if (!function_exists('walletCanApply')) {
 }
 
 
-
-
-
-
-
-
-// if (!function_exists('walletCredit')) {
-
-//     function walletCredit(
-//         Candidate $candidate,
-//         string $action,
-//         float $points,
-//         $reference = null
-//     ): bool {
-
-//         $rule = CoinRule::where('action', $action)
-//             ->where('type', 'earn')
-//             ->where('status', true)
-//             ->first();
-
-//         if (!$rule) {
-//             return false;
-//         }
-
-//         if (!walletCanApply($candidate, $rule, $reference)) {
-//             return false;
-//         }
-
-//         // if (!function_exists('canAccessRoadmap')) {
-
-//         //     function canAccessRoadmap(
-//         //         Candidate $candidate,
-//         //         Roadmap $roadmap
-//         //     ): bool {
-
-//         //         if ($roadmap->is_free) {
-//         //             return true;
-//         //         }
-
-//         //         return RoadmapUnlock::where('candidate_id', $candidate->id)
-//         //             ->where('roadmap_id', $roadmap->id)
-//         //             ->exists();
-//         //     }
-//         // }
-
-//         $wallet = Wallet::firstOrCreate([
-//             'candidate_id' => $candidate->id
-//         ]);
-
-//         DB::transaction(function () use ($wallet, $candidate, $rule, $points, $reference) {
-
-//             $wallet->increment('balance', $points);
-
-//             WalletTransaction::create([
-//                 'candidate_id' => $candidate->id,
-//                 'coin_rule_id' => $rule->id,
-//                 'type' => 'credit',
-//                 'points' => $points,
-//                 'reference' => $reference,
-//             ]);
-//         });
-
-//         return true;
-//     }
-// }
-
-
-
-
-// if (!function_exists('walletDebit')) {
-
-//     function walletDebit(
-//         Candidate $candidate,
-//         string $action,
-//         float $points,
-//         $reference = null
-//     ): void {
-
-//         $rule = CoinRule::where('action', $action)
-//             ->where('type', 'spend')
-//             ->where('status', true)
-//             ->firstOrFail();
-
-//         $wallet = Wallet::where('candidate_id', $candidate->id)->first();
-
-//         if (!$wallet || $wallet->balance < $points) {
-//             throw new Exception('Insufficient wallet balance');
-//         }
-
-//         DB::transaction(function () use ($wallet, $candidate, $rule, $points, $reference) {
-
-//             $wallet->decrement('balance', $points);
-
-//             WalletTransaction::create([
-//                 'candidate_id' => $candidate->id,
-//                 'coin_rule_id' => $rule->id,
-//                 'type' => 'debit',
-//                 'points' => $points,
-//                 'reference' => $reference,
-//             ]);
-//         });
-//     }
-// }
-// walletCredit($candidate, 'daily_login', 5);
-
-// walletDebit($candidate, 'premium_roadmap', 200, $roadmapId);
