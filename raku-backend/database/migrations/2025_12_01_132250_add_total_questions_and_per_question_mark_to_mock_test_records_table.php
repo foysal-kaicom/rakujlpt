@@ -9,8 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('mock_test_records', function (Blueprint $table) {
-            $table->integer('total_questions')->after('wrong_listening_answer')->nullable();
-            $table->double('per_question_mark', 8, 2)->after('total_questions')->nullable();
+            $table->integer('total_questions')->nullable();
+            $table->double('per_question_mark', 8, 2)->nullable();
         });
     }
 

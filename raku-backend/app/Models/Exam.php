@@ -13,20 +13,7 @@ class Exam extends Model
 
     protected $table = 'exams';
 
-    protected $fillable = [
-        'name',
-        'title',
-        'type',
-        'slug',
-        'description',
-        'duration',
-        'pass_point',
-        'total_point',
-        'image',
-        'answer_value',
-        'start_time',
-        'created_by',
-    ];
+    protected $guarded = [];
 
     protected $hidden = [];
 
@@ -39,6 +26,11 @@ class Exam extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
+    public function agent()
+    {
+        return $this->belongsTo(Agent::class, 'agent_id', 'id');
     }
     
     public function getExamDateAttribute($value)

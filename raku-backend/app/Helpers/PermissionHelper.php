@@ -87,4 +87,24 @@ function sanitizeName(string $name): string
     return $name;
 }
 
+function sanitizeEmail(?string $email): ?string
+{
+    if (empty($email)) {
+        return null;
+    }
+
+    $email = strtolower(trim($email));
+    $email = preg_replace('/\s+/', '', $email);
+    $email = str_replace([',', ';'], '.', $email);
+    $email = rtrim($email, ".,;");
+    $email = preg_replace('/\.{2,}/', '.', $email);
+
+    if (substr_count($email, '@') > 1) {
+        $parts = explode('@', $email);
+        $email = array_shift($parts) . '@' . implode('', $parts);
+    }
+
+    return filter_var($email, FILTER_SANITIZE_EMAIL);
+}
+
 

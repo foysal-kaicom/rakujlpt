@@ -1,23 +1,22 @@
 "use client";
 
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+import { useTranslation } from "react-i18next";
+
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import BreadCrumb from "@/components/BreadCrumb";
+import PaginatedComponent from "@/components/PaginateComponent";
 
 import { FaPlus, FaMinus } from "react-icons/fa";
 
-import { useEffect, useState } from "react";
-import PaginatedComponent from "@/components/PaginateComponent";
-import Link from "next/link";
-import axios from "axios";
-import { useTranslation } from "react-i18next";
+import { FAQ } from "@/types/index.types";
+import { FAQService } from "@/services/website/common.service";
 
-interface FAQ {
-  id: null | number;
-  question: string;
-  answer: string;
-}
 
-export default function FAQ() {
+
+export default function Faq() {
   const { t } = useTranslation();
 
   const breadCrumbData = [
@@ -49,20 +48,17 @@ export default function FAQ() {
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
-
-  const getFaqList = async () => {
+ const fetchFaqs = async () => {
     try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/faq/list`
-      );
-      setFaqs(res?.data?.data || []);
-    } catch (error) {
+      const data = await FAQService.getFaqList();
+      setFaqs(data);
+    } catch {
       setFaqs([]);
     }
   };
 
   useEffect(() => {
-    getFaqList();
+    fetchFaqs();
   }, []);
 
   return (
