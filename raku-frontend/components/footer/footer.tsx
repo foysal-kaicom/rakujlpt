@@ -12,7 +12,7 @@ import { useBusinessSettingsStore } from "@/stores/useBusinessStore";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 
-import { newsletterService } from "@/services/website/common.service";
+import { newsletterService } from "@/services/common.service";
 
 export default function Footer() {
   const { t } = useTranslation("common");

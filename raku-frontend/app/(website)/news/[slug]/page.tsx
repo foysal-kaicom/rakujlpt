@@ -13,7 +13,7 @@ import SuspenseLoader from "@/components/SuspenseLoader";
 import { IoPersonCircleOutline } from "react-icons/io5";
 
 import { NewsItem } from "@/types/index.types";
-import { newsService } from "@/services/website/blogs/blog.service";
+import { newsService } from "@/services/blogs/blog.service";
 
 export default function NewsDetailsPage() {
   const params = useParams();

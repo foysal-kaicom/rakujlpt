@@ -1,23 +1,22 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
+import Link from "next/link";
+
+import { toast } from "sonner";
+import axiosInstance from "@/utils/axios";
+import { useTranslation } from "react-i18next";
 
 import BreadCrumb from "@/components/BreadCrumb";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
 import Loader from "@/components/Loader";
-import { toast } from "sonner";
-import axiosInstance from "@/utils/axios";
 import SuspenseLoader from "@/components/SuspenseLoader";
 import PaginatedComponent from "@/components/PaginateComponent";
-
-import Link from "next/link";
-import { useTranslation } from "react-i18next";
 
 interface Exam {
   title: string;
   pass_point: number;
 }
-
 interface ExamResult {
   id: number;
   reading_answered: number;

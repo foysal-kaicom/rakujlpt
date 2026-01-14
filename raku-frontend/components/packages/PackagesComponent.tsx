@@ -10,7 +10,7 @@ import PricingCard from "../PricingCard";
 import PackagesSkeleton from "@/app/(website)/packages/PackageSkeleton";
 import PaginatedComponent from "@/components/PaginateComponent";
 
-import { subscriptionService } from "@/services/website/subscription/subscription.service";
+import { subscriptionService } from "@/services/subscription/subscription.service";
 import { Plan } from "@/types/subscription/package.type";
 
 const breadCrumbData = [

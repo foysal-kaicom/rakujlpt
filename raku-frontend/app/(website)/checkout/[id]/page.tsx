@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import BreadCrumb from "@/components/BreadCrumb";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 
-import { subscriptionService } from "@/services/website/subscription/subscription.service";
+import { subscriptionService } from "@/services/subscription/subscription.service";
 import { Coupon , Plan } from "@/types/subscription/package.type";
 
 export default function CheckoutPage() {

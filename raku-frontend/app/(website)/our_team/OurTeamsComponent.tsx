@@ -13,7 +13,7 @@ import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import BreadCrumb from "@/components/BreadCrumb";
 
 import { TeamMember } from "@/types/index.types";
-import { ourTeamService } from "@/services/website/common.service";
+import { ourTeamService } from "@/services/common.service";
 
 
 export default function OurTeamsComponent() {

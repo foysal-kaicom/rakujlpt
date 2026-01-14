@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/(website)/registration_terms/[slug]/page.tsx", "types", "components/header/authComponent.js", "utils/authSession.js", "services/website/blogs" ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/(website)/registration_terms/[slug]/page.tsx", "types", "components/header/authComponent.js", "utils/authSession.js", "services/blogs" ],
   "exclude": ["node_modules"]
 }

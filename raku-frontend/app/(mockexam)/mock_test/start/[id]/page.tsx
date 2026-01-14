@@ -100,7 +100,7 @@ export default function ExamPage() {
     timeRemaining,
     setTimeRemaining,
     decrementTime,
-    resetTime,
+    // resetTime,
     examStarted,
     stopExam,
   } = useExamStore();
