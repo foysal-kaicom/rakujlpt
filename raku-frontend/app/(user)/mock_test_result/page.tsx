@@ -45,6 +45,57 @@ export default function MockExamResult() {
     },
   ];
 
+
+  const examResults = [
+  {
+    id: 1,
+    date: "2025-01-12",
+    examName: "Frontend Development Assessment",
+    achievedPoint: 78,
+    passingPoint: 60,
+    certificateUrl: "/certificates/frontend-dev.pdf",
+  },
+  {
+    id: 2,
+    date: "2025-02-03",
+    examName: "React & Next.js Advanced Test",
+    achievedPoint: 54,
+    passingPoint: 65,
+  },
+  {
+    id: 3,
+    date: "2025-02-28",
+    examName: "JavaScript Core Concepts",
+    achievedPoint: 92,
+    passingPoint: 70,
+    certificateUrl: "/certificates/js-core.pdf",
+  },
+  {
+    id: 4,
+    date: "2025-03-10",
+    examName: "Web Performance Optimization",
+    achievedPoint: 61,
+    passingPoint: 60,
+    certificateUrl: "/certificates/performance.pdf",
+  },
+  {
+    id: 5,
+    date: "2025-03-25",
+    examName: "TypeScript & Architecture",
+    achievedPoint: 48,
+    passingPoint: 65,
+  },
+];
+
+const getStatus = (achieved: number, passing: number) =>
+  achieved >= passing ? "passed" : "failed";
+
+
+
+
+
+
+
   const [resultData, setResultData] = useState<ExamResult[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -373,6 +424,93 @@ export default function MockExamResult() {
                 </div>
               )}
             </div>
+
+
+            <div className="overflow-x-auto rounded-2xl bg-white/70 backdrop-blur shadow-lg border">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-100 text-gray-600 uppercase text-xs">
+            <tr>
+              <th className="px-6 py-4 text-left">Date</th>
+              <th className="px-6 py-4 text-left">Exam</th>
+              <th className="px-6 py-4 text-center">Score</th>
+              <th className="px-6 py-4 text-center">Passing</th>
+              <th className="px-6 py-4 text-center">Status</th>
+              <th className="px-6 py-4 text-center">Certificate</th>
+              <th className="px-6 py-4 text-center">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {examResults.map((item) => {
+              const status = getStatus(
+                item.achievedPoint,
+                item.passingPoint
+              );
+
+              return (
+                <tr
+                  key={item.id}
+                  className="border-t hover:bg-gray-50 transition"
+                >
+                  <td className="px-6 py-4">{item.date}</td>
+                  <td className="px-6 py-4 font-medium">
+                    {item.examName}
+                  </td>
+                  <td className="px-6 py-4 text-center font-semibold">
+                    {item.achievedPoint}
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    {item.passingPoint}
+                  </td>
+
+                  <td className="px-6 py-4 text-center">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold
+                      ${
+                        status === "passed"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {status.toUpperCase()}
+                    </span>
+                  </td>
+
+                  <td className="px-6 py-4 text-center">
+                    {status === "passed" ? (
+                      <a
+                        // href={item.module_scores}
+                        className="text-blue-600 hover:underline font-medium"
+                        download
+                      >
+                        Download
+                      </a>
+                    ) : (
+                      <span className="text-gray-400">—</span>
+                    )}
+                  </td>
+
+                  <td className="px-6 py-4 text-center">
+                    <button
+                      // onClick={() => setSelected(item)}
+                      className="px-4 py-1.5 rounded-lg bg-black text-white text-xs hover:bg-gray-800 transition"
+                    >
+                      Details
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* {selected && (
+        <ExamDetailsModal
+          data={selected}
+          onClose={() => setSelected(null)}
+        />
+      )} */}
           </div>
         </div>
       </Suspense>
