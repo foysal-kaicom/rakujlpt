@@ -121,55 +121,82 @@ class MockTestController extends Controller
     {
         try {
             $data = $request->all();
-          
+
             $request->validate([
                 'exam_id' => 'required|integer|exists:exams,id',
             ]);
 
             $examId = $data['exam_id'];
             $candidateId = Auth::guard('candidate')->id();
-            $exam = Exam::with('mockTestModules')->findOrFail($examId);
-            $modulesScore=[];
 
-            foreach($exam->mockTestModules as $moduleName)
-            {
-                $modulesScore[$moduleName->name] = ['answered' => 0, 'correct' => 0, 'wrong' => 0];
-                   
+            $exam = Exam::with('mockTestModules')->findOrFail($examId);
+
+            // INIT MODULE SCORES
+            $modulesScore = [];
+            foreach ($exam->mockTestModules as $module) {
+                $modulesScore[$module->name] = [
+                    'answered' => 0,
+                    'correct'  => 0,
+                    'wrong'    => 0,
+                ];
             }
 
-           
+            // GLOBAL TOTALS
+            $totalAnswered = 0;
+            $totalCorrect  = 0;
+            $totalWrong    = 0;
+
+            // EXTRACT QUESTION IDS
+            $questionIds = collect($data)
+                ->filter(fn($v, $k) => $k !== 'exam_id' && isset($v['id']))
+                ->pluck('id')
+                ->unique()
+                ->values();
+
+            // FETCH QUESTIONS ONCE
+            $questions = MockTestQuestion::with([
+                'section.mockTestModule',
+                'mockTestQuestionOption'
+            ])->whereIn('id', $questionIds)->get()->keyBy('id');
+
             $userAnswers = [];
+
             foreach ($data as $key => $questionPayload) {
                 if ($key === 'exam_id') continue;
-                if (!isset($questionPayload['id']) || !isset($questionPayload['answer'])) continue;
+                if (!isset($questionPayload['id'], $questionPayload['answer'])) continue;
 
-                $question = MockTestQuestion::with(['section.mockTestModule', 'mockTestQuestionOption'])
-                    ->find($questionPayload['id']);
-
+                $question = $questions->get($questionPayload['id']);
                 if (!$question) continue;
-// dd($question->toArray());
-                $moduleName = $question->section->mockTestModule->name ?? null;
-                if (!isset($modulesScore[$moduleName])) continue;
+
+                $moduleName = $question->section->mockTestModule->name ?? 'Unknown';
+
+                if (!isset($modulesScore[$moduleName])) {
+                    // HARD FAIL > silent corruption
+                    throw new \Exception("Invalid module detected: {$moduleName}");
+                }
 
                 $modulesScore[$moduleName]['answered']++;
+                $totalAnswered++;
 
                 $correctAnswer = $question->mockTestQuestionOption->correct_answer_index;
-                $isCorrect = false;
-                if ($questionPayload['answer'] == $correctAnswer) {
+                $isCorrect = ($questionPayload['answer'] == $correctAnswer);
+
+                if ($isCorrect) {
                     $modulesScore[$moduleName]['correct']++;
-                    $isCorrect = true;
+                    $totalCorrect++;
                 } else {
                     $modulesScore[$moduleName]['wrong']++;
+                    $totalWrong++;
                 }
 
                 $userAnswers[] = [
-                    'question_id'   => $question->id,
-                    'question'      => $question->title ?? null,
-                    'selected'      => $questionPayload['answer'],
-                    'correct'       => $correctAnswer,
-                    'is_correct'    => $isCorrect,
-                    'options'       => $question->mockTestQuestionOption->values ?? null,
-                    'module'        => $moduleName,
+                    'question_id' => $question->id,
+                    'question'    => $question->title,
+                    'selected'    => $questionPayload['answer'],
+                    'correct'     => $correctAnswer,
+                    'is_correct'  => $isCorrect,
+                    'options'     => $question->mockTestQuestionOption->values,
+                    'module'      => $moduleName,
                 ];
             }
 
@@ -195,6 +222,10 @@ class MockTestController extends Controller
             ]);
 
             $mockTestRecord->per_question_mark = $per_question_mark;
+            $mockTestRecord->answered = $totalAnswered;
+            $mockTestRecord->correct = $totalCorrect;
+            $mockTestRecord->wrong = $totalWrong;
+
 
             $subscriptionId = UserSubscription::where('candidate_id', $candidateId)
                 ->where('status', 'confirmed')
@@ -221,15 +252,28 @@ class MockTestController extends Controller
     public function getTestResult()
     {
         try {
-            $id = Auth::guard('candidate')->id();
-            $testResults = MockTestRecords::with('exam:id,name,title,pass_point,total_point')->where('candidate_id', $id)->orderBy('id', 'desc')->get();
-            if (!$testResults || $testResults->isEmpty()) {
-                return $this->responseWithSuccess([], "No mock test records found.");
+            $candidateId = Auth::guard('candidate')->id();
+
+            $testResults = MockTestRecords::with(
+                'exam:id,name,title,pass_point,total_point'
+            )
+                ->where('candidate_id', $candidateId)
+                ->orderByDesc('id')
+                ->get();
+
+            if ($testResults->isEmpty()) {
+                return $this->responseWithSuccess([], 'No mock test records found.');
             }
 
-            return $this->responseWithSuccess($testResults, "Mock test results fetched.");
-        } catch (Throwable $ex) {
-            return $this->responseWithError("Something went wrong", $ex->getMessage());
+            return $this->responseWithSuccess(
+                MockTestResultResource::collection($testResults),
+                'Mock test results fetched.'
+            );
+        } catch (\Throwable $ex) {
+            return $this->responseWithError(
+                'Something went wrong',
+                $ex->getMessage()
+            );
         }
     }
 
