@@ -83,7 +83,7 @@ export default function MockExamResult() {
     setLoading(true);
     try {
       const response = await axiosInstance.get("/mock-test/results");
-      const data: ExamResult[] = response?.data?.data || [];
+      const data: MockTestResult[] = response?.data?.data || [];
       setResultData(data);
     } catch (error: any) {
       console.error(error);
