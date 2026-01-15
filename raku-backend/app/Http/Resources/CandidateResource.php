@@ -33,6 +33,7 @@ class CandidateResource extends JsonResource
             'current_package_name'  => $this->current_package_name,
             'is_subscribed'         => $this->is_subscribed,
             'is_free'               => $this->is_free,
+            'candidate_code'        => $this->candidate_code,
             'skills'                => [
                                     'vocabulary' => 0,
                                     'grammar' => 0,
