@@ -57,7 +57,7 @@ class CoinRuleSeeder extends Seeder
                 'action' => 'unlock_roadmap',
                 'title' => 'Unlock Roadmap',
                 'type' => 'spend',
-                'points_min' => 0,
+                'points_min' => 20,
                 'frequency' => 'per_action',
             ],
             [
@@ -67,6 +67,15 @@ class CoinRuleSeeder extends Seeder
                 'points_min' => 70,
                 'frequency' => 'per_action',
             ],
+            //referral_bonus
+            [
+                'action' => 'referral_bonus',
+                'title' => 'Referral Bonus',
+                'type' => 'earn',
+                'points_min' => 50,
+                'frequency' => 'per_action',
+            ],
+
         ];
 
         foreach ($rules as $rule) {
