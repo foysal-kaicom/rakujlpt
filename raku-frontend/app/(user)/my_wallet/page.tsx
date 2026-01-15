@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { ConfirmUnlockModal } from "@/app/(website)/practice/ConfirmUnlockModal";
 import Loader from "@/components/Loader";
+import ReferralTransferModal from "./ReferralTransferModal";
 
 interface Roadmap {
   id: number;
@@ -65,6 +66,7 @@ export default function WalletSystem() {
 
   const [loading, setLoading] = useState(true);
   const [practiceTestsData, setPracticeTestsData] = useState<Roadmap[]>([]);
+  const [isRefTransferOpen, setIsRefTransferOpen] = useState(false);
   const fetchRoadmaps = async () => {
     setLoading(true);
     try {
@@ -127,9 +129,27 @@ export default function WalletSystem() {
       );
     }
   };
+
+  const handleTransferCoins = async (receiverCode: string, amount: number) => {
+    try {
+      const response = await axiosInstance.post(`/candidate/wallet-coin-transfer`, {
+        receiver_code: receiverCode,
+        amount: amount,
+      });
+      if (response?.data?.success) {
+        toast.success(t("wallet.referral.transfer_success"));
+        // Refresh wallet data
+        fetchWalletData();
+      } else {
+        toast.error(t("errors.transfer_coins"));
+      }
+    } catch (error: any) {
+      toast.error(t("errors.transfer_coins"));
+    }
+  };
   return (
     <>
-    {loading && <Loader />}
+      {loading && <Loader />}
       <div className="">
         <div className="space-y-5">
           <BreadCrumb breadCrumbData={breadCrumbData} />
@@ -187,6 +207,9 @@ export default function WalletSystem() {
                   </p>
                 </div>
               )}
+               <button onClick={() => setIsRefTransferOpen(true)} className="bg-amber-400">
+                Refer or Transfer Coins
+              </button>
             </div>
 
             <div className="relative w-full col-span-3 lg:col-span-1">
@@ -416,6 +439,13 @@ export default function WalletSystem() {
         onClose={() => setShowUnlockModal(false)}
         onConfirm={() => handleUnlock(selectedRoadmap?.id ?? 0)}
         selectedRoadmap={selectedRoadmap ?? null}
+      />
+      <ReferralTransferModal
+        isOpen={isRefTransferOpen}
+        onClose={() => setIsRefTransferOpen(false)}
+        userReferralCode="ABC123XYZ"
+        currentCoins={points}
+        onTransferCoins={handleTransferCoins}
       />
     </>
   );
