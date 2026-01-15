@@ -11,6 +11,7 @@ import axiosInstance from "@/utils/axios";
 import { toast } from "sonner";
 import Link from "next/link";
 import { ConfirmUnlockModal } from "@/app/(website)/practice/ConfirmUnlockModal";
+import Loader from "@/components/Loader";
 
 interface Roadmap {
   id: number;
@@ -62,9 +63,10 @@ export default function WalletSystem() {
       ? t("wallet.milestones.keep_pushing")
       : t("wallet.milestones.great_job");
 
-  const [loader, setLoader] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [practiceTestsData, setPracticeTestsData] = useState<Roadmap[]>([]);
   const fetchRoadmaps = async () => {
+    setLoading(true);
     try {
       const response = await axiosInstance.get(`/roadmaps`);
       if (response?.data?.success) {
@@ -73,7 +75,7 @@ export default function WalletSystem() {
     } catch (error: any) {
       toast.error(t("errors.fetch_roadmaps"));
     } finally {
-      setLoader(false);
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -90,7 +92,7 @@ export default function WalletSystem() {
     } catch (error: any) {
       toast.error(t("errors.fetch_wallet"));
     } finally {
-      setLoader(false);
+      setLoading(false);
     }
   };
 
@@ -127,6 +129,7 @@ export default function WalletSystem() {
   };
   return (
     <>
+    {loading && <Loader />}
       <div className="">
         <div className="space-y-5">
           <BreadCrumb breadCrumbData={breadCrumbData} />
