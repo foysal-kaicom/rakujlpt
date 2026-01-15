@@ -143,8 +143,44 @@
                 </div>
             </div>
 
+              <!-- Payment Section -->
+        <div class="menu-section" data-toggle="candidate">
+            <div class="cursor-pointer">
+                <div
+                    class="group flex items-center justify-between px-3 py-2.5 rounded-xl transition-all duration-200 {{ $candidateActive ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-700 hover:text-emerald-600 hover:bg-emerald-50' }}">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="flex items-center justify-center w-9 h-9 rounded-lg {{ $candidateActive ? 'bg-white/20' : 'bg-gradient-to-br from-emerald-500 to-emerald-600' }} text-white shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                            <i class="fa-solid fa-dollar-sign"></i>
+                        </div>
+                        <span class="font-semibold text-sm">Payment</span>
+                    </div>
+                    <i
+                        class="fas fa-chevron-down drop-arrow text-xs {{ $candidateActive ? 'text-white/80' : 'text-slate-400' }} transition-transform duration-300 {{ $candidateActive ? 'rotated' : '-rotate-90' }}"></i>
+                </div>
+            </div>
+            <div class="submenu mt-1 ml-12 space-y-1 {{ $candidateActive ? '' : 'hidden' }}"
+                data-target="candidate">
+        
+                <a href="{{ route('agent.payment.index') }}"
+                    class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('agent.candidate.import-page') ? 'bg-emerald-100 text-emerald-700 font-semibold' : 'text-slate-600 hover:text-emerald-600 hover:bg-emerald-50' }}">
+                    <i class="fa-solid fa-file-import text-emerald-400 text-xs"></i>
+                    <span>Bills</span>
+                </a>
+                
+                <a href=""
+                    class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('agent.candidate.list') ? 'bg-emerald-100 text-emerald-700 font-semibold' : 'text-slate-600 hover:text-emerald-600 hover:bg-emerald-50' }}">
+                    <i class="fa-solid fa-list text-emerald-400 text-xs"></i>
+                    <span>List</span>
+                </a>
+                
+            </div>
+        </div>
+
+
         </div>
     </div>
+
 
     <!-- Logout Section - Fixed at bottom -->
     <div class="sticky w-full bottom-0 bg-white/95 backdrop-blur-sm border-t border-slate-200 px-2 py-1">
