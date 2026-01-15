@@ -209,22 +209,17 @@ class MockTestController extends Controller
                 'candidate_id'              => $candidateId,
                 'exam_id'                   => $examId,
                 'question_set'              => 1,
-                // 'reading_answered'          => $modulesScore['Reading']['answered'],
-                // 'correct_reading_answer'    => $modulesScore['Reading']['correct'],
-                // 'wrong_reading_answer'      => $modulesScore['Reading']['wrong'],
-                // 'listening_answered'        => $modulesScore['Listening']['answered'],
-                // 'correct_listening_answer'  => $modulesScore['Listening']['correct'],
-                // 'wrong_listening_answer'    => $modulesScore['Listening']['wrong'],
                 'total_questions'           => $data['total_questions'],
                 'per_question_mark'         => $per_question_mark,
                 'answers'                   => json_encode($userAnswers),
                 'module_wise_score'         => json_encode($modulesScore),
+                'total_answered'            => $totalAnswered,
+                'total_correct'             => $totalCorrect,
+                'total_wrong'               => $totalWrong
             ]);
 
             $mockTestRecord->per_question_mark = $per_question_mark;
-            $mockTestRecord->answered = $totalAnswered;
-            $mockTestRecord->correct = $totalCorrect;
-            $mockTestRecord->wrong = $totalWrong;
+            $mockTestRecord->exam=$exam;
 
 
             $subscriptionId = UserSubscription::where('candidate_id', $candidateId)
