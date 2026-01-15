@@ -26,11 +26,11 @@ const SidebarData = [
     to: "/my_subscriptions",
     icon: <MdSubscriptions />,
   },
-  // {
-  //   label: "sidebar.my_wallet",
-  //   to: "/my_wallet",
-  //   icon: <FaWallet />,
-  // },
+  {
+    label: "sidebar.my_wallet",
+    to: "/my_wallet",
+    icon: <FaWallet />,
+  },
   // {
   //   label: "sidebar.my_agent",
   //   to: "/my_agent",
