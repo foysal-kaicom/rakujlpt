@@ -211,12 +211,14 @@ export default function MockExamResult() {
                               </td>
                               <td className="p-3 border-t border-r border-gray-200 capitalize text-xs font-medium">
                                 {status == "passed" ? (
-                                  <button
-                                    onClick={() => handleDownload(c.id)}
-                                    className="py-1.5 px-4 border-b border-b-purple-300 rounded-2xl bg-purple-700 text-white hover:opacity-80 duration-300 drop-shadow-sm drop-shadow-purple-500 w-22 mx-auto cursor-pointer"
-                                  >
-                                    {t("mock_exam_result.table.generate_btn")}
-                                  </button>
+                                  <div className="flex justify-center">
+                                    <button
+                                      onClick={() => handleDownload(c.id)}
+                                      className="py-1.5 px-4 border-b border-b-purple-300 rounded-2xl bg-purple-700 text-white hover:opacity-80 duration-300 drop-shadow-sm drop-shadow-purple-500 w-22 mx-auto cursor-pointer"
+                                    >
+                                      {t("mock_exam_result.table.generate_btn")}
+                                    </button>
+                                  </div>
                                 ) : (
                                   <p className="text-gray-700 text-center">
                                     --
