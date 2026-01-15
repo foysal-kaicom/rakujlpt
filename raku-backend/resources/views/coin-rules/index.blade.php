@@ -59,7 +59,7 @@
                         <td>{{ $rule->title }}</td>
                         <td>[{{ $rule->action }}]</td>
                         <td>{{ ucfirst($rule->type) }}</td>
-                        <td>{{ $rule->points_min }}</td>
+                        <td>{{ (int)$rule->points_min }}</td>
                         <td>
                             <span class="badge {{ $rule->status ? 'bg-success' : 'bg-danger' }}">
                                 {{ $rule->status ? 'Active' : 'Inactive' }}

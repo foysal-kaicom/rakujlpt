@@ -44,7 +44,7 @@
             <div class="col-md-6">
                 <label class="form-label">Points</label>
                 <input type="number" step="0.01" name="points_min"
-                       value="{{ old('points_min', $coinRule->points_min) }}"
+                       value="{{ old('points_min', (int)$coinRule->points_min) }}"
                        class="form-control">
                 @error('points_min')
                     <div class="text-danger">{{ $message }}</div>
