@@ -650,13 +650,11 @@ class MockTestController extends Controller
             'Candidate',
             'Exam',
             'Question Set',
-            'Reading Answered',
-            'Correct Reading',
-            'Wrong Reading',
-            'Listening Answered',
-            'Correct Listening',
-            'Wrong Listening',
-            'Created At'
+            'Total Answered',
+            'Total Corrected',
+            'Total Wrong',
+            'Score',
+            'Exam Date',
         ];
     
         $callback = function() use ($records, $columns) {
@@ -670,12 +668,10 @@ class MockTestController extends Controller
                     $r->candidate->full_name ?? '-',
                     $r->exam->title ?? '-',
                     $r->question_set,
-                    $r->reading_answered,
-                    $r->correct_reading_answer,
-                    $r->wrong_reading_answer,
-                    $r->listening_answered,
-                    $r->correct_listening_answer,
-                    $r->wrong_listening_answer,
+                    $r->total_answered,
+                    $r->total_correct,
+                    $r->total_wrong,
+                    (int) ($r->total_correct * $r->per_question_mark),
                     $r->created_at->format('Y-m-d H:i'),
                 ]);
             }

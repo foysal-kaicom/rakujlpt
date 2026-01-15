@@ -20,6 +20,16 @@ export default function ConfettiComponent({
     window.addEventListener("resize", updateSize);
     return () => window.removeEventListener("resize", updateSize);
   }, []);
+
+  useEffect(() => {
+    if(show) {
+      const timer = setTimeout(() => {
+        setShow(false);
+      }, 6000);
+      return () => clearTimeout(timer);
+    }
+  }, [show]);
+
   return (
     <>
       {show && (
@@ -29,7 +39,7 @@ export default function ConfettiComponent({
           particleShape="mix"
           particleCount={400} // more particles
           force={0.6} // stronger upward force
-          duration={8000} // show for 8s
+          duration={6000} // show for 6s
           particleSize={14} // slightly larger
           colors={["#ff0000", "#00ff00", "#0000ff", "#ffdd00", "#ff00dd"]}
           destroyAfterDone={true} // cleanup

@@ -48,13 +48,13 @@ class CandidateController extends Controller
             $data['first_name'] = sanitizeName($data['first_name']);
             $data['last_name']  = sanitizeName($data['last_name']);
 
-            if (!empty($data['referral_code'])) {
-                $referrer = Candidate::where('candidate_code', $data['referral_code'])->first();
+            $referralCode = $request->referral_code ?? null;
+            $referrer = null;
 
+            if ($referralCode) {
+                $referrer = Candidate::where('candidate_code', $referralCode)->first();
                 if ($referrer) {
                     $data['referral_id'] = $referrer->id;
-                } else {
-                    return $this->responseWithError(null, "The referral code is invalid. Please try the correct one to continue.");
                 }
             }
 
@@ -72,11 +72,12 @@ class CandidateController extends Controller
 
             dispatch(new SendRegistrationEmailJob($candidate));
 
-            // add coin here using WalletHelper
-            // WalletHelper::addCoinOnRegistration($candidate->id);
             // walletCredit($candidate, 'new_registration', 50);
             walletCredit($candidate, 'new_registration');
 
+            if ($referrer) {
+                walletCredit($referrer,'referral_bonus',$candidate->id);
+            }
 
             return $this->responseWithSuccess($candidate, "Candidate registered successfully", 201);
 
@@ -111,6 +112,14 @@ class CandidateController extends Controller
         if ($candidate && $candidate->status == 'active' && Hash::check($request->password, $candidate->password)) {
             try {
                 $token = JWTAuth::fromUser($candidate);
+
+                $today = now()->toDateString();
+                if (!$candidate->last_login || Carbon::parse($candidate->last_login)->toDateString() !== $today) {
+                    walletCredit($candidate, 'daily_login');
+                }
+                $candidate->update([
+                    'last_login' => now(),
+                ]);
 
                 return response()->json([
                     'data' => $candidate,

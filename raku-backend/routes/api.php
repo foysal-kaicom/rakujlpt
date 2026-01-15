@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Agent\CandidateAgentController;
 use App\Models\Package;
 use App\Models\Roadmap;
 use Illuminate\Support\Facades\Route;
@@ -98,6 +99,9 @@ Route::prefix('v1')->group(function () {
 
             // Roadmap Unlock
             Route::post('/unlock-roadmaps', [RoadmapUnlockController::class, 'unlock']);
+
+            //Transfer Coin
+            Route::post('/wallet-coin-transfer', [WalletController::class, 'transferCoin']);
     
         });
 
@@ -127,6 +131,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/candidate/current-roadmap', [RoadmapController::class, 'get_current_roadmap']);
         Route::get('/certificate-download', [CertificateController::class, 'download']);
 
+        Route::get('/agent', [CandidateAgentController::class, 'getCandidateAgentData']);
     });
 
     Route::group(['prefix' => 'coupon', 'as' => 'coupon.'], function () {

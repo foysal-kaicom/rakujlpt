@@ -15,19 +15,23 @@ class MockTestResultResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-           'id'                        => $this->id,
-            'candidate_id'             => $this->candidate_id,
-            'question_set'             => $this->question_set,
-            // 'reading_answered'         => $this->reading_answered,
-            // 'correct_reading_answer'   => $this->correct_reading_answer,
-            // 'wrong_reading_answer'     => $this->wrong_reading_answer,
-            // 'listening_answered'       => $this->listening_answered,
-            // 'correct_listening_answer' => $this->correct_listening_answer,
-            // 'wrong_listening_answer'   => $this->wrong_listening_answer,
-            'per_question_mark'        => $this->per_question_mark,
-            'module_wise_score'        => json_decode($this->module_wise_score),
-            'created_at'               => date('Y-m-d h:i:s',strtotime($this->created_at)),
-            'updated_at'               => date('Y-m-d h:i:s',strtotime($this->updated_at)),
+            'id'                        => $this->id,
+            'candidate_id'              => $this->candidate_id,
+            'question_set'              => $this->question_set,
+            'per_question_mark'         => $this->per_question_mark,
+            'total_answered'            => $this->total_answered,
+            'total_correct'             => $this->total_correct,
+            'total_wrong'               => $this->total_wrong,
+            'module_wise_score'         => json_decode($this->module_wise_score),
+            'created_at'                => date('Y-m-d', strtotime($this->created_at)),
+            'updated_at'               => date('Y-m-d h:i:s', strtotime($this->updated_at)),
+            'exam' => [
+                'id' => $this->exam->id ?? null,
+                'name' => $this->exam->name ?? null,
+                'title' => $this->exam->title ?? null,
+                'pass_point' => $this->exam->pass_point ?? null,
+                'total_point' => $this->exam->total_point ?? null,
+            ],
 
         ];
     }

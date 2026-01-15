@@ -160,8 +160,6 @@ export default function Header() {
     }
     return isAuthenticated && token && user ? (
       <>
-        <LanguageSwitcher />
-        <Notification />
         <div className="flex gap-2 items-center relative group cursor-pointer">
           {user?.photo ? (
             <Image
@@ -214,7 +212,6 @@ export default function Header() {
       </>
     ) : (
       <>
-        <LanguageSwitcher />
         <Link
           href="/registration"
           className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-4 text-indigo-700 bg-white rounded-full border-4 border-indigo-300 hover:border-orange-400 duration-300 shadow-2xl transform hover:scale-110 hover:-rotate-2 font-bold group relative overflow-hidden max-w-44"
@@ -449,9 +446,13 @@ export default function Header() {
           <MainHeader />
 
           <div className="hidden items-center gap-5 xl:flex justify-end">
+            <LanguageSwitcher />
+            {hydrated && isAuthenticated && token && user && (
+              <Notification token={token} />
+            )}
             <NavCta />
           </div>
-          {isAuthenticated && token && user ? (
+          {hydrated && isAuthenticated && token && user ? (
             <div className="block xl:hidden">
               <Notification token={token} />
             </div>

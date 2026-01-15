@@ -4,22 +4,28 @@ import { useState } from "react";
 import { FaPaperPlane } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import { RiBarChartBoxAiFill } from "react-icons/ri";
+import { FaArrowRight } from "react-icons/fa";
+
 
 import CircularProgress from "@/components/CircularProgress";
+import MocktestAnsEvaluation from "./MocktestAnsEvaluation";
 
 import axiosInstance from "@/utils/axios";
 import { toast } from "sonner";
-import MocktestAnsEvaluation from "./MocktestAnsEvaluation";
 
 interface ExamResult {
-  readingAnswered: number;
-  correctReadingAnswer: number;
-  wrongReadingAnswer: number;
-  listeningAnswered: number;
-  correctListeningAnswer: number;
-  wrongListeningAnswer: number;
+  question_set: number;
   per_question_mark: number;
+  total_correct: number;
+  module_wise_score: ModuleWiseScore;
 }
+interface ModuleStats {
+  answered: number;
+  correct: number;
+  wrong: number;
+}
+
+type ModuleWiseScore = Record<string, ModuleStats>;
 
 interface ModuleQuestionCounts {
   [key: string]: number;
@@ -43,6 +49,22 @@ export default function MocktestResultModal({
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showAnsEval, setShowAnsEval] = useState(false);
+
+  const getColors = (stats: ModuleStats) => {
+    if (stats.correct === stats.wrong) {
+      return {
+        circleColor: "text-violet-500",
+      };
+    } else if (stats.correct > stats.wrong) {
+      return {
+        circleColor: "text-green-500",
+      };
+    } else {
+      return {
+        circleColor: "text-red-500",
+      };
+    }
+  };
 
   const handleReviewSubmit = async (e: any) => {
     e.preventDefault();
@@ -76,7 +98,7 @@ export default function MocktestResultModal({
   return (
     <>
       <div className="min-h-screen bg-linear-to-br from-purple-50 to-indigo-100 flex items-center justify-center p-4">
-        <div className="bg-white rounded-xl shadow-2xl p-8 text-center max-w-2xl w-full relative">
+        <div className="bg-white rounded-xl shadow-2xl p-8 text-center max-w-2xl w-full relative max-h-[90vh] overflow-y-auto">
           <div className="size-10 sm:size-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
             <FaPaperPlane className="sm:size-8 text-white" />
           </div>
@@ -89,67 +111,54 @@ export default function MocktestResultModal({
           <p className="text-base sm:text-xl font-semibold text-green-500 mb-6">
             Total Score:{" "}
             {Math.round(
-              ((result?.correctListeningAnswer ?? 0) +
-                (result?.correctReadingAnswer ?? 0)) *
-                (result?.per_question_mark ?? 0)
+              (result?.per_question_mark ?? 0) * (result?.total_correct ?? 0)
             )}
           </p>
 
           <div className="grid sm:grid-cols-2 gap-5 mb-6">
-            {/* Listening Section */}
-            <div className="bg-purple-50 rounded-lg p-6 flex flex-col items-center border border-purple-200">
-              <h3 className="sm:text-lg font-semibold text-gray-800 mb-4">
-                Listening Section
-              </h3>
-              <CircularProgress
-                value={result?.correctListeningAnswer ?? 0}
-                total={moduleQuestionCounts?.Listening ?? 0}
-                color="text-purple-500"
-              />
-              <div className="mt-4 text-sm text-gray-600 space-y-1">
-                <p>
-                  Answered: {result?.listeningAnswered ?? 0} /{" "}
-                  {moduleQuestionCounts?.Listening ?? 0}
-                </p>
-                <p className="text-green-600 font-medium">
-                  Correct: {result?.correctListeningAnswer ?? 0}
-                </p>
-                <p className="text-red-600 font-medium">
-                  Wrong: {result?.wrongListeningAnswer ?? 0}
-                </p>
-              </div>
-            </div>
+            {Object.entries(
+              (result?.module_wise_score as ModuleWiseScore) ?? {}
+            ).map(([moduleName, stats]) => {
+              const total =
+                moduleQuestionCounts?.[moduleName] ?? stats.answered;
+              const { circleColor } = getColors(stats);
 
-            {/* Reading Section */}
-            <div className="bg-green-50 rounded-lg p-6 flex flex-col items-center border border-green-200">
-              <h3 className="sm:text-lg font-semibold text-gray-800 mb-4">
-                Reading Section
-              </h3>
-              <CircularProgress
-                value={result?.correctReadingAnswer ?? 0}
-                total={moduleQuestionCounts?.Reading ?? 0}
-                color="text-green-500"
-              />
-              <div className="mt-4 text-sm text-gray-600 space-y-1">
-                <p>
-                  Answered: {result?.readingAnswered ?? 0} /{" "}
-                  {moduleQuestionCounts?.Reading ?? 0}
-                </p>
-                <p className="text-green-600 font-medium">
-                  Correct: {result?.correctReadingAnswer ?? 0}
-                </p>
-                <p className="text-red-600 font-medium">
-                  Wrong: {result?.wrongReadingAnswer ?? 0}
-                </p>
-              </div>
-            </div>
+              return (
+                <div
+                  key={moduleName}
+                  className={`rounded-lg p-4 border bg-violet-50/50 border-violet-200`}
+                >
+                  <h3 className="sm:text-lg font-semibold text-gray-800 text-center">
+                    {moduleName}
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    <CircularProgress
+                      value={stats.correct}
+                      total={total}
+                      color={circleColor}
+                    />
+                    <div className="text-sm text-gray-600 space-y-1 text-left">
+                      <p className="font-medium">
+                        Answered: {stats.answered} / {total}
+                      </p>
+                      <p className="text-green-600 font-medium">
+                        Correct: {stats.correct}
+                      </p>
+                      <p className="text-red-600 font-medium">
+                        Wrong: {stats.wrong}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
           <button
             onClick={() => setShowAnsEval(true)}
             className="text-lg text-violet-500 hover:text-purple-500 hover:underline mb-2 flex justify-center items-center gap-1 cursor-pointer mx-auto"
           >
-            <RiBarChartBoxAiFill className="animate-bounce" /> Evaluate you
+            <RiBarChartBoxAiFill /> Evaluate you
             result with AI
           </button>
 
@@ -162,14 +171,15 @@ export default function MocktestResultModal({
 
           <button
             onClick={() => setIsOpen(true)}
-            className="text-white text-center px-3 py-1.5 rounded-md bg-purple-500 hover:opacity-80 duration-300 drop-shadow drop-shadow-amber-50"
+            className="text-white text-center px-3 py-1.5 rounded-md bg-purple-500 hover:opacity-80 duration-300 drop-shadow drop-shadow-amber-50 cursor-pointer relative"
           >
             Rate Us
+            <FaArrowRight className="absolute top-0 translate-y-1/2 -left-5 text-purple-500 fade-slide-in-left"/>
           </button>
 
           <button
             onClick={() => setIsSubmitted(false)}
-            className="bg-gray-400 hover:bg-red-600 duration-500 text-white size-7 rounded-full text-sm absolute z-10 top-2 right-2"
+            className="bg-gray-400 hover:bg-red-600 duration-500 text-white size-7 rounded-full text-sm absolute z-10 top-2 right-2 cursor-pointer"
           >
             X
           </button>
@@ -221,7 +231,7 @@ export default function MocktestResultModal({
           </div>
         </div>
       )}
-      {showAnsEval && <MocktestAnsEvaluation setShowAnsEval={setShowAnsEval}/>}
+      {showAnsEval && <MocktestAnsEvaluation setShowAnsEval={setShowAnsEval} />}
     </>
   );
 }
