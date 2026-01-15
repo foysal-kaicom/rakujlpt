@@ -59,15 +59,6 @@ interface ModuleQuestionCounts {
   [key: string]: number;
 }
 
-interface ExamResult {
-  readingAnswered: number;
-  correctReadingAnswer: number;
-  wrongReadingAnswer: number;
-  listeningAnswered: number;
-  correctListeningAnswer: number;
-  wrongListeningAnswer: number;
-  per_question_mark: number;
-}
 
 /* -------------------- Helpers -------------------- */
 const formatTime = (seconds: number) =>
@@ -88,7 +79,7 @@ export default function ExamPage() {
   const [loading, setLoading] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [sidebarShow, setSidebarShow] = useState(false);
-  const [result, setResult] = useState<ExamResult | null>(null);
+  const [result, setResult] = useState(null);
   const questionRefs = useRef<Record<number, HTMLDivElement | null>>({});
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -371,7 +362,7 @@ export default function ExamPage() {
 
   const handleSubmit = async () => {
     if (consent && showConsent) {
-      console.log("true");
+      // console.log("true");
       if (isSubmitted) return;
 
       try {
@@ -388,18 +379,7 @@ export default function ExamPage() {
           payload
         );
 
-        setResult({
-          readingAnswered: response?.data?.data?.reading_answered ?? 0,
-          correctReadingAnswer:
-            response?.data?.data?.correct_reading_answer ?? 0,
-          wrongReadingAnswer: response?.data?.data?.wrong_reading_answer ?? 0,
-          listeningAnswered: response?.data?.data?.listening_answered ?? 0,
-          correctListeningAnswer:
-            response?.data?.data?.correct_listening_answer ?? 0,
-          wrongListeningAnswer:
-            response?.data?.data?.wrong_listening_answer ?? 0,
-          per_question_mark: response?.data?.data?.per_question_mark ?? 0,
-        });
+        setResult(response?.data?.data);
 
         setIsSubmitted(true);
         stopExam();

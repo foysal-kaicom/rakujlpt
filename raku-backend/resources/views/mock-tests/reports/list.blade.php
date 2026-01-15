@@ -41,16 +41,14 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Candidate</th>
+                    <th>Candidate Name</th>
                     <th>Exam</th>
                     <th>Question Set</th>
-                    <th>Reading Answered</th>
-                    <th>Correct Reading</th>
-                    <th>Wrong Reading</th>
-                    <th>Listening Answered</th>
-                    <th>Correct Listening</th>
-                    <th>Wrong Listening</th>
-                    <th>Created At</th>
+                    <th>Total Answered</th>
+                    <th>Total Corrected</th>
+                    <th>Total Wrong</th>
+                    <th>Score</th>
+                    <th>Exam Date</th>
                 </tr>
             </thead>
             <tbody>
@@ -69,12 +67,10 @@
                         </td>
                         <td>{{ $record->exam->title ?? '-' }}</td>
                         <td>{{ $record->question_set }}</td>
-                        <td>{{ $record->reading_answered }}</td>
-                        <td>{{ $record->correct_reading_answer }}</td>
-                        <td>{{ $record->wrong_reading_answer }}</td>
-                        <td>{{ $record->listening_answered }}</td>
-                        <td>{{ $record->correct_listening_answer }}</td>
-                        <td>{{ $record->wrong_listening_answer }}</td>
+                        <td>{{ $record->total_answered }}</td>
+                        <td>{{ $record->total_correct }}</td>
+                        <td>{{ $record->total_wrong }}</td>
+                        <td>{{ (int) ($record->total_correct * $record->per_question_mark) }}</td>
                         <td>{{ $record->created_at->format('Y-m-d H:i') }}</td>
                     </tr>
                 @empty
