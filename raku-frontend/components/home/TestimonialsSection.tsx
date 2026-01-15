@@ -3,24 +3,16 @@
 import { useEffect, useState } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
-
-// import required modules
 import { Autoplay, Pagination } from "swiper/modules";
-import TestimonialCard from "../TestimonialCard";
+
 import { useTranslation } from "react-i18next";
 
-interface Testimonial {
-  id: null | number;
-  body: string;
-  reviewer_name: string;
-  reviewer_designation: string;
-  rating: number;
-  image: string;
-}
+import TestimonialCard from "../TestimonialCard";
+
+import { homePageService } from "@/services/common.service";
+import { Testimonial } from "@/types/index.types";
 
 export default function TestimonialsSection() {
   const { t } = useTranslation("common");
@@ -28,14 +20,8 @@ export default function TestimonialsSection() {
 
   const reviewList = async () => {
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/review/list`,
-        {
-          cache: "no-store",
-        }
-      );
-      const data = await res.json();
-      setTestimonials(data?.data || []);
+      const res = await homePageService.getReviewList()
+      setTestimonials(res || []);
     } catch (error) {
       setTestimonials([]);
     }

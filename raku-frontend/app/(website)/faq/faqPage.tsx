@@ -12,7 +12,7 @@ import PaginatedComponent from "@/components/PaginateComponent";
 import { FaPlus, FaMinus } from "react-icons/fa";
 
 import { FAQ } from "@/types/index.types";
-import { FAQService } from "@/services/website/common.service";
+import { FAQService } from "@/services/common.service";
 
 
 

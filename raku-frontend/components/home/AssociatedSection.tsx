@@ -1,27 +1,21 @@
 "use client";
 
-import axios from "axios";
 import { useEffect, useState } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
 
-interface Partner {
-  id: null | number;
-  name: string;
-  logo: string;
-}
+import { homePageService } from "@/services/common.service";
+import { Partner } from "@/types/index.types";
 
 export default function AssociatedSection() {
   const [partners, setPartners] = useState<Partner[]>([]);
 
   const getPartnersList = async () => {
     try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/partner/list`
-      );
-      setPartners(res?.data?.data || []);
+      const res = await homePageService.getPartnerList()
+      setPartners(res || []);
     } catch (error) {
       setPartners([]);
     }

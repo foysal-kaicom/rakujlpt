@@ -1,16 +1,12 @@
 'use client'
 
-import axios from "axios";
-import { BookOpen } from "lucide-react";
 import { useEffect, useState } from "react";
+
+import { BookOpen } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-interface feature {
-  id: null | number;
-  title: string;
-  description: string;
-  icon: string;
-}
+import { feature } from "@/types/index.types";
+import { homePageService } from "@/services/common.service";
 
 export default function FeaturesSection() {
   const { t } = useTranslation();
@@ -18,10 +14,8 @@ export default function FeaturesSection() {
 
   const featureList = async () => {
     try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/feature/list`,
-      );
-      setFeatures(res?.data?.data || []);
+      const res = await homePageService.getFeatureList()
+      setFeatures(res || []);
     } catch (error) {
       setFeatures([]);
     }

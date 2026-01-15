@@ -392,8 +392,12 @@
       "wrong": "गलत",
       "score": "स्कोर",
       "total": "जम्मा",
+      "status" : "स्थिति",
+      "passing": "उत्तीर्ण",
+      "action": "क्रिया",
       "generate_btn": "सिर्जना गर्नुहोस्",
       "download_btn": "डाउनलोड",
+      "details_btn": "विवरण",
       "not_passed": "पास भएन"
     },
     "status": {

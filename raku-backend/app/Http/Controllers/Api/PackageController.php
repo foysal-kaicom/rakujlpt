@@ -108,7 +108,7 @@ class PackageController extends Controller
 
         if ($request->has('coupon_code')) {
             //here title = coupon code and need to check coupon validity:
-            $coupon = Coupon::where('title', trim($request->coupon_code))->first();
+            $coupon = Coupon::where('coupon_code', trim($request->coupon_code))->first();
             // $coupon = CouponController::validateCouponCode($request->coupon_code, $package->price);
             if (!$coupon) {
                 return $this->responseWithError(

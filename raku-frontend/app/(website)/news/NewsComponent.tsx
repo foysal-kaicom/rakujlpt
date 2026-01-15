@@ -7,7 +7,7 @@ import NewsSketeton from "./NewsSkeleton";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 
 import { NewsItem } from "@/types/index.types"
-import { newsService } from "@/services/website/blogs/blog.service";
+import { newsService } from "@/services/blogs/blog.service";
 
 export default function NewsComponent() {
   const [allNews, setAllNews] = useState<NewsItem[]>([]);
