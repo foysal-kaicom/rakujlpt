@@ -29,14 +29,14 @@ use App\Http\Controllers\Api\CandidateProgressController;
 use App\Http\Controllers\Api\SslCommerzPaymentController;
 
 Route::prefix('v1')->group(function () {
-        
+
     Route::post('/login', [CandidateController::class, 'doLogin']);
     Route::post('/google-login', [GoogleAuthController::class, 'googleLogin']);
 
     Route::post('/test', [HomeController::class, 'test']);
 
     Route::get('/roadmaps', [RoadmapController::class, 'getRoadmaps']);
-    
+
 
     Route::get('/roadmaps/{slug}/stages', [RoadmapController::class, 'getStages']);
     Route::get('/subscriptions', [PackageController::class, 'show']);
@@ -102,7 +102,8 @@ Route::prefix('v1')->group(function () {
 
             //Transfer Coin
             Route::post('/wallet-coin-transfer', [WalletController::class, 'transferCoin']);
-    
+
+            Route::get('/agent', [CandidateAgentController::class, 'getCandidateAgentData']);
         });
 
         Route::group(['prefix' => 'review'], function () {
@@ -116,12 +117,12 @@ Route::prefix('v1')->group(function () {
             Route::get('/read-all', [NotificationController::class, 'markAllAsRead']);
         });
 
-        Route::group(['prefix' => 'mock-test', 'as' => 'mock-test.', 'middleware' => ['checkSubscription'] ], function () {
+        Route::group(['prefix' => 'mock-test', 'as' => 'mock-test.', 'middleware' => ['checkSubscription']], function () {
             Route::get('/get-questions', [MockTestController::class, 'getQuestions']);
             Route::post('/submit-answer', [MockTestController::class, 'evaluateAnswers']);
         });
 
-        Route::group(['prefix' => 'mock-test', 'as' => 'mock-test.' ], function () {
+        Route::group(['prefix' => 'mock-test', 'as' => 'mock-test.'], function () {
             Route::get('/results', [MockTestController::class, 'getTestResult']);
             Route::get('/active-user-subscription', [MockTestController::class, 'activeUserSubscriptionDetails']);
         });
@@ -130,19 +131,17 @@ Route::prefix('v1')->group(function () {
         Route::post('/stages/{stageId}/complete', [CandidateProgressController::class, 'completeStage']);
         Route::get('/candidate/current-roadmap', [RoadmapController::class, 'get_current_roadmap']);
         Route::get('/certificate-download', [CertificateController::class, 'download']);
-
-        Route::get('/agent', [CandidateAgentController::class, 'getCandidateAgentData']);
     });
 
     Route::group(['prefix' => 'coupon', 'as' => 'coupon.'], function () {
         Route::get('/', [CouponController::class, 'activeCoupons']);
         Route::get('/check', [CouponController::class, 'checkCoupon']);
     });
- 
+
     Route::post('/success', [SslCommerzPaymentController::class, 'success'])->name('ssl.success');
     Route::post('/fail', [SslCommerzPaymentController::class, 'fail'])->name('ssl.fail');
     Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel'])->name('ssl.cancel');
-    
+
     Route::post('/send-password-reset-otp', [CandidateController::class, 'sendPasswordResetOtp']);
     Route::post('/verify-password-reset-otp', [CandidateController::class, 'verifyResetPasswordOtp']);
 
