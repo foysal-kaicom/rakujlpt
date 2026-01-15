@@ -42,7 +42,7 @@ class CertificateController extends Controller
     {
         $mock_test = MockTestRecords::with(['candidate', 'exam'])->findOrFail($mockTestId);
     
-        $obtainedMarks = ($mock_test->correct_reading_answer + $mock_test->correct_listening_answer) * $mock_test->per_question_mark;
+        $obtainedMarks = (int) ($mock_test->total_correct * $mock_test->per_question_mark);
     
         return [
             'name'           => $mock_test->candidate->FullName,

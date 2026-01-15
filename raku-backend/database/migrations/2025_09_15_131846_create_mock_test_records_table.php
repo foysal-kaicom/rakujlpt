@@ -16,15 +16,9 @@ return new class extends Migration
             $table->foreignId('candidate_id')->constrained('candidates')->cascadeOnDelete();
             $table->foreignId('exam_id')->nullable()->constrained('exams');
             $table->integer('question_set');
-            // Reading module
-            // $table->integer('reading_answered')->default(0);
-            // $table->integer('correct_reading_answer')->default(0);
-            // $table->integer('wrong_reading_answer')->default(0);
-
-            // // Listening module
-            // $table->integer('listening_answered')->default(0);
-            // $table->integer('correct_listening_answer')->default(0);
-            // $table->integer('wrong_listening_answer')->default(0);
+            $table->integer('total_answered')->default(0);
+            $table->integer('total_wrong')->default(0);
+            $table->integer('total_correct')->default(0);
             $table->json('module_wise_score')->nullable();
 
             $table->timestamps();
