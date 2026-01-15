@@ -398,8 +398,12 @@
       "wrong": "Wrong",
       "score": "Score",
       "total": "Total",
+      "status" : "Status",
+      "passing": "Passing",
+      "action": "Action",
       "generate_btn": "Generate",
       "download_btn": "Download",
+      "details_btn": "Details",
       "not_passed": "Not Passed"
     },
     "status": {

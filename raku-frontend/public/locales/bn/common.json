@@ -402,8 +402,12 @@
       "wrong": "ভুল",
       "score": "স্কোর",
       "total": "মোট",
+      "status" : "স্ট্যাটাস",
+      "passing": "পাসিং",
+      "action": "অ্যাকশন",
       "generate_btn": "জেনারেট",
       "download_btn": "ডাউনলোড",
+      "details_btn": "বিস্তারিত",
       "not_passed": "উত্তীর্ণ হননি"
     },
     "status": {
