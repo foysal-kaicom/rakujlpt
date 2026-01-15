@@ -22,7 +22,7 @@ class WalletController extends Controller
         $wallet = Wallet::firstOrCreate([
             'candidate_id' => $candidate->id
         ]);
-        $walletTransactions = WalletTransaction::where('candidate_id', $candidate->id)->get();
+        $walletTransactions = WalletTransaction::where('candidate_id', $candidate->id)->orderBy('created_at', 'desc')->get();
 
         return $this->responseWithSuccess([
             'balance' => $wallet->balance,
