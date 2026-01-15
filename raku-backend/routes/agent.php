@@ -4,6 +4,7 @@ use App\Http\Controllers\Agent\AgentDashboardController;
 use App\Http\Controllers\Agent\CandidateController;
 use App\Http\Controllers\Agent\ExamController;
 use App\Http\Controllers\Agent\CandidateNoticeController;
+use App\Http\Controllers\Agent\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:agent'], function () {
@@ -41,6 +42,12 @@ Route::group(['middleware' => 'auth:agent'], function () {
         Route::post('/update/{id}', [CandidateNoticeController::class, 'update'])->name('update');
         Route::post('{id}/toggle-status', [CandidateNoticeController::class, 'toggleStatus'])->name('toggleStatus');
         Route::delete('/delete/{id}', [CandidateNoticeController::class, 'destroy'])->name('delete');
+    });
+
+    Route::group(['prefix' => 'payment', 'as' => 'payment.'], function () {
+        Route::get('/bill', [PaymentController::class, 'index'])->name('index');
+       // Route::post('/calculate-bill', [PaymentController::class, 'calculate'])->name('calculate');
+        Route::post('/disburse', [PaymentController::class, 'storeDisburse'])->name('disburse');
     });
 });
 Route::get('/logout', [AgentDashboardController::class, 'logoutAgent'])->name('logout');

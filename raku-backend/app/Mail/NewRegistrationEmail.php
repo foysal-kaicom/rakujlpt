@@ -18,10 +18,12 @@ class NewRegistrationEmail extends Mailable
      * Create a new message instance.
      */
     public $candidate;
+    public $plainPassword;
 
-    public function __construct(Candidate $candidate)
+    public function __construct(Candidate $candidate, $plainPassword)
     {
         $this->candidate = $candidate;
+        $this->plainPassword = $plainPassword;
     }
 
 

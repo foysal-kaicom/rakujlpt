@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CandidateRequest;
 use App\Jobs\SendBatchRegistrationEmailJob;
 use App\Jobs\SendRegistrationEmailJob;
+use App\Models\AgentBill;
 use App\Models\Candidate;
 use App\Models\FileProcess;
 use App\Models\Package;
@@ -207,6 +208,21 @@ class CandidateController extends Controller
                             'is_free' => ((float) $autoPackage->price <= 0) ? 1 : 0,
                         ]);
                     }
+
+                    $now = now();
+                    $agent = auth('agent')->user();
+
+                    AgentBill::create([
+                        'agent_id' => $agent->id,
+                        'candidate_id' => $newCandidate->id,
+                        'billing_month' => (int) $now->format('m'),
+                        'billing_year' => (int) $now->format('Y'),
+                        'commission_amount' => (int) ($agent->commission_amount),
+                        'status' => 'unpaid',
+                        'billed_at' => $now,
+                        'notes' => 'Billed on candidate registration (CSV import)',
+                    ]);
+
                     $importedCount++;
                 }
             }
@@ -309,9 +325,9 @@ class CandidateController extends Controller
                 $query->where('status', $status);
             }
 
-            $data = $query->latest('id')->where('agent_id', auth('agent')->id())->get();
+            $query->where('agent_id', auth('agent')->id())->orderBy('id', 'desc');
 
-            return DataTables::of($data)
+            return DataTables::eloquent($query)
                 ->addColumn('name', function ($row) {
                     $editUrl = route('agent.candidate.edit', $row->id);
                     return '<a href="' . $editUrl . '" class="text-blue-600 hover:underline">' . $row->first_name . ' ' . $row->last_name . '</a>';
