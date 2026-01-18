@@ -237,8 +237,10 @@ Route::group(['middleware' => 'auth', 'checkPermission'], function () {
         Route::get('/edit/{id}', [AgentController::class, 'edit'])->name('edit');
         Route::put('/update/{id}', [AgentController::class, 'update'])->name('update');
         Route::post('{id}/toggle-status', [AgentController::class, 'toggleStatus'])->name('toggleStatus');
+        Route::get('/payment-history', [AgentController::class, 'paymentHistory'])->name('payment.history');
+        Route::get('/edit-payment-details/{id}', [AgentController::class, 'editPaymentHistory'])->name('payment.Details');
+        Route::post('/update-payment-details/{id}', [AgentController::class, 'updatePaymentHistoryStatus'])->name('payment.update');
     });
-
 
     Route::group(['prefix' => 'coupon', 'as' => 'coupon.'], function () {
         Route::get('/', [CouponController::class, 'list'])->name('list');
