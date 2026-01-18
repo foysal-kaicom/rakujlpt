@@ -11,6 +11,8 @@ import axiosInstance from "@/utils/axios";
 import { toast } from "sonner";
 import Link from "next/link";
 import { ConfirmUnlockModal } from "@/app/(website)/practice/ConfirmUnlockModal";
+import Loader from "@/components/Loader";
+import ReferralTransferModal from "./ReferralTransferModal";
 
 interface Roadmap {
   id: number;
@@ -62,9 +64,11 @@ export default function WalletSystem() {
       ? t("wallet.milestones.keep_pushing")
       : t("wallet.milestones.great_job");
 
-  const [loader, setLoader] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [practiceTestsData, setPracticeTestsData] = useState<Roadmap[]>([]);
+  const [isRefTransferOpen, setIsRefTransferOpen] = useState(false);
   const fetchRoadmaps = async () => {
+    setLoading(true);
     try {
       const response = await axiosInstance.get(`/roadmaps`);
       if (response?.data?.success) {
@@ -73,7 +77,7 @@ export default function WalletSystem() {
     } catch (error: any) {
       toast.error(t("errors.fetch_roadmaps"));
     } finally {
-      setLoader(false);
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -90,7 +94,7 @@ export default function WalletSystem() {
     } catch (error: any) {
       toast.error(t("errors.fetch_wallet"));
     } finally {
-      setLoader(false);
+      setLoading(false);
     }
   };
 
@@ -125,8 +129,30 @@ export default function WalletSystem() {
       );
     }
   };
+
+  const handleTransferCoins = async (receiverCode: string, amount: number) => {
+    try {
+      const response = await axiosInstance.post(
+        `/candidate/wallet-coin-transfer`,
+        {
+          receiver_code: receiverCode,
+          amount: amount,
+        }
+      );
+      if (response?.data?.success) {
+        toast.success(t("wallet.referral.transfer_success"));
+        // Refresh wallet data
+        fetchWalletData();
+      } else {
+        toast.error(t("errors.transfer_coins"));
+      }
+    } catch (error: any) {
+      toast.error(t("errors.transfer_coins"));
+    }
+  };
   return (
     <>
+      {loading && <Loader />}
       <div className="">
         <div className="space-y-5">
           <BreadCrumb breadCrumbData={breadCrumbData} />
@@ -136,7 +162,7 @@ export default function WalletSystem() {
         <div className="space-y-10 mt-5">
           <div className="grid grid-cols-3 gap-6">
             <div className="col-span-3 lg:col-span-2 bg-white p-6 rounded-2xl">
-              <div className="flex justify-between">
+              <div className="flex justify-between items-start">
                 <div>
                   {/* Total Points */}
                   <h2 className="text-5xl font-extrabold mb-2 text-purple-700">
@@ -184,6 +210,54 @@ export default function WalletSystem() {
                   </p>
                 </div>
               )}
+
+              {/* Action Buttons */}
+              <div className="mt-6 pt-4 border-t border-gray-200">
+                <div className="sm:w-1/2 flex flex-col sm:flex-row gap-3">
+                  <button
+                    onClick={() => setIsRefTransferOpen(true)}
+                    className="flex-1 group relative overflow-hidden bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white font-semibold py-3.5 px-6 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 cursor-pointer"
+                  >
+                    <span className="relative z-10 flex items-center justify-center gap-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 4v16m8-8H4"
+                        />
+                      </svg>
+                      Refer or Transfer Coins
+                    </span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                  </button>
+
+                  {/* <button className="sm:w-auto bg-purple-100 hover:bg-purple-200 text-purple-700 font-semibold py-3.5 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-0.5 cursor-pointer">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <span className="hidden sm:inline">How to Earn</span>
+                    <span className="sm:hidden">Info</span>
+                  </button> */}
+                </div>
+              </div>
             </div>
 
             <div className="relative w-full col-span-3 lg:col-span-1">
@@ -413,6 +487,13 @@ export default function WalletSystem() {
         onClose={() => setShowUnlockModal(false)}
         onConfirm={() => handleUnlock(selectedRoadmap?.id ?? 0)}
         selectedRoadmap={selectedRoadmap ?? null}
+      />
+      <ReferralTransferModal
+        isOpen={isRefTransferOpen}
+        onClose={() => setIsRefTransferOpen(false)}
+        userReferralCode={user?.candidate_code ?? ""}
+        currentCoins={points}
+        onTransferCoins={handleTransferCoins}
       />
     </>
   );

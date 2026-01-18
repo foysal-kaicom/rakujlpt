@@ -1,8 +1,23 @@
-import type { TeamMember, FAQ } from "@/types/index.types";
+import type { TeamMember, FAQ , feature , Partner , Testimonial ,ContactPayload , ContactResponse } from "@/types/index.types";
 
 import axios from "axios";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+export const homePageService = {
+  async getFeatureList(): Promise<feature[]> {
+    const res = await axios.get(`${API_BASE}/feature/list`);
+    return res?.data?.data ?? [];
+  },
+  async getPartnerList(): Promise<Partner[]> {
+    const res = await axios.get(`${API_BASE}/partner/list`);
+    return res?.data?.data ?? [];
+  },
+  async getReviewList(): Promise<Testimonial[]> {
+    const res = await axios.get(`${API_BASE}/review/list`);
+    return res?.data?.data ?? [];
+  },
+};
 
 export const ourTeamService = {
   async getTeamList(): Promise<TeamMember[]> {
@@ -28,5 +43,16 @@ export const newsletterService = {
 
     const res = await axios.post(`${API_BASE}/news-letter-subscribe`, form);
     return res.data;
+  },
+};
+
+export const contactService = {
+  async sendQuery(payload: ContactPayload): Promise<ContactResponse> {
+    const { data } = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/send-query-mail`,
+      payload
+    );
+
+    return data;
   },
 };

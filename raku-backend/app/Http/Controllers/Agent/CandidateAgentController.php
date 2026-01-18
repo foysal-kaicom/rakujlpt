@@ -13,7 +13,7 @@ class CandidateAgentController extends Controller
     {
         try {
             $agentId = optional(auth()->guard('candidate')->user())->agent_id;
-            $data['agent'] = auth()->guard('candidate')->user()->agent;
+            $data['agent'] = auth()->guard('candidate')->user()->agent->only(['id', 'name', 'business_name', 'email', 'phone', 'location', 'address', 'photo']);
             $data['notice'] = CandidateNotice::where('status', 1)
                 ->where('agent_id', $agentId)
                 ->orderBy('created_at', 'desc')

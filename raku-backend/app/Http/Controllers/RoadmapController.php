@@ -52,14 +52,25 @@ class RoadmapController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $rules = [
             'title' => 'required|string|max:255|unique:roadmaps,title',
             'slug' => 'required|string|max:255|unique:roadmaps,slug',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'is_free' => 'nullable|boolean',
-            'unlock_coins' => 'nullable|numeric|min:0',
-        ]);
+        ];
+
+        if ($request->boolean('is_free')) {
+            $rules['unlock_coins'] = 'required|numeric|in:0';
+        } else {
+            // dd('here');
+            $rules['unlock_coins'] = 'required|numeric|min:1';
+        }
+        $validated = $request->validate($rules);
+
+        if ($request->boolean('is_free')) {
+            $validated['unlock_coins'] = 0;
+        }
 
         // Handle Image Upload
         if ($request->hasFile('image')) {
@@ -123,14 +134,26 @@ class RoadmapController extends Controller
      */
     public function update(Request $request, Roadmap $roadmap)
     {
-        $validated = $request->validate([
+        $rules = [
             'title' => 'required|string|max:255|unique:roadmaps,title,' . $roadmap->id,
             'slug' => 'required|string|max:255|unique:roadmaps,slug,' . $roadmap->id,
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'is_free' => 'nullable|boolean',
-            'unlock_coins' => 'nullable|numeric|min:0',
-        ]);
+        ];
+
+        if ($request->boolean('is_free')) {
+            $rules['unlock_coins'] = 'required|numeric|in:0';
+        } else {
+            $rules['unlock_coins'] = 'required|numeric|min:1';
+        }
+
+        $validated = $request->validate($rules);
+
+        // Force unlock_coins = 0 if free
+        if ($request->boolean('is_free')) {
+            $validated['unlock_coins'] = 0;
+        }
 
         // Handle Image Update
         if ($request->hasFile('image')) {

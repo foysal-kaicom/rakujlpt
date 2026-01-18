@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import PricingCard from "../PricingCard";
 
-import { subscriptionService } from "@/services/website/subscription/subscription.service";
+import { subscriptionService } from "@/services/subscription/subscription.service";
 import { Plan } from "@/types/subscription/package.type";
 
 const defaultPlans: Plan[] = [];

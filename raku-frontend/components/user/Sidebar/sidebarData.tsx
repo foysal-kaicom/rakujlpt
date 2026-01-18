@@ -31,11 +31,11 @@ const SidebarData = [
     to: "/my_wallet",
     icon: <FaWallet />,
   },
-  {
-    label: "sidebar.my_agent",
-    to: "/my_agent",
-    icon: <HiMiniUserGroup />,
-  },
+  // {
+  //   label: "sidebar.my_agent",
+  //   to: "/my_agent",
+  //   icon: <HiMiniUserGroup />,
+  // },
   {
     label: "sidebar.settings",
     to: "/settings",

@@ -1,21 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import axios from "axios";
+
+import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 import { useBusinessSettingsStore } from "@/stores/useBusinessStore";
 
-// Icons
 import { IoLogoYoutube } from "react-icons/io";
 import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 import HTMLReactParser from "html-react-parser/lib/index";
-import { toast } from "sonner";
-import { useTranslation } from "react-i18next";
+
+import { contactService } from "@/services/common.service";
+import { ContactPayload } from "@/types/index.types";
 
 export default function ContactSocialComponent() {
   const { t } = useTranslation();
   const settings = useBusinessSettingsStore((state) => state.settings);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ContactPayload>({
     first_name: "",
     last_name: "",
     email: "",
@@ -39,16 +41,19 @@ export default function ContactSocialComponent() {
     setLoading(true);
 
     try {
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/send-query-mail`,
-        formData
-      );
-      toast.success(res.data.data || t("contact.success"));
-    } catch (err: any) {
+      const res = await contactService.sendQuery(formData);
+
+      toast.success(res.data || res.message || t("contact.success"));
+    } catch (error) {
       toast.error(t("contact.error"));
     } finally {
       setLoading(false);
-      setFormData({ first_name: "", last_name: "", email: "", body: "" });
+      setFormData({
+        first_name: "",
+        last_name: "",
+        email: "",
+        body: "",
+      });
     }
   };
 

@@ -143,6 +143,9 @@
             font-size: 9pt;
             margin-top: 2mm;
         }
+        .signature{
+            height: 50px;
+        }
     </style>
 </head>
 
@@ -165,7 +168,9 @@
         <table class="footer-table">
             <tr>
                 <td>
-                    <div>fdhn</div>
+                    <div>
+                        <img src="https://www.shutterstock.com/image-vector/letter-d-abstract-signature-idea-260nw-2564589719.jpg" alt="" class="signature">
+                    </div>
                     <div class="line"></div>
 
                     <div class="label">Instructor</div>
@@ -177,7 +182,9 @@
                 </td>
 
                 <td>
-                    <div>fdhs</div>
+                    <div>
+                        <img src="https://www.shutterstock.com/image-vector/letter-d-abstract-signature-idea-260nw-2564589719.jpg" alt="" class="signature">
+                    </div>
                     <div class="line"></div>
 
                     <div class="label">Administrator</div>

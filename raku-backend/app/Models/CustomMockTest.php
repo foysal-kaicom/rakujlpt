@@ -15,10 +15,14 @@ class CustomMockTest extends Model
     {
         return $this->hasMany(MockTestQuestionGroup::class,'mock_test_section_id');
     }
+   
     public function mockTestModule()
     {
         return $this->belongsTo(MockTestModule::class,'mock_test_module_id');
     }
+
+
+
 
     public function mockTestQuestion()
     {

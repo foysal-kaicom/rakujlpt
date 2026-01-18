@@ -1,38 +1,46 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
+import Link from "next/link";
+
+import { toast } from "sonner";
+import axiosInstance from "@/utils/axios";
+import { useTranslation } from "react-i18next";
 
 import BreadCrumb from "@/components/BreadCrumb";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
 import Loader from "@/components/Loader";
-import { toast } from "sonner";
-import axiosInstance from "@/utils/axios";
 import SuspenseLoader from "@/components/SuspenseLoader";
 import PaginatedComponent from "@/components/PaginateComponent";
+import ExamDetailsModal from "./ExamDetailsModal";
+import MocktestResultEvaluation from "./MocktestResultEvaluationComponent";
 
-import Link from "next/link";
-import { useTranslation } from "react-i18next";
-
-interface Exam {
-  title: string;
-  pass_point: number;
+interface ModuleScore {
+  wrong: number;
+  correct: number;
+  answered: number;
 }
 
-interface ExamResult {
+interface ExamInfo {
   id: number;
-  reading_answered: number;
-  correct_reading_answer: number;
-  wrong_reading_answer: number;
-  listening_answered: number;
-  correct_listening_answer: number;
-  wrong_listening_answer: number;
-  module_scores: { [key: string]: number };
-  created_at?: string;
-  total_marks?: string;
-  total_questions: number;
+  name: string;
+  title: string;
+  pass_point: number;
+  total_point: number;
+}
+
+interface MockTestResult {
+  id: number;
+  candidate_id: number;
+  question_set: number;
   per_question_mark: number;
-  exam_id: number;
-  exam: Exam;
+  total_answered: number;
+  total_correct: number;
+  total_wrong: number;
+  module_wise_score?: Record<string, ModuleScore>;
+  created_at: string;
+  updated_at: string;
+  exam: ExamInfo;
 }
 
 export default function MockExamResult() {
@@ -46,11 +54,11 @@ export default function MockExamResult() {
     },
   ];
 
-  const [resultData, setResultData] = useState<ExamResult[]>([]);
+  const [resultData, setResultData] = useState<MockTestResult[]>([]);
   const [loading, setLoading] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 9;
 
   // Calculate pagination
   const totalExams = resultData.length;
@@ -59,35 +67,29 @@ export default function MockExamResult() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentResult = resultData.slice(startIndex, startIndex + itemsPerPage);
 
+  const [selectedItem, setSelectedItem] = useState<MockTestResult | null>(null);
+
+  const getStatus = (
+    achieved: number,
+    perQuestionMarks: number,
+    passing: number
+  ) => (achieved * perQuestionMarks >= passing ? "passed" : "failed");
+
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
-  };
-
-  const formatDate = (timestamp?: string | null): string => {
-    if (!timestamp) return "N/A";
-
-    const cleanedDate = timestamp.split(".")[0] + "Z";
-    const date = new Date(cleanedDate);
-
-    if (isNaN(date.getTime())) return "N/A";
-
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = String(date.getFullYear()).slice(-2);
-
-    return `${day}/${month}/${year}`;
   };
 
   const getMockTestResultData = async () => {
     setLoading(true);
     try {
       const response = await axiosInstance.get("/mock-test/results");
-      const data: ExamResult[] = response?.data?.data || [];
+      const data: MockTestResult[] = response?.data?.data || [];
       setResultData(data);
     } catch (error: any) {
       console.error(error);
       toast.error(
-        error?.response?.data?.message || t("mock_exam_result.status.fetch_error")
+        error?.response?.data?.message ||
+          t("mock_exam_result.status.fetch_error")
       );
     } finally {
       setLoading(false);
@@ -132,7 +134,9 @@ export default function MockExamResult() {
               preText=""
               subText=""
             />
-
+            <div className="flex justify-end">
+              <MocktestResultEvaluation resultData={resultData} />
+            </div>
             {/* Result Table/Card */}
             <div className="w-full flex flex-col gap-5 mt-5">
               {currentResult.length > 0 ? (
@@ -148,208 +152,174 @@ export default function MockExamResult() {
                           <th className="p-3 text-left font-bold border-r border-gray-200">
                             {t("mock_exam_result.table.exam")}
                           </th>
-                          <th className="p-3 text-left font-bold border-r border-gray-200">
-                            {t("mock_exam_result.table.listening")}
+                          <th className="p-3 text-center font-bold border-r border-gray-200">
+                            {t("mock_exam_result.table.score")}
                           </th>
-                          <th className="p-3 text-left font-bold border-r border-gray-200">
-                            {t("mock_exam_result.table.reading")}
+                          <th className="p-3 text-center font-bold border-r border-gray-200">
+                            {t("mock_exam_result.table.passing")}
                           </th>
-                          <th className="p-3 text-left font-bold border-gray-200">
-                            {t("mock_exam_result.table.total_score")}
+                          <th className="p-3 text-center font-bold border-r border-gray-200">
+                            {t("mock_exam_result.table.status")}
                           </th>
-                          <th className="p-3 text-left font-bold border-gray-200">
+                          <th className="p-3 text-center font-bold border-r border-gray-200">
                             {t("mock_exam_result.table.certificate")}
+                          </th>
+                          <th className="p-3 text-center font-bold border-gray-200">
+                            {t("mock_exam_result.table.action")}
                           </th>
                         </tr>
                       </thead>
                       <tbody>
-                        {currentResult.map((c, i) => (
-                          <tr
-                            key={i}
-                            className="bg-white/40 backdrop-blur-md hover:shadow-lg transition-all"
-                          >
-                            <td className="p-3 text-gray-700 border-t border-r border-gray-200">
-                              {formatDate(c?.created_at)}
-                            </td>
-                            <td className="p-3 text-purple-700 border-t border-r border-gray-200 font-semibold">
-                              {c.exam.title} Exam
-                            </td>
-                            <td className="p-3 border-t border-r border-gray-200 font-medium">
-                              <div className="grid grid-cols-1 gap-1 text-xs ">
-                                <span className="text-blue-600">
-                                  {t("mock_exam_result.table.answered")}:{" "}
-                                  {c?.listening_answered ?? 0}
-                                </span>
-                                <span className="text-green-600">
-                                  {t("mock_exam_result.table.correct")}:{" "}
-                                  {c?.correct_listening_answer ?? 0}
-                                </span>
-                                <span className="text-red-600">
-                                  {t("mock_exam_result.table.wrong")}:{" "}
-                                  {c?.wrong_listening_answer ?? 0}
-                                </span>
-                                <span className="text-purple-600 font-semibold">
-                                  {t("mock_exam_result.table.score")}:{" "}
-                                  {Math.ceil(
-                                    (c?.correct_listening_answer ?? 0) *
-                                      c?.per_question_mark
-                                  )}
-                                </span>
-                              </div>
-                            </td>
-                            <td className="p-3 border-t border-r border-gray-200 font-medium">
-                              <div className="grid grid-cols-1 gap-1 text-xs">
-                                <span className="text-blue-600">
-                                  {t("mock_exam_result.table.answered")}:{" "}
-                                  {c?.reading_answered ?? 0}
-                                </span>
-                                <span className="text-green-600">
-                                  {t("mock_exam_result.table.correct")}:{" "}
-                                  {c?.correct_reading_answer ?? 0}
-                                </span>
-                                <span className="text-red-600">
-                                  {t("mock_exam_result.table.wrong")}:{" "}
-                                  {c?.wrong_reading_answer ?? 0}
-                                </span>
-                                <span className="text-purple-600 font-semibold">
-                                  {t("mock_exam_result.table.score")}:{" "}
-                                  {Math.ceil(
-                                    (c?.correct_reading_answer ?? 0) *
-                                      c?.per_question_mark
-                                  )}
-                                </span>
-                              </div>
-                            </td>
-                            <td className="p-3 border-t border-gray-200 capitalize font-bold text-purple-700 text-lg">
-                              {Math.round(
-                                ((c?.correct_listening_answer ?? 0) +
-                                  (c?.correct_reading_answer ?? 0)) *
-                                  c?.per_question_mark
-                              )}
-                            </td>
-                            <td className="p-3 border-t border-gray-200 capitalize text-xs font-medium">
-                              {((c?.correct_listening_answer ?? 0) +
-                                (c?.correct_reading_answer ?? 0)) *
-                                (c?.per_question_mark ?? 0) >
-                              (c.exam.pass_point ?? 0) ? (
-                                <button
-                                  onClick={() => handleDownload(c.id)}
-                                  className="py-1.5 px-4 border-b border-b-purple-300 rounded-2xl bg-purple-700 text-white hover:opacity-80 duration-300 drop-shadow-sm drop-shadow-purple-500"
+                        {currentResult.map((c, i) => {
+                          const status = getStatus(
+                            c.total_correct,
+                            c.per_question_mark,
+                            c.exam.pass_point
+                          );
+                          return (
+                            <tr
+                              key={i}
+                              className="bg-white/40 backdrop-blur-md hover:shadow-lg transition-all"
+                            >
+                              <td className="p-3 text-gray-700 border-t border-r border-gray-200">
+                                {c?.created_at}
+                              </td>
+                              <td className="p-3 text-purple-700 border-t border-r border-gray-200 font-semibold">
+                                {c.exam.title} Exam
+                              </td>
+                              <td className="p-3 border-t border-r border-gray-200 font-medium text-center">
+                                {Math.round(
+                                  (c?.total_correct ?? 0) *
+                                    (c?.per_question_mark ?? 0)
+                                )}
+                                /{c.exam.total_point ?? 0}
+                              </td>
+                              <td className="p-3 border-t border-r border-gray-200 font-medium text-center">
+                                {c?.exam?.pass_point}/{c.exam.total_point ?? 0}
+                              </td>
+                              <td className="p-3 border-t border-r border-gray-200 capitalize font-bold text-purple-700 text-center">
+                                <span
+                                  className={`px-3 py-1 rounded-full text-xs font-semibold
+                                    ${
+                                      status === "passed"
+                                        ? "bg-green-100 text-green-700"
+                                        : "bg-red-100 text-red-700"
+                                    }`}
                                 >
-                                  {t("mock_exam_result.table.generate_btn")}
-                                </button>
-                              ) : (
-                                <span className="text-gray-400">
-                                  {t("mock_exam_result.table.not_passed")}
+                                  {status.toUpperCase()}
                                 </span>
-                              )}
-                            </td>
-                          </tr>
-                        ))}
+                              </td>
+                              <td className="p-3 border-t border-r border-gray-200 capitalize text-xs font-medium">
+                                {status == "passed" ? (
+                                  <div className="flex justify-center">
+                                    <button
+                                      onClick={() => handleDownload(c.id)}
+                                      className="py-1.5 px-4 border-b border-b-purple-300 rounded-2xl bg-purple-700 text-white hover:opacity-80 duration-300 drop-shadow-sm drop-shadow-purple-500 w-22 mx-auto cursor-pointer"
+                                    >
+                                      {t("mock_exam_result.table.generate_btn")}
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <p className="text-gray-700 text-center">
+                                    --
+                                  </p>
+                                )}
+                              </td>
+                              <td className="p-3 border-t border-gray-200 capitalize text-xs font-medium">
+                                <div className="flex">
+                                  <button
+                                    onClick={() => setSelectedItem(c)}
+                                    className="px-4 py-1.5 rounded-2xl bg-violet-600 text-white font-medium text-xs hover:bg-violet-800 transition mx-auto w-22 cursor-pointer"
+                                  >
+                                    {t("mock_exam_result.table.details_btn")}
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>
 
                   {/* Mobile Cards */}
                   <div className="md:hidden flex flex-col gap-4">
-                    {currentResult.map((c, i) => (
-                      <div
-                        key={i}
-                        className="bg-white shadow-sm rounded-lg p-4 hover:shadow-xl transition"
-                      >
-                        <div className="mb-4 text-xs flex justify-between gap-4 items-center">
-                          <div className=" space-y-1    space-x-1">
+                    {currentResult.map((c, i) => {
+                      const status = getStatus(
+                        c.total_correct,
+                        c.per_question_mark,
+                        c.exam.pass_point
+                      );
+                      return (
+                        <div
+                          key={i}
+                          className="bg-white shadow-sm rounded-lg p-4 hover:shadow-xl transition"
+                        >
+                          <div className=" space-y-1 space-x-1 text-sm mb-2">
                             <span className="font-semibold text-violet-500">
                               JLPT Exam
                             </span>
                             <span className="text-gray-500">
-                              ({formatDate(c?.created_at)})
+                              ({c?.created_at})
                             </span>
                           </div>
-                          {((c?.correct_listening_answer ?? 0) +
-                            (c?.correct_reading_answer ?? 0)) *
-                            (c?.per_question_mark ?? 0) >
-                          (c.exam.pass_point ?? 0) ? (
+                          <div className="flex justify-between gap-4">
+                            <div className="space-y-1">
+                              <p className="text-xs text-gray-500 font-medium">
+                                {t("mock_exam_result.table.score")}
+                              </p>
+                              <span className="text-blue-500 font-semibold text-xs">
+                                {Math.round(
+                                  (c?.total_correct ?? 0) *
+                                    (c?.per_question_mark ?? 0)
+                                )}
+                                /{c.exam.total_point ?? 0}
+                              </span>
+                            </div>
+                            <div className="space-y-1">
+                              <p className="text-xs text-gray-500 font-medium">
+                                {t("mock_exam_result.table.passing")}
+                              </p>
+                              <span className="text-blue-500 font-semibold text-xs">
+                                {c?.exam?.pass_point}/{c.exam.total_point ?? 0}
+                              </span>
+                            </div>
+                            <div className="space-y-1">
+                              <p className="text-xs text-gray-500 font-medium">
+                                {t("mock_exam_result.table.status")}
+                              </p>
+                              <span
+                                className={`px-3 py-1 rounded-full text-xs font-semibold
+                                    ${
+                                      status === "passed"
+                                        ? "bg-green-100 text-green-700"
+                                        : "bg-red-100 text-red-700"
+                                    }`}
+                              >
+                                {status.toUpperCase()}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="gap-2 mt-4 flex justify-between">
                             <button
-                              onClick={() => handleDownload(c.id)}
-                              className="py-1 px-3 border-b border-b-purple-300 rounded-2xl bg-purple-700 text-white hover:opacity-80 duration-300 drop-shadow-sm drop-shadow-purple-500"
+                              onClick={() => setSelectedItem(c)}
+                              className="px-4 py-1 rounded-2xl bg-violet-600 text-white font-medium text-xs hover:bg-violet-800 transition w-22 cursor-pointer"
                             >
-                              {t("mock_exam_result.table.download_btn")}
+                              {t("mock_exam_result.table.details_btn")}
                             </button>
-                          ) : (
-                            <p className="text-gray-500">
-                              {t("mock_exam_result.table.not_passed")}
-                            </p>
-                          )}
-                        </div>
-                        <div className="flex justify-between gap-4">
-                          <div className="space-y-1">
-                            <p className="text-xs text-gray-500 font-medium">
-                              {t("mock_exam_result.table.listening")}
-                            </p>
-                            <div className="grid grid-cols-1 gap-2 items-center text-xs">
-                              <span className="text-blue-500 font-semibold">
-                                {t("mock_exam_result.table.answered")}:{" "}
-                                {c?.listening_answered ?? "N/A"}
-                              </span>
-                              <span className="text-green-500 font-semibold">
-                                {t("mock_exam_result.table.correct")}:{" "}
-                                {c?.correct_listening_answer ?? "N/A"}
-                              </span>
-                              <span className="text-red-500 font-semibold">
-                                {t("mock_exam_result.table.wrong")}:{" "}
-                                {c?.wrong_listening_answer ?? "N/A"}
-                              </span>
-                              <span className="text-purple-500 font-semibold">
-                                {t("mock_exam_result.table.score")}:{" "}
-                                {Math.round(
-                                  (c?.correct_listening_answer ?? "N/A") *
-                                    c.per_question_mark
-                                )}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="space-y-1">
-                            <p className="text-xs text-gray-500 font-medium">
-                              {t("mock_exam_result.table.reading")}
-                            </p>
-                            <div className="grid grid-cols-1 gap-2 items-center text-xs">
-                              <span className="text-blue-500 font-semibold">
-                                {t("mock_exam_result.table.answered")}:{" "}
-                                {c?.reading_answered ?? "N/A"}
-                              </span>
-                              <span className="text-green-500 font-semibold">
-                                {t("mock_exam_result.table.correct")}:{" "}
-                                {c?.correct_reading_answer ?? "N/A"}
-                              </span>
-                              <span className="text-red-500 font-semibold">
-                                {t("mock_exam_result.table.wrong")}:{" "}
-                                {c?.wrong_reading_answer ?? "N/A"}
-                              </span>
-                              <span className="text-purple-500 font-semibold">
-                                {t("mock_exam_result.table.score")}:{" "}
-                                {Math.round(
-                                  (c?.correct_reading_answer ?? "N/A") *
-                                    c.per_question_mark
-                                )}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="space-y-1">
-                            <p className="text-xs text-gray-500 font-medium">
-                              {t("mock_exam_result.table.total")}
-                            </p>
-                            <p className="text-purple-500 font-semibold text-xs">
-                              {Math.round(
-                                ((c?.correct_listening_answer ?? 0) +
-                                  (c?.correct_reading_answer ?? 0)) *
-                                  c?.per_question_mark
-                              )}
-                            </p>
+                            {status == "passed" && (
+                              <button
+                                onClick={() => handleDownload(c.id)}
+                                className="py-1 px-3 border-b border-b-purple-300 rounded-2xl bg-purple-700 text-white hover:opacity-80 duration-300 drop-shadow-sm drop-shadow-purple-500 text-xs cursor-pointer"
+                              >
+                                {t("mock_exam_result.table.download_btn")}
+                              </button>
+                            )}
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
 
                   {/* pagination  */}
@@ -374,6 +344,13 @@ export default function MockExamResult() {
                 </div>
               )}
             </div>
+
+            {selectedItem && (
+              <ExamDetailsModal
+                data={selectedItem}
+                onClose={() => setSelectedItem(null)}
+              />
+            )}
           </div>
         </div>
       </Suspense>

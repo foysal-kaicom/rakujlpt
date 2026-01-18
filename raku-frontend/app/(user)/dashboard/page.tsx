@@ -17,12 +17,10 @@ import { PiNotebookFill } from "react-icons/pi";
 import { GiStairsGoal, GiRingingAlarm } from "react-icons/gi";
 import { BiSolidBookBookmark } from "react-icons/bi";
 import { MdTipsAndUpdates } from "react-icons/md";
-import { TbRosetteDiscountFilled } from "react-icons/tb";
 import { FaRocket, FaBook, FaBrain, FaTrophy } from "react-icons/fa";
 
 import DashboardSkeleton from "./dashboardSkeleton";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
-import ReferralModal from "./ReferralModal";
 import { useTranslation } from "react-i18next";
 
 interface ExamItem {
@@ -44,15 +42,12 @@ interface DashboardItem {
 
 export default function Dashboard() {
   const { t } = useTranslation("common");
-  const settings = useBusinessSettingsStore((state) => state.settings);
-  const user = useAuthStore().user;
 
   const [loading, setLoading] = useState(true);
   const [allExam, setAllExam] = useState<ExamItem[]>([]);
   const [dashboard, setDashboard] = useState<DashboardItem>(
     {} as DashboardItem
   );
-  const [open, setOpen] = useState(false);
 
   const getExamData = async () => {
     // setLoading(true);
@@ -122,12 +117,6 @@ export default function Dashboard() {
               subText=""
               preText=""
             />
-            <button
-              onClick={() => setOpen(true)}
-              className="flex items-center gap-1 font-semibold rounded-2xl bg-purple-100 hover:bg-purple-200 px-5 py-1.5 border border-purple-200 text-sm sm:text-base text-purple-700 cursor-pointer"
-            >
-              <TbRosetteDiscountFilled className="size-6 shake-pause" />{t("dashboard.buttons.refer_earn")}
-            </button>
           </section>
           <div className="relative bg-linear-to-t from-purple-400 to-pink-400 text-white rounded-xl overflow-hidden px-8 py-4 lg:py-0 lg:px-16 flex justify-between items-center gap-8 shadow-md hover:shadow-lg transition-shadow duration-500 mb-5">
             {/* Animated Floating Orbs */}
@@ -334,14 +323,6 @@ export default function Dashboard() {
               </section>
             </div>
           </section>
-
-          <ReferralModal
-            isOpen={open}
-            onClose={() => setOpen(false)}
-            referralLink={`${settings?.website_url}/registration/?ref=${
-              user?.candidate_code || ""
-            }`}
-          />
         </div>
       )}
     </>
