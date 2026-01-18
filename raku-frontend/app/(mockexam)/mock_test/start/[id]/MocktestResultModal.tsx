@@ -154,13 +154,13 @@ export default function MocktestResultModal({
             })}
           </div>
 
-          <button
+          {/* <button
             onClick={() => setShowAnsEval(true)}
             className="text-lg text-violet-500 hover:text-purple-500 hover:underline mb-2 flex justify-center items-center gap-1 cursor-pointer mx-auto"
           >
             <RiBarChartBoxAiFill /> Evaluate you
             result with AI
-          </button>
+          </button> */}
 
           <Link
             href="/mock_test_result"
