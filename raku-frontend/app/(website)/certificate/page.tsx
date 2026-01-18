@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import BreadCrumb from "@/components/BreadCrumb";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 export default function QRScannerPage() {
   const { t } = useTranslation("common");
@@ -18,6 +19,7 @@ export default function QRScannerPage() {
   const [scannedData, setScannedData] = useState("");
 
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (!scannerRef.current) return;
@@ -37,7 +39,13 @@ export default function QRScannerPage() {
     scanner.render(
       (decodedText: string) => {
         setScannedData(decodedText);
-        router.push(`${decodedText}`);
+        const id = searchParams.get("mock_test_id");
+        if (id) {
+          router.push(`certificate/${id}`);
+        } else {
+          toast.error("Invalid QR code");
+          return
+        }
       },
       (errorMessage: string) => {
         // optional: console.log(errorMessage);

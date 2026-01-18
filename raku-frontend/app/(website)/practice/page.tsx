@@ -13,6 +13,8 @@ import { useTranslation } from "react-i18next";
 import { FaRoad } from "react-icons/fa";
 import { ConfirmUnlockModal } from "./ConfirmUnlockModal";
 import ConfettiComponent from "@/components/ConfettiComponent";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { useRouter } from "next/navigation";
 
 interface Roadmap {
   id: number;
@@ -33,6 +35,12 @@ export default function Practice() {
     { name: t("breadcrumb.home"), to: "/" },
     { name: t("breadcrumb.practice"), to: "/practice" },
   ];
+
+  const isAuthenticated = useAuthStore().isAuthenticated;
+  const user = useAuthStore().user
+  const token = useAuthStore().token
+  const router = useRouter()
+
   const practiceLevelRef = useRef<HTMLDivElement | null>(null);
   const [showUnlockModal, setShowUnlockModal] = useState(false);
   const [selectedRoadmap, setSelectedRoadmap] = useState<Roadmap | null>(null);
@@ -64,6 +72,10 @@ export default function Practice() {
   }, [t]);
 
   const handleUnlock = async (roadmapId: number) => {
+    if(!isAuthenticated && user && token){
+      router.push(`sign_in?callbackUrl=/practice`)
+      return
+    }
     try {
       const response = await axiosInstance.post(
         `/candidate/unlock-roadmaps/?roadmap_id=${roadmapId}`

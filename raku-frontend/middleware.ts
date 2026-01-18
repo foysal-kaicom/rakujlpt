@@ -42,6 +42,7 @@ export const config = {
     "/payment-failed/(.*)",
     "/payment-cancle/(.*)",
     "/otp_verify",
+    "/mock_test_select/(.*)",
     "/mock_test/start/(.*)",
     "/practice/(.*)"
   ],

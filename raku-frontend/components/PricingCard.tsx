@@ -85,7 +85,7 @@ export default function PricingCard({ plan }: any) {
         )}
 
         {/* Plan Info */}
-        <div className="text-center mb-8 mt-4">
+        <div className="text-center mb-4">
           <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
           <div className="mb-4">
             <span className="text-4xl font-bold bg-linear-to-tr from-blue-600 via-fuchsia-500 to-purple-600 bg-clip-text text-transparent">
@@ -96,14 +96,14 @@ export default function PricingCard({ plan }: any) {
         </div>
 
         {/* Description */}
-        <div className="space-y-4 mb-16">
+        <div className="space-y-4 mb-20">
           <div className="text-gray-600 font-medium leading-7">
             {plan.description && parse(plan.description)}
           </div>
         </div>
 
         {/* Subscribe Button */}
-        <div className="w-full flex justify-center absolute bottom-5 left-0 px-8">
+        <div className="w-full flex justify-center absolute bottom-6 left-0 px-8">
           {(user?.current_package_id == plan.id && user?.is_subscribed == 1) ||
           (plan.is_free == true && user?.is_free == 1) ||
           plan.is_active == 0 ? (
