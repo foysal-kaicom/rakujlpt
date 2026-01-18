@@ -10,6 +10,27 @@
         </h3>
     </div>
 
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">    
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">    
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">    
+            @foreach ($errors->all() as $error)
+                {{ $error }}
+            @endforeach
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     <!-- Form -->
     <form action="{{ route('roadmaps.update', $roadmap->id) }}" method="POST" enctype="multipart/form-data" class="p-4">
         @csrf
@@ -61,6 +82,7 @@
                         <label class="form-label fw-semibold"></label>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="is_free" id="requiresCoinsCheckbox" value="1" {{ old('is_free', $roadmap->is_free) ? 'checked' : '' }}>
+                            
                             <label class="form-check-label" for="requiresCoinsCheckbox">
                                 Free Roadmap    
                             </label>
@@ -69,12 +91,14 @@
                     </div>
 
                     <!-- unlock_coins -->
-                    <div class="col-md-6">
+                    <div class="col-md-6" id="unlockCoinsWrapper">
                         <label class="form-label fw-semibold">Unlock Coins</label>
-                        <input type="number" name="unlock_coins" id="unlockCoinsInput" value="{{ old('unlock_coins', $roadmap->unlock_coins) }}"
-                            class="form-control form-control-lg shadow-sm rounded-2" placeholder="Enter coins required to unlock" min="0" />
+                        <input type="number" name="unlock_coins" id="unlockCoinsInput"
+                            value="{{ old('unlock_coins', $roadmap->unlock_coins) }}" class="form-control form-control-lg shadow-sm rounded-2"
+                            />
                         @error('unlock_coins') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
+
             
                     <!-- Description -->
                     <div class="col-md-12">
@@ -137,5 +161,30 @@
         slugInput.value = slugify(this.value);
     });
 </script>
+<script>
+    const isFreeCheckbox = document.getElementById('requiresCoinsCheckbox');
+    const unlockCoinsWrapper = document.getElementById('unlockCoinsWrapper');
+    const unlockCoinsInput = document.getElementById('unlockCoinsInput');
+
+    function toggleUnlockCoins() {
+        if (isFreeCheckbox.checked) {
+            unlockCoinsWrapper.style.display = 'none';
+            unlockCoinsInput.value = 0;
+            unlockCoinsInput.removeAttribute('required');
+        } else {
+            unlockCoinsWrapper.style.display = 'block';
+            unlockCoinsInput.value = unlockCoinsInput.value > 0 ? unlockCoinsInput.value : 1;
+            unlockCoinsInput.setAttribute('required', 'required');
+        }
+    }
+
+    // Run on page load
+    toggleUnlockCoins();
+
+    // Run on change
+    isFreeCheckbox.addEventListener('change', toggleUnlockCoins);
+</script>
+
+
 
 @endsection
