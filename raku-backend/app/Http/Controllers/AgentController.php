@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AgentRequest;
 use App\Models\Agent;
+use App\Models\AgentDisburseHistory;
 use App\Services\FileStorageService;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
@@ -128,4 +129,61 @@ class AgentController extends Controller
             return redirect()->route('agents.list');
         }
     }
+
+    public function paymentHistory(Request $request)
+    {
+        $agents = Agent::select('id', 'name')->orderBy('name')->get();
+
+        if ($request->filled('agent_id')) {
+            $query = AgentDisburseHistory::with(['agent:id,name'])->where('agent_id', $request->agent_id)->orderByDesc('id');
+
+            if ($request->filled('month')) {
+                $query->where('billing_month', $request->month);
+            }
+            if ($request->filled('year')) {
+                $query->Where('billing_year', $request->year);
+            }
+
+            $disbursements = $query->paginate(10)->appends($request->query());
+            return view('agents.payment.index', compact('agents', 'disbursements'));
+        }
+
+        return view('agents.payment.index', compact('agents'));
+    }
+
+
+    public function editPaymentHistory($id)
+    {
+        $agents = Agent::select('id','name')->orderBy('name')->get();
+
+        $history = AgentDisburseHistory::with(['agent:id,name'])->findOrFail($id);
+
+        return view('agents.payment.edit-payment', compact('agents', 'history'));
+    }
+
+    public function updatePaymentHistoryStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status'  => 'required|in:pending,approved,rejected,cancelled',
+            'remarks' => 'nullable|string|max:1000',
+        ]);
+
+        $history = AgentDisburseHistory::findOrFail($id);
+
+        $history->status = $request->status;
+        $history->remarks = $request->remarks;
+        $history->approved_by = auth()->id();
+        $history->paid_at = $request->status === 'approved' ? now() : null;
+
+        $history->save();
+
+        Toastr::success('Disbursement status updated successfully.');
+        return redirect()->route('agents.payment.history', [
+            'agent_id' => $history->agent_id,
+            'month'    => $history->billing_month,
+            'year'     => $history->billing_year,
+        ]);
+    }
+
+
 }

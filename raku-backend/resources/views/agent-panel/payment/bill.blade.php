@@ -295,11 +295,17 @@
 
                     <div class="col-md-6">
                         <label class="form-label">Paid Amount</label>
-                        <input type="number" name="payout_amount" class="form-control" required placeholder="Enter paid amount">
+                        <input type="number" name="payout_amount" id="payout_amount" class="form-control" required placeholder="Enter paid amount" min="1" max="{{ is_numeric($dueAmount) ? $dueAmount : 0 }}">
+                    
                         <small class="text-muted">
                             Due: {{ is_numeric($dueAmount) ? number_format((float)$dueAmount, 0) : '-' }} BDT
                         </small>
+                    
+                        <small class="text-danger d-none" id="amountError">
+                            Paid amount cannot exceed due amount
+                        </small>
                     </div>
+                    
 
                     <div class="col-md-6">
                         <label class="form-label">Transaction ID</label>

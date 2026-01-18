@@ -349,23 +349,59 @@
                 </a>
                 </div>
             </div>
-            <div>
-                <a href="{{ route('agents.list') }}"
-                    class="menu-link group flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 
-                    {{ request()->routeIs('agent.list') ? 'bg-purple-500 text-white shadow-lg' : 'text-slate-700 hover:text-purple-600 hover:bg-purple-50' }}">
-                    
+            @php
+    $agentsActive = request()->routeIs('agent.*');
+    @endphp
+
+    <div class="menu-section" data-toggle="agents">
+
+        <!-- MAIN MENU -->
+        <div class="cursor-pointer">
+            <div
+                class="group flex items-center justify-between px-3 py-2.5 rounded-xl transition-all duration-200
+                {{ $agentsActive ? 'bg-purple-500 text-white shadow-lg' : 'text-slate-700 hover:text-purple-600 hover:bg-purple-50' }}">
+
+                <div class="flex items-center gap-3">
                     <div
-                        class="flex items-center justify-center w-9 h-9 rounded-lg 
-                        {{ request()->routeIs('agent.list') ? 'bg-white/20' : 'bg-gradient-to-br from-orange-500 to-purple-600' }} 
+                        class="flex items-center justify-center w-9 h-9 rounded-lg
+                        {{ $agentsActive ? 'bg-white/20' : 'bg-gradient-to-br from-orange-500 to-purple-600' }}
                         text-white shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
-                        
+
                         <i class="fas fa-people-group text-sm"></i>
                     </div>
-            
+
                     <span class="font-semibold text-sm">Agents</span>
+                </div>
+
+                <i
+                    class="fas fa-chevron-down drop-arrow text-xs
+                    {{ $agentsActive ? 'text-white/80 rotated' : 'text-slate-400 -rotate-90' }}
+                    transition-transform duration-300">
+                </i>
+            </div>
+        </div>
+
+        <!-- SUB MENU -->
+        <div class="submenu mt-1 ml-12 space-y-1 {{ $agentsActive ? '' : 'hidden' }}"
+            data-target="agents">
+
+            {{-- Agent List --}}
+                <a href="{{ route('agents.list') }}"
+                    class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200
+                    {{ request()->routeIs('agents.list') ? 'bg-purple-100 text-purple-700 font-semibold' : 'text-slate-600 hover:text-purple-600 hover:bg-purple-50' }}">
+                    <i class="fa-solid fa-list text-xs"></i>
+                    <span>Agent List</span>
+                </a>
+
+                {{-- Agent Payments --}}
+                <a href="{{ route('agents.payment.history') }}"
+                    class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200
+                    {{ request()->routeIs('agents.payments') ? 'bg-purple-100 text-purple-700 font-semibold' : 'text-slate-600 hover:text-purple-600 hover:bg-purple-50' }}">
+                    <i class="fa-solid fa-money-bill-wave text-xs"></i>
+                    <span>Payments</span>
                 </a>
             </div>
-            
+        </div>
 
             <div>
                 <a href="{{ route('user-payments') }}"

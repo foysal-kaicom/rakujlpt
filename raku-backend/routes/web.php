@@ -221,7 +221,12 @@ Route::group(['middleware' => 'auth', 'checkPermission'], function () {
     });
 
     Route::group(['prefix' => 'practices', 'as' => 'practices.', 'module' => 'practices'], function () {
-        Route::resource('/', PracticeController::class);
+        Route::get('/', [PracticeController::class, 'index'])->name('index');
+        Route::get('/create', [PracticeController::class, 'create'])->name('create');
+        Route::post('/store', [PracticeController::class, 'store'])->name('store');
+        Route::get('/edit/{practice}', [PracticeController::class, 'edit'])->name('edit');
+        Route::post('/update/{practice}', [PracticeController::class, 'update'])->name('update');
+        Route::post('{practice}/toggle-status', [PracticeController::class, 'toggleStatus'])->name('toggleStatus');
         Route::get('/create/{stage_id}', [PracticeController::class, 'createPractice'])->name('create.stage');
     });
 
@@ -237,8 +242,10 @@ Route::group(['middleware' => 'auth', 'checkPermission'], function () {
         Route::get('/edit/{id}', [AgentController::class, 'edit'])->name('edit');
         Route::put('/update/{id}', [AgentController::class, 'update'])->name('update');
         Route::post('{id}/toggle-status', [AgentController::class, 'toggleStatus'])->name('toggleStatus');
+        Route::get('/payment-history', [AgentController::class, 'paymentHistory'])->name('payment.history');
+        Route::get('/edit-payment-details/{id}', [AgentController::class, 'editPaymentHistory'])->name('payment.Details');
+        Route::post('/update-payment-details/{id}', [AgentController::class, 'updatePaymentHistoryStatus'])->name('payment.update');
     });
-
 
     Route::group(['prefix' => 'coupon', 'as' => 'coupon.'], function () {
         Route::get('/', [CouponController::class, 'list'])->name('list');
