@@ -213,7 +213,7 @@ export default function WalletSystem() {
 
               {/* Action Buttons */}
               <div className="mt-6 pt-4 border-t border-gray-200">
-                <div className="w-1/2 flex flex-col sm:flex-row gap-3">
+                <div className="sm:w-1/2 flex flex-col sm:flex-row gap-3">
                   <button
                     onClick={() => setIsRefTransferOpen(true)}
                     className="flex-1 group relative overflow-hidden bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white font-semibold py-3.5 px-6 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 cursor-pointer"
