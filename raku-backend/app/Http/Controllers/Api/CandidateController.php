@@ -117,8 +117,12 @@ class CandidateController extends Controller
                 if (!$candidate->last_login || Carbon::parse($candidate->last_login)->toDateString() !== $today) {
                     walletCredit($candidate, 'daily_login');
                 }
+                if (empty($candidate->candidate_code)) {
+                    $candidate->candidate_code = strtoupper(Str::random(7));
+                }
                 $candidate->update([
                     'last_login' => now(),
+                    'candidate_code' => $candidate->candidate_code,
                 ]);
 
                 return response()->json([
