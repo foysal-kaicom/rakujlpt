@@ -72,7 +72,7 @@ export default function Practice() {
   }, [t]);
 
   const handleUnlock = async (roadmapId: number) => {
-    if(!isAuthenticated && user && token){
+    if(!isAuthenticated && !user && !token){
       router.push(`sign_in?callbackUrl=/practice`)
       return
     }
