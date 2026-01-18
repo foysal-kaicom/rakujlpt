@@ -129,11 +129,13 @@ class MockTestController extends Controller
             $examId = $data['exam_id'];
             $candidateId = Auth::guard('candidate')->id();
 
-            $exam = Exam::with('mockTestModules')->findOrFail($examId);
+            $exam = Exam::findOrFail($examId);
+            $modules = $exam->resolveModules();
+
 
             // INIT MODULE SCORES
             $modulesScore = [];
-            foreach ($exam->mockTestModules as $module) {
+            foreach ($modules as $module) {
                 $modulesScore[$module->name] = [
                     'answered' => 0,
                     'correct'  => 0,
@@ -169,6 +171,8 @@ class MockTestController extends Controller
                 if (!$question) continue;
 
                 $moduleName = $question->section->mockTestModule->name ?? 'Unknown';
+               
+           
 
                 if (!isset($modulesScore[$moduleName])) {
                     // HARD FAIL > silent corruption

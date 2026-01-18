@@ -68,4 +68,19 @@ class Exam extends Model
         return $this->hasMany(MockTestRecords::class, 'exam_id', 'id');
     }
 
+    public function resolveModules()
+{
+    if ($this->type === 'custom') {
+        return CustomMockTest::where('exam_id', $this->id)
+            ->with('mockTestModule:id,name')
+            ->get()
+            ->pluck('mockTestModule')
+            ->unique('id')
+            ->values();
+    }
+
+    return $this->mockTestModules()->get();
+}
+
+
 }
