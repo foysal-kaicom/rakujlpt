@@ -18,7 +18,7 @@ $question = $practice->questions_array[0] ?? [];
 
 <form action="{{ route('practices.update', $practice->id) }}" method="POST" enctype="multipart/form-data" class="px-10">
     @csrf
-    @method('PUT')
+
 
     <div class="questionBlock border rounded-lg mb-5 relative">
         <h3 class="text-xl font-semibold p-[12px] rounded-t-lg text-black bg-indigo-300">
