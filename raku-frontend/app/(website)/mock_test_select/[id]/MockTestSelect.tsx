@@ -16,7 +16,7 @@ export default function MockTestQuestionComposition() {
   const searchParams = useSearchParams();
   const type = (searchParams.get("type") || "").toLowerCase();
   const title = searchParams.get("title")?.toLowerCase();
-  const duration= searchParams.get("duration")?.toLowerCase();
+  const duration = searchParams.get("duration")?.toLowerCase();
   const router = useRouter();
   const { examStarted, startExam } = useExamStore();
 
@@ -37,7 +37,7 @@ export default function MockTestQuestionComposition() {
         title={title || ""}
         duration={duration || ""}
       />
-      <div className="relative pb-12 p-6 sm:p-8 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 overflow-hidden">
+      <div className="relative pb-12 md:px-6 py-6 sm:py-8 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 overflow-hidden">
         {/* Floating background shapes */}
         <WebpageWrapper>
           <div className="absolute -top-10 -left-10 w-40 h-40 bg-blue-300/20 rounded-full blur-3xl animate-bounce-slow"></div>

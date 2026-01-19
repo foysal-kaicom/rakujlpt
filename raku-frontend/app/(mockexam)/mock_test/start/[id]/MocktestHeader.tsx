@@ -73,6 +73,24 @@ export default function MocktestHeader({
             </h1>
           </div>
 
+          <div className="hidden md:flex justify-center gap-5 w-fit my-2 bg-white container mx-auto rounded-lg py-2 px-5 font-semibold">
+            {moduleList.map((module) => (
+              <button
+                key={module}
+                onClick={() => handleModuleClick(module)}
+                className={`flex items-center gap-1 cursor-pointer ${
+                  module === currentModule ? "text-purple-700" : "text-gray-400"
+                }`}
+              >
+                {/* {module === currentModule && <p className="size-4 bg-purple-700 rounded-full"></p>} */}
+                <p
+                  className={`size-2 rounded-full  ${module === currentModule ? "bg-purple-700 animate-ping" : "bg-gray-200"}`}
+                ></p>
+                {module}
+              </button>
+            ))}
+          </div>
+
           <div className="flex items-center space-x-4 justify-center">
             <div className="relative flex items-center gap-3 p-1 rounded-full bg-gradient-to-r from-red-500 via-rose-500 to-pink-500 shadow-lg shadow-red-500/30 w-[150px] shake-pause">
               {/* Glow */}
@@ -90,7 +108,8 @@ export default function MocktestHeader({
             </div>
           </div>
         </div>
-        <div className="flex justify-center gap-5 w-fit my-2 bg-white container mx-auto rounded-lg py-2 px-5 font-semibold">
+
+        <div className="flex md:hidden justify-center gap-5 w-fit my-2 bg-white container mx-auto rounded-lg py-2 px-5 font-semibold">
           {moduleList.map((module) => (
             <button
               key={module}
@@ -100,7 +119,9 @@ export default function MocktestHeader({
               }`}
             >
               {/* {module === currentModule && <p className="size-4 bg-purple-700 rounded-full"></p>} */}
-              <p className={`size-2 rounded-full  ${module === currentModule ? "bg-purple-700 animate-ping" : "bg-gray-200"}`}></p>
+              <p
+                className={`size-2 rounded-full  ${module === currentModule ? "bg-purple-700 animate-ping" : "bg-gray-200"}`}
+              ></p>
               {module}
             </button>
           ))}
@@ -125,7 +146,7 @@ export default function MocktestHeader({
                 const sectionQuestions =
                   section.group?.reduce(
                     (sum, g) => sum + g.questions.length,
-                    0
+                    0,
                   ) ?? 0;
                 if (sectionQuestions === 0) return null;
 
@@ -135,7 +156,7 @@ export default function MocktestHeader({
                       sum +
                       g.questions.filter((q) => answers[q.id] !== undefined)
                         .length,
-                    0
+                    0,
                   ) ?? 0;
 
                 let btnClass = "";
@@ -153,8 +174,8 @@ export default function MocktestHeader({
                   <button
                     key={section.id}
                     onClick={() => {
-                      setCurrentSectionIndex(index),
-                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      (setCurrentSectionIndex(index),
+                        window.scrollTo({ top: 0, behavior: "smooth" }));
                     }}
                     className={`flex shrink-0 justify-center items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors cursor-pointer ${btnClass}`}
                   >

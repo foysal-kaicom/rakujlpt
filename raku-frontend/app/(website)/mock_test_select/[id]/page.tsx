@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function MockTestQuestionCompositionWrapper() {
   return (
     <Suspense fallback={<QuestionCompositionSkeleton />}>
-      <MockTestQuestionComposition/>
+      <MockTestQuestionComposition />
     </Suspense>
   );
 }

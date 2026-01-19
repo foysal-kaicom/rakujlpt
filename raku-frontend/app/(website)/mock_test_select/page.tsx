@@ -46,7 +46,7 @@ export default function MockTestSelect() {
 
   const getExamOptions = (data: { short_name: any }[]): Option[] => {
     const uniqueShortNames = Array.from(
-      new Set(data.map((item) => item.short_name))
+      new Set(data.map((item) => item.short_name)),
     );
 
     return [
@@ -62,7 +62,7 @@ export default function MockTestSelect() {
     setLoader(true);
     try {
       const response = await axios.get<{ success: boolean; data: Exam[] }>(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/exam/list`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/exam/list`,
       );
       if (response?.data?.success) {
         setMockTests(response.data.data);
@@ -135,7 +135,7 @@ export default function MockTestSelect() {
                 >
                   {mockTests
                     .filter((test) =>
-                      exam === "all" ? true : test.short_name === exam
+                      exam === "all" ? true : test.short_name === exam,
                     )
                     .map((test) => (
                       <div

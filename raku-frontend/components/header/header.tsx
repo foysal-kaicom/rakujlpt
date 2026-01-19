@@ -214,7 +214,7 @@ export default function Header() {
       <>
         <Link
           href="/registration"
-          className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-4 text-indigo-700 bg-white rounded-full border-4 border-indigo-300 hover:border-orange-400 duration-300 shadow-2xl transform hover:scale-110 hover:-rotate-2 font-bold group relative overflow-hidden max-w-44"
+          className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-4 text-indigo-700 bg-white rounded-full border-4 border-indigo-300 hover:border-orange-400 duration-300 shadow-2xl hover:scale-110 transform font-bold group relative overflow-hidden max-w-44"
         >
           <div className="absolute inset-0 bg-linear-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-30 group-hover:translate-x-full transition-all duration-700 -skew-x-12"></div>
           <span className="relative z-10 group-hover:text-orange-600 transition-colors duration-300">
@@ -225,7 +225,7 @@ export default function Header() {
 
         <Link
           href="/sign_in"
-          className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-4 rounded-full border-4 border-white/50 bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-pink-500 hover:to-rose-500 hover:border-pink-300 duration-300 shadow-2xl transform hover:scale-110 hover:rotate-2 font-bold group relative overflow-hidden max-w-44"
+          className="text-xs 2xl:text-sm flex items-center gap-2 py-3 px-4 rounded-full border-4 border-white/50 bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-pink-500 hover:to-rose-500 hover:border-pink-300 duration-300 shadow-2xl transform hover:scale-110 font-bold group relative overflow-hidden max-w-44"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 group-hover:translate-x-full transition-all duration-700 -skew-x-12"></div>
           <span className="relative z-10">🔑 {t("nav.sign_in")}</span>
