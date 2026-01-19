@@ -226,6 +226,8 @@ Route::group(['middleware' => 'auth', 'checkPermission'], function () {
         Route::post('/store', [PracticeController::class, 'store'])->name('store');
         Route::get('/edit/{practice}', [PracticeController::class, 'edit'])->name('edit');
         Route::post('/update/{practice}', [PracticeController::class, 'update'])->name('update');
+        Route::delete('/{practice}', [PracticeController::class, 'destroy'])->name('destroy');
+
         Route::post('{practice}/toggle-status', [PracticeController::class, 'toggleStatus'])->name('toggleStatus');
         Route::get('/create/{stage_id}', [PracticeController::class, 'createPractice'])->name('create.stage');
     });
