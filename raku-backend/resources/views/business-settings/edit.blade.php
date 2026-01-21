@@ -222,39 +222,8 @@
         </form>    
     </div>
     @endHasPermission
-    @hasPermission('business-settings.policies')
-    <div class="bg-white rounded m-4" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0px 2px rgba(0, 0, 0, 0.1), 4px 0 6px rgba(0, 0, 0, 0.1), 0px 0 2px rgba(0, 0, 0, 0.1);">
-        <div class="text-white p-3 bg-indigo-400 rounded-top" style="color:#04070a">
-            <h3 class="fs-5">Policies</h3>
-        </div>
-        <div class="row g-4 p-4">
-            <form action="{{ route('business-settings.policies') }}" method="POST" >
-                @csrf 
-            
-                <div class="form-group mb-4">
-                    <label for="privacy_policy" style="margin-left: 4px; font-weight: bold; font-size:18px">Privacy Policy</label>
-                    <textarea id="content" name="privacy_policy" class="form-control">{{ old('privacy_policy', $bsData->privacy_policy ) }}</textarea>
-                </div>
-            
-                <div class="form-group mb-4">
-                    <label for="terms_and_conditions" style="margin-left: 4px; font-weight: bold; font-size:18px">Terms and Conditions</label>
-                    <textarea id="terms" name="terms_and_conditions" class="form-control">{{ old('terms_and_conditions',  $bsData->terms_and_conditions) }}</textarea>
-                </div>
-            
-                <div class="form-group mb-4">
-                    <label for="return_policy" style="margin-left: 4px; font-weight: bold; font-size:18px">Return Policy</label>
-                    <textarea id="return" name="return_policy" class="form-control">{{ old('return_policy',  $bsData->return_policy) }}</textarea>
-                </div>
-           
-              <!-- Submit Button -->
-                <div class="d-flex justify-content-end mt-4">
-                    <button type="submit" class="btn btn-primary w-25">Save</button>
-                </div>
-            </form>
-        </div>
-    </div>        
 </div>
-@endHasPermission
+
 <!-- JavaScript for Image Preview -->
 <script>
     document.getElementById("fileInput").addEventListener("change", function(event) {
