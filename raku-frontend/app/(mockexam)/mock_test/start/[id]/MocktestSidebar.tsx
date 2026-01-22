@@ -3,38 +3,7 @@ import React from "react";
 import { FaVolumeUp, FaFileAlt } from "react-icons/fa";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 
-interface QuestionOption {
-  id: number;
-  values: string;
-  mock_test_question_id: number;
-  created_at: string;
-  updated_at: string;
-}
-
-interface Question {
-  id: number;
-  proficiency_level: string;
-  title: string;
-  type: string;
-  hints: string;
-  options: QuestionOption;
-}
-
-interface Group {
-  type: string;
-  group_type: string;
-  content: string;
-  questions: Question[];
-}
-
-interface ExamSection {
-  id: number;
-  slug: string;
-  title: string;
-  module_name: string;
-  sample_question: string;
-  group: Group[];
-}
+import type { ExamSection } from "@/types/Mocktest/MockExam.type";
 
 interface MocktestSidebarProps {
   currentSection: ExamSection | null;
@@ -61,7 +30,7 @@ export default function MocktestSidebar({
     <>
       <div className="lg:col-span-1">
         {currentSection && (
-          <div className="bg-white rounded-xl outline outline-purple-200 p-6 sticky top-54">
+          <div className="bg-white rounded-xl outline outline-purple-200 p-6 sticky top-44">
             <div className="text-lg font-semibold text-gray-800 flex justify-between">
               Current Module
               <IoIosArrowDropdownCircle

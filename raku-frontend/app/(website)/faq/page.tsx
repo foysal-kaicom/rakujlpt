@@ -18,8 +18,6 @@ export const metadata: Metadata = {
   ],
 };
 
-
-
 export default function FaqPageWrapper() {
   return (
     <Suspense fallback={<SuspenseLoader />}>

@@ -59,14 +59,16 @@ export default function WalletSystem() {
     nextMilestone === "MAX"
       ? t("wallet.milestones.top_tier")
       : pointsNeeded <= 20
-      ? t("wallet.milestones.almost_there")
-      : pointsNeeded <= 50
-      ? t("wallet.milestones.keep_pushing")
-      : t("wallet.milestones.great_job");
+        ? t("wallet.milestones.almost_there")
+        : pointsNeeded <= 50
+          ? t("wallet.milestones.keep_pushing")
+          : t("wallet.milestones.great_job");
 
   const [loading, setLoading] = useState(true);
   const [practiceTestsData, setPracticeTestsData] = useState<Roadmap[]>([]);
   const [isRefTransferOpen, setIsRefTransferOpen] = useState(false);
+  const [transactionData, setTransactionData] = useState<any[]>([]);
+
   const fetchRoadmaps = async () => {
     setLoading(true);
     try {
@@ -83,7 +85,7 @@ export default function WalletSystem() {
   useEffect(() => {
     fetchRoadmaps();
   }, [t]);
-  const [transactionData, setTransactionData] = useState<any[]>([]);
+
   const fetchWalletData = async () => {
     try {
       const response = await axiosInstance.get(`/candidate/wallet`);
@@ -109,10 +111,11 @@ export default function WalletSystem() {
     setPoints(points - sub.cost);
     setSubscription(t(sub.name)); // Translate name for state
   };
+
   const handleUnlock = async (roadmapId: number) => {
     try {
       const response = await axiosInstance.post(
-        `/candidate/unlock-roadmaps/?roadmap_id=${roadmapId}`
+        `/candidate/unlock-roadmaps/?roadmap_id=${roadmapId}`,
       );
       if (response?.data?.success) {
         toast.success(t("practicePage.unlock_success"));
@@ -125,7 +128,7 @@ export default function WalletSystem() {
       toast.error(
         (error?.response?.data?.message || "") +
           ". " +
-          t("errors.unlock_roadmap")
+          t("errors.unlock_roadmap"),
       );
     }
   };
@@ -137,12 +140,13 @@ export default function WalletSystem() {
         {
           receiver_code: receiverCode,
           amount: amount,
-        }
+        },
       );
       if (response?.data?.success) {
         toast.success(t("wallet.referral.transfer_success"));
         // Refresh wallet data
         fetchWalletData();
+        setIsRefTransferOpen(false);
       } else {
         toast.error(t("errors.transfer_coins"));
       }
@@ -150,6 +154,7 @@ export default function WalletSystem() {
       toast.error(t("errors.transfer_coins"));
     }
   };
+
   return (
     <>
       {loading && <Loader />}
@@ -286,7 +291,7 @@ export default function WalletSystem() {
                 </div>
 
                 {/* Card Number (fake formatting) */}
-                <p className="mt-3 tracking-widest text-sm opacity-80">
+                <p className="mt-3 tracking-widest text-sm opacity-80 font-medium">
                   **** &nbsp; **** &nbsp; **** &nbsp;{" "}
                   {String(points).slice(-4).padStart(4, "0")}
                 </p>
@@ -294,7 +299,7 @@ export default function WalletSystem() {
                 {/* Footer */}
                 <div className="mt-6 flex justify-between items-center opacity-90">
                   <div>
-                    <p className="text-xs uppercase opacity-80">
+                    <p className="text-xs uppercase opacity-80 font-medium">
                       {t("wallet.card.member")}
                     </p>
                     <p className="font-semibold tracking-wide">
@@ -303,7 +308,7 @@ export default function WalletSystem() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-xs uppercase opacity-80">
+                    <p className="text-xs uppercase opacity-80 font-medium">
                       {t("wallet.card.premium_balance")}
                     </p>
                     <p className="font-semibold">
@@ -320,55 +325,88 @@ export default function WalletSystem() {
             <h2 className="text-xl font-bold mb-4">
               {t("wallet.sections.unlock_features")}
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {practiceTestsData.map((f) => {
-                const unlocked = Number(f.is_unlocked) === 1;
+                const unlocked = Boolean(f.is_unlocked);
 
                 return (
                   <div
                     key={f.id}
-                    className="p-5 rounded-xl shadow bg-white flex flex-col justify-between h-45"
+                    className="group relative rounded-2xl bg-white p-5 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col"
                   >
-                    <div>
+                    {/* Status Badge */}
+                    <div className="absolute top-4 right-4">
                       {unlocked ? (
-                        <Link
-                          href={`/practice/${f.slug}`}
-                          className="text-blue-500"
-                        >
-                          <h3 className="text-lg font-semibold">
+                        <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700 font-medium flex items-center gap-1">
+                          <FaLockOpen />
+                          Unlocked
+                        </span>
+                      ) : f.is_free ? (
+                        <span className="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-700 font-medium">
+                          Free
+                        </span>
+                      ) : (
+                        <span className="px-3 py-1 text-xs rounded-full bg-red-100 text-red-700 font-medium flex items-center gap-1">
+                          <FaLock />
+                          Locked
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1">
+                      {unlocked ? (
+                        <Link href={`/practice/${f.slug}`}>
+                          <h3 className="text-lg font-semibold text-gray-900 group-hover:text-purple-600 transition">
                             {t(f.title)}
                           </h3>
                         </Link>
                       ) : (
-                        <h3 className="text-lg font-semibold">{t(f.title)}</h3>
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          {t(f.title)}
+                        </h3>
                       )}
 
-                      <p className="text-gray-500">
-                        {t("wallet.ui.required")}: {f.unlock_coins}{" "}
-                        {t("wallet.ui.points_full")}
+                      <p className="mt-2 text-sm text-gray-500 line-clamp-3">
+                        {t(f.description)}
                       </p>
+
                     </div>
 
-                    <button
-                      disabled={unlocked || points < f.unlock_coins}
-                      onClick={() => {
-                        setSelectedRoadmap(f);
-                        setShowUnlockModal(true);
-                      }}
-                      className={`mt-4 flex items-center justify-center gap-2 py-2 rounded-lg font-medium transition 
-                    ${
-                      unlocked
-                        ? "bg-green-500 text-white"
-                        : points < f.unlock_coins
-                        ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                        : "bg-purple-600 hover:bg-purple-700 text-white cursor-pointer"
-                    }`}
-                    >
-                      {unlocked ? <FaLockOpen /> : <FaLock />}
-                      {unlocked
-                        ? t("wallet.ui.unlocked")
-                        : t("wallet.ui.unlock")}
-                    </button>
+                    {/* Footer */}
+                    <div className="mt-5">
+                      <p className="mb-2 text-xs text-violet-600 font-semibold text-center bg-violet-50 px-5 py-1 rounded-4xl w-fit mx-auto">
+                        {f.total_stages} Stages
+                      </p>
+                      {unlocked && (
+                        <p className="mb-3 text-sm text-gray-500 font-medium">
+                          {t("wallet.ui.required")}:{" "}
+                          <span className="font-semibold text-gray-700">
+                            {f.unlock_coins} {t("wallet.ui.points_full")}
+                          </span>
+                        </p>
+                      )}
+
+                      <button
+                        disabled={unlocked || points < f.unlock_coins}
+                        onClick={() => {
+                          setSelectedRoadmap(f);
+                          setShowUnlockModal(true);
+                        }}
+                        className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl font-medium transition-all ${
+                          unlocked
+                            ? "bg-green-500 text-white cursor-pointer"
+                            : points < f.unlock_coins
+                              ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                              : "bg-purple-600 hover:bg-purple-700 text-white shadow-md hover:shadow-lg cursor-pointer"
+                        }`}
+                      >
+                        {unlocked ? <FaLockOpen /> : <FaLock />}
+                        {unlocked
+                          ? t("wallet.ui.unlocked")
+                          : t("wallet.ui.unlock")}
+                      </button>
+                    </div>
                   </div>
                 );
               })}
@@ -470,7 +508,7 @@ export default function WalletSystem() {
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-600">
                           {new Date(
-                            transaction.created_at
+                            transaction.created_at,
                           ).toLocaleDateString()}
                         </td>
                       </tr>
