@@ -16,11 +16,13 @@ class SendRegistrationEmailJob implements ShouldQueue
      * Create a new job instance.
      */
     public $candidate;
+    public $plainPassword;
 
 
-    public function __construct(Candidate $candidate)
+    public function __construct(Candidate $candidate, $plainPassword)
     {
         $this->candidate = $candidate;
+        $this->plainPassword = $plainPassword;
 
     }
 
@@ -29,7 +31,7 @@ class SendRegistrationEmailJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Mail::to($this->candidate->email)->send(new NewRegistrationEmail($this->candidate));
+        Mail::to($this->candidate->email)->send(new NewRegistrationEmail($this->candidate, $this->plainPassword ));
 
     }
 }

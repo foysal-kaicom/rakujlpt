@@ -15,7 +15,6 @@ import BreadCrumb from "@/components/BreadCrumb";
 import { TeamMember } from "@/types/index.types";
 import { ourTeamService } from "@/services/common.service";
 
-
 export default function OurTeamsComponent() {
   const { t } = useTranslation("common");
 
@@ -49,7 +48,7 @@ export default function OurTeamsComponent() {
       ) : (
         <WebpageWrapper>
           <BreadCrumb breadCrumbData={breadCrumbData} />
-          <h2 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text mb-4 text-center">
+          <h2 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text mb-4 text-center mt-10">
             {t("meet_the_team.title")}
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto mb-16 text-center">

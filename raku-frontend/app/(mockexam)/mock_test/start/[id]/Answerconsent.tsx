@@ -1,46 +1,14 @@
-interface QuestionOption {
-  id: number;
-  values: string;
-  mock_test_question_id: number;
-  created_at: string;
-  updated_at: string;
-}
-
-interface Question {
-  id: number;
-  proficiency_level: string;
-  title: string;
-  type: string;
-  hints: string;
-  options: QuestionOption;
-}
-
-interface Group {
-  type: string;
-  group_type: string;
-  content: string;
-  questions: Question[];
-}
-
-interface ExamSection {
-  id: number;
-  slug: string;
-  title: string;
-  module_name: string;
-  sample_question: string;
-  group: Group[];
-}
+import type { ExamSection } from "@/types/Mocktest/MockExam.type";
 
 interface MocktestConsentProps {
   questions: ExamSection[];
-  answers: Record<number, string>;
-  questionRefs: React.RefObject<Record<number, HTMLElement | null>>;
+  answers: Record<string, string>;
+  questionRefs: React.RefObject<Record<number, HTMLDivElement | null>>;
+  handleSubmit: () => void | Promise<void>;
   getGlobalQuestionNumber: (questionId: number) => number;
-  setCurrentSectionIndex: (index: number) => void;
-  handleSubmit: () => void;
-  setShowConsent: (value: boolean) => void;
-  setCurrentModule: (value: string) => void;
-  setIgnoreModuleEffect: (value: boolean) => void;
+  setShowConsent: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentModule: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentSectionIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function AnswerConsent({
@@ -52,7 +20,7 @@ export default function AnswerConsent({
   handleSubmit,
   setShowConsent,
   setCurrentModule,
-  setIgnoreModuleEffect,
+  // setIgnoreModuleEffect,
 }: MocktestConsentProps) {
   const handleQuestionClick = (questionId: number) => {
     const targetSection = questions.find((section) =>
@@ -71,7 +39,7 @@ export default function AnswerConsent({
       );
     if (sectionIndex === -1) return;
 
-    setIgnoreModuleEffect(true);
+    // setIgnoreModuleEffect(true);
     setCurrentModule(targetSection.module_name);
     setCurrentSectionIndex(sectionIndex);
     setShowConsent(false);

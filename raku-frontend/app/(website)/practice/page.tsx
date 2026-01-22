@@ -37,9 +37,9 @@ export default function Practice() {
   ];
 
   const isAuthenticated = useAuthStore().isAuthenticated;
-  const user = useAuthStore().user
-  const token = useAuthStore().token
-  const router = useRouter()
+  const user = useAuthStore().user;
+  const token = useAuthStore().token;
+  const router = useRouter();
 
   const practiceLevelRef = useRef<HTMLDivElement | null>(null);
   const [showUnlockModal, setShowUnlockModal] = useState(false);
@@ -72,13 +72,13 @@ export default function Practice() {
   }, [t]);
 
   const handleUnlock = async (roadmapId: number) => {
-    if(!isAuthenticated && !user && !token){
-      router.push(`sign_in?callbackUrl=/practice`)
-      return
+    if (!isAuthenticated && !user && !token) {
+      router.push(`sign_in?callbackUrl=/practice`);
+      return;
     }
     try {
       const response = await axiosInstance.post(
-        `/candidate/unlock-roadmaps/?roadmap_id=${roadmapId}`
+        `/candidate/unlock-roadmaps/?roadmap_id=${roadmapId}`,
       );
       if (response?.data?.success) {
         setShowConfetti(true);
@@ -227,15 +227,30 @@ export default function Practice() {
 
                     {/* Stages badge */}
                     <div className="mt-6 flex justify-center">
-                      <div
-                        className={`px-4 py-2 rounded-full font-semibold text-sm ${
-                          isFree
-                            ? "bg-blue-100 text-blue-700 border border-blue-200"
-                            : "bg-gray-200 text-gray-600 border border-gray-300"
-                        }`}
-                      >
-                        📚 {test.total_stages} {t("practicePage.stages")}
-                      </div>
+                      {isFree ? (
+                        <div
+                          className={`px-4 py-2 rounded-full font-semibold text-sm ${
+                            isFree
+                              ? "bg-blue-100 text-blue-700 border border-blue-200"
+                              : "bg-gray-200 text-gray-600 border border-gray-300"
+                          }`}
+                        >
+                          📚 {test.total_stages} {t("practicePage.stages")}
+                        </div>
+                      ) : (
+                        <div className="size-full flex justify-center items-center">
+                          <span className="flex items-center gap-1.5 text-sm bg-gray-200 text-gray-900 px-3 py-2 rounded-full font-bold">
+                            <span className="text-base">🪙</span>
+                            <span>
+                              Unlock with{" "}
+                              <span className="text-amber-700">
+                                {unlockCoins}
+                              </span>{" "}
+                              coins
+                            </span>
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     {/* Action */}
@@ -252,17 +267,13 @@ export default function Practice() {
                             setSelectedRoadmap(test);
                             setShowUnlockModal(true);
                           }}
-                          className="w-full py-4 bg-gradient-to-r from-gray-700 to-gray-900 text-white rounded-2xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex flex-col items-center gap-2 group cursor-pointer"
+                          className="w-full py-4 bg-gradient-to-r from-gray-700 to-gray-900 text-white rounded-2xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex flex-col items-center gap-2 group cursor-pointer relative"
                         >
                           <span className="flex items-center gap-2 text-lg">
                             <span className="text-2xl group-hover:scale-110 transition-transform">
                               🔒
                             </span>
                             <span>{t("practicePage.unlock_now")}</span>
-                          </span>
-                          <span className="flex items-center gap-1.5 text-sm bg-gray-200 text-gray-900 px-3 py-1 rounded-full font-bold">
-                            <span className="text-base">🪙</span>
-                            <span>{unlockCoins} coins</span>
                           </span>
                         </button>
                       )}

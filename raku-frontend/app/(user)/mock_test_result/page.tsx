@@ -15,6 +15,8 @@ import PaginatedComponent from "@/components/PaginateComponent";
 import ExamDetailsModal from "./ExamDetailsModal";
 import MocktestResultEvaluation from "./MocktestResultEvaluationComponent";
 
+type Lang = "en" | "bn";
+
 interface ModuleScore {
   wrong: number;
   correct: number;
@@ -54,6 +56,8 @@ export default function MockExamResult() {
     },
   ];
 
+  const [language, setLanguage] = useState<Lang>("en");
+
   const [resultData, setResultData] = useState<MockTestResult[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -72,7 +76,7 @@ export default function MockExamResult() {
   const getStatus = (
     achieved: number,
     perQuestionMarks: number,
-    passing: number
+    passing: number,
   ) => (achieved * perQuestionMarks >= passing ? "passed" : "failed");
 
   const handlePageChange = (page: number) => {
@@ -89,7 +93,7 @@ export default function MockExamResult() {
       console.error(error);
       toast.error(
         error?.response?.data?.message ||
-          t("mock_exam_result.status.fetch_error")
+          t("mock_exam_result.status.fetch_error"),
       );
     } finally {
       setLoading(false);
@@ -98,6 +102,13 @@ export default function MockExamResult() {
 
   useEffect(() => {
     getMockTestResultData();
+  }, []);
+
+  useEffect(() => {
+    const lang = localStorage.getItem("lang") as Lang | null;
+    if (lang === "bn" || lang === "en") {
+      setLanguage(lang);
+    }
   }, []);
 
   const handleDownload = async (id: any) => {
@@ -134,8 +145,11 @@ export default function MockExamResult() {
               preText=""
               subText=""
             />
-            <div className="flex justify-end">
-              <MocktestResultEvaluation resultData={resultData} />
+            <div className="flex justify-center">
+              <MocktestResultEvaluation
+                resultData={resultData}
+                language={language}
+              />
             </div>
             {/* Result Table/Card */}
             <div className="w-full flex flex-col gap-5 mt-5">
@@ -174,7 +188,7 @@ export default function MockExamResult() {
                           const status = getStatus(
                             c.total_correct,
                             c.per_question_mark,
-                            c.exam.pass_point
+                            c.exam.pass_point,
                           );
                           return (
                             <tr
@@ -190,7 +204,7 @@ export default function MockExamResult() {
                               <td className="p-3 border-t border-r border-gray-200 font-medium text-center">
                                 {Math.round(
                                   (c?.total_correct ?? 0) *
-                                    (c?.per_question_mark ?? 0)
+                                    (c?.per_question_mark ?? 0),
                                 )}
                                 /{c.exam.total_point ?? 0}
                               </td>
@@ -248,7 +262,7 @@ export default function MockExamResult() {
                       const status = getStatus(
                         c.total_correct,
                         c.per_question_mark,
-                        c.exam.pass_point
+                        c.exam.pass_point,
                       );
                       return (
                         <div
@@ -271,7 +285,7 @@ export default function MockExamResult() {
                               <span className="text-blue-500 font-semibold text-xs">
                                 {Math.round(
                                   (c?.total_correct ?? 0) *
-                                    (c?.per_question_mark ?? 0)
+                                    (c?.per_question_mark ?? 0),
                                 )}
                                 /{c.exam.total_point ?? 0}
                               </span>

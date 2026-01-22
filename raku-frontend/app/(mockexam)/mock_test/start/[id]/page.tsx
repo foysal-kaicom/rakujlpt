@@ -1,8 +1,15 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useRef, ReactNode } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useRef,
+  useCallback,
+  ReactNode,
+} from "react";
 import { useRouter, useParams } from "next/navigation";
-import { toast } from "sonner";
+
 import {
   FaFileAlt,
   FaBookOpen,
@@ -11,6 +18,7 @@ import {
   FaUsers,
 } from "react-icons/fa";
 
+import { toast } from "sonner";
 import axiosInstance from "@/utils/axios";
 import { useExamStore } from "@/stores/useExamStore";
 
@@ -21,78 +29,35 @@ import MocktestSidebar from "./MocktestSidebar";
 import MocktestMainContent from "./MocktestMainContent";
 import AnswerConsent from "./Answerconsent";
 
-/* -------------------- Types -------------------- */
-interface QuestionOption {
-  id: number;
-  values: string;
-  mock_test_question_id: number;
-  created_at: string;
-  updated_at: string;
-}
-
-interface Question {
-  id: number;
-  proficiency_level: string;
-  title: string;
-  type: string;
-  hints: string;
-  options: QuestionOption;
-}
-
-interface Group {
-  type: string;
-  group_type: string;
-  content: string;
-  questions: Question[];
-}
-
-interface ExamSection {
-  id: number;
-  slug: string;
-  title: string;
-  module_name: string;
-  sample_question: string;
-  group: Group[];
-}
-
-interface ModuleQuestionCounts {
-  [key: string]: number;
-}
-
+import type {
+  ExamSection,
+  ModuleQuestionCounts,
+} from "@/types/Mocktest/MockExam.type";
 
 /* -------------------- Helpers -------------------- */
 const formatTime = (seconds: number) =>
   new Date(seconds * 1000).toISOString().substring(11, 19);
 
-/* -------------------- Main Component -------------------- */
+/* -------------------- Component -------------------- */
 export default function ExamPage() {
   const router = useRouter();
-  const params = useParams();
-  const { id } = params as { id: string };
+  const { id } = useParams() as { id: string };
 
-  /* -------------------- State -------------------- */
+  /* -------------------- Local State -------------------- */
   const [questions, setQuestions] = useState<ExamSection[]>([]);
-  const [examTitle, setExamTitle] = useState<string>(
-    "Japanese Language Proficiency Exam"
-  );
+  const [examTitle, setExamTitle] = useState("");
+  const [currentModule, setCurrentModule] = useState("");
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [sidebarShow, setSidebarShow] = useState(false);
-  const [result, setResult] = useState(null);
-  const questionRefs = useRef<Record<number, HTMLDivElement | null>>({});
-
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const sliderRef = useRef<HTMLDivElement>(null);
-  const [consent, setConsent] = useState(false);
+  const [result, setResult] = useState<any>(null);
   const [showConsent, setShowConsent] = useState(false);
 
-  const [moduleList, setModuleList] = useState<string[]>([]);
-  const [currentModule, setCurrentModule] = useState<string>("");
-  const [sectionList, setSectionList] = useState<ExamSection[]>([]);
-  const [ignoreModuleEffect, setIgnoreModuleEffect] = useState(false);
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const questionRefs = useRef<Record<number, HTMLDivElement | null>>({});
 
-  /* -------------------- Exam Store -------------------- */
+  /* -------------------- Store -------------------- */
   const {
     answers,
     setAnswer,
@@ -100,13 +65,11 @@ export default function ExamPage() {
     timeRemaining,
     setTimeRemaining,
     decrementTime,
-    // resetTime,
     examStarted,
     stopExam,
   } = useExamStore();
 
-  const currentSection = sectionList[currentSectionIndex] ?? null;
-
+  /* -------------------- Static Map -------------------- */
   const stepHeadingIcons: Record<string, ReactNode> = {
     "photo-description": <FaRegImage className="size-8" />,
     "questions-and-answers": <FaRegCommentDots className="size-8" />,
@@ -118,33 +81,56 @@ export default function ExamPage() {
     "reading-comprehension": <FaFileAlt className="size-8" />,
   };
 
-  /* -------------------- Derived Values -------------------- */
-  const totalQuestions = useMemo(
-    () =>
-      questions.reduce(
-        (total, section) =>
-          total + section.group.reduce((sum, g) => sum + g.questions.length, 0),
-        0
-      ),
-    [questions]
+  /* -------------------- Derived Data -------------------- */
+  const moduleList = useMemo(
+    () => [...new Set(questions.map((q) => q.module_name))],
+    [questions],
   );
 
-  const moduleQuestionCounts = questions.reduce(
-    (acc: ModuleQuestionCounts, section) => {
-      const module = section.module_name;
-      const questionCount = section.group.reduce(
-        (sum, g) => sum + g.questions.length,
-        0
-      );
-      acc[module] = (acc[module] || 0) + questionCount;
+  const moduleQuestionCounts = useMemo(() => {
+    return questions.reduce((acc, s) => {
+      const count = s.group.reduce((g, q) => g + q.questions.length, 0);
+      acc[s.module_name] = (acc[s.module_name] || 0) + count;
       return acc;
-    },
-    {} as ModuleQuestionCounts
+    }, {} as ModuleQuestionCounts);
+  }, [questions]);
+
+  const handleModuleClick = (moduleName: string) => {
+    setCurrentModule(moduleName);
+
+    const firstValidIndex = sectionList.findIndex(
+      (s) => s.module_name === moduleName && hasQuestions(s),
+    );
+
+    setCurrentSectionIndex(firstValidIndex === -1 ? 0 : firstValidIndex);
+  };
+
+  const sectionList = useMemo(
+    () => questions.filter((q) => q.module_name === currentModule),
+    [questions, currentModule],
   );
+
+  const currentSection = sectionList[currentSectionIndex] ?? null;
+
+  const totalQuestions = useMemo(() => {
+    return questions.reduce(
+      (t, s) => t + s.group.reduce((g, q) => g + q.questions.length, 0),
+      0,
+    );
+  }, [questions]);
+
+  const handleAnswerChange = (questionId: number, value: string) => {
+    setAnswer(questionId, value);
+  };
 
   const answeredQuestions = useMemo(
     () => Object.keys(answers).length,
-    [answers]
+    [answers],
+  );
+
+  const hasQuestions = useCallback(
+    (s: ExamSection) => s.group.some((g) => g.questions.length > 0),
+    [],
   );
 
   const getGlobalQuestionNumber = (questionId: number) => {
@@ -160,42 +146,25 @@ export default function ExamPage() {
     return 0;
   };
 
-  const hasQuestions = (section: ExamSection) =>
-    section?.group?.some((g) => g.questions && g.questions.length > 0);
-
-  /* -------------------- Data Fetch -------------------- */
+  /* -------------------- Fetch -------------------- */
   useEffect(() => {
     if (!examStarted || isSubmitted) return;
 
-    const fetchQuestions = async () => {
+    const fetchExam = async () => {
       try {
         setLoading(true);
-        const response = await axiosInstance.get(
-          `/mock-test/get-questions?exam_id=${id}`
+        const { data } = await axiosInstance.get(
+          `/mock-test/get-questions?exam_id=${id}`,
         );
-        setQuestions(response.data.data.sections);
-        setExamTitle(response.data.data.exam_title);
-        setCurrentSectionIndex(0);
 
-        const uniqueModules = [
-          ...new Set(
-            response.data.data.sections.map(
-              (sec: ExamSection) => sec.module_name
-            )
-          ),
-        ] as string[];
-
-        setModuleList(uniqueModules);
-        setCurrentModule(uniqueModules[0]);
-
-        const duration = Number(response.data.data.exam_duration); // convert to number
-        setTimeRemaining(duration * 60);
-
-        toast.success(response?.data?.message || "Mock test questions loaded!");
+        setQuestions(data.data.sections);
+        setExamTitle(data.data.exam_title);
+        setCurrentModule(data.data.sections[0]?.module_name);
+        setTimeRemaining(Number(data.data.exam_duration) * 60);
       } catch (error: any) {
         toast.error(
           error?.response?.data?.message ||
-            "Cannot fetch mock questions right now"
+            "Cannot fetch mock questions right now",
         );
         router.push("/packages");
       } finally {
@@ -203,41 +172,19 @@ export default function ExamPage() {
       }
     };
 
-    fetchQuestions();
-  }, [examStarted, isSubmitted]);
+    fetchExam();
+  }, [examStarted, isSubmitted, id, router, setTimeRemaining]);
 
-  /* -------------------- current section list -------------------- */
-  useEffect(() => {
-    if (!currentModule || questions.length === 0) return;
-
-    const filtered = questions.filter(
-      (sec) => sec.module_name === currentModule
-    );
-
-    setSectionList(filtered);
-  }, [currentModule, questions]);
-
-  /* -------------------- current module  change -------------------- */
-  const handleModuleClick = (moduleName: string) => {
-    setCurrentModule(moduleName);
-  };
-
-  /* -------------------- Route Guard -------------------- */
+  /* -------------------- Guards -------------------- */
   useEffect(() => {
     if (!examStarted && !isSubmitted) router.back();
   }, [examStarted, isSubmitted, router]);
 
-  /* -------------------- Timer -------------------- */
   useEffect(() => {
-    if (!examStarted) return;
-
-    const timer = setInterval(() => decrementTime(), 1000);
-    return () => clearInterval(timer);
-  }, [decrementTime, examStarted]);
-
-  useEffect(() => {
-    if (timeRemaining <= 0) handleSubmit();
-  }, [timeRemaining]);
+    if (!examStarted || isSubmitted) return;
+    const id = setInterval(decrementTime, 1000);
+    return () => clearInterval(id);
+  }, [examStarted, isSubmitted, decrementTime]);
 
   /* -------------------- Reload Warning -------------------- */
   useEffect(() => {
@@ -252,170 +199,135 @@ export default function ExamPage() {
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, [examStarted, isSubmitted]);
 
-  /* -------------------- Handlers -------------------- */
-  const handleAnswerChange = (questionId: number, value: string) => {
-    setAnswer(questionId, value);
-  };
+  /* -------------------- Submit -------------------- */
+  const submitExam = useCallback(async () => {
+    if (isSubmitted) return;
 
-  const scroll = (dir: "left" | "right") => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({
-        left: dir === "left" ? -250 : 250,
-        behavior: "smooth",
-      });
-    }
-  };
+    try {
+      setLoading(true);
+      const payload = Object.entries(answers).map(([id, value]) => ({
+        id: Number(id),
+        answer: Number(value),
+      }));
 
-  const handlePrevious = () => {
-    let prevIndex = currentSectionIndex - 1;
-    while (prevIndex >= 0 && !hasQuestions(sectionList[prevIndex])) {
-      prevIndex--;
+      const { data } = await axiosInstance.post(
+        `/mock-test/submit-answer?exam_id=${id}&total_questions=${totalQuestions}`,
+        payload,
+      );
+
+      setResult(data.data);
+      setIsSubmitted(true);
+      stopExam();
+      clearAnswers();
+    } finally {
+      setLoading(false);
+      setShowConsent(false);
+    }
+  }, [answers, id, totalQuestions, isSubmitted, stopExam, clearAnswers]);
+
+  useEffect(() => {
+    if (timeRemaining <= 0 && examStarted && !isSubmitted) {
+      submitExam();
+    }
+  }, [timeRemaining, examStarted, isSubmitted, submitExam]);
+
+  /* -------------------- Navigation -------------------- */
+  const handleNext = useCallback(() => {
+    for (let i = currentSectionIndex + 1; i < sectionList.length; i++) {
+      if (hasQuestions(sectionList[i])) {
+        setCurrentSectionIndex(i);
+        return;
+      }
     }
 
-    if (prevIndex >= 0) {
-      setCurrentSectionIndex(prevIndex);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
+    const nextModule = moduleList[moduleList.indexOf(currentModule) + 1];
+    if (!nextModule) return;
+
+    setCurrentModule(nextModule);
+    setCurrentSectionIndex(0);
+  }, [
+    currentSectionIndex,
+    sectionList,
+    moduleList,
+    currentModule,
+    hasQuestions,
+  ]);
+
+  const handlePrevious = useCallback(() => {
+    // 1️⃣ Move inside current module first
+    for (let i = currentSectionIndex - 1; i >= 0; i--) {
+      if (hasQuestions(sectionList[i])) {
+        setCurrentSectionIndex(i);
+        return;
+      }
     }
+
+    // 2️⃣ Move to previous module
     const currentModuleIndex = moduleList.indexOf(currentModule);
-    const prevModuleIndex = currentModuleIndex - 1;
+    if (currentModuleIndex <= 0) return;
 
-    if (prevModuleIndex < 0) return;
+    const prevModule = moduleList[currentModuleIndex - 1];
 
-    const prevModule = moduleList[prevModuleIndex];
+    // 3️⃣ Find LAST valid section of previous module (IMPORTANT)
     const prevModuleSections = questions.filter(
-      (sec) => sec.module_name === prevModule
+      (s) => s.module_name === prevModule,
     );
-    let lastValidIndex = -1;
+
     for (let i = prevModuleSections.length - 1; i >= 0; i--) {
       if (hasQuestions(prevModuleSections[i])) {
-        lastValidIndex = i;
-        break;
+        setCurrentModule(prevModule);
+        setCurrentSectionIndex(i);
+        return;
       }
     }
+  }, [currentSectionIndex, sectionList, moduleList, currentModule, questions]);
 
-    if (lastValidIndex === -1) return;
-    setCurrentModule(prevModule);
-    setCurrentSectionIndex(lastValidIndex);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const handleNext = () => {
-    let nextIndex = currentSectionIndex + 1;
-    while (
-      nextIndex < sectionList.length &&
-      !hasQuestions(sectionList[nextIndex])
-    ) {
-      nextIndex++;
+  const canGoNext = useMemo(() => {
+    for (let i = currentSectionIndex + 1; i < sectionList.length; i++) {
+      if (hasQuestions(sectionList[i])) return true;
     }
 
-    if (nextIndex < sectionList.length) {
-      setCurrentSectionIndex(nextIndex);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
-    const currentModuleIndex = moduleList.indexOf(currentModule);
-    const nextModuleIndex = currentModuleIndex + 1;
+    const nextModule = moduleList[moduleList.indexOf(currentModule) + 1];
 
-    if (nextModuleIndex >= moduleList.length) return;
+    if (!nextModule) return false;
 
-    const nextModule = moduleList[nextModuleIndex];
-    const nextModuleSections = questions.filter(
-      (sec) => sec.module_name === nextModule
+    return questions.some(
+      (s) => s.module_name === nextModule && hasQuestions(s),
     );
-    const firstValidIndex = nextModuleSections.findIndex(hasQuestions);
+  }, [
+    currentSectionIndex,
+    sectionList,
+    moduleList,
+    currentModule,
+    questions,
+    hasQuestions,
+  ]);
 
-    if (firstValidIndex === -1) return;
-    setCurrentModule(nextModule);
-    setCurrentSectionIndex(firstValidIndex);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  const isFirstStep = useMemo(() => {
+    // if not first module → not first step
+    if (currentModule !== moduleList[0]) return false;
 
-  useEffect(() => {
-    if (ignoreModuleEffect) {
-      setIgnoreModuleEffect(false);
-      return;
-    }
-    setCurrentSectionIndex(0);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [currentModule]);
-
-  const isFirstStep = () => {
-    const firstModule = moduleList[0];
-    if (currentModule !== firstModule) return false;
-
+    // find first section WITH questions in this module
     const firstValidIndex = sectionList.findIndex(hasQuestions);
+
+    // if no valid sections exist, treat as first (edge case)
+    if (firstValidIndex === -1) return true;
+
     return currentSectionIndex === firstValidIndex;
-  };
+  }, [
+    currentModule,
+    moduleList,
+    sectionList,
+    currentSectionIndex,
+    hasQuestions,
+  ]);
 
-  const isLastStep = () => {
-    const lastModule = moduleList[moduleList.length - 1];
-    if (currentModule !== lastModule) return false;
-
-    const lastValidIndex =
-      sectionList.length -
-      1 -
-      [...sectionList].reverse().findIndex(hasQuestions);
-
-    return currentSectionIndex === lastValidIndex;
-  };
-
-  const handleSubmit = async () => {
-    if (consent && showConsent) {
-      // console.log("true");
-      if (isSubmitted) return;
-
-      try {
-        setLoading(true);
-        const payload = Object.entries(answers).map(
-          ([questionId, selectedOption]) => ({
-            id: Number(questionId),
-            answer: Number(selectedOption),
-          })
-        );
-
-        const response = await axiosInstance.post(
-          `/mock-test/submit-answer?exam_id=${id}&total_questions=${totalQuestions}`,
-          payload
-        );
-
-        setResult(response?.data?.data);
-
-        setIsSubmitted(true);
-        stopExam();
-        clearAnswers();
-        toast.success("Exam submitted successfully!");
-
-        // timeoutRef.current = setTimeout(() => {
-        //   setIsSubmitted(false);
-        //   router.back();
-        // }, 3 * 60 * 1000);
-      } catch (error: any) {
-        toast.error(
-          error?.response?.data?.message || "Cannot submit your answer"
-        );
-      } finally {
-        setLoading(false);
-        setShowConsent(false);
-      }
-    } else {
-      setShowConsent(true);
-      setConsent(true);
-    }
-  };
-
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, []);
-
+  const isLastStep = !canGoNext;
 
   /* -------------------- Render -------------------- */
   if (loading) return <SkeletonMockExam />;
 
   if (isSubmitted) {
-    /* -------------------- Result Screen -------------------- */
     return (
       <MocktestResultModal
         result={result}
@@ -426,30 +338,26 @@ export default function ExamPage() {
     );
   }
 
-  /* -------------------- Exam Screen -------------------- */
   return (
     <>
       {!showConsent ? (
         <div className="min-h-screen bg-linear-to-br from-gray-50 to-slate-100">
-          {/* Header */}
           <MocktestHeader
             formatTime={formatTime}
             examTitle={examTitle}
             timeRemaining={timeRemaining}
             sliderRef={sliderRef}
             currentSectionIndex={currentSectionIndex}
-            scroll={scroll}
-            setCurrentSectionIndex={setCurrentSectionIndex}
             answers={answers}
             currentModule={currentModule}
-            handleModuleClick={handleModuleClick}
             moduleList={moduleList}
             sectionList={sectionList}
+            setCurrentSectionIndex={setCurrentSectionIndex}
+            handleModuleClick={handleModuleClick}
+            scroll={() => {}}
           />
 
-          {/* Content */}
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
-            {/* Sidebar */}
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6 p-6">
             <MocktestSidebar
               currentSection={currentSection}
               sidebarShow={sidebarShow}
@@ -461,7 +369,6 @@ export default function ExamPage() {
               getGlobalQuestionNumber={getGlobalQuestionNumber}
             />
 
-            {/* Main Content */}
             <MocktestMainContent
               currentSection={currentSection}
               stepHeadingIcons={stepHeadingIcons}
@@ -470,9 +377,9 @@ export default function ExamPage() {
               handleAnswerChange={handleAnswerChange}
               answers={answers}
               handlePrevious={handlePrevious}
-              isFirstStep={isFirstStep()}
-              isLastStep={isLastStep()}
-              handleSubmit={handleSubmit}
+              isFirstStep={isFirstStep}
+              isLastStep={isLastStep}
+              handleSubmit={() => setShowConsent(true)}
               handleNext={handleNext}
             />
           </div>
@@ -480,14 +387,13 @@ export default function ExamPage() {
       ) : (
         <AnswerConsent
           questions={questions}
-          getGlobalQuestionNumber={getGlobalQuestionNumber}
           answers={answers}
-          setCurrentSectionIndex={setCurrentSectionIndex}
           questionRefs={questionRefs}
-          handleSubmit={handleSubmit}
+          handleSubmit={submitExam}
           setShowConsent={setShowConsent}
           setCurrentModule={setCurrentModule}
-          setIgnoreModuleEffect={setIgnoreModuleEffect}
+          setCurrentSectionIndex={setCurrentSectionIndex}
+          getGlobalQuestionNumber={getGlobalQuestionNumber}
         />
       )}
     </>

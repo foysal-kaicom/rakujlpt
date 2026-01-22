@@ -43,7 +43,6 @@
                 <th class="border border-gray-300 px-4 py-3 text-left">Phone</th>
                 <th class="border border-gray-300 px-4 py-3 text-left">Registration Date <br> (m-d-y)</th>
                 <th class="border border-gray-300 px-4 py-3 text-left">Status</th>
-                <th class="border border-gray-300 px-4 py-3 text-left">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -102,12 +101,6 @@
                 {
                     data: 'status',
                     name: 'status',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'action',
-                    name: 'action',
                     orderable: false,
                     searchable: false
                 }

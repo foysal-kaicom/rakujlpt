@@ -92,7 +92,7 @@ export default function PracticeQuestion() {
         // toast.success(response?.data?.message || "Stages loaded!");
       } catch (error: any) {
         toast.error(
-          error?.response?.data?.message || "Cannot fetch Questions right now"
+          error?.response?.data?.message || "Cannot fetch Questions right now",
         );
       } finally {
         setLoader(false);
@@ -128,7 +128,7 @@ export default function PracticeQuestion() {
     correctSoundRef.current = new Audio("/assets/audio/correct.mp3");
     wrongSoundRef.current = new Audio("/assets/audio/wrong.mp3");
     stageCompleteSoundRef.current = new Audio(
-      "/assets/audio/stage_complete.mp3"
+      "/assets/audio/stage_complete.mp3",
     );
 
     [clickSoundRef, correctSoundRef, wrongSoundRef].forEach((ref) => {
@@ -290,40 +290,38 @@ export default function PracticeQuestion() {
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
         </div>
       )}
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-pink-50 to-purple-50 pt-5">
         {/* Header */}
-        <div className="bg-white shadow-sm border-b border-gray-200">
-          <div className="max-w-4xl mx-auto px-4 py-4">
-            <h1 className="text-lg lg:text-4xl font-semibold text-purple-600 capitalize text-center mb-5 text-wrap">
-              you are practicing : {stageName}
+        <div className="bg-white shadow-md border-b border-pink-200 rounded-3xl max-w-4xl mx-auto sticky top-0 z-20">
+          <div className="max-w-4xl mx-auto px-4 py-6">
+            <h1 className="text-xl md:text-4xl font-extrabold text-pink-600 text-center mb-4">
+              🎉 You are practicing: {stageName} 🎈
             </h1>
             <div className="flex items-center justify-between">
               <Link
                 href={`/practice/${slug}`}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 hover:bg-pink-100 rounded-full transition-transform transform hover:scale-125"
               >
-                <X className="w-6 h-6 text-gray-600" />
+                <X className="w-6 h-6 text-pink-500" />
               </Link>
 
               <div className="flex-1 mx-6">
                 <div className="relative">
-                  <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="h-4 bg-pink-200 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-500"
+                      className="h-full bg-gradient-to-r from-yellow-400 via-pink-400 to-purple-400 rounded-full transition-all duration-500"
                       style={{ width: `${progress}%` }}
                     ></div>
                   </div>
-                  <div className="text-xs text-gray-600 mt-1 text-center">
+                  <div className="text-xs text-pink-700 mt-1 text-center font-bold">
                     Question {currentQuestionIndex + 1} of {totalQuestions}
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 text-gray-600">
+              <div className="flex items-center gap-2 text-pink-700 font-bold">
                 <Clock className="w-5 h-5" />
-                <span className="font-mono font-semibold">
-                  {formatTime(timeElapsed)}
-                </span>
+                <span className="font-mono">{formatTime(timeElapsed)}</span>
               </div>
             </div>
           </div>
@@ -332,9 +330,8 @@ export default function PracticeQuestion() {
         {/* Main Content */}
         <div className="max-w-4xl mx-auto px-4 py-8">
           {stageCompleted ? (
-            <div className="flex flex-col items-center justify-center p-8 bg-white rounded-3xl shadow-lg max-w-md mx-auto">
-              {/* Green checkmark circle */}
-              <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mb-4">
+            <div className="flex flex-col items-center justify-center p-8 bg-white rounded-3xl shadow-xl max-w-md mx-auto">
+              <div className="w-24 h-24 bg-green-400 rounded-full flex items-center justify-center mb-4">
                 <svg
                   className="w-12 h-12 text-white"
                   fill="none"
@@ -350,48 +347,45 @@ export default function PracticeQuestion() {
                 </svg>
               </div>
 
-              {/* Success message */}
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                Stage Completed!
+              <h2 className="text-3xl font-extrabold text-green-700 mb-2">
+                🎉 Stage Completed!
               </h2>
-              <p className="text-gray-600 mb-6">
-                Your answers have been recorded
+              <p className="text-green-800 font-medium mb-6">
+                Your answers have been recorded ✅
               </p>
 
-              {/* Score display */}
-              <div className="w-full bg-gray-50 rounded-lg p-6 space-y-3">
+              <div className="w-full bg-green-50 rounded-lg p-6 space-y-3 border-2 border-green-200">
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-700 font-medium">
+                  <span className="font-bold text-green-700">
                     Correct Answers:
                   </span>
-                  <span className="text-green-600 font-bold text-lg">
+                  <span className="text-green-900 font-extrabold text-lg">
                     {correctAnswerCount}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-700 font-medium">
-                    Wrong Answers:
-                  </span>
-                  <span className="text-red-600 font-bold text-lg">
+                  <span className="font-bold text-red-700">Wrong Answers:</span>
+                  <span className="text-red-900 font-extrabold text-lg">
                     {totalQuestions - correctAnswerCount}
                   </span>
                 </div>
-                <div className="border-t border-gray-300 pt-3 mt-3">
+                <div className="border-t border-green-200 pt-3 mt-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-800 font-semibold">
+                    <span className="font-bold text-blue-700">
                       Total Score:
                     </span>
-                    <span className="text-blue-600 font-bold text-xl">
+                    <span className="text-blue-900 font-extrabold text-xl">
                       {correctAnswerCount}/{totalQuestions}
                     </span>
                   </div>
                 </div>
+
                 <div className="w-full flex justify-center mt-4">
                   <Link
                     href={`/practice/${slug}`}
-                    className="px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:shadow-lg transition-all transform hover:scale-105 flex items-center gap-2 cursor-pointer"
+                    className="px-8 py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-yellow-400 via-pink-400 to-purple-500 hover:shadow-xl transition-transform transform hover:scale-105 flex items-center gap-2"
                   >
-                    Continue practice
+                    Continue Practice 🎈
                     <ChevronRight className="w-5 h-5" />
                   </Link>
                 </div>
@@ -401,11 +395,20 @@ export default function PracticeQuestion() {
             <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12">
               {/* Question */}
               <div className="text-center mb-12">
+                {currentQuestion?.question_type === "text" && (
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: currentQuestion?.question,
+                    }}
+                    className="text-2xl md:text-3xl font-extrabold text-pink-700 mb-8"
+                  />
+                )}
+
                 {currentQuestion?.question_type === "image" && (
-                  <div className="w-full max-h-[500px] overflow-hidden rounded-lg bg-gray-50 flex items-center justify-center">
+                  <div className="w-full max-h-[500px] overflow-hidden rounded-xl bg-yellow-50 border-2 border-yellow-200 flex items-center justify-center shadow-md">
                     <Image
                       src={currentQuestion?.question || ""}
-                      alt={currentQuestion?.question || "Question image"}
+                      alt="Question image"
                       width={1600}
                       height={900}
                       className="w-full h-auto object-contain"
@@ -413,152 +416,159 @@ export default function PracticeQuestion() {
                     />
                   </div>
                 )}
-                {currentQuestion?.question_type === "text" && (
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: currentQuestion?.question,
-                    }}
-                    className="text-2xl md:text-3xl font-bold text-gray-800 mb-8"
-                  />
-                )}
+
                 {currentQuestion?.question_type === "audio" && (
                   <div className="flex flex-col items-center gap-4 mb-6">
-                    {currentQuestion?.question && (
-                      <div className="w-full max-h-[500px] overflow-hidden rounded-lg bg-gray-50 flex items-center justify-center">
-                        <Image
-                          src={currentQuestion?.question || ""}
-                          alt={currentQuestion?.question || "Question image"}
-                          width={1600}
-                          height={900}
-                          className="w-full h-auto object-contain"
-                          loading="lazy"
-                        />
-                      </div>
-                    )}
-
                     {currentQuestion?.audio_file && (
-                      <div className="w-full flex justify-center">
-                        <audio
-                          controls
-                          className="w-full max-w-2xl rounded-md p-2"
-                          aria-label="Question audio"
-                        >
-                          <source
-                            src={currentQuestion.audio_file}
-                            type="audio/mpeg"
-                          />
-                          Your browser does not support the audio element.
-                        </audio>
-                      </div>
+                      <audio
+                        controls
+                        className="w-full max-w-2xl rounded-xl p-2 border-2 border-pink-200 shadow-lg"
+                        aria-label="Question audio"
+                      >
+                        <source
+                          src={currentQuestion.audio_file}
+                          type="audio/mpeg"
+                        />
+                        Your browser does not support the audio element.
+                      </audio>
                     )}
                   </div>
                 )}
               </div>
 
               {/* Answer Options */}
-              <div className="mb-8">
-                {/* Yes/No Options */}
-
-                {/* Multiple Choice Options */}
-                {/* {currentQuestion?.question_type === "text" && ( */}
-                <div className="space-y-3">
+              {currentQuestion && (
+                <div className="mb-8 space-y-4">
                   {Array.from({ length: 4 }).map((_, index) => {
                     const optObj = currentQuestion?.options || {};
                     const optionText = String(
-                      optObj[index + 1] || `Option ${index + 1}`
+                      optObj[index + 1] || `Option ${index + 1}`,
                     );
                     const selectedKey = String(index + 1);
+
+                    // States
+                    const isCorrectOption =
+                      isAnswered && selectedKey === currentQuestion.answer;
+                    const isWrongSelected =
+                      isAnswered &&
+                      selectedAnswer === selectedKey &&
+                      !isCorrectOption;
+                    const isSelectedBeforeSubmit =
+                      !isAnswered && selectedAnswer === selectedKey;
+
+                    // Base styles
+                    let buttonClasses =
+                      "w-full p-5 rounded-3xl border-2 text-left transition-all transform hover:scale-105 duration-300";
+
+                    // Cursor
+                    buttonClasses += isAnswered
+                      ? " cursor-not-allowed"
+                      : " cursor-pointer";
+
+                    // Color logic
+                    if (isCorrectOption) {
+                      buttonClasses +=
+                        " bg-green-200 border-green-500 shadow-lg";
+                    } else if (isWrongSelected) {
+                      buttonClasses += " bg-red-200 border-red-500 shadow-md";
+                    } else if (isSelectedBeforeSubmit) {
+                      buttonClasses += " bg-blue-100 border-blue-300 shadow-md";
+                    } else {
+                      buttonClasses +=
+                        " bg-yellow-50 border-yellow-200 hover:border-pink-300";
+                    }
+
+                    // Circle classes
+                    let circleClasses =
+                      "w-12 h-12 rounded-full border-2 flex items-center justify-center flex-shrink-0";
+                    if (isCorrectOption)
+                      circleClasses += " bg-green-500 border-green-600";
+                    else if (isWrongSelected)
+                      circleClasses += " bg-red-500 border-red-600";
+                    else if (isSelectedBeforeSubmit)
+                      circleClasses += " bg-blue-500 border-blue-600";
+                    else circleClasses += " bg-yellow-100 border-yellow-300";
+
                     return (
                       <button
                         key={index}
                         onClick={() => handleAnswerSelect(selectedKey)}
                         disabled={isAnswered}
-                        className={`w-full p-5 rounded-xl border-2 text-left transition-all transform hover:scale-[1.02] ${
-                          selectedAnswer === String(index + 1)
-                            ? "border-blue-500 bg-blue-50 shadow-md"
-                            : "border-gray-300 bg-white hover:border-blue-300"
-                        } ${
-                          isAnswered && selectedKey === currentQuestion.answer
-                            ? "border-green-500 bg-green-50"
-                            : ""
-                        } ${
-                          isAnswered &&
-                          selectedAnswer === selectedKey &&
-                          selectedKey !== currentQuestion.answer
-                            ? "border-red-500 bg-red-50"
-                            : ""
-                        } ${
-                          isAnswered ? "cursor-not-allowed" : "cursor-pointer"
-                        }`}
+                        className={buttonClasses}
                       >
                         <div className="flex items-center gap-4">
-                          <div
-                            className={`w-8 h-8 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                              selectedAnswer === String(index + 1)
-                                ? "border-blue-500 bg-blue-500"
-                                : "border-gray-400"
-                            }`}
-                          >
-                            {selectedAnswer === String(index + 1) && (
-                              <Check className="w-5 h-5 text-white" />
+                          <div className={circleClasses}>
+                            {isCorrectOption && (
+                              <Check className="w-6 h-6 text-white" />
+                            )}
+                            {isWrongSelected && (
+                              <X className="text-white text-2xl animate-shake" />
+                            )}
+                            {!isAnswered && isSelectedBeforeSubmit && (
+                              <Check className="w-6 h-6 text-white" />
                             )}
                           </div>
                           <div
                             dangerouslySetInnerHTML={{ __html: optionText }}
-                            className="text-lg text-gray-800"
+                            className={`text-xl font-extrabold ${
+                              isCorrectOption
+                                ? "text-green-800"
+                                : isWrongSelected
+                                  ? "text-red-800"
+                                  : isSelectedBeforeSubmit
+                                    ? "text-blue-800"
+                                    : "text-yellow-900"
+                            }`}
                           />
                         </div>
                       </button>
                     );
                   })}
                 </div>
-              </div>
+              )}
 
               {/* Hint Section */}
               {!showExplanation && (
-                <div className="mb-6">
+                <div className="mb-6 text-center">
                   <button
                     onClick={() => {
                       setShowHint(!showHint);
-                      if (currentQuestion?.question_type === "audio") return;
-                      else {
-                        // Prepare payload dynamically
+                      if (currentQuestion?.question_type !== "audio") {
                         const payload: any = {};
-                        if (currentQuestion?.question_type === "text") {
+                        if (currentQuestion?.question_type === "text")
                           payload.questionText = currentQuestion?.question;
-                        } else if (currentQuestion?.question_type === "audio") {
+                        else if (currentQuestion?.question_type === "audio") {
                           payload.audioUrl = currentQuestion?.audio_file;
                           payload.imageUrl = currentQuestion?.question;
                         }
-
                         getHint(payload);
                       }
                     }}
-                    className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors mx-auto cursor-pointer"
+                    className="flex items-center justify-center gap-2 text-yellow-600 hover:text-pink-600 font-bold text-lg transition-transform transform hover:scale-110 mx-auto cursor-pointer"
                   >
-                    <Lightbulb className="w-5 h-5 shake-pause" />
-                    <span
-                      className={`font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-400 tracking-wide drop-shadow-md cursor-pointer transition-transform duration-300`}
-                    >
-                      {showHint
-                        ? "Hide AI Hints"
-                        : "Get Hints from AI Assistant"}
-                    </span>
+                    <Lightbulb className="w-6 h-6 animate-pulse" />
+                    {showHint
+                      ? "Hide AI Hints 💡"
+                      : "Get Hints from AI Assistant ✨"}
                   </button>
 
                   {showHint && (
-                    <div className="mt-4 p-4 bg-yellow-50 border-2 border-yellow-200 rounded-xl">
+                    <div className="mt-4 p-4 bg-yellow-50 border-2 border-yellow-200 rounded-2xl shadow-inner animate-fade-in">
                       <div className="flex gap-3">
-                        <Lightbulb className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5 shake-pause" />
-                        {currentQuestion?.question_type === "audio" ? (
-                          <AIHint hint={currentQuestion.hints || ""} />
-                        ) : loadingHint ? (
-                          <p className="text-gray-800 font-medium">
+                        <Lightbulb className="w-6 h-6 text-yellow-500 mt-1 animate-bounce" />
+                        {loadingHint ? (
+                          <p className="text-pink-700 font-bold">
                             Thinking
                             <span className="animate-dots ml-1">...</span>
                           </p>
                         ) : (
-                          <AIHint hint={aiHint} />
+                          <AIHint
+                            hint={
+                              aiHint ||
+                              currentQuestion?.hints ||
+                              "No hints available."
+                            }
+                          />
                         )}
                       </div>
                     </div>
@@ -567,49 +577,49 @@ export default function PracticeQuestion() {
               )}
 
               {/* Explanation Section */}
-              {showExplanation && (
+              {showExplanation && currentQuestion && (
                 <div
-                  className={`mb-6 p-6 rounded-xl border-2 relative mt-[78px] ${
-                    isCorrect
-                      ? "bg-green-50 border-green-200"
-                      : "bg-red-50 border-red-200"
-                  }`}
+                  className={`relative mb-8 p-6 rounded-3xl border-4 transition-all ${isCorrect ? "bg-green-100 border-green-400 shadow-lg" : "bg-red-100 border-red-400 shadow-md"}`}
                 >
-                  <div className="flex items-start gap-3 mb-3">
-                    {isCorrect ? (
-                      <>
-                        <Check className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
-                        <Image
-                          src="/assets/img/smiling_smile.gif"
-                          alt="Correct"
-                          width={80}
-                          height={60}
-                          className="flex-shrink-0 mt-0.5 absolute top-[-78px]"
-                          loading="lazy"
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
-                        <Image
-                          src="/assets/img/raku_sad.gif"
-                          alt="Incorrect"
-                          width={89}
-                          height={60}
-                          className="flex-shrink-0 mt-0.5 absolute top-[-87px]"
-                          loading="lazy"
-                        />
-                      </>
-                    )}
+                  <div className="flex items-start gap-4">
+                    {/* Emoji or Image */}
+                    <div className="flex-shrink-0 relative -translate-y-5">
+                      {isCorrect ? (
+                        <>
+                          {/* <span className="text-4xl animate-bounce">🎉✅</span> */}
+                          <Image
+                            src="/assets/img/smiling_smile.gif"
+                            alt="Correct"
+                            width={80}
+                            height={60}
+                            className=""
+                            loading="lazy"
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <Image
+                            src="/assets/img/raku_sad.gif"
+                            alt="Incorrect"
+                            width={89}
+                            height={60}
+                            className=""
+                            loading="lazy"
+                          />
+                        </>
+                      )}
+                    </div>
+
+                    {/* Text Content */}
                     <div>
                       <h3
-                        className={`font-bold text-lg mb-2 ${
-                          isCorrect ? "text-green-800" : "text-red-800"
-                        }`}
+                        className={`font-extrabold text-2xl mb-2 ${isCorrect ? "text-green-800" : "text-red-800"}`}
                       >
-                        {isCorrect ? "Correct!" : "Incorrect"}
+                        {isCorrect
+                          ? "Correct! 🎉 Great job!"
+                          : "Oops! ❌ Try again!"}
                       </h3>
-                      <p className="text-gray-700">
+                      <p className="text-gray-800 text-lg">
                         {currentQuestion.explanation ??
                           "No explanation available."}
                       </p>
@@ -619,28 +629,27 @@ export default function PracticeQuestion() {
               )}
 
               {/* Action Buttons */}
-              <div className="flex gap-4 justify-center">
+              <div className="flex gap-4 justify-center mt-4">
                 {!isAnswered ? (
                   <button
                     onClick={checkAnswer}
                     disabled={!canSubmit()}
-                    className={`px-8 py-4 rounded-xl font-semibold text-white transition-all transform hover:scale-105 cursor-pointer ${
+                    className={`px-8 py-4 rounded-2xl font-bold text-white transition-transform transform hover:scale-105 ${
                       canSubmit()
-                        ? "bg-gradient-to-r from-blue-500 to-purple-500 hover:shadow-lg"
+                        ? "bg-gradient-to-r from-yellow-400 via-pink-400 to-purple-500 hover:shadow-lg cursor-pointer"
                         : "bg-gray-300 cursor-not-allowed"
                     }`}
                   >
-                    Check Answer
+                    Check Answer ✅
                   </button>
                 ) : (
                   <button
                     onClick={nextQuestion}
-                    className="px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:shadow-lg transition-all transform hover:scale-105 flex items-center gap-2 cursor-pointer"
+                    className="px-8 py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-yellow-400 via-pink-400 to-purple-500 hover:shadow-lg transition-transform transform hover:scale-105 flex items-center gap-2 cursor-pointer"
                   >
                     {currentQuestionIndex < totalQuestions - 1
-                      ? "Next Question"
-                      : "Finish"}
-                    <ChevronRight className="w-5 h-5" />
+                      ? "Next Question →"
+                      : "Finish 🎉"}
                   </button>
                 )}
               </div>

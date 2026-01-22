@@ -164,7 +164,7 @@ export default function CheckoutPage() {
       </WebpageWrapper>
 
       {/* Gradient Border Wrapper */}
-      <div className="flex items-center justify-center mt-5">
+      <div className="flex items-center justify-center my-8">
         <div className="relative w-full max-w-lg rounded-[28px] p-[1px] bg-gradient-to-r from-indigo-500 via-violet-500 to-pink-500">
           {/* Glass Card */}
           <div className="rounded-[27px] bg-white/80 backdrop-blur-xl p-8 space-y-8">
