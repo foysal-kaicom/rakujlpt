@@ -19,7 +19,9 @@ export default function ReferralTransferModal({
   currentCoins,
   onTransferCoins,
 }: ReferralTransferModalProps) {
-  const [activeTab, setActiveTab] = useState<"referral" | "transfer">("referral");
+  const [activeTab, setActiveTab] = useState<"referral" | "transfer">(
+    "referral",
+  );
   const [copied, setCopied] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
   const [receiverCode, setReceiverCode] = useState("");
@@ -48,6 +50,11 @@ export default function ReferralTransferModal({
       return;
     }
 
+    if (receiverCode.trim() == userReferralCode) {
+      toast.error("You cannot transfer coins to yourself");
+      return;
+    }
+
     if (!coinAmount || Number(coinAmount) <= 0) {
       toast.error("Please enter a valid coin amount");
       return;
@@ -61,10 +68,10 @@ export default function ReferralTransferModal({
     setIsTransferring(true);
     try {
       await onTransferCoins(receiverCode, Number(coinAmount));
-      toast.success(`Successfully transferred ${coinAmount} coins!`);
+      // toast.success(`Successfully transferred ${coinAmount} coins!`);
       setReceiverCode("");
       setCoinAmount("");
-      onClose();
+      // onClose();
     } catch (error: any) {
       toast.error(error.message || "Transfer failed");
     } finally {
@@ -143,8 +150,6 @@ export default function ReferralTransferModal({
           <div className="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
             {activeTab === "referral" ? (
               <div className="space-y-6">
-                
-
                 {/* Referral Link */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -188,20 +193,32 @@ export default function ReferralTransferModal({
                       </h3>
                       <ul className="space-y-2 text-sm text-gray-600">
                         <li className="flex items-start gap-2">
-                          <span className="text-blue-600 font-bold mt-0.5">1.</span>
+                          <span className="text-blue-600 font-bold mt-0.5">
+                            1.
+                          </span>
                           <span>Share your referral link with friends</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <span className="text-blue-600 font-bold mt-0.5">2.</span>
+                          <span className="text-blue-600 font-bold mt-0.5">
+                            2.
+                          </span>
                           <span>They sign up using your referral link</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <span className="text-blue-600 font-bold mt-0.5">3.</span>
-                          <span>Both you and your friend can earn bonus coins!</span>
+                          <span className="text-blue-600 font-bold mt-0.5">
+                            3.
+                          </span>
+                          <span>
+                            Both you and your friend can earn bonus coins!
+                          </span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <span className="text-blue-600 font-bold mt-0.5">4.</span>
-                          <span>Use coins to unlock premium features and exams</span>
+                          <span className="text-blue-600 font-bold mt-0.5">
+                            4.
+                          </span>
+                          <span>
+                            Use coins to unlock premium features and exams
+                          </span>
                         </li>
                       </ul>
                     </div>
@@ -220,7 +237,9 @@ export default function ReferralTransferModal({
                     <div className="text-3xl font-bold text-green-600 mb-1">
                       50
                     </div>
-                    <div className="text-xs text-gray-600">Coins for Friend</div>
+                    <div className="text-xs text-gray-600">
+                      Coins for Friend
+                    </div>
                   </div>
                 </div>
               </div>
@@ -249,7 +268,9 @@ export default function ReferralTransferModal({
                 </div>
                 {/* Current Balance */}
                 <div className="bg-gradient-to-r from-violet-600 to-purple-600 rounded-xl p-5 text-white">
-                  <div className="text-sm opacity-90 mb-1">Available Balance</div>
+                  <div className="text-sm opacity-90 mb-1">
+                    Available Balance
+                  </div>
                   <div className="text-3xl font-bold">{currentCoins} Coins</div>
                 </div>
 
@@ -261,7 +282,9 @@ export default function ReferralTransferModal({
                   <input
                     type="text"
                     value={receiverCode}
-                    onChange={(e) => setReceiverCode(e.target.value.toUpperCase())}
+                    onChange={(e) =>
+                      setReceiverCode(e.target.value.toUpperCase())
+                    }
                     placeholder="Enter referral code"
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                   />
@@ -307,8 +330,12 @@ export default function ReferralTransferModal({
                     <div className="text-sm text-gray-700">
                       <p className="font-semibold mb-1">Important Notes:</p>
                       <ul className="space-y-1 text-sm text-gray-600">
-                        <li>• Coin transfers are instant and cannot be reversed</li>
-                        <li>• Make sure to verify the receiver's referral code</li>
+                        <li>
+                          • Coin transfers are instant and cannot be reversed
+                        </li>
+                        <li>
+                          • Make sure to verify the receiver's referral code
+                        </li>
                         <li>• Minimum transfer amount is 1 coin</li>
                       </ul>
                     </div>

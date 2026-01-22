@@ -7,45 +7,14 @@ import {
   FaCheck,
 } from "react-icons/fa";
 
-/* -------------------- Types -------------------- */
-interface QuestionOption {
-  id: number;
-  values: string;
-  mock_test_question_id: number;
-  created_at: string;
-  updated_at: string;
-}
-
-type ParsedOptions = Record<string, string>;
-
-interface Question {
-  id: number;
-  proficiency_level: string;
-  title: string;
-  type: string;
-  hints: string;
-  options: QuestionOption;
-}
-
-interface Group {
-  type: string;
-  group_type: string;
-  content: string;
-  questions: Question[];
-}
-
-interface ExamSection {
-  id: number;
-  slug: string;
-  title: string;
-  module_name: string;
-  sample_question: string;
-  group: Group[];
-}
+import type {
+  ExamSection,
+  ParsedOptions
+} from "@/types/Mocktest/MockExam.type";
 
 interface MocktestMainContentProps {
   currentSection: ExamSection | null;
- stepHeadingIcons: Record<string, React.ReactNode>;
+  stepHeadingIcons: Record<string, React.ReactNode>;
   questionRefs: React.RefObject<Record<number, HTMLDivElement | null>>;
   getGlobalQuestionNumber: (id: number) => number;
   handleAnswerChange: (questionId: number, value: string) => void;
@@ -81,7 +50,7 @@ export default function MocktestMainContent({
                 const totalQuestions =
                   currentSection.group?.reduce(
                     (sum, g) => sum + g.questions.length,
-                    0
+                    0,
                   ) ?? 0;
 
                 return (
@@ -101,7 +70,7 @@ export default function MocktestMainContent({
                       dangerouslySetInnerHTML={{
                         __html: (currentSection.sample_question ?? "").replace(
                           /\\n/g,
-                          "<br>"
+                          "<br>",
                         ),
                       }}
                     />
@@ -194,13 +163,18 @@ export default function MocktestMainContent({
 
                             {/* Options */}
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
-                              {Object.entries(parsedOptions).filter(([_, option]) => option && option.trim() !== "").map(
-                                ([key, option], index) => (
+                              {Object.entries(parsedOptions)
+                                .filter(
+                                  ([_, option]) =>
+                                    option && option.trim() !== "",
+                                )
+                                .map(([key, option], index) => (
                                   <label
                                     key={key}
                                     className="flex space-x-3 p-2 cursor-pointer font-medium items-center"
                                   >
                                     <div className="size-6 relative mt-1">
+                                     
                                       <input
                                         type="radio"
                                         name={`question-${question.id}`}
@@ -209,7 +183,7 @@ export default function MocktestMainContent({
                                         onChange={(e) => {
                                           handleAnswerChange(
                                             question.id,
-                                            e.target.value
+                                            e.target.value,
                                           );
                                         }}
                                         className="absolute inset-0 size-6 opacity-0 peer cursor-pointer z-30"
@@ -229,8 +203,7 @@ export default function MocktestMainContent({
                                       }}
                                     />
                                   </label>
-                                )
-                              )}
+                                ))}
                             </div>
                           </div>
                         );

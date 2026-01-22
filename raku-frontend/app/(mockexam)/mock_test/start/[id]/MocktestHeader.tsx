@@ -1,38 +1,7 @@
-import React from "react";
+import React, { useRef } from "react";
 import { FaClock, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-interface QuestionOption {
-  id: number;
-  values: string;
-  mock_test_question_id: number;
-  created_at: string;
-  updated_at: string;
-}
-
-interface Question {
-  id: number;
-  proficiency_level: string;
-  title: string;
-  type: string;
-  hints: string;
-  options: QuestionOption;
-}
-
-interface Group {
-  type: string;
-  group_type: string;
-  content: string;
-  questions: Question[];
-}
-
-interface ExamSection {
-  id: number;
-  slug: string;
-  title: string;
-  module_name: string;
-  sample_question: string;
-  group: Group[];
-}
+import type { ExamSection } from "@/types/Mocktest/MockExam.type";
 
 interface MocktestHeaderProps {
   formatTime: (seconds: number) => string;
@@ -53,9 +22,9 @@ export default function MocktestHeader({
   formatTime,
   examTitle,
   timeRemaining,
-  sliderRef,
+  // sliderRef,
   currentSectionIndex,
-  scroll,
+  // scroll,
   setCurrentSectionIndex,
   answers,
   currentModule,
@@ -63,6 +32,15 @@ export default function MocktestHeader({
   moduleList,
   sectionList,
 }: MocktestHeaderProps) {
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const scroll = (dir: "left" | "right") => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollBy({
+        left: dir === "left" ? -250 : 250,
+        behavior: "smooth",
+      });
+    }
+  };
   return (
     <>
       <div className="sticky top-0 z-20 bg-linear-to-r from-purple-300 to-violet-300 pb-3">
@@ -118,7 +96,6 @@ export default function MocktestHeader({
                 module === currentModule ? "text-purple-700" : "text-gray-400"
               }`}
             >
-              {/* {module === currentModule && <p className="size-4 bg-purple-700 rounded-full"></p>} */}
               <p
                 className={`size-2 rounded-full  ${module === currentModule ? "bg-purple-700 animate-ping" : "bg-gray-200"}`}
               ></p>

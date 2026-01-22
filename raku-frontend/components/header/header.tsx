@@ -34,7 +34,6 @@ export default function Header() {
 
   const path = usePathname();
   const router = useRouter();
-  console.log(path);
 
   const toggleDropdown = (index: number) => {
     setOpenDropdown(openDropdown === index ? null : index);
