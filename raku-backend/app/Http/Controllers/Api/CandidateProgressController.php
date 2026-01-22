@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Stage;
+use App\Models\Wallet;
 use App\Models\Roadmap;
 use Illuminate\Http\Request;
+use App\Models\WalletTransaction;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CandidateStageProgress;
@@ -88,24 +91,82 @@ class CandidateProgressController extends Controller
     }
 
 
+    // public function completeStage(Request $request, $stageId)
+    // {
+    //     $candidate = Auth::guard('candidate')->user();
+
+    //     $progress = CandidateStageProgress::where('candidate_id', $candidate->id)
+    //         ->where('stage_id', $stageId)
+    //         ->firstOrFail();
+        
+    //     $score = $request->input('total_score', null);
+
+    //     // Mark current stage as completed
+    //     // $progress->update(['candidate_status' => 'completed']);
+    //     $progress->update([
+    //         'candidate_status' => 'completed',
+    //         'total_score' => $score ?? $progress->total_score, // update if provided
+    //     ]);
+
+    //     // Unlock next stage by creating a new record (current)
+    //     $nextStage = Stage::where('roadmap_id', $progress->roadmap_id)
+    //         ->where('order', '>', $progress->stage->order)
+    //         ->where('status', 1)
+    //         ->orderBy('order', 'asc')
+    //         ->first();
+
+    //     if ($nextStage) {
+    //         $existingProgress = CandidateStageProgress::where('candidate_id', $candidate->id)
+    //             ->where('roadmap_id', $progress->roadmap_id)
+    //             ->where('stage_id', $nextStage->id)
+    //             ->first();
+
+    //         if ($existingProgress) {
+    //             // If already completed, skip updating
+    //             if ($existingProgress->candidate_status === 'completed') {
+    //                 // Do nothing — already completed
+    //             } else {
+    //                 // Update to current if not completed
+    //                 $existingProgress->update(['candidate_status' => 'current']);
+    //             }
+    //         } else {
+    //             // Create a new record for the next stage
+    //             CandidateStageProgress::create([
+    //                 'candidate_id' => $candidate->id,
+    //                 'roadmap_id' => $progress->roadmap_id,
+    //                 'stage_id' => $nextStage->id,
+    //                 'candidate_status' => 'current',
+    //             ]);
+    //         }
+    //     }
+
+    //     return response()->json(['message' => 'Stage completed!']);
+    //     // return response()->json(['message' => 'Stage completed successfully!', 'score' => $score]);
+    // }
+
+
     public function completeStage(Request $request, $stageId)
     {
         $candidate = Auth::guard('candidate')->user();
 
-        $progress = CandidateStageProgress::where('candidate_id', $candidate->id)
+        $progress = CandidateStageProgress::with('stage')
+            ->where('candidate_id', $candidate->id)
             ->where('stage_id', $stageId)
             ->firstOrFail();
-        
-        $score = $request->input('total_score', null);
 
-        // Mark current stage as completed
-        // $progress->update(['candidate_status' => 'completed']);
+        $score = $request->input('total_score');
+
+        // ===============================
+        // 1. Mark current stage completed
+        // ===============================
         $progress->update([
             'candidate_status' => 'completed',
-            'total_score' => $score ?? $progress->total_score, // update if provided
+            'total_score' => $score ?? $progress->total_score,
         ]);
 
-        // Unlock next stage by creating a new record (current)
+        // ===============================
+        // 2. Unlock next stage
+        // ===============================
         $nextStage = Stage::where('roadmap_id', $progress->roadmap_id)
             ->where('order', '>', $progress->stage->order)
             ->where('status', 1)
@@ -113,94 +174,83 @@ class CandidateProgressController extends Controller
             ->first();
 
         if ($nextStage) {
-            $existingProgress = CandidateStageProgress::where('candidate_id', $candidate->id)
+
+            $nextProgress = CandidateStageProgress::where('candidate_id', $candidate->id)
                 ->where('roadmap_id', $progress->roadmap_id)
                 ->where('stage_id', $nextStage->id)
                 ->first();
 
-            if ($existingProgress) {
-                // If already completed, skip updating
-                if ($existingProgress->candidate_status === 'completed') {
-                    // Do nothing — already completed
-                } else {
-                    // Update to current if not completed
-                    $existingProgress->update(['candidate_status' => 'current']);
+            if ($nextProgress) {
+                if ($nextProgress->candidate_status !== 'completed') {
+                    $nextProgress->update([
+                        'candidate_status' => 'current'
+                    ]);
                 }
             } else {
-                // Create a new record for the next stage
                 CandidateStageProgress::create([
                     'candidate_id' => $candidate->id,
-                    'roadmap_id' => $progress->roadmap_id,
-                    'stage_id' => $nextStage->id,
+                    'roadmap_id'   => $progress->roadmap_id,
+                    'stage_id'     => $nextStage->id,
                     'candidate_status' => 'current',
                 ]);
             }
         }
 
-        return response()->json(['message' => 'Stage completed!']);
-        // return response()->json(['message' => 'Stage completed successfully!', 'score' => $score]);
+        // ===============================
+        // 3. Roadmap completion bonus
+        // ===============================
+        $roadmap = Roadmap::find($progress->roadmap_id);
+
+        if ($roadmap && (int) $roadmap->completed_bonus > 0) {
+
+            $totalStages = Stage::where('roadmap_id', $roadmap->id)
+                ->where('status', 1)
+                ->count();
+
+            $completedStages = CandidateStageProgress::where('candidate_id', $candidate->id)
+                ->where('roadmap_id', $roadmap->id)
+                ->where('candidate_status', 'completed')
+                ->count();
+
+            // All stages completed
+            if ($totalStages > 0 && $totalStages === $completedStages) {
+
+                $alreadyCredited = WalletTransaction::where('candidate_id', $candidate->id)
+                    ->where('reference', 'roadmap_completed_' . $roadmap->id)
+                    ->exists();
+
+                if (!$alreadyCredited) {
+
+                    DB::transaction(function () use ($candidate, $roadmap) {
+
+                        $wallet = Wallet::firstOrCreate([
+                            'candidate_id' => $candidate->id
+                        ]);
+
+                        $wallet->increment('balance', $roadmap->completed_bonus);
+
+                        WalletTransaction::create([
+                            'candidate_id' => $candidate->id,
+                            'coin_rule_id' => null,
+                            'type' => 'credit',
+                            'points' => $roadmap->completed_bonus,
+                            'reference' => 'roadmap_completed_' . $roadmap->id,
+                            'remarks' => 'Roadmap completion bonus',
+                        ]);
+                    });
+                }
+            }
+        }
+
+        // ===============================
+        // 4. Response
+        // ===============================
+        return response()->json([
+            'message' => 'Stage completed successfully',
+            'roadmap_completed' => isset($totalStages) && $totalStages === $completedStages,
+            'bonus_points' => $roadmap->completed_bonus ?? 0
+        ], 200);
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Candidate completes a stage
-     */
-    // public function completeStage(Request $request, $stageId)
-    // {
-    //     $candidate = auth()->user();
-
-    //     $progress = CandidateStageProgress::where('candidate_id', $candidate->id)
-    //         ->where('stage_id', $stageId)
-    //         ->firstOrFail();
-
-    //     $progress->update(['candidate_status' => 'completed']);
-
-    //     // Unlock next stage
-    //     $nextStage = Stage::where('roadmap_id', $progress->roadmap_id)
-    //         ->where('order', '>', $progress->stage->order)
-    //         ->orderBy('order', 'asc')
-    //         ->first();
-
-    //     if ($nextStage) {
-    //         CandidateStageProgress::updateOrCreate(
-    //             [
-    //                 'candidate_id' => $candidate->id,
-    //                 'roadmap_id' => $progress->roadmap_id,
-    //                 'stage_id' => $nextStage->id,
-    //             ],
-    //             ['candidate_status' => 'current']
-    //         );
-    //     }
-
-    //     return response()->json(['message' => 'Stage completed!']);
-    // }
 }

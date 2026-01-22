@@ -78,7 +78,7 @@
                     </div>
 
                     <!-- is_free need check box (yes or no) no need select tag -->
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label fw-semibold"></label>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="is_free" id="requiresCoinsCheckbox" value="1" {{ old('is_free', $roadmap->is_free) ? 'checked' : '' }}>
@@ -91,13 +91,21 @@
                     </div>
 
                     <!-- unlock_coins -->
-                    <div class="col-md-6" id="unlockCoinsWrapper">
+                    <div class="col-md-4" id="unlockCoinsWrapper">
                         <label class="form-label fw-semibold">Unlock Coins</label>
                         <input type="number" name="unlock_coins" id="unlockCoinsInput"
                             value="{{ old('unlock_coins', $roadmap->unlock_coins) }}" class="form-control form-control-lg shadow-sm rounded-2"
                             />
                         @error('unlock_coins') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
+                    <!-- completed_bonus_coins -->
+                    <div class="col-md-4" id="completedCoinsWrapper">
+                        <label class="form-label fw-semibold">Bonus Coins Earned</label>
+                        <input type="number" name="completed_bonus" id="completedCoinsInput"
+                            value="{{ old('completed_bonus', $roadmap->completed_bonus) }}" class="form-control form-control-lg shadow-sm rounded-2"
+                            />
+                        @error('completed_bonus') <div class="text-danger small">{{ $message }}</div> @enderror
+                    </div>  
 
             
                     <!-- Description -->

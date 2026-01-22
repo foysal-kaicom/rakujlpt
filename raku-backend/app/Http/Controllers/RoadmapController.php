@@ -58,6 +58,7 @@ class RoadmapController extends Controller
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'is_free' => 'nullable|boolean',
+            'completed_bonus' => 'nullable|numeric|min:0',
         ];
 
         if ($request->boolean('is_free')) {
@@ -66,6 +67,7 @@ class RoadmapController extends Controller
             // dd('here');
             $rules['unlock_coins'] = 'required|numeric|min:1';
         }
+
         $validated = $request->validate($rules);
 
         if ($request->boolean('is_free')) {
@@ -140,6 +142,7 @@ class RoadmapController extends Controller
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'is_free' => 'nullable|boolean',
+            'completed_bonus' => 'nullable|numeric|min:0',
         ];
 
         if ($request->boolean('is_free')) {
