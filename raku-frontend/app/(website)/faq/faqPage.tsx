@@ -14,8 +14,6 @@ import { FaPlus, FaMinus } from "react-icons/fa";
 import { FAQ } from "@/types/index.types";
 import { FAQService } from "@/services/common.service";
 
-
-
 export default function Faq() {
   const { t } = useTranslation();
 
@@ -48,7 +46,7 @@ export default function Faq() {
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
- const fetchFaqs = async () => {
+  const fetchFaqs = async () => {
     try {
       const data = await FAQService.getFaqList();
       setFaqs(data);
@@ -62,7 +60,7 @@ export default function Faq() {
   }, []);
 
   return (
-    <section className="relative min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50 overflow-hidden pt-5 pb-20 px-6">
+    <section className="relative min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50 overflow-hidden pt-5 pb-20">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-gradient-to-br from-purple-400/30 to-pink-400/30 rounded-full blur-[120px] animate-float"></div>
         <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-gradient-to-tr from-indigo-400/30 to-pink-400/20 rounded-full blur-[140px] animate-float-slow"></div>
@@ -76,9 +74,7 @@ export default function Faq() {
             {t("faq.title")}
           </h1>
 
-          <p className="text-gray-700 mb-16 text-lg">
-            {t("faq.subtitle")}
-          </p>
+          <p className="text-gray-700 mb-16 text-lg">{t("faq.subtitle")}</p>
 
           {/* FAQ Accordion */}
           <div className="space-y-6 text-left mb-8">

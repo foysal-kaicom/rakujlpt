@@ -19,17 +19,17 @@
                 <div class="col-md-6">
                     <div class="mb-4">
                         <label class="block mb-1">English</label>
-                        <textarea name="content_en" class="form-control tinymce">
-                            {{ old('content_en', $privacy->content['en'] ?? '') }}
-                        </textarea>
+                        <div class="questionInput">
+                            <textarea id="content" name="content_en" class="tinymce"> {{ old('content_en', $privacy->content['en'] ?? '') }} </textarea>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-4">
                         <label class="block mb-1">Bangla</label>
-                        <textarea name="content_bn" class="form-control tinymce">
-                            {{ old('content_bn', $privacy->content['bn'] ?? '') }}
-                        </textarea>
+                        <div class="questionInput">
+                            <textarea id="content" name="content_bn" class="tinymce"> {{ old('content_bn', $privacy->content['bn'] ?? '') }} </textarea>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -46,17 +46,17 @@
                 <div class="col-md-6">
                     <div class="mb-4">
                         <label class="block mb-1">English</label>
-                        <textarea name="content_en" class="form-control tinymce">
-                            {{ old('content_en', $terms->content['en'] ?? '') }}
-                        </textarea>
+                        <div class="questionInput">
+                            <textarea id="content" name="content_en" class="tinymce"> {{ old('content_en', $terms->content['en'] ?? '') }} </textarea>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-4">
                         <label class="block mb-1">Bangla</label>
-                        <textarea name="content_bn" class="form-control tinymce">
-                            {{ old('content_bn', $terms->content['bn'] ?? '') }}
-                        </textarea>
+                        <div class="questionInput">
+                            <textarea id="content" name="content_bn" class="tinymce"> {{ old('content_bn', $terms->content['bn'] ?? '') }} </textarea>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -74,17 +74,17 @@
                 <div class="col-md-6">
                     <div class="mb-4">
                         <label class="block mb-1">English</label>
-                        <textarea name="content_en" class="form-control tinymce">
-                            {{ old('content_en', $return->content['en'] ?? '') }}
-                        </textarea>
+                        <div class="questionInput">
+                            <textarea id="content" name="content_en" class="tinymce"> {{ old('content_en', $return->content['en'] ?? '') }} </textarea>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-4">
                         <label class="block mb-1">Bangla</label>
-                        <textarea name="content_bn" class="form-control tinymce">
-                            {{ old('content_bn', $return->content['bn'] ?? '') }}
-                        </textarea>
+                        <div class="questionInput">
+                            <textarea id="content" name="content_bn" class="tinymce"> {{ old('content_bn', $return->content['bn'] ?? '') }} </textarea>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -94,24 +94,25 @@
         </form>
     </div>
 </div>
-@endsection
-@push('js')
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js"></script>
+
 <script>
-    tinymce.init({
-        selector: 'textarea.tinymce',
-        height: 350,
-        menubar: false,
-        plugins: [
-            'advlist autolink lists link image charmap preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste code help wordcount'
-        ],
-        toolbar:
-            'undo redo | formatselect | bold italic backcolor | ' +
-            'alignleft aligncenter alignright alignjustify | ' +
-            'bullist numlist outdent indent | removeformat | help',
-        forced_root_block: false
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // TinyMCE show/hide helpers
+        function hideTinyMCE() {
+            if (window.tinymce) {
+                const editor = tinymce.get("content");
+                if (editor) editor.hide();
+            }
+        }
+
+        function showTinyMCE() {
+            if (window.tinymce) {
+                const editor = tinymce.get("content");
+                if (editor) editor.show();
+            }
+        }
     });
 </script>
-@endpush
+@endsection
+

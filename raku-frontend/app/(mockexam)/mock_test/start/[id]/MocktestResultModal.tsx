@@ -3,9 +3,7 @@ import { useState } from "react";
 
 import { FaPaperPlane } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
-import { RiBarChartBoxAiFill } from "react-icons/ri";
 import { FaArrowRight } from "react-icons/fa";
-
 
 import CircularProgress from "@/components/CircularProgress";
 import MocktestAnsEvaluation from "./MocktestAnsEvaluation";
@@ -13,24 +11,11 @@ import MocktestAnsEvaluation from "./MocktestAnsEvaluation";
 import axiosInstance from "@/utils/axios";
 import { toast } from "sonner";
 
-interface ExamResult {
-  question_set: number;
-  per_question_mark: number;
-  total_correct: number;
-  module_wise_score: ModuleWiseScore;
-}
-interface ModuleStats {
-  answered: number;
-  correct: number;
-  wrong: number;
-}
-
-type ModuleWiseScore = Record<string, ModuleStats>;
+import type { ExamResult , ModuleStats , ModuleWiseScore } from "@/types/Mocktest/MockExam.type";
 
 interface ModuleQuestionCounts {
   [key: string]: number;
 }
-
 interface MocktestResultModalProps {
   result: ExamResult | null;
   setIsSubmitted: (value: boolean) => void;
@@ -191,7 +176,7 @@ export default function MocktestResultModal({
           <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative fade-slide-in-bottom">
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute top-4 right-4 text-red-400 hover:text-red-600 text-lg font-bold cursor-pointer duration-300 hover:rotate-180 duration-300"
+              className="absolute top-4 right-4 text-red-400 hover:text-red-600 text-lg font-bold cursor-pointer hover:rotate-180 duration-300"
             >
               ✕
             </button>

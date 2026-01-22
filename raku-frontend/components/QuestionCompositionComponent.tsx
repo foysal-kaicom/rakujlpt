@@ -28,7 +28,7 @@ export default function QuestionCompositionComponent({
             <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-300/30 rounded-full blur-3xl animate-bounce-slow"></div>
             <div className="absolute bottom-0 left-0 w-96 h-96 bg-pink-300/30 rounded-full blur-3xl animate-pulse-slow"></div>
 
-            <div className="relative z-10 max-w-5xl mx-auto text-center px-6">
+            <div className="relative z-10 max-w-5xl mx-auto text-center md:px-6">
               <h2 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 py-2">
                 <span className="uppercase">
                   {title ? title : t("composition.jlpt.default_title")}
@@ -60,7 +60,9 @@ export default function QuestionCompositionComponent({
                   <ul className="text-gray-700 space-y-2 list-disc">
                     <li>{t("composition.jlpt.cards.language.items.vocab")}</li>
                     <li>{t("composition.jlpt.cards.language.items.kanji")}</li>
-                    <li>{t("composition.jlpt.cards.language.items.grammar")}</li>
+                    <li>
+                      {t("composition.jlpt.cards.language.items.grammar")}
+                    </li>
                   </ul>
                 </div>
 
@@ -70,7 +72,9 @@ export default function QuestionCompositionComponent({
                   </h3>
                   <ul className="text-gray-700 space-y-2 list-disc">
                     <li>{t("composition.jlpt.cards.reading.items.short")}</li>
-                    <li>{t("composition.jlpt.cards.reading.items.practical")}</li>
+                    <li>
+                      {t("composition.jlpt.cards.reading.items.practical")}
+                    </li>
                     <li>{t("composition.jlpt.cards.reading.items.long")}</li>
                   </ul>
                 </div>
