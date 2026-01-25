@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\SendRegistrationEmailJob;
+use App\Jobs\CandidateRegistrationEmailJob;
 use App\Models\Candidate;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -62,7 +62,7 @@ class GoogleAuthController extends Controller
             if ($candidate->wasRecentlyCreated) {
                 $candidate->password = bcrypt(Str::random(12));
                 $candidate->save();
-                dispatch(new SendRegistrationEmailJob($candidate));
+                dispatch(new CandidateRegistrationEmailJob($candidate));
             }
 
         $token = auth('candidate')->login($candidate);

@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CandidateRequest;
 use App\Http\Requests\WebCandidateRegistrationRequest;
 use App\Http\Resources\CandidateResource;
-use App\Jobs\SendRegistrationEmail;
-use App\Jobs\SendRegistrationEmailJob;
+use App\Jobs\CandidateRegistrationEmailJob;
 use App\Models\Booking;
 use App\Models\Candidate;
 use App\Notifications\CandidateNotification;
@@ -16,12 +14,10 @@ use App\Services\SMS\SmsService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -70,7 +66,7 @@ class CandidateController extends Controller
             
             $candidate = Candidate::create($data);
 
-            dispatch(new SendRegistrationEmailJob($candidate));
+            dispatch(new CandidateRegistrationEmailJob($candidate));
 
             // walletCredit($candidate, 'new_registration', 50);
             walletCredit($candidate, 'new_registration');
