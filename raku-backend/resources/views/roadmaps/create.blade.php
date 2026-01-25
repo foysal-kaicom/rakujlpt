@@ -52,7 +52,7 @@
                     </div>
 
                     <!-- is_free checkbox -->
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-check mt-4">
                             <input class="form-check-input" type="checkbox" name="is_free" id="isFreeCheckbox" value="1"
                                 {{ old('is_free') ? 'checked' : '' }}>
@@ -63,13 +63,23 @@
                     </div>
 
                     <!-- unlock_coins -->
-                    <div class="col-md-6" id="unlockCoinsWrapper">
+                    <div class="col-md-4" id="unlockCoinsWrapper">
                         <label class="form-label fw-semibold">Coins Required to Unlock</label>
                         <input type="number" name="unlock_coins" id="unlockCoinsInput"
                             value="{{ old('unlock_coins', 0) }}"
                             class="form-control form-control-lg shadow-sm rounded-2"
                             />
                         @error('unlock_coins') <div class="text-danger small">{{ $message }}</div> @enderror
+                    </div>
+
+                    <!-- complted bonus coins -->
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Bonus Coins Earned</label>
+                        <input type="number" name="completed_bonus" id="completedCoinsInput"
+                            value="{{ old('completed_bonus', 0) }}"
+                            class="form-control form-control-lg shadow-sm rounded-2"
+                            />
+                        @error('completed_bonus') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
 
 
