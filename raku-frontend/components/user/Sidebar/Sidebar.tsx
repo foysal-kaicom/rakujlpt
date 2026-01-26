@@ -21,67 +21,83 @@ export default function Sidebar() {
 
   const MainSidebar = () => {
     return (
-      <div className="h-[calc(100vh-80px)] bg-white w-[300px] fixed top-[80px] shadow-lg hidden xl:block overflow-y-auto scrollbar-thin">
+      <div className="fixed top-[80px] left-0 h-[calc(100vh-80px)] w-[300px] bg-white/80 backdrop-blur-xl border-r border-gray-200 shadow-[0_10px_40px_rgba(0,0,0,0.04)] hidden xl:flex flex-col overflow-y-auto scrollbar-thin">
+        {/* Profile */}
         <Link href="/profile">
-          <div className="p-5 flex flex-col items-center relative pt-8">
-            <div className="h-22 w-full bg-purple-400 absolute left-0 top-0"></div>
-            {user?.photo ? (
-              <Image
-                src={user?.photo || ""}
-                alt="profile picture"
-                height={100}
-                width={100}
-                className="rounded-full size-24 aspect-auto object-cover relative z-10 ring-5 ring-white bg-white"
-                loading="lazy"
-              />
-            ) : (
-              <FaUser className="rounded-full size-24 aspect-auto object-cover text-purple-400 relative z-10 ring-5 ring-white bg-white" />
-            )}
+          <div className="relative px-6 pt-10 pb-6 text-center">
+            <div className="absolute inset-0 h-32 bg-gradient-to-br from-purple-100 via-pink-100 to-indigo-100 rounded-b-3xl" />
 
-            <p className="text-2xl font-semibold px-5 mt-2">
-              {user?.first_name} {""} {user?.last_name}
-            </p>
-            <p className="font-medium text-gray-600 px-5">{user?.email}</p>
+            <div className="relative z-10 flex flex-col items-center">
+              {user?.photo ? (
+                <Image
+                  src={user.photo}
+                  alt="profile"
+                  height={96}
+                  width={96}
+                  className="rounded-full size-24 object-cover ring-4 ring-white shadow-md"
+                />
+              ) : (
+                <div className="size-24 rounded-full bg-white shadow-md flex items-center justify-center ring-4 ring-white">
+                  <FaUser className="text-3xl text-purple-400" />
+                </div>
+              )}
+
+              <p className="mt-3 text-lg font-semibold text-gray-800">
+                {user?.first_name} {user?.last_name}
+              </p>
+              <p className="text-sm text-gray-500 font-medium">{user?.email}</p>
+            </div>
           </div>
         </Link>
 
-        <div className="p-5 flex flex-col gap-4 font-semibold">
-          {SidebarData.map((data, index) => (
-            <Link
-              key={index}
-              href={data.to}
-              className={`p-1.5 rounded group hover:text-purple-700 hover:bg-pink-50 ${
-                path.startsWith(data.to)
-                  ? "text-purple-700 bg-pink-50"
-                  : "text-gray-600"
-              }`}
-            >
-              <div className="flex gap-3 items-center">
-                <p
-                  className={`p-1.5 rounded border group-hover:bg-white group-hover:text-purple-600 group-hover:border-purple-400 text-xl ${
-                    path.startsWith(data.to)
-                      ? " bg-white text-purple-600 border-purple-400"
-                      : "bg-white text-purple-600 border-purple-400 "
+        {/* Navigation */}
+        <div className="flex-1 px-4 py-6 space-y-2 font-semibold">
+          {SidebarData.map((data, index) => {
+            const active = path.startsWith(data.to);
+
+            return (
+              <Link
+                key={index}
+                href={data.to}
+                className={`group relative flex items-center gap-4 px-4 py-3 rounded-xl transition-all
+                ${
+                  active
+                    ? "bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700"
+                    : "text-gray-600 hover:bg-gray-50"
+                }`}
+              >
+                {/* Active Indicator */}
+                {active && (
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1.5 rounded-r-full bg-purple-500" />
+                )}
+
+                <div
+                  className={`flex items-center justify-center size-10 rounded-lg border
+                  ${
+                    active
+                      ? "bg-white border-purple-300 text-purple-700"
+                      : "bg-white border-gray-200 text-purple-500 group-hover:border-purple-300"
                   }`}
                 >
                   {data.icon}
-                </p>
-                <p>{t(data.label)}</p>
-              </div>
-            </Link>
-          ))}
+                </div>
+
+                <span className="text-sm">{t(data.label)}</span>
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Logout */}
+        <div className="px-4 pb-6 font-semibold">
           <button
             onClick={handleLogout}
-            className={`p-1.5 rounded text-gray-600 hover:bg-pink-50 hover:text-red-500 group cursor-pointer`}
+            className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-gray-600 hover:text-red-500 hover:bg-red-50 transition cursor-pointer"
           >
-            <div className="flex gap-3 items-center">
-              <p
-                className={`p-2 rounded bg-white group-hover:bg-white text-red-400 border border-pink-400 group-hover:border-pink-500`}
-              >
-                <FaSignOutAlt />
-              </p>
-              <p>{t("nav.logout")}</p>
+            <div className="size-10 flex items-center justify-center rounded-lg border border-red-200 bg-white">
+              <FaSignOutAlt className="text-red-500" />
             </div>
+            <span className="text-sm">{t("nav.logout")}</span>
           </button>
         </div>
       </div>
@@ -89,23 +105,29 @@ export default function Sidebar() {
   };
 
   const SmSidebar = () => {
-
     return (
-      <div className="fixed bottom-0 inset-x-0 z-30 bg-white shadow-t border-t border-gray-200 flex justify-evenly gap-3 items-center py-4 rounded-t-2xl xl:hidden">
-        {SidebarData.slice(0, 5).map((item, i) => (
-          <Link
-            key={i}
-            href={item.to}
-            className={`flex flex-col items-center text-xs tracking-wide p-1 transition-colors duration-200 rounded-lg md:w-[120px] ${
-              path.startsWith(item.to)
-                ? "bg-linear-to-tr from-purple-500 to-indigo-500 text-white scale-130"
-                : "bg-white text-purple-600 border"
-            }`}
-          >
-            <span className="text-3xl">{item.icon}</span>
-            <span className="mt-1 hidden md:block font-medium">{t(item.label)}</span>
-          </Link>
-        ))}
+      <div className="fixed bottom-0 inset-x-0 z-30 xl:hidden bg-white/90 backdrop-blur-xl border-t border-gray-200 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] flex justify-around py-3 rounded-t-3xl">
+        {SidebarData.slice(0, 6).map((item, i) => {
+          const active = path.startsWith(item.to);
+
+          return (
+            <Link
+              key={i}
+              href={item.to}
+              className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition
+              ${
+                active
+                  ? "bg-gradient-to-br from-purple-500 to-indigo-500 text-white scale-105"
+                  : "text-purple-600 hover:bg-purple-50"
+              }`}
+            >
+              <span className="text-2xl">{item.icon}</span>
+              <span className="text-[11px] font-medium hidden md:block">
+                {t(item.label)}
+              </span>
+            </Link>
+          );
+        })}
       </div>
     );
   };
@@ -115,7 +137,7 @@ export default function Sidebar() {
       const response = await axiosInstance.get("/candidate/logout");
 
       if (response.status === 200) {
-        console.log("Logout Success:", response.data);
+        // console.log("Logout Success:", response.data);
         useAuthStore.getState().logout();
         router.push("/sign_in");
       } else {
@@ -123,7 +145,7 @@ export default function Sidebar() {
       }
     } catch (error: any) {
       toast.error(
-        error?.response?.data?.message || error.message || "Logout error"
+        error?.response?.data?.message || error.message || "Logout error",
       );
       useAuthStore.getState().logout();
       router.push("/sign_in");

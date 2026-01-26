@@ -212,7 +212,7 @@ export default function MocktestResultEvaluation({
                 ✕
               </button>
 
-              <div className="p-6 space-y-8 h-[80vh] overflow-y-auto">
+              <div className="p-6 space-y-8 h-[80vh] overflow-y-auto scrollbar-thin">
                 {report.map((exam) => (
                   <div
                     key={exam.title}

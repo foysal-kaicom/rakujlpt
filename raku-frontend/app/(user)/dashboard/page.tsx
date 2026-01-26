@@ -9,15 +9,14 @@ import Image from "next/image";
 import { useBusinessSettingsStore } from "@/stores/useBusinessStore";
 import { useAuthStore } from "@/stores/useAuthStore";
 
-import { SiAudiobookshelf } from "react-icons/si";
-import { LuLetterText, LuComponent } from "react-icons/lu";
-import { RxLetterCaseCapitalize } from "react-icons/rx";
-import { IoIosBookmarks, IoIosAlarm } from "react-icons/io";
+import { LuComponent } from "react-icons/lu";
+import { IoIosAlarm } from "react-icons/io";
 import { PiNotebookFill } from "react-icons/pi";
-import { GiStairsGoal, GiRingingAlarm } from "react-icons/gi";
-import { BiSolidBookBookmark } from "react-icons/bi";
+import { GiStairsGoal } from "react-icons/gi";
 import { MdTipsAndUpdates } from "react-icons/md";
-import { FaRocket, FaBook, FaBrain, FaTrophy } from "react-icons/fa";
+import { FaCoins, FaWallet } from "react-icons/fa";
+import { Clock, Target, TrendingUp, Flame } from "lucide-react";
+import { PlayCircle, FileText, CheckCircle } from "lucide-react";
 
 import DashboardSkeleton from "./dashboardSkeleton";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
@@ -46,7 +45,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [allExam, setAllExam] = useState<ExamItem[]>([]);
   const [dashboard, setDashboard] = useState<DashboardItem>(
-    {} as DashboardItem
+    {} as DashboardItem,
   );
 
   const getExamData = async () => {
@@ -78,253 +77,224 @@ export default function Dashboard() {
     getDashboard();
   }, []);
 
-  const steps = [
-    {
-      title: t("dashboard.steps.getting_started"),
-      icon: <FaRocket />,
-      color: "from-purple-500 to-pink-500",
-      status: "completed",
-    },
-    {
-      title: t("dashboard.steps.basics"),
-      icon: <FaBook />,
-      color: "from-blue-500 to-yellow-400",
-      status: "current",
-    },
-    {
-      title: t("dashboard.steps.intermediate"),
-      icon: <FaBrain />,
-      color: "from-pink-500 to-blue-500",
-      status: "upcoming",
-    },
-    {
-      title: t("dashboard.steps.mastery"),
-      icon: <FaTrophy />,
-      color: "from-yellow-400 to-purple-500",
-      status: "upcoming",
-    },
-  ];
-
   return (
     <>
       {loading ? (
         <DashboardSkeleton />
       ) : (
-        <div className="">
-          <section className="flex items-center justify-between gap-2 mb-3 flex-wrap">
+        <>
+          <div className="">
+            {/* Header */}
             <UserHeadline
               mainText={t("dashboard.title")}
               subText=""
               preText=""
             />
-          </section>
-          <div className="relative bg-linear-to-t from-purple-400 to-pink-400 text-white rounded-xl overflow-hidden px-8 py-4 lg:py-0 lg:px-16 flex justify-between items-center gap-8 shadow-md hover:shadow-lg transition-shadow duration-500 mb-5">
-            {/* Animated Floating Orbs */}
-            <div className="absolute -top-20 -left-20 w-56 h-56 rounded-full bg-purple-500 blur-3xl"></div>
-            <div className="absolute -bottom-24 -right-24 w-72 h-72 rounded-full bg-pink-400 blur-3xl"></div>
 
-            <div className="relative z-10 w-2/3">
-              <h1 className="text-lg sm:text-3xl lg:text-4xl xl:text-5xl font-semibold mb-4">
-                {t("dashboard.hero.title")}
-              </h1>
-              <p className="text-sm sm:text-base mb-6 text-white font-medium hidden sm:block">
-                {t("dashboard.hero.description")}
-              </p>
-              <Link
-                href="/mock_test_select"
-                className="px-5 sm:px-10 py-1.5 lg:py-2.5 rounded-lg text-white bg-purple-600 text-xs sm:text-sm md:text-base font-bold shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300 animate-pulse"
-              >
-                {t("dashboard.buttons.take_mock_test")}
-              </Link>
-            </div>
-
-            <div className="w-1/3 drop-shadow-xl drop-shadow-amber-50/50 flex justify-end">
-              <Image
-                src="/assets/img/mocktest/t13.png"
-                alt="Mock Test Illustration"
-                height={400}
-                width={400}
-                className="w-full max-w-[300px]"
-                loading="lazy"
+            {/* Quick Actions */}
+            <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 mb-6 mt-8">
+              <ActionCard
+                title="Mock Test"
+                button="Start Test"
+                icon={IoIosAlarm}
+                action={"/mock_test_select"}
               />
-            </div>
-          </div>
-          <section className="space-y-4 md:space-y-10">
-            <section className="space-y-2 mt-3 md:mt-10 ">
-              <h1 className="font-bold sm:text-xl">
-                {t("dashboard.sections.exam_solution.title")}
-              </h1>
-              <section className="grid grid-cols-4 sm:grid-cols-4 lg:flex flex-wrap gap-2 sm:gap-6">
-                {[
-                  {
-                    title: t("dashboard.sections.exam_solution.items.practice"),
-                    value: dashboard?.total_bookings,
-                    icon: <GiStairsGoal className="size-8 sm:size-14" />,
-                    iconBg: "bg-purple-600",
-                    link: "/my_practice",
-                    extranal: false,
-                  },
-                  {
-                    title: t("dashboard.sections.exam_solution.items.learn"),
-                    value: dashboard?.total_success_payments,
-                    icon: (
-                      <BiSolidBookBookmark className="size-8 sm:size-14" />
-                    ),
-                    iconBg: "bg-purple-600",
-                    link: "",
-                    extranal: false,
-                  },
-                  {
-                    title: t(
-                      "dashboard.sections.exam_solution.items.materials"
-                    ),
-                    value: dashboard?.pending_booking,
-                    icon: <PiNotebookFill className="size-8 sm:size-14" />,
-                    iconBg: "bg-purple-600",
-                    link: "",
-                    extranal: false,
-                  },
-                  {
-                    title: t("dashboard.sections.exam_solution.items.tips"),
-                    value: dashboard?.total_results_published,
-                    icon: <MdTipsAndUpdates className="size-8 sm:size-14" />,
-                    iconBg: "bg-purple-600",
-                    link: "",
-                    extranal: false,
-                  },
-                  {
-                    title: t("dashboard.sections.exam_solution.items.jpt_exam"),
-                    value: dashboard?.total_bookings,
-                    icon: <IoIosAlarm className="size-8 sm:size-14" />,
-                    iconBg: "bg-purple-600",
-                    link: "https://jptbd.com/",
-                    extranal: true,
-                  },
-                  {
-                    title: t(
-                      "dashboard.sections.exam_solution.items.jlpt_exam"
-                    ),
-                    value: dashboard?.total_success_payments,
-                    icon: <IoIosAlarm className="size-8 sm:size-14" />,
-                    iconBg: "bg-purple-600",
-                    link: "https://jlpt.juaab-bd.org/jlpt_test_level",
-                    extranal: true,
-                  },
-                  {
-                    title: t(
-                      "dashboard.sections.exam_solution.items.mock_test"
-                    ),
-                    value: dashboard?.pending_booking,
-                    icon: <GiRingingAlarm className="size-8 sm:size-14" />,
-                    iconBg: "bg-purple-600",
-                    link: "/mock_test_select",
-                    extranal: false,
-                  },
-                  {
-                    title: t(
-                      "dashboard.sections.exam_solution.items.exam_pattern"
-                    ),
-                    value: dashboard?.total_results_published,
-                    icon: <LuComponent className="size-8 sm:size-14" />,
-                    iconBg: "bg-purple-600",
-                    link: "/question_composition",
-                    extranal: false,
-                  },
-                ].map((item, index) => (
-                  <Link
-                    key={index}
-                    href={item.link}
-                    target={item.extranal ? "_blank" : "_self"}
-                  >
-                    <div
-                      className={`flex flex-col gap-2 items-center p-2 lg:p-6 sm:bg-purple-300/50 rounded-xl hover:shadow-md shadow-purple-400 transition duration-300 border border-transparent hover:border-gray-200`}
-                    >
-                      <div
-                        className={`${item.iconBg} p-1 rounded-md text-white`}
-                      >
-                        {item.icon}
-                      </div>
-                      <h1 className="text-xs sm:text-sm lg:text-base font-medium text-center">
-                        {item.title}
-                      </h1>
-                    </div>
-                  </Link>
-                ))}
-              </section>
+              <ActionCard
+                title="Practice Roadmap"
+                button="View Materials"
+                icon={GiStairsGoal}
+                action={"/practice"}
+              />
+
+              <ActionCard
+                title="Exam Pattern"
+                button="View Materials"
+                icon={LuComponent}
+                action={"/question_composition"}
+              />
+
+              <ActionCard
+                title="Course Materials"
+                button="View Materials"
+                icon={PiNotebookFill}
+                action={"/dashboard"}
+              />
+
+              <ActionCard
+                title="Tips"
+                button="View Materials"
+                icon={MdTipsAndUpdates}
+                action={"/dashboard"}
+              />
             </section>
-            <div className="space-y-2 sm:bg-white sm:p-5 rounded-xl sm:border border-gray-200">
-              <h1 className="font-bold sm:text-xl">
-                {t("dashboard.sections.daily_practice.title")}
-              </h1>
-              <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                {[
-                  {
-                    title: t(
-                      "dashboard.sections.daily_practice.items.vocabulary"
-                    ),
-                    value: dashboard?.total_bookings,
-                    icon: (
-                      <RxLetterCaseCapitalize className="size-6 2xl:size-10" />
-                    ),
-                    iconBg: "bg-sky-600",
-                    cardBg: "bg-sky-200",
-                  },
-                  {
-                    title: t(
-                      "dashboard.sections.daily_practice.items.grammar"
-                    ),
-                    value: dashboard?.total_success_payments,
-                    icon: <LuLetterText className="size-6 2xl:size-10" />,
-                    iconBg: "bg-green-600",
-                    cardBg: "bg-green-200",
-                  },
-                  {
-                    title: t(
-                      "dashboard.sections.daily_practice.items.listening"
-                    ),
-                    value: dashboard?.pending_booking,
-                    icon: <SiAudiobookshelf className="size-6 2xl:size-10" />,
-                    iconBg: "bg-yellow-500",
-                    cardBg: "bg-amber-100",
-                  },
-                  {
-                    title: t("dashboard.sections.daily_practice.items.reading"),
-                    value: dashboard?.total_results_published,
-                    icon: <IoIosBookmarks className="size-6 2xl:size-10" />,
-                    iconBg: "bg-cyan-600",
-                    cardBg: "bg-cyan-200",
-                  },
-                ].map((item, index) => (
-                  <div
-                    key={index}
-                    className={`${item.cardBg} flex gap-2 items-center p-2 rounded-md shadow-md hover:shadow-xl transition duration-300 border border-transparent hover:border-gray-200`}
-                  >
-                    <div
-                      className={`${item.iconBg} p-3 rounded-full text-white`}
-                    >
-                      {item.icon}
-                    </div>
-                    <div className="space-y-2 w-[calc(100%-74px)]">
-                      <h1 className="text-sm md:text-base 2xl:text-lg font-semibold flex gap-1.5 justify-between items-center">
-                        <span>{item.title}</span>{" "}
-                        <span className="text-xs lg:text-sm font-medium">
-                          {item.value}/10
-                        </span>
-                      </h1>
-                      <div className="w-full bg-white rounded-full h-2">
-                        <div
-                          className={`bg-sky-400 h-2 rounded-full transition-all duration-1000`}
-                          style={{ width: `10%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </section>
-            </div>
-          </section>
-        </div>
+
+            {/* Progress & Report */}
+            <section className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+              <DailyProgress />
+              <PerformanceReport />
+              <Milestones />
+            </section>
+            <RecentActivity />
+          </div>
+        </>
       )}
     </>
+  );
+}
+
+function ActionCard({ title, action, button, icon: Icon }: any) {
+  return (
+    <Link href={action}>
+      <div className="bg-white rounded-2xl p-4 md:p-6 border border-gray-100 shadow-sm hover:shadow-md transition flex items-center gap-4">
+        {/* Icon */}
+        <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center  text-white  ">
+          <Icon size={34} />
+        </div>
+
+        {/* Content */}
+        <div className="flex-1">
+          <h3 className="text-base md:text-lg font-semibold text-gray-900">
+            {title}
+          </h3>
+          <button className="ml-auto text-sm font-semibold text-violet-600 hover:text-blue-600 transition cursor-pointer">
+            {button}
+          </button>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function DailyProgress() {
+  return (
+    <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+      <h3 className="font-semibold text-gray-900 mb-4">📅 Daily Progress</h3>
+
+      {["Reading", "Listening", "Grammar"].map((item, i) => (
+        <div key={i} className="mb-3">
+          <div className="flex justify-between text-sm text-gray-600 mb-1">
+            <span>{item}</span>
+            <span>70%</span>
+          </div>
+
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="bg-gradient-to-r from-violet-500 to-blue-500 h-2 rounded-full w-[70%]" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PerformanceReport() {
+  return (
+    <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+      <h3 className="font-semibold text-gray-900 mb-4">
+        📊 Performance Report
+      </h3>
+
+      <ul className="space-y-2 text-sm text-gray-700">
+        <li>
+          ✔ Tests Taken: <b>18</b>
+        </li>
+        <li>
+          ✔ Avg Score: <b>72%</b>
+        </li>
+        <li>
+          ✔ Accuracy: <b>68%</b>
+        </li>
+        <li>
+          ✔ Weak Area: <b>Grammar</b>
+        </li>
+      </ul>
+    </div>
+  );
+}
+
+function Milestones() {
+  return (
+    <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+      <h3 className="font-semibold text-gray-900 mb-4">🏆 Milestones</h3>
+
+      <ul className="space-y-2 text-sm text-gray-700">
+        <li>🎉 Completed 10 Mock Tests</li>
+        <li>🔥 7 Days Study Streak</li>
+        <li>🚀 Reached 70% Accuracy</li>
+      </ul>
+    </div>
+  );
+}
+
+function RecentActivity() {
+  const activities = [
+    {
+      title: "Mock Test – Reading Section",
+      meta: "Score: 68% • 2 hours ago",
+      icon: PlayCircle,
+      color: "text-violet-600",
+      bg: "bg-violet-50",
+      action: "Resume",
+    },
+    {
+      title: "Grammar Notes – N4",
+      meta: "Completed yesterday",
+      icon: FileText,
+      color: "text-blue-600",
+      bg: "bg-blue-50",
+      action: "View",
+    },
+    {
+      title: "Listening Practice",
+      meta: "Completed • Score 75%",
+      icon: CheckCircle,
+      color: "text-green-600",
+      bg: "bg-green-50",
+      action: "Review",
+    },
+  ];
+
+  return (
+    <section className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="font-semibold text-gray-900">🕒 Recent Activity</h3>
+        <button className="text-sm text-violet-600 hover:underline">
+          View All
+        </button>
+      </div>
+
+      <ul className="space-y-4">
+        {activities.map((item, i) => {
+          const Icon = item.icon;
+          return (
+            <li
+              key={i}
+              className="
+                flex items-center gap-4
+                p-3 rounded-xl
+                hover:bg-gray-50
+                transition
+              "
+            >
+              <div
+                className={`w-10 h-10 rounded-lg flex items-center justify-center ${item.bg} ${item.color}`}
+              >
+                <Icon size={20} />
+              </div>
+
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-900">
+                  {item.title}
+                </p>
+                <p className="text-xs text-gray-500">{item.meta}</p>
+              </div>
+
+              <button className="text-sm font-semibold text-violet-600 hover:text-blue-600">
+                {item.action}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
   );
 }
