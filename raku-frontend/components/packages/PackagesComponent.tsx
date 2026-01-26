@@ -41,8 +41,8 @@ const PackagesComponent = () => {
         error?.message ||
           t(
             "pricing.error_fetching_plans",
-            "Cannot get subscription plans at this moment"
-          )
+            "Cannot get subscription plans at this moment",
+          ),
       );
     }
     setLoader(false);
@@ -56,7 +56,7 @@ const PackagesComponent = () => {
   const totalPages = Math.ceil(plansData.length / ITEMS_PER_PAGE);
   const paginatedPlans = plansData.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    currentPage * ITEMS_PER_PAGE,
   );
 
   const handlePageChange = (page: number) => {
@@ -68,17 +68,19 @@ const PackagesComponent = () => {
       {loader && <PackagesSkeleton />}
       <section
         id="pricing"
-        className="pb-20 pt-5 relative bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 overflow-hidden"
+        className="pb-20 pt-5 relative bg-gradient-to-br from-blue-50 via-pink-50 to-purple-100 overflow-hidden"
       >
-        <div className="absolute -top-10 -left-10 w-40 h-40 bg-blue-300/20 rounded-full blur-3xl animate-bounce-slow"></div>
-        <div className="absolute -bottom-10 -right-10 w-56 h-56 bg-pink-300/20 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute -top-16 -left-16 w-60 h-60 bg-yellow-200/30 rounded-full filter blur-3xl animate-bounce-slow"></div>
+        <div className="absolute -bottom-24 -right-16 w-96 h-96 bg-pink-200/30 rounded-full filter blur-3xl animate-pulse-slow"></div>
 
         <div className="container mx-auto px-4 lg:px-8 relative z-10">
           <BreadCrumb breadCrumbData={breadCrumbData} />
           <div className="text-center mb-16 mt-15">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
               {t("pricing.title")}{" "}
-              <span className="text-blue-600">{t("pricing.highlight")}</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-400 to-purple-500">
+                {t("pricing.highlight")}
+              </span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               {t("pricing.subtitle")}

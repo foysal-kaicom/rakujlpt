@@ -51,7 +51,7 @@ export default function NewsComponent() {
           <div className="pb-15 pt-8">
             {/* Featured News */}
             <div className="mb-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-              <div className="relative aspect-2/1 h-auto w-full rounded-xl overflow-hidden shadow-lg">
+              <div className="relative aspect-2/1 h-auto w-full rounded-xl overflow-hidden shadow-lg shadow-violet-200 ring-3 ring-white/70">
                 <Image
                   src={featuredNews?.featured_image || "/"}
                   alt={featuredNews?.title.slice(0, 10) || ""}

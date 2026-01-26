@@ -72,7 +72,7 @@ export default function TestimonialsSection() {
           className="mySwiper"
         >
           {testimonials.map((testimonial) => (
-            <SwiperSlide>
+            <SwiperSlide className="mb-5">
               <TestimonialCard testimonial={testimonial} />
             </SwiperSlide>
           ))}

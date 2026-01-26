@@ -33,7 +33,7 @@ export default function QRScannerPage() {
     const scanner = new Html5QrcodeScanner(
       scannerRef.current.id,
       config,
-      false
+      false,
     );
 
     scanner.render(
@@ -44,13 +44,13 @@ export default function QRScannerPage() {
           router.push(`certificate/${id}`);
         } else {
           toast.error("Invalid QR code");
-          return
+          return;
         }
       },
       (errorMessage: string) => {
         // optional: console.log(errorMessage);
         // toast.error("Certificate not found")
-      }
+      },
     );
 
     return () => {
@@ -61,13 +61,15 @@ export default function QRScannerPage() {
   }, []);
 
   return (
-    <div className="min-h-[70vh] bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 pt-5">
+    <div className="min-h-[70vh] relative bg-gradient-to-br from-blue-50 via-pink-50 to-purple-100 pt-5 overflow-clip">
+      <div className="absolute -top-16 -left-16 w-60 h-60 bg-yellow-200/30 rounded-full filter blur-3xl animate-bounce-slow"></div>
+      <div className="absolute -bottom-24 -right-16 w-96 h-96 bg-pink-200/30 rounded-full filter blur-3xl animate-pulse-slow"></div>
       <WebpageWrapper>
         <BreadCrumb breadCrumbData={breadCrumbData} />
         <div className="flex flex-col items-center justify-center py-8">
           {/* Header */}
           <div className="text-center mb-10">
-            <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent pb-2">
+            <h1 className="text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-400 to-purple-500 pb-2">
               {t("certificate.title")}
             </h1>
             <p className="text-gray-700 mt-2 max-w-md mx-auto">

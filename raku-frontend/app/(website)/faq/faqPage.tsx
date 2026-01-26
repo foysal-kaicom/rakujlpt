@@ -60,17 +60,17 @@ export default function Faq() {
   }, []);
 
   return (
-    <section className="relative min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50 overflow-hidden pt-5 pb-20">
+    <section className="relative min-h-screen bg-gradient-to-br from-blue-50 via-pink-50 to-purple-100 overflow-hidden pt-5 pb-20">
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-gradient-to-br from-purple-400/30 to-pink-400/30 rounded-full blur-[120px] animate-float"></div>
-        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-gradient-to-tr from-indigo-400/30 to-pink-400/20 rounded-full blur-[140px] animate-float-slow"></div>
+        <div className="absolute -top-16 -left-16 w-60 h-60 bg-yellow-200/30 rounded-full filter blur-3xl animate-bounce-slow"></div>
+        <div className="absolute -bottom-24 -right-16 w-96 h-96 bg-pink-200/30 rounded-full filter blur-3xl animate-pulse-slow"></div>
       </div>
 
       <WebpageWrapper>
         <BreadCrumb breadCrumbData={breadCrumbData} />
 
         <div className="relative z-10 max-w-3xl mx-auto text-center pt-15">
-          <h1 className="text-5xl md:text-6xl font-extrabold pb-6 bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent drop-shadow-sm">
+          <h1 className="text-5xl md:text-6xl font-extrabold pb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-400 to-purple-500">
             {t("faq.title")}
           </h1>
 

@@ -1,4 +1,3 @@
-// lib/authOptions.ts
 import { AuthOptions, DefaultSession } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -9,7 +8,6 @@ type MyUser = {
 };
 
 type MyJWT = {
-  [key: string]: any;
   accessToken?: string;
   user?: MyUser;
 };

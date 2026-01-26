@@ -8,6 +8,7 @@ import Link from "next/link";
 // Third-party libraries
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next"; // Import added
+import { signIn, getSession } from "next-auth/react";
 
 // Icons
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -38,7 +39,7 @@ export default function LoginPage() {
   const searchParams = useSearchParams();
   const registered = searchParams.get("registered") === "true";
   const callbackUrl = decodeURIComponent(
-    searchParams.get("callbackUrl") || "/dashboard"
+    searchParams.get("callbackUrl") || "/dashboard",
   );
   const router = useRouter();
   const login = useAuthStore((state) => state.login);
@@ -86,12 +87,12 @@ export default function LoginPage() {
           email: data.email,
           phone_number: data.phone_number,
           photo: data.photo,
-          user_subscriptions_id:data.user_subscriptions_id,
-          is_subscribed:data.is_subscribed,
-          current_package_id:data.current_package_id,
-          current_package_name:data.current_package_name,
-          is_free:data.is_free,
-          candidate_code:data?.candidate_code,
+          user_subscriptions_id: data.user_subscriptions_id,
+          is_subscribed: data.is_subscribed,
+          current_package_id: data.current_package_id,
+          current_package_name: data.current_package_name,
+          is_free: data.is_free,
+          candidate_code: data?.candidate_code,
         };
 
         login(user, token);
@@ -99,7 +100,7 @@ export default function LoginPage() {
       }
     } catch (error: any) {
       toast.error(
-        error?.response?.data?.message || error.message || t("login.failed")
+        error?.response?.data?.message || error.message || t("login.failed"),
       );
     } finally {
       setLoading(false);
@@ -108,17 +109,9 @@ export default function LoginPage() {
 
   const handleGoogleLogin = async () => {
     try {
-      setLoading(true);
-
-      const userData = await googleLoginUtils();
-
-      if (!userData) {
-        toast.error(t("login.google_failed"));
-      }
+      signIn("google", { callbackUrl: "/auth/callback" });
     } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
+      toast.error(t("login.google_failed"));
     }
   };
 

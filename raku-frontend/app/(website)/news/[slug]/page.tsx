@@ -24,7 +24,7 @@ export default function NewsDetailsPage() {
 
   const breadCrumbData = [
     { name: "Home", to: "/" },
-    { name: "News", to: "/news" },
+    { name: "Blogs", to: "/news" },
     {
       name: newsDetails?.title?.slice(0, 20) + "..." || "News Details",
       to: `/news/${slug}`,
@@ -71,12 +71,16 @@ export default function NewsDetailsPage() {
 
   return (
     <Suspense fallback={<SuspenseLoader />}>
-      <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+      <div className="relative bg-gradient-to-br from-blue-50 via-pink-50 to-purple-100 overflow-clip">
+        <div className="absolute -top-16 -left-16 w-60 h-60 bg-yellow-200/30 rounded-full filter blur-3xl animate-bounce-slow"></div>
+        <div className="absolute -bottom-24 -right-16 w-96 h-96 bg-pink-200/30 rounded-full filter blur-3xl animate-pulse-slow"></div>
         <WebpageWrapper>
           <div className="pt-5">
             <BreadCrumb breadCrumbData={breadCrumbData} />
             <div className="w-1/2 mt-5">
-              <HeadLine2 preText="" subText="" mainText="News Details" />
+              <h2 className="text-4xl sm:text-5xl font-extrabold leading-snug bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-400 to-purple-500 animate-gradient-x">
+                Blog Details
+              </h2>
             </div>
           </div>
 
@@ -106,7 +110,7 @@ export default function NewsDetailsPage() {
                 />
 
                 <div className="flex items-center gap-4 pt-6 border-t border-gray-200">
-                  <div className="size-[50px] rounded-full bg-blue-300">
+                  <div className="size-[50px] rounded-full bg-violet-400">
                     <IoPersonCircleOutline className="size-[50px] text-white" />
                   </div>
                   <div>

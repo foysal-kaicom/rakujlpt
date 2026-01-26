@@ -13,7 +13,11 @@ export const metadata: Metadata = {
 export default function MockTestQuestionCompositionWrapper() {
   return (
     <Suspense fallback={<QuestionCompositionSkeleton />}>
-      <MockTestQuestionComposition />
+      <div className="relative bg-gradient-to-br from-blue-50 via-pink-50 to-purple-100 overflow-clip">
+        <div className="absolute -top-16 -left-16 w-60 h-60 bg-yellow-200/30 rounded-full filter blur-3xl animate-bounce-slow"></div>
+        <div className="absolute -bottom-24 -right-16 w-96 h-96 bg-pink-200/30 rounded-full filter blur-3xl animate-pulse-slow"></div>
+        <MockTestQuestionComposition />
+      </div>
     </Suspense>
   );
 }
