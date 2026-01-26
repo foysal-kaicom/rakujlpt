@@ -1,6 +1,5 @@
 "use client";
 
-import BreadCrumb from "@/components/BreadCrumb";
 import axiosInstance from "@/utils/axios";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,11 +18,6 @@ interface Stage {
   duration: number | null;
 }
 export default function Roadmap() {
-  const breadCrumbData = [
-    { name: "Home", to: "/" },
-    { name: "Practice", to: "/practice" },
-    { name: "Roadmap", to: "/practice/roadmap" },
-  ];
 
   const params = useParams();
   const slug = params.slug;

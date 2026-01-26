@@ -68,7 +68,7 @@ export default function Header() {
   const getSettingsData = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/settings`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/settings`,
       );
       const data = response.data?.data;
 
@@ -131,11 +131,11 @@ export default function Header() {
               )}
             </Link>
             {Array.isArray(item.links) && (
-              <div className="bg-white absolute overflow-hidden scale-0 group-hover:scale-100 transform origin-top left-1/2 -translate-x-1/2 top-[80px] w-[230px] duration-400 rounded-md shadow ring-1 ring-purple-200 py-2 grid grid-cols-1">
+              <div className="bg-white absolute overflow-hidden scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-100 transform origin-top left-1/2 -translate-x-1/2 top-[80px] w-[238px] duration-400 rounded-md shadow ring-1 ring-purple-200 py-2 grid grid-cols-1 px-1">
                 {item.links.map((link, i) => (
                   <Link href={link.to} key={i}>
                     <div
-                      className={`w-[230px] px-5 py-2 hover:bg-purple-100 hover:text-[#570d69] duration-300 text-sm font-semibold ${
+                      className={`w-[230px] px-5 py-2 hover:bg-purple-100 hover:text-[#570d69] duration-300 text-sm font-semibold rounded-md ${
                         path.startsWith(link.to)
                           ? "text-[#570d69] bg-purple-100"
                           : ""
@@ -182,12 +182,12 @@ export default function Header() {
             </p>
           </div>
 
-          <div className="bg-white grid grid-cols-1 rounded-md text-sm shadow absolute right-1/2 translate-x-1/2 top-10 scale-0 group-hover:scale-100 w-[200px] h-[210px] overflow-clip duration-400 origin-top outline outline-gray-200">
+          <div className="bg-white grid grid-cols-1 rounded-md text-sm shadow absolute right-1/2 translate-x-1/2 top-10 scale-0 group-hover:scale-100 w-[200px] h-[210px] opacity-0 group-hover:opacity-100 overflow-clip duration-400 origin-top outline outline-gray-200 p-1">
             {SidebarData.slice(0, 4).map((item, i) => (
               <Link
                 key={i}
                 href={item.to}
-                className={`flex gap-1.5 items-center hover:bg-purple-100 duration-300 cursor-pointer line-clamp-1 p-1 px-4 ${
+                className={`flex gap-1.5 items-center hover:bg-purple-100 duration-300 cursor-pointer line-clamp-1 p-1 px-4 rounded-md ${
                   path.startsWith(item.to) ? "bg-purple-100" : ""
                 }`}
               >
@@ -199,7 +199,7 @@ export default function Header() {
             ))}
             <p
               onClick={handleLogout}
-              className="flex gap-1.5 items-center hover:bg-purple-100 duration-300 cursor-pointer line-clamp-1 p-1 px-4 text-red-500"
+              className="flex gap-1.5 items-center hover:bg-purple-100 duration-300 cursor-pointer line-clamp-1 p-1 px-4 text-red-500 rounded-md"
             >
               <span className="p-1 bg-white rounded outline outline-purple-200">
                 <IoLogOut />
@@ -238,7 +238,7 @@ export default function Header() {
     return (
       <>
         <div
-          className={`xl:hidden h-[calc(100vh-80px)] w-full fixed z-40 top-20 left-0 bg-linear-to-r from-indigo-200 to-purple-200 duration-500 transform ${
+          className={`xl:hidden h-[calc(100vh-80px)] w-full fixed z-40 top-20 left-0 bg-violet-50/90 backdrop-blur-xl duration-500 transform ${
             isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
@@ -248,7 +248,7 @@ export default function Header() {
                 <>
                   <div
                     onClick={toggleSidebar}
-                    className="space-y-3 flex flex-col items-center border-b pb-3 border-white/70"
+                    className="space-y-3 flex flex-col items-center border-b pb-3 border-indigo-100"
                   >
                     <Link href="/dashboard">
                       {user.photo ? (
@@ -275,18 +275,18 @@ export default function Header() {
                       </p>
                     </Link>
                   </div>
-                  <div className="space-y-5 border-b border-white/70 pb-5 text-indigo-800">
+                  <div className="space-y-5 border-b border-indigo-100 pb-5 text-violet-800">
                     {/* Sidebar Items */}
                     {SidebarData.map((item, index) => (
                       <Link
                         key={index}
                         href={item.to}
                         onClick={toggleSidebar}
-                        className={`font-semibold text-sm 2xl:text-base hover:text-[#d400ff] transition flex items-center gap-2 ${
+                        className={`font-medium text-sm 2xl:text-base hover:text-[#d400ff] transition flex items-center gap-2 ${
                           path.startsWith(item.to) ? "text-[#d400ff]" : ""
                         }`}
                       >
-                        <span className="text-lg rounded-sm">{item.icon}</span>
+                        {/* <span className="text-lg rounded-sm">{item.icon}</span> */}
                         {t(item.label)}
                       </Link>
                     ))}
@@ -307,8 +307,8 @@ export default function Header() {
                     {item.links ? (
                       <button
                         onClick={() => toggleDropdown(index)}
-                        className={`flex justify-between gap-2 w-full text-left font-semibold text-sm 2xl:text-base hover:text-[#d400ff] cursor-pointer ${
-                          isActive ? "text-[#d400ff]" : "text-indigo-800"
+                        className={`flex justify-between gap-2 w-full text-left font-medium text-sm 2xl:text-base hover:text-[#d400ff] cursor-pointer ${
+                          isActive ? "text-[#d400ff]" : "text-violet-800"
                         }`}
                       >
                         <p className="w-[calc(100%-24px)]">
@@ -326,8 +326,8 @@ export default function Header() {
                       <Link
                         href={item.to}
                         onClick={toggleSidebar}
-                        className={`flex justify-between gap-2 w-full text-left font-semibold text-sm 2xl:text-base hover:text-[#d400ff] ${
-                          isActive ? "text-[#d400ff]" : "text-indigo-800"
+                        className={`flex justify-between gap-2 w-full text-left font-medium text-sm 2xl:text-base hover:text-[#d400ff] ${
+                          isActive ? "text-[#d400ff]" : "text-violet-800"
                         }`}
                       >
                         {t(item.labelKey)}
@@ -344,8 +344,8 @@ export default function Header() {
                             item.labelKey == "nav.test"
                               ? "hidden"
                               : item.to == path
-                              ? "text-[#d400ff]"
-                              : ""
+                                ? "text-[#d400ff]"
+                                : ""
                           }`}
                         >
                           {t(item.labelKey)}
@@ -358,7 +358,7 @@ export default function Header() {
                             className={`block hover:text-[#d400ff] text-sm duration-300 font-medium ${
                               path.startsWith(link.to)
                                 ? "text-[#d400ff]"
-                                : "text-indigo-800"
+                                : "text-violet-800"
                             }`}
                           >
                             {t(link.labelKey)}
@@ -375,7 +375,7 @@ export default function Header() {
             {isAuthenticated && token && user ? (
               <button
                 onClick={handleLogout}
-                className="text-xs 2xl:text-sm flex w-[100px] items-center gap-1 py-1 px-3 2xl:py-2 2xl:px-5 text-white bg-red-600 rounded-full border-2 border-red-600 hover:bg-white hover:text-red-600 duration-300 cursor-pointer"
+                className="text-sm font-medium 2xl:text-sm flex w-[100px] items-center gap-1 py-1 px-3 2xl:py-2 2xl:px-5 text-white bg-red-600 rounded-full border-2 border-red-600 hover:bg-white hover:text-red-600 duration-300 cursor-pointer"
               >
                 {t("nav.logout")}
                 <IoLogOut className="size-5" />
@@ -410,19 +410,18 @@ export default function Header() {
   return (
     <>
       <div
-        className={`w-full sticky z-50 top-0 ${
-          scrollCount > 10 ? "bg-purple-50 shadow-md" : "bg-white"
+        className={`w-full sticky z-50 top-0 transition-all ${
+          scrollCount > 10 ? "bg-purple-50/80 backdrop-blur-xl" : "bg-white"
         }`}
       >
         <div className="px-6 lg:px-8 container mx-auto flex justify-between xl:grid grid-cols-3 items-center h-[80px] ">
           <div
-            className="text-purple-600 drop-shadow-2xl drop-shadow-amber-500 xl:hidden"
+            className="text-purple-600 drop-shadow-2xl drop-shadow-amber-500 xl:hidden cursor-pointer"
             onClick={toggleSidebar}
           >
             {isSidebarOpen ? (
               <RxCross2 className="size-6" />
             ) : (
-              // <HiViewGridAdd className="size-6" />
               <Image
                 src="/assets/icon/menu.png"
                 alt="menu"
