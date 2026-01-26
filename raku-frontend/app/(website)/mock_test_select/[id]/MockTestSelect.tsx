@@ -37,11 +37,9 @@ export default function MockTestQuestionComposition() {
         title={title || ""}
         duration={duration || ""}
       />
-      <div className="relative pb-12 md:px-6 py-6 sm:py-8 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 overflow-hidden">
+      <div className="relative pb-12 md:px-6 py-6 sm:py-8">
         {/* Floating background shapes */}
         <WebpageWrapper>
-          <div className="absolute -top-10 -left-10 w-40 h-40 bg-blue-300/20 rounded-full blur-3xl animate-bounce-slow"></div>
-          <div className="absolute -bottom-10 -right-10 w-56 h-56 bg-pink-300/20 rounded-full blur-3xl animate-pulse-slow"></div>
 
           <div className="relative z-10 w-full max-w-5xl mx-auto">
             <div className="flex items-start gap-4 w-full">
@@ -63,11 +61,11 @@ export default function MockTestQuestionComposition() {
                 </div>
               </div>
 
-              <div className="text-sm sm:text-base text-gray-700 leading-relaxed w-full">
+              <div className="text-sm sm:text-base leading-relaxed w-full">
                 <p className="font-bold text-blue-700 text-lg mb-2">
                   💡 Important Note
                 </p>
-                <ul className="list-disc pl-5 space-y-2 text-gray-700">
+                <ul className="list-disc pl-5 space-y-2 text-gray-900">
                   <li>
                     Carefully read the entire question composition before
                     clicking <b>Start</b>.

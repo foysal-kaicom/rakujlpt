@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import BreadCrumb from "@/components/BreadCrumb";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
-import HeadLine2 from "@/components/HeadLine2";
 import { Suspense } from "react";
 
 import NewsComponent from "./NewsComponent";
@@ -26,17 +25,21 @@ export const metadata: Metadata = {
 export default function AllNewsPage() {
   const breadCrumbData = [
     { name: "Home", to: "/" },
-    { name: "News", to: "/news" },
+    { name: "Blogs", to: "/news" },
   ];
 
   return (
     <Suspense fallback={<NewsSketeton />}>
-      <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 min-h-[70vh]">
+      <div className="relative bg-gradient-to-br from-blue-50 via-pink-50 to-purple-100 min-h-[70vh] overflow-clip">
+        <div className="absolute -top-16 -left-16 w-60 h-60 bg-yellow-200/30 rounded-full filter blur-3xl animate-bounce-slow"></div>
+        <div className="absolute -bottom-24 -right-16 w-96 h-96 bg-pink-200/30 rounded-full filter blur-3xl animate-pulse-slow"></div>
         <WebpageWrapper>
           <div className="pt-5">
             <BreadCrumb breadCrumbData={breadCrumbData} />
             <div className="w-1/2 mt-5">
-              <HeadLine2 preText="" subText="" mainText="Blogs" />
+              <h2 className="text-4xl sm:text-5xl font-extrabold leading-snug bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-400 to-purple-500">
+                Blogs
+              </h2>
             </div>
           </div>
         </WebpageWrapper>

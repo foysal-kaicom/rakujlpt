@@ -42,7 +42,7 @@ export default function MyPractice() {
       const response = await axiosInstance.get("/candidate/current-roadmap");
       const data: Practice[] = response?.data?.data || [];
       setPracticeData(data);
-      toast.success(t("practice.toast_loaded"));
+      // toast.success(t("practice.toast_loaded"));
     } catch (error: any) {
       console.error(error);
     } finally {

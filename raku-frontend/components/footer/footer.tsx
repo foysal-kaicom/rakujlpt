@@ -57,7 +57,7 @@ export default function Footer() {
                 loading="lazy"
               />
             </Link>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-600">
               {t("footer.description")}
             </p>
 
@@ -91,7 +91,7 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">
               {t("footer.company")}
             </h3>
-            <ul className="space-y-2 text-gray-500 text-sm">
+            <ul className="space-y-2 text-gray-600 text-sm">
               <li>
                 <Link href="/about_us" className="hover:text-purple-500 transition">
                   {t("footer.about")}
@@ -120,7 +120,7 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">
               {t("footer.resources")}
             </h3>
-            <ul className="space-y-2 text-gray-500 text-sm">
+            <ul className="space-y-2 text-gray-600 text-sm">
               <li>
                 <Link href="/faq" className="hover:text-purple-500 transition">
                   {t("footer.faq")}
@@ -149,7 +149,7 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">
               {t("footer.subscribe")}
             </h3>
-            <p className="text-gray-500 text-sm mb-4">
+            <p className="text-gray-600 text-sm mb-4">
               {t("footer.subscribe_text")}
             </p>
 
@@ -175,7 +175,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-purple-300 text-gray-500 text-sm py-6">
+        <div className="border-t border-purple-300 text-gray-600 text-sm py-6">
           <div className="flex justify-center">
             <p>
               © {new Date().getFullYear()} RAKU JLPT. {t("footer.rights")}
