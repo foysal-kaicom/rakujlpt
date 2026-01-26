@@ -8,7 +8,7 @@ import Link from "next/link";
 // Third-party libraries
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next"; // Import added
-import { signIn, getSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 // Icons
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -19,7 +19,6 @@ import { useAuthStore } from "@/stores/useAuthStore";
 
 // Utilities
 import axiosInstance from "@/utils/axios";
-import { googleLoginUtils } from "@/utils/googleLoginUtils";
 
 // Components
 import BreadCrumb from "@/components/BreadCrumb";
