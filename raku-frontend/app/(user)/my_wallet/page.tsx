@@ -188,7 +188,7 @@ export default function WalletSystem() {
                   </p>
                 </div>
                 <img
-                  src="/assets/img/smiling_smile.gif"
+                  src="/assets/img/coin-rotate.gif"
                   alt=""
                   className="h-20"
                 />

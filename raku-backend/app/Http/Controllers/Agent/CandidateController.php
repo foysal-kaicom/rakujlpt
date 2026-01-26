@@ -424,6 +424,48 @@ class CandidateController extends Controller
 
             $candidate = Candidate::create($data);
 
+            $autoPackage = Package::with('package_details')
+                ->where('assign_on_agent_import', true)
+                ->where('is_active', true)
+                ->where('status', 1)
+                ->orderByDesc('id')
+                ->first();
+
+            $packageDetails = $autoPackage?->package_details ?? collect();
+
+            if ($autoPackage) {
+                $subscription = UserSubscription::create([
+                    'candidate_id' => $candidate->id,
+                    'package_id' => $autoPackage->id,
+                    'tran_id' => (string) Str::uuid(),
+                    'status' => 'confirmed',
+                    'payment_status' => 'success',
+                    'total_payable' => (float) $autoPackage->price,
+                    'updated_by' => auth('agent')->id(),
+                    'title' => $autoPackage->name,
+                ]);
+
+                if ($packageDetails->isNotEmpty()) {
+                    foreach ($packageDetails as $pd) {
+                        UserSubscriptionDetails::create([
+                            'user_subscription_id' => $subscription->id,
+                            'package_details_id' => $pd->id,
+                            'exam_id' => $pd->exam_id,
+                            'max_exam_attempt' => $pd->max_exam_attempt,
+                            'used_exam_attempt' => 0,
+                        ]);
+                    }
+                }
+
+                $candidate->update([
+                    'user_subscriptions_id' => $subscription->id,
+                    'current_package_id' => $autoPackage->id,
+                    'current_package_name' => $autoPackage->name,
+                    'is_subscribed' => 1,
+                    'is_free' => ((float) $autoPackage->price <= 0) ? 1 : 0,
+                ]);
+            } //need one fn
+
             dispatch(new SendRegistrationEmailJob($candidate, $plainPassword));
 
             Toastr::success('Candidate Registered Successfully.');

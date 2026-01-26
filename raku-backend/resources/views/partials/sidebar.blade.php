@@ -285,22 +285,23 @@
                     @endHasPermission 
                     @hasPermission('business-settings.edit')
                     <a href="{{ route('business-settings.edit', 1) }}"
-                        class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('business-settings.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
+                        class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('business-settings.edit*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fas fa-briefcase text-xs"></i>
                         <span>Business Setting</span>
                     </a>
+                    @endHasPermission
                     <!-- page-policies -->
                     <a href="{{ route('business-settings.page.edit') }}"
-                        class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('page.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
+                        class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('business-settings.page.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fa-solid fa-file-contract text-xs"></i>
                         <span>Page Policies</span>
                     </a>
 
                     
-                    @endHasPermission
+                    
                     <!-- coin rules -->
                     <a href="{{ route('business-settings.coin-rules.index') }}"
-                        class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('coin-rules.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
+                        class="submenu-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('business-settings.coin-rules.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50' }}">
                         <i class="fa-solid fa-coins text-xs"></i>
                         <span>Coin Rules</span>
                     </a>

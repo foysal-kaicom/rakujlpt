@@ -12,20 +12,6 @@ use App\Models\CandidateStageProgress;
 
 class RoadmapController extends Controller
 {
-    // public function getRoadmaps(Request $request)
-    // {
-    //     $candidate = Auth::guard('candidate')->user();
-
-    //     $roadmaps = Roadmap::withCount([
-    //         'stages as total_stages' => function ($query) {
-    //             $query->where('status', 1);
-    //         }
-    //     ])
-    //         ->get(['id', 'title', 'slug', 'description', 'image'])
-    //         ->makeHidden(['created_at', 'updated_at']);
-
-    //     return $this->responseWithSuccess($roadmaps, 'Roadmaps fetched successfully', 200);
-    // }
     public function getRoadmaps(Request $request)
     {
         $candidate = Auth::guard('candidate')->user();

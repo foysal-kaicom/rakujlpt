@@ -88,6 +88,7 @@
                     </th>
                     <th scope="col" class="text-secondary small py-3">Slug</th>
                     <th scope="col" class="text-secondary small py-3">Unlock Coins</th>
+                    <th scope="col" class="text-secondary small py-3">Bonus Coins Earned</th>
                     <th scope="col" class="text-secondary small py-3">Created At</th>
                     <th scope="col" class="text-secondary small py-3">Action</th>
                 </tr>
@@ -100,6 +101,8 @@
                         <td>{{ $roadmap->title }}</td>
                         <td>{{ $roadmap->slug }}</td>
                         <td>{{ $roadmap->unlock_coins }}</td>
+                        <td>{{ $roadmap->completed_bonus }}</td>
+
                         <td>{{ $roadmap->created_at?->format('Y-m-d') }}</td>
                         <td>
                             @hasPermission('roadmaps.edit')
