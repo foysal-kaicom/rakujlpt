@@ -61,8 +61,8 @@ export default function InsightSection() {
                 href="/practice"
                 className="relative inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-purple-700 bg-[linear-gradient(to_right,#ffffff_50%,#7c3aed_50%)] bg-[length:200%_100%] bg-left hover:bg-right border border-purple-400 shadow-md shadow-purple-300/40 hover:text-white hover:-translate-y-1 hover:scale-105 transition-[background-position,transform,color,box-shadow] duration-500"
               >
-                <PiCursorClickBold className="text-2xl" />
                 {t("start_practice")}
+                <PiCursorClickBold className="text-2xl" />
               </Link>
             </div>
 
