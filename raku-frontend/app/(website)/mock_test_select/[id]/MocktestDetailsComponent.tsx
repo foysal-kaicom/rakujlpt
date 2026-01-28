@@ -1,14 +1,25 @@
+"use client";
+
+import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import BreadCrumb from "@/components/BreadCrumb";
 
 import { Sparkles, Rocket } from "lucide-react";
 import { IoMdStar } from "react-icons/io";
 
+import { useExamStore } from "@/stores/useExamStore";
+
 export default function MockTestDetailsPage() {
+  const params = useParams();
+  const id = params.id;
+  const router = useRouter();
+  const { startExam } = useExamStore();
   const breadCrumbData = [
     { name: "Home", to: "/" },
     { name: "Select Mock test", to: "/mock_test_select" },
-    { name: "Mocktest Details", to: `/mock_test_select/id` },
+    { name: "Mocktest Details", to: `/mock_test_select/${id}` },
   ];
 
   return (
@@ -23,7 +34,7 @@ export default function MockTestDetailsPage() {
               Raku JLPT
             </span>
 
-            <h2 className="text-4xl sm:text-5xl font-extrabold leading-snug bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-400 to-purple-500 animate-gradient-x capitalize mt-3">
+            <h2 className="text-4xl sm:text-5xl font-extrabold leading-snug bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-400 to-purple-500 capitalize mt-3">
               JLPT N4 Full Mock Test
             </h2>
 
@@ -33,13 +44,32 @@ export default function MockTestDetailsPage() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3 justify-center">
-              <StatBadge label="⏱ 120 Minutes" color="indigo" />
-              <StatBadge label="❓ 120 Questions" color="pink" />
-              <StatBadge label="🎯 Pass: 90 / 180" color="violet" />
-              <StatBadge label="♻ Unlimited Attempts" color="indigo" />
+              <span
+                className={`px-4 py-2 rounded-full font-medium border shadow text-sm bg-indigo-100/40 text-indigo-700 border-indigo-200`}
+              >
+                ⏱ 120 Minutes
+              </span>
+
+              <span
+                className={`px-4 py-2 rounded-full font-medium border shadow text-sm bg-pink-100/40 text-pink-700 border-pink-200`}
+              >
+                ❓ 120 Questions
+              </span>
+
+              <span
+                className={`px-4 py-2 rounded-full font-medium border shadow text-sm bg-violet-100/40 text-violet-700 border-violet-200`}
+              >
+                🎯 Pass: 90 / 180
+              </span>
             </div>
 
-            <button className="mt-10 bg-gradient-to-r from-pink-500 to-purple-500 px-8 py-3 rounded-3xl font-bold text-white shadow-lg hover:shadow-xl transition-all duration-300 border border-white flex gap-1 shake-pause">
+            <button
+              onClick={() => {
+                startExam();
+                router.push(`/mock_test/start/${id}`);
+              }}
+              className="mt-10 bg-gradient-to-r from-pink-500 to-purple-500 px-8 py-3 rounded-3xl font-bold text-white shadow-lg hover:shadow-xl transition-all duration-300 border border-white flex gap-1 shake-pause cursor-pointer"
+            >
               Start Mock Test <Rocket />
             </button>
           </section>
@@ -47,33 +77,33 @@ export default function MockTestDetailsPage() {
           <section>
             <SectionTitle title="Module-wise Question Breakdown" />
 
-            <div className="mt-6 grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+            <div className="mt-4 grid md:grid-cols-2 xl:grid-cols-4 gap-6">
               <Module
                 title="Vocabulary"
                 desc="Kanji, meanings & usage"
                 question="30"
-                marks="60"
+                section="60"
                 color="indigo"
               />
               <Module
                 title="Grammar"
                 desc="Particles & patterns"
                 question="30"
-                marks="60"
+                section="60"
                 color="pink"
               />
               <Module
                 title="Reading"
                 desc="Short & long passages"
                 question="30"
-                marks="60"
+                section="60"
                 color="violet"
               />
               <Module
                 title="Listening"
                 desc="Audio-based questions"
                 question="30"
-                marks="60"
+                section="60"
                 color="indigo"
               />
             </div>
@@ -82,7 +112,7 @@ export default function MockTestDetailsPage() {
           <section>
             <SectionTitle title="Student Reviews" />
 
-            <div className="mt-6 grid md:grid-cols-3 gap-6">
+            <div className="mt-4 grid md:grid-cols-3 gap-6">
               <Review
                 name="Rafiul Islam"
                 rating={5}
@@ -99,7 +129,13 @@ export default function MockTestDetailsPage() {
           </section>
 
           <section className="flex justify-center">
-            <button className="bg-gradient-to-r from-pink-500 to-purple-500 px-8 py-3 rounded-3xl font-bold text-white shadow-lg hover:shadow-xl transition-all duration-300 border border-white flex gap-1 shake-pause">
+            <button
+              onClick={() => {
+                startExam();
+                router.push(`/mock_test/start/${id}`);
+              }}
+              className="bg-gradient-to-r from-pink-500 to-purple-500 px-8 py-3 rounded-3xl font-bold text-white shadow-lg hover:shadow-xl transition-all duration-300 border border-white flex gap-1 shake-pause cursor-pointer"
+            >
               Start Mock Test <Rocket />
             </button>
           </section>
@@ -111,25 +147,9 @@ export default function MockTestDetailsPage() {
 
 /* ================= COMPONENTS ================= */
 
-function StatBadge({ label, color }: { label: string; color: string }) {
-  const bgColor =
-    color === "pink"
-      ? "bg-pink-100/40 text-pink-700 border-pink-200"
-      : color === "violet"
-        ? "bg-purple-100/40 text-purple-700 border-purple-200"
-        : "bg-indigo-100/40 text-indigo-700 border-indigo-200";
-  return (
-    <span
-      className={`px-4 py-2 rounded-full font-medium border shadow text-sm ${bgColor}`}
-    >
-      {label}
-    </span>
-  );
-}
-
 function SectionTitle({ title }: { title: string }) {
   return (
-    <h2 className="text-3xl font-semibold text-slate-900 tracking-tight text-center">
+    <h2 className="text-3xl font-semibold leading-snug bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-400 to-purple-500 text-center">
       {title}
     </h2>
   );
@@ -138,13 +158,13 @@ function SectionTitle({ title }: { title: string }) {
 function Module({
   title,
   desc,
-  marks,
+  section,
   question,
   color,
 }: {
   title: string;
   desc: string;
-  marks: string;
+  section: string;
   question: string;
   color: string;
 }) {
@@ -157,14 +177,14 @@ function Module({
   return (
     <div className="rounded-2xl p-6 border bg-white/70 border-slate-200 hover:border-indigo-300 transition">
       <h3 className="text-lg font-medium text-slate-900">{title}</h3>
-      <p className="text-slate-600 mt-2">{desc}</p>
+      <p className="text-slate-600 mt-1">{desc}</p>
 
       <div className="mt-4 flex gap-4 text-sm">
+        <span className={`px-3 py-1 rounded-full ${badgeColor}`}>
+          {section} Section
+        </span>
         <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-900">
           {question} Questions
-        </span>
-        <span className={`px-3 py-1 rounded-full ${badgeColor}`}>
-          {marks} Marks
         </span>
       </div>
     </div>
