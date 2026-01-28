@@ -68,11 +68,11 @@ class CandidateController extends Controller
 
             dispatch(new CandidateRegistrationEmailJob($candidate));
 
-            // walletCredit($candidate, 'new_registration', 50);
-            walletCredit($candidate, 'new_registration');
+            walletTransaction($candidate, 'new_registration'); 
 
             if ($referrer) {
-                walletCredit($referrer,'referral_bonus',$candidate->id);
+                walletTransaction($referrer, 'referral_bonus', $candidate->id); // credit with reference
+
             }
 
             return $this->responseWithSuccess($candidate, "Candidate registered successfully", 201);
@@ -111,7 +111,8 @@ class CandidateController extends Controller
 
                 $today = now()->toDateString();
                 if (!$candidate->last_login || Carbon::parse($candidate->last_login)->toDateString() !== $today) {
-                    walletCredit($candidate, 'daily_login');
+                    // walletCredit($candidate, 'daily_login');
+                    walletTransaction($candidate, 'daily_login');
                 }
                 if (empty($candidate->candidate_code)) {
                     $candidate->candidate_code = strtoupper(Str::random(7));
