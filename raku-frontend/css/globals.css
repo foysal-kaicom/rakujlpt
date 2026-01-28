@@ -36,7 +36,6 @@ body {
   -ms-user-select: none;
 }
 
-
 .primary-text-color {
   color: var(--primary-color);
 }
@@ -78,7 +77,7 @@ body {
 
 /* For Firefox */
 .scrollbar-thin {
-  scrollbar-width: thin;      /* valid values: auto, thin, none */
+  scrollbar-width: thin; /* valid values: auto, thin, none */
   scrollbar-color: #a40db4 transparent; /* thumb | track */
 }
 
@@ -95,7 +94,6 @@ body {
 .scrollbar-thin::-webkit-scrollbar-track {
   background: transparent;
 }
-
 
 /* css for animation */
 
@@ -263,7 +261,6 @@ body {
   height: 12px !important;
 }
 
-
 /* certificate scanner */
 
 #html5-qrcode-select-camera {
@@ -293,13 +290,36 @@ body {
 /* practice dot  */
 
 @keyframes dots {
-  0%, 20% { content: ""; }
-  40% { content: "."; }
-  60% { content: ".."; }
-  80%, 100% { content: "..."; }
+  0%,
+  20% {
+    content: "";
+  }
+  40% {
+    content: ".";
+  }
+  60% {
+    content: "..";
+  }
+  80%,
+  100% {
+    content: "...";
+  }
 }
 
 .animate-dots::after {
   content: "";
   animation: dots 1.5s infinite steps(1);
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  animation: gradient 4s linear infinite;
 }

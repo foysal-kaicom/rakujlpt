@@ -48,13 +48,13 @@ export default function OurTeamsComponent() {
       ) : (
         <WebpageWrapper>
           <BreadCrumb breadCrumbData={breadCrumbData} />
-          <h2 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text mb-4 text-center mt-10">
+          <h2 className="text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-400 to-purple-500 mb-4 text-center mt-10">
             {t("meet_the_team.title")}
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto mb-16 text-center">
             {t("meet_the_team.description")}
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+          <div className={`gap-10 ${teams.length > 3 ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4' : 'flex justify-center flex-wrap'}`}>
             {teams.map((member, index) => (
               <div
                 key={index}

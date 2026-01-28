@@ -40,7 +40,7 @@ export default function InsightSectionCounter() {
   return (
     <div className="mt-10 grid grid-cols-3 gap-6 font-medium">
       <div className="flex flex-col">
-        <span className="text-2xl sm:text-4xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <span className="text-2xl sm:text-4xl font-semibold bg-gradient-to-r from-blue-600 via-fuchsia-600 to-purple-600 bg-clip-text text-transparent">
           {Math.floor(learners).toLocaleString()}+
         </span>
         <span className="text-sm text-gray-500 mt-1">
@@ -49,21 +49,17 @@ export default function InsightSectionCounter() {
       </div>
 
       <div className="flex flex-col">
-        <span className="text-2xl sm:text-4xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <span className="text-2xl sm:text-4xl font-semibold bg-gradient-to-r from-blue-600 via-fuchsia-600 to-purple-600 bg-clip-text text-transparent">
           {Math.floor(tests)}+
         </span>
-        <span className="text-sm text-gray-500 mt-1">
-          {t("mock_tests")}
-        </span>
+        <span className="text-sm text-gray-500 mt-1">{t("mock_tests")}</span>
       </div>
 
       <div className="flex flex-col">
-        <span className="text-2xl sm:text-4xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <span className="text-2xl sm:text-4xl font-semibold bg-gradient-to-r from-blue-600 via-fuchsia-600 to-purple-600 bg-clip-text text-transparent">
           {rating.toFixed(1)}/5
         </span>
-        <span className="text-sm text-gray-500 mt-1">
-          {t("avg_rating")}
-        </span>
+        <span className="text-sm text-gray-500 mt-1">{t("avg_rating")}</span>
       </div>
     </div>
   );

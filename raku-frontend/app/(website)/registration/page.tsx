@@ -2,17 +2,17 @@
 
 import { useState, FormEvent, ChangeEvent } from "react";
 import Link from "next/link";
-import { useRouter,useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { MdEmail } from "react-icons/md";
 import { FaUser, FaLock, FaEye, FaEyeSlash, FaPhone } from "react-icons/fa";
 
 import axios from "axios";
 import { toast } from "sonner";
-import { googleLoginUtils } from "@/utils/googleLoginUtils";
+import { useTranslation } from "react-i18next";
+import { signIn } from "next-auth/react";
 
 import Loader from "@/components/Loader";
-import { useTranslation } from "react-i18next";
 
 interface FormData {
   first_name: string;
@@ -67,13 +67,13 @@ export default function SignUpPage() {
       };
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/candidate/register`,
-        payload
+        payload,
       );
       router.push("/sign_in");
       toast.success(response.data.message || t("signup.success"));
     } catch (error: any) {
       toast.error(
-        error?.response?.data?.message || error.message || t("signup.failed")
+        error?.response?.data?.message || error.message || t("signup.failed"),
       );
     } finally {
       setLoading(false);
@@ -82,12 +82,9 @@ export default function SignUpPage() {
 
   const handleGoogleLogin = async () => {
     try {
-      setLoading(true);
-      await googleLoginUtils();
-    } catch (error) {
-      console.error("Google login failed:", error);
-    } finally {
-      setLoading(false);
+      signIn("google", { callbackUrl: "/auth/callback" });
+    } catch (err) {
+      toast.error(t("login.google_failed"));
     }
   };
 

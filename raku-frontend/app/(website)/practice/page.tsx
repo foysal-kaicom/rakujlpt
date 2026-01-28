@@ -99,11 +99,10 @@ export default function Practice() {
       {loader && <PracticeSkeleton />}
 
       {/* MAIN SECTION */}
-      <div className="min-h-screen bg-linear-to-br from-blue-50 via-pink-50 to-purple-50 relative overflow-hidden">
+      <div className="min-h-screen relative bg-gradient-to-br from-blue-50 via-pink-50 to-purple-100 overflow-hidden">
         {/* Soft Blobs */}
-        <div className="absolute w-80 h-80 bg-pink-200 opacity-40 blur-[120px] rounded-full top-[10%] left-[10%]" />
-        <div className="absolute w-96 h-96 bg-blue-200 opacity-40 blur-[140px] rounded-full bottom-[10%] right-[5%]" />
-        <div className="absolute w-72 h-72 bg-purple-200 opacity-40 blur-[150px] rounded-full top-[40%] left-1/2 -translate-x-1/2" />
+        <div className="absolute -top-16 -left-16 w-60 h-60 bg-yellow-200/30 rounded-full filter blur-3xl animate-bounce-slow"></div>
+        <div className="absolute -bottom-24 -right-16 w-96 h-96 bg-pink-200/30 rounded-full filter blur-3xl animate-pulse-slow"></div>
 
         <div className="container mx-auto px-4 lg:px-8 relative z-10 pt-5 py-14">
           <BreadCrumb breadCrumbData={breadCrumbData} />
@@ -117,7 +116,7 @@ export default function Practice() {
 
             <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mt-6 leading-tight">
               {t("practicePage.hero_title")}
-              <span className="bg-linear-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-400 to-purple-500">
                 {" "}
                 {t("practicePage.hero_highlight")}
               </span>
