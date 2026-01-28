@@ -67,7 +67,7 @@
 
         <h2>Welcome, {{ $candidate->full_name }}!</h2>
 
-        <p>We’re excited to have you on board. Your account has been successfully created. Below are your login credentials:</p>
+        <p>We’re excited to have you on board. Your account has been successfully created</p>
 
         <p>To access your account, click the button below:</p>
 
