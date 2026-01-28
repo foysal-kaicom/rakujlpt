@@ -31,6 +31,26 @@ class ExamController extends Controller
         return $this->responseWithSuccess($response,'Single Exam View.');
     }
 
+    public function examModulesWithSections($examId)
+    {
+        $examDetails = Exam::query()
+            ->select('id','title','name','type','pass_point','total_point','duration','description')
+            ->withSum('sections as total_exam_question_quantity', 'question_limit')
+            ->with([
+                'mockTestModules' => function ($query) {
+                    $query->select('id','exam_id','name')
+                      ->withSum('sections as total_module_question_quantity', 'question_limit')
+                      ->with([
+                          'sections:id,mock_test_module_id,title,status,question_limit'
+                      ]);
+                },
+                'reviews:id,exam_id,reviewer_name,reviewer_designation,rating,body'
+            ])
+            ->findOrFail($examId);
+    
+        return $this->responseWithSuccess($examDetails, 'Exam details fetched.');
+    }
+    
 
     public function getModulesByExam($examId)
     {
