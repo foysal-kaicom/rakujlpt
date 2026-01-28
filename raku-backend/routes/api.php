@@ -26,6 +26,7 @@ use App\Http\Controllers\Api\DemoQuestionController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\RoadmapUnlockController;
 use App\Http\Controllers\Api\CandidateProgressController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\SslCommerzPaymentController;
 
 Route::prefix('v1')->group(function () {
@@ -50,6 +51,7 @@ Route::prefix('v1')->group(function () {
     Route::group(['prefix' => 'exam', 'as' => 'exam.'], function () {
         Route::get('/list', [ExamController::class, 'list']);
         Route::get('/view/{slug}', [ExamController::class, 'view']);
+        Route::get('/module-details/{id}', [ExamController::class, 'examModulesWithSections']);
     });
 
     Route::get('/faq/list', [CMSController::class, 'getFaqList']);
@@ -80,7 +82,12 @@ Route::prefix('v1')->group(function () {
         Route::post('/subscribe', [PackageController::class, 'subscribe']);
 
         Route::group(['prefix' => 'candidate', 'as' => 'candidate.'], function () {
-            Route::get('/dashboard', [CandidateController::class, 'dashboard']);
+
+            Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {       
+                Route::get('/', [CandidateController::class, 'dashboard']);
+                Route::get('/data', [DashboardController::class, 'getDashboardData']);
+            });
+
             Route::put('/update', [CandidateController::class, 'update']);
             Route::get('/logout', [CandidateController::class, 'logout']);
             Route::get('/profile', [CandidateController::class, 'profile']);
