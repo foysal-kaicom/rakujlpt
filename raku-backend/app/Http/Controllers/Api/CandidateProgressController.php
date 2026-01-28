@@ -222,21 +222,15 @@ class CandidateProgressController extends Controller
                 if (!$alreadyCredited) {
 
                     DB::transaction(function () use ($candidate, $roadmap) {
+                        walletTransaction(
+                            $candidate,
+                            null,
+                            'roadmap_completed_'.$roadmap->id,
+                            $roadmap->completed_bonus,
+                            'credit',
+                            'Roadmap completion bonus'
+                        ); // manual credit (no CoinRule)
 
-                        $wallet = Wallet::firstOrCreate([
-                            'candidate_id' => $candidate->id
-                        ]);
-
-                        $wallet->increment('balance', $roadmap->completed_bonus);
-
-                        WalletTransaction::create([
-                            'candidate_id' => $candidate->id,
-                            'coin_rule_id' => null,
-                            'type' => 'credit',
-                            'points' => $roadmap->completed_bonus,
-                            'reference' => 'roadmap_completed_' . $roadmap->id,
-                            'remarks' => 'Roadmap completion bonus',
-                        ]);
                     });
                 }
             }
