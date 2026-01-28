@@ -79,7 +79,7 @@ class DashboardController extends Controller
             ->get()
             ->map(function ($subscription) {
                 return [
-                    'package_name'   => $subscription->package->title ?? $subscription->title ?? null,
+                    'package_name'   => $subscription->package->name ?? null,
                     'start_date'     => $subscription->created_at->format('Y-m-d') ?? null,
                     'price'          => (double) ($subscription->total_payable ?? 0),
                     'status'         => $subscription->status,

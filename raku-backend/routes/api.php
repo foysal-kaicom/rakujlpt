@@ -51,6 +51,7 @@ Route::prefix('v1')->group(function () {
     Route::group(['prefix' => 'exam', 'as' => 'exam.'], function () {
         Route::get('/list', [ExamController::class, 'list']);
         Route::get('/view/{slug}', [ExamController::class, 'view']);
+        Route::get('/module-details/{id}', [ExamController::class, 'examModulesWithSections']);
     });
 
     Route::get('/faq/list', [CMSController::class, 'getFaqList']);

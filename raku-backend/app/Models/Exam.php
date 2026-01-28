@@ -28,6 +28,11 @@ class Exam extends Model
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'exam_id', 'id');
+    }
+
     public function agent()
     {
         return $this->belongsTo(Agent::class, 'agent_id', 'id');
@@ -55,7 +60,7 @@ class Exam extends Model
 
     public function sections()
     {
-        return $this->belongsToMany(MockTestSection::class, 'exam_section', 'exam_id', 'section_id');
+        return $this->hasManyThrough(MockTestSection::class, MockTestModule::class, 'exam_id', 'mock_test_module_id', 'id', 'id');
     }
 
     public function mockTestModules()
