@@ -77,7 +77,7 @@ export default function Dashboard() {
 
               <ActionCard
                 title={t("dashboard.sections.exam_solution.items.exam_pattern")}
-                button="View Materials"
+                button="View Pattern"
                 icon={LuComponent}
                 action={"/question_composition"}
               />
@@ -91,7 +91,7 @@ export default function Dashboard() {
 
               <ActionCard
                 title={t("dashboard.sections.exam_solution.items.tips")}
-                button="View Materials"
+                button="View Tips"
                 icon={MdTipsAndUpdates}
                 action={"/dashboard"}
               />
