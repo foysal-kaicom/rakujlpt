@@ -347,7 +347,7 @@ export default function PracticeQuestion() {
                 </svg>
               </div>
 
-              <h2 className="text-3xl font-extrabold text-green-700 mb-2">
+              <h2 className="text-xl md:text-3xl text-center font-extrabold text-green-700 mb-2">
                 🎉 Stage Completed!
               </h2>
               <p className="text-green-800 font-medium mb-6">
@@ -383,7 +383,7 @@ export default function PracticeQuestion() {
                 <div className="w-full flex justify-center mt-4">
                   <Link
                     href={`/practice/${slug}`}
-                    className="px-8 py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-yellow-400 via-pink-400 to-purple-500 hover:shadow-xl transition-transform transform hover:scale-105 flex items-center gap-2"
+                    className="px-4 lg:px-8 py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-yellow-400 via-pink-400 to-purple-500 hover:shadow-xl transition-transform transform hover:scale-105 flex items-center gap-2"
                   >
                     Continue Practice 🎈
                     <ChevronRight className="w-5 h-5" />
@@ -400,7 +400,7 @@ export default function PracticeQuestion() {
                     dangerouslySetInnerHTML={{
                       __html: currentQuestion?.question,
                     }}
-                    className="text-2xl md:text-3xl font-extrabold text-pink-700 mb-8"
+                    className="sm:text-2xl md:text-3xl font-extrabold text-pink-700 mb-8"
                   />
                 )}
 
@@ -510,7 +510,7 @@ export default function PracticeQuestion() {
                           </div>
                           <div
                             dangerouslySetInnerHTML={{ __html: optionText }}
-                            className={`text-xl font-extrabold ${
+                            className={`lg:text-xl font-extrabold ${
                               isCorrectOption
                                 ? "text-green-800"
                                 : isWrongSelected
@@ -581,37 +581,37 @@ export default function PracticeQuestion() {
                 <div
                   className={`relative mb-8 p-6 rounded-3xl border-4 transition-all ${isCorrect ? "bg-green-100 border-green-400 shadow-lg" : "bg-red-100 border-red-400 shadow-md"}`}
                 >
-                  <div className="flex items-start gap-4">
-                    {/* Emoji or Image */}
-                    <div className="flex-shrink-0 relative -translate-y-5">
-                      {isCorrect ? (
-                        <>
-                          {/* <span className="text-4xl animate-bounce">🎉✅</span> */}
-                          <Image
-                            src="/assets/img/smiling_smile.gif"
-                            alt="Correct"
-                            width={80}
-                            height={60}
-                            className=""
-                            loading="lazy"
-                          />
-                        </>
-                      ) : (
-                        <>
-                          <Image
-                            src="/assets/img/raku_sad.gif"
-                            alt="Incorrect"
-                            width={89}
-                            height={60}
-                            className=""
-                            loading="lazy"
-                          />
-                        </>
-                      )}
-                    </div>
+                  <div>
+                    <div className="flex items-start gap-4">
+                      {/* Emoji or Image */}
+                      <div className="flex-shrink-0 relative -translate-y-5">
+                        {isCorrect ? (
+                          <>
+                            {/* <span className="text-4xl animate-bounce">🎉✅</span> */}
+                            <Image
+                              src="/assets/img/smiling_smile.gif"
+                              alt="Correct"
+                              width={80}
+                              height={60}
+                              className=""
+                              loading="lazy"
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <Image
+                              src="/assets/img/raku_sad.gif"
+                              alt="Incorrect"
+                              width={89}
+                              height={60}
+                              className=""
+                              loading="lazy"
+                            />
+                          </>
+                        )}
+                      </div>
 
-                    {/* Text Content */}
-                    <div>
+                      {/* Text Content */}
                       <h3
                         className={`font-extrabold text-2xl mb-2 ${isCorrect ? "text-green-800" : "text-red-800"}`}
                       >
@@ -619,11 +619,11 @@ export default function PracticeQuestion() {
                           ? "Correct! 🎉 Great job!"
                           : "Oops! ❌ Try again!"}
                       </h3>
-                      <p className="text-gray-800 text-lg">
-                        {currentQuestion.explanation ??
-                          "No explanation available."}
-                      </p>
                     </div>
+                    <p className="text-gray-800 md:text-lg text-center">
+                      {currentQuestion.explanation ??
+                        "No explanation available."}
+                    </p>
                   </div>
                 </div>
               )}

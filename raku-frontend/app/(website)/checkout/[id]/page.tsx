@@ -3,7 +3,11 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 
-import { IoMdAddCircle, IoIosRemoveCircle } from "react-icons/io";
+import {
+  IoMdAddCircle,
+  IoIosRemoveCircle,
+  IoMdCheckboxOutline,
+} from "react-icons/io";
 
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
@@ -12,7 +16,7 @@ import BreadCrumb from "@/components/BreadCrumb";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 
 import { subscriptionService } from "@/services/subscription/subscription.service";
-import { Coupon , Plan } from "@/types/subscription/package.type";
+import { Coupon, Plan } from "@/types/subscription/package.type";
 
 export default function CheckoutPage() {
   const { t } = useTranslation("common");
@@ -134,15 +138,15 @@ export default function CheckoutPage() {
   }, [packageDetails]);
 
   const handleSubscribe = async () => {
-    if (!agreed) {
-      toast.error(t("checkout.agreement_error"));
-      return;
-    }
+    // if (!agreed) {
+    //   toast.error(t("checkout.agreement_error"));
+    //   return;
+    // }
 
     try {
       const response = await subscriptionService.subscribePackage(
         id,
-        couponCode
+        couponCode,
       );
 
       const url = response?.url;
@@ -152,7 +156,7 @@ export default function CheckoutPage() {
       toast.success(response?.message || t("checkout.success"));
     } catch (error: any) {
       toast.error(
-        error?.response?.data?.message || error.message || t("checkout.failed")
+        error?.response?.data?.message || error.message || t("checkout.failed"),
       );
     }
   };
@@ -178,120 +182,133 @@ export default function CheckoutPage() {
               </p>
             </div>
 
-            {/* Order Summary */}
-            <div className="rounded-2xl border-2 border-fuchsia-100 bg-gradient-to-br from-gray-50/30 to-white/30 p-5 space-y-3 font-medium text-gray-700">
-              <div className="flex justify-between text-sm">
-                <span>{t("checkout.package_label")}</span>
-                <span>{packageDetails?.name}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>{t("checkout.price_label")}</span>
-                <span>
-                  {t("checkout.currency")} {BASE_AMOUNT || t("checkout.free")}
-                </span>
-              </div>
-
-              {discount > 0 && (
-                <div className="flex justify-between text-sm font-medium text-violet-600">
-                  <span>{couponCode}</span>
+            <form onSubmit={handleSubscribe} className="space-y-8">
+              {/* Order Summary */}
+              <div className="rounded-2xl border-2 border-fuchsia-100 bg-gradient-to-br from-gray-50/30 to-white/30 p-5 space-y-3 font-medium text-gray-700">
+                <div className="flex justify-between text-sm">
+                  <span>{t("checkout.package_label")}</span>
+                  <span>{packageDetails?.name}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>{t("checkout.price_label")}</span>
                   <span>
-                    - {discount}{" "}
-                    {discountType != "percentage"
-                      ? t("checkout.currency")
-                      : "%"}
+                    {t("checkout.currency")} {BASE_AMOUNT || t("checkout.free")}
                   </span>
+                </div>
+
+                {discount > 0 && (
+                  <div className="flex justify-between text-sm font-medium text-violet-600">
+                    <span>{couponCode}</span>
+                    <span>
+                      - {discount}{" "}
+                      {discountType != "percentage"
+                        ? t("checkout.currency")
+                        : "%"}
+                    </span>
+                  </div>
+                )}
+
+                <div className="border-t border-fuchsia-400 pt-3 flex justify-between items-center">
+                  <span className="text-lg font-semibold">
+                    {t("checkout.total_label")}
+                  </span>
+                  <span className="text-xl font-bold text-fuchsia-600">
+                    {t("checkout.currency")} {finalAmount || t("checkout.free")}
+                  </span>
+                </div>
+              </div>
+              {BASE_AMOUNT != 0 && couponList.length > 0 && (
+                <div className="space-y-2">
+                  <div className="flex gap-2">
+                    <p className="flex-1 rounded-xl text-gray-600 px-4 py-2 focus:outline-none outline outline-fuchsia-300/50 focus:ring-2 focus:ring-indigo-500 bg-white/50 w-[calc(100%-250px)] overflow-clip">
+                      {selectedCoupon
+                        ? selectedCoupon
+                        : t("checkout.select_coupon")}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleApplyCoupon}
+                      className="rounded-xl border px-5 py-3 text-sm font-semibold text-white bg-gradient-to-br from-fuchsia-600 to-violet-600 hover:scale-105 duration-300 cursor-pointer"
+                    >
+                      {t("checkout.apply_btn")}
+                    </button>
+                  </div>
+                  {couponList && (
+                    <div className="font-medium text-violet-600 mt-3">
+                      <span className="font-semibold">
+                        {t("checkout.available_coupon")}
+                      </span>
+                      {couponList.map((coupon) => (
+                        <div
+                          key={coupon?.id}
+                          className="flex items-center justify-between mt-1 bg-white/40 py-2 px-4 rounded-md"
+                        >
+                          <span className="w-[calc(100%-100px)] overflow-clip">
+                            {coupon.coupon_code}
+                          </span>
+                          <div className="flex items-center gap-1">
+                            <span>
+                              - {Math.round(Number(coupon?.discount_value))}{" "}
+                              {coupon?.type == "percentage"
+                                ? "%"
+                                : t("checkout.currency")}
+                            </span>
+                            {selectedCoupon != coupon?.coupon_code ? (
+                              <IoMdAddCircle
+                                onClick={() => addCoupon(coupon)}
+                                className="size-6 text-violet-600 hover:scale-105 duration-300 cursor-pointer"
+                              />
+                            ) : (
+                              <IoIosRemoveCircle
+                                onClick={removeCoupon}
+                                className="size-6 text-red-600 hover:scale-105 duration-300 cursor-pointer"
+                              />
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {error && (
+                    <p className="text-sm text-red-600 text-center">{error}</p>
+                  )}
                 </div>
               )}
 
-              <div className="border-t border-fuchsia-400 pt-3 flex justify-between items-center">
-                <span className="text-lg font-semibold">
-                  {t("checkout.total_label")}
-                </span>
-                <span className="text-xl font-bold text-fuchsia-600">
-                  {t("checkout.currency")} {finalAmount || t("checkout.free")}
-                </span>
-              </div>
-            </div>
-            {BASE_AMOUNT != 0 && couponList.length > 0 && (
-              <div className="space-y-2">
-                <div className="flex gap-2">
-                  <p className="flex-1 rounded-xl text-gray-600 px-4 py-2 focus:outline-none outline outline-fuchsia-300/50 focus:ring-2 focus:ring-indigo-500 bg-white/50 w-[calc(100%-250px)] overflow-clip">
-                    {selectedCoupon
-                      ? selectedCoupon
-                      : t("checkout.select_coupon")}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={handleApplyCoupon}
-                    className="rounded-xl border px-5 py-3 text-sm font-semibold text-white bg-gradient-to-br from-fuchsia-600 to-violet-600 hover:scale-105 duration-300 cursor-pointer"
-                  >
-                    {t("checkout.apply_btn")}
-                  </button>
-                </div>
-                {couponList && (
-                  <div className="font-medium text-violet-600 mt-3">
-                    <span className="font-semibold">
-                      {t("checkout.available_coupon")}
-                    </span>
-                    {couponList.map((coupon) => (
-                      <div
-                        key={coupon?.id}
-                        className="flex items-center justify-between mt-1 bg-white/40 py-2 px-4 rounded-md"
-                      >
-                        <span className="w-[calc(100%-100px)] overflow-clip">
-                          {coupon.coupon_code}
-                        </span>
-                        <div className="flex items-center gap-1">
-                          <span>
-                            - {Math.round(Number(coupon?.discount_value))}{" "}
-                            {coupon?.type == "percentage"
-                              ? "%"
-                              : t("checkout.currency")}
-                          </span>
-                          {selectedCoupon != coupon?.coupon_code ? (
-                            <IoMdAddCircle
-                              onClick={() => addCoupon(coupon)}
-                              className="size-6 text-violet-600 hover:scale-105 duration-300 cursor-pointer"
-                            />
-                          ) : (
-                            <IoIosRemoveCircle
-                              onClick={removeCoupon}
-                              className="size-6 text-red-600 hover:scale-105 duration-300 cursor-pointer"
-                            />
-                          )}
-                        </div>
-                      </div>
-                    ))}
+              {/* Agreement */}
+              <label className="flex justify-center items-center gap-2 cursor-pointer select-none">
+                <div className="relative">
+                  <input
+                    type="checkbox"
+                    required
+                    checked={agreed}
+                    onChange={(e) => setAgreed(e.target.checked)}
+                    className="peer absolute size-5 opacity-0 cursor-pointer"
+                  />
+                  <div className="size-5 rounded-sm border border-purple-600 flex items-center justify-center transition-all duration-200 peer-checked:bg-purple-600 peer-checked:border-purple-600">
+                    <IoMdCheckboxOutline
+                      className={`text-white size-5 transition-opacity duration-200 ${
+                        agreed ? "opacity-100" : "opacity-0"
+                      }`}
+                    />
                   </div>
-                )}
-                {error && (
-                  <p className="text-sm text-red-600 text-center">{error}</p>
-                )}
-              </div>
-            )}
+                </div>
+                <span className="text-sm font-medium text-gray-700">
+                  {t("checkout.agreement_label")}
+                </span>
+              </label>
 
-            {/* Agreement */}
-            <label className="flex items-center justify-center gap-2 text-sm text-gray-700 cursor-pointer font-medium">
-              <input
-                type="checkbox"
-                checked={agreed}
-                onChange={(e) => setAgreed(e.target.checked)}
-                className="accent-purple-600 size-4"
-              />
-              {t("checkout.agreement_label")}
-            </label>
-
-            {/* CTA */}
-            <button
-              onClick={handleSubscribe}
-              disabled={loading}
-              className={`w-full rounded-2xl bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-600 py-4 text-white text-lg font-semibold shadow-lg shadow-indigo-300/40 hover:shadow-xl hover:scale-[1.01] transition disabled:opacity-50 ${
-                agreed ? "cursor-pointer" : "cursor-not-allowed"
-              }`}
-            >
-              {loading ? t("checkout.loading") : t("checkout.pay_btn")}
-            </button>
-
+              {/* CTA */}
+              <button
+                type="submit"
+                disabled={loading}
+                className={`w-full rounded-2xl bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-600 py-4 text-white text-lg font-semibold shadow-lg shadow-indigo-300/40 hover:shadow-xl hover:scale-[1.01] transition disabled:opacity-50 ${
+                  agreed ? "cursor-pointer" : "cursor-not-allowed"
+                }`}
+              >
+                {loading ? t("checkout.loading") : t("checkout.pay_btn")}
+              </button>
+            </form>
             {/* Trust */}
             <p className="text-center text-xs text-gray-700 font-medium">
               {t("checkout.trust_text")}

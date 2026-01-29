@@ -44,10 +44,10 @@ class RoadmapUnlockController extends Controller
         }
 
         try {
-            walletDebit(
+            walletTransaction(
                 $candidate,
                 'unlock_roadmap',
-                'roadmap_' . $roadmap->id,
+                'roadmap_'.$roadmap->id,
                 (float) $roadmap->unlock_coins
             );
 

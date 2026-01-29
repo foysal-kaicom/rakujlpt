@@ -15,6 +15,7 @@ class MockTestGroupResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id'=>$this->id,
             'type'=>$this->type,
             'group_type'=>$this->group_type,
             'content'=>$this->content,

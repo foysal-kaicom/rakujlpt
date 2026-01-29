@@ -16,25 +16,17 @@ class MockTestSectionResource extends JsonResource
     {
        $groups = collect();
 
-        if ($this->mockTestModule->slug==='listening') { // for listening module - need to follow set no
+        if ($this->mockTestModule->slug === 'listening') { // for listening module - need to follow set no
             // Find available set numbers for this section
-            $availableSets = $this->mockTestQuestionGroup()
-                ->where('mock_test_section_id', $this->id)
-                ->distinct()
-                ->pluck('set_no');
+              if (!$this->selected_set_no) {
+            return [];
+        }
 
-            if ($availableSets->isNotEmpty()) {
-                // Pick one set randomly for this section
-                $randomSetNo = $availableSets->random();
-
-                // Fetch questions belonging to that set (respect limit)
-                $groups = $this->mockTestQuestionGroup()
-                    ->where('mock_test_section_id', $this->id)
-                    ->where('set_no', $randomSetNo)
-                    ->orderBy('id') // keep order
-                    ->take($this->question_limit)
-                    ->get();
-            }
+        $groups = $this->mockTestQuestionGroup
+            ->where('set_no', $this->selected_set_no)
+            ->sortBy('id')
+            ->values();
+            
         } elseif ($this->slug === 'reading-comprehension') {
             // Hardcoded pattern: 3 + 4 + 3
             $groups = $groups->merge(

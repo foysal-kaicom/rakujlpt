@@ -1,79 +1,48 @@
 "use client";
 
-import axiosInstance from "@/utils/axios";
-
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
-
-import { useBusinessSettingsStore } from "@/stores/useBusinessStore";
-import { useAuthStore } from "@/stores/useAuthStore";
 
 import { LuComponent } from "react-icons/lu";
 import { IoIosAlarm } from "react-icons/io";
 import { PiNotebookFill } from "react-icons/pi";
 import { GiStairsGoal } from "react-icons/gi";
 import { MdTipsAndUpdates } from "react-icons/md";
-import { FaCoins, FaWallet } from "react-icons/fa";
-import { Clock, Target, TrendingUp, Flame } from "lucide-react";
-import { PlayCircle, FileText, CheckCircle } from "lucide-react";
+import { LuArrowUpDown } from "react-icons/lu";
+import { FileText, CheckCircle } from "lucide-react";
+import { GrMoney } from "react-icons/gr";
 
 import DashboardSkeleton from "./dashboardSkeleton";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
 import { useTranslation } from "react-i18next";
 
-interface ExamItem {
-  title: string;
-  exam_date: string;
-  start_time: string;
-  end_time: string;
-  application_deadline: string;
-  slug: string;
-  available_to_apply: boolean;
-}
-
-interface DashboardItem {
-  total_bookings: number;
-  total_success_payments: number;
-  pending_booking: number;
-  total_results_published: number;
-}
+import type { DashboardResponse } from "@/types/Dashboard/Dashboard.type";
+import { DashboardService } from "@/services/dashboard/dashboard.service";
 
 export default function Dashboard() {
   const { t } = useTranslation("common");
 
   const [loading, setLoading] = useState(true);
-  const [allExam, setAllExam] = useState<ExamItem[]>([]);
-  const [dashboard, setDashboard] = useState<DashboardItem>(
-    {} as DashboardItem,
-  );
+  const [dashboard, setDashboard] = useState<DashboardResponse | null>(null);
+  const [value, setValue] = useState(1);
 
-  const getExamData = async () => {
-    // setLoading(true);
-    try {
-      const response = await axiosInstance.get(`/exam/list`);
-      setAllExam(response?.data?.data);
-    } catch (error) {
-      console.error("Failed to fetch exam data:", error);
-    } finally {
-      setLoading(false);
-    }
+  const handleNext = () => {
+    setValue((prev) => (prev % 3) + 1);
   };
 
   const getDashboard = async () => {
-    // setLoading(true);
+    setLoading(true);
     try {
-      const response = await axiosInstance.get(`/candidate/dashboard`);
-      setDashboard(response?.data?.data);
+      const data = await DashboardService.getDashboardData();
+      setDashboard(data);
     } catch (error) {
-      console.error("Failed to fetch exam data:", error);
+      console.error("Failed to fetch dashboard data:", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    getExamData();
     getDashboard();
   }, []);
 
@@ -130,11 +99,201 @@ export default function Dashboard() {
 
             {/* Progress & Report */}
             <section className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-              <DailyProgress />
-              <PerformanceReport />
+              <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                <h3 className="font-semibold text-gray-900 mb-4">
+                  📅 Daily Progress
+                </h3>
+
+                {dashboard?.practice_progress.map((item, i) => (
+                  <div key={i} className="mb-3">
+                    <div className="flex justify-between text-sm text-gray-600 mb-1">
+                      <span>{item.module_name}</span>
+                      <span>{item.complete}%</span>
+                    </div>
+
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className="h-2 rounded-full bg-gradient-to-r from-violet-500 to-blue-500"
+                        style={{ width: `${item.complete}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                <h3 className="font-semibold text-gray-900 mb-4">
+                  📊 Performance Report
+                </h3>
+
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li>
+                    ✔ Tests Taken: <b>{dashboard?.report?.exam_taken}</b>
+                  </li>
+                  <li>
+                    ✔ Avg Score: <b>{dashboard?.report?.avg_score}%</b>
+                  </li>
+                  <li>
+                    ✔ Accuracy: <b>{dashboard?.report?.accuracy}</b>
+                  </li>
+                  <li>
+                    ✔ Weak Area: <b>{dashboard?.report?.weak_area}</b>
+                  </li>
+                </ul>
+              </div>
+
               <Milestones />
             </section>
-            <RecentActivity />
+
+            <section className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-semibold text-gray-900">
+                  🕒 Recent Activity
+                </h3>
+                <button
+                  onClick={handleNext}
+                  className="text-sm text-white bg-violet-600 p-1 rounded-md cursor-pointer hover:scale-110 duration-300 shadow-xl"
+                >
+                  <LuArrowUpDown className="size-5" />
+                </button>
+              </div>
+              {value == 1 && (
+                <ul className="space-y-4">
+                  {dashboard?.last_three_mock_tests &&
+                  dashboard.last_three_mock_tests.length > 0 ? (
+                    dashboard.last_three_mock_tests.map((item) => {
+                      const Icon = FileText;
+
+                      return (
+                        <li
+                          key={item.id}
+                          className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition"
+                        >
+                          <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-purple-600 text-white">
+                            <Icon size={20} />
+                          </div>
+
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-gray-900">
+                              {item.exam_name}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              Score:{" "}
+                              {Math.round(
+                                item.per_question_mark * item.total_correct,
+                              )}
+                            </p>
+                          </div>
+
+                          <span className="text-xs font-medium text-violet-600 hover:text-blue-600">
+                            {item.created_at.slice(0, 10)}
+                          </span>
+                        </li>
+                      );
+                    })
+                  ) : (
+                    <li className="text-sm text-gray-500 text-center">
+                      No data found
+                    </li>
+                  )}
+                </ul>
+              )}
+
+              {value == 2 && (
+                <ul className="space-y-4">
+                  {dashboard?.last_three_subscriptions &&
+                  dashboard.last_three_subscriptions.length > 0 ? (
+                    dashboard.last_three_subscriptions.map((item, i) => {
+                      const Icon = GrMoney;
+
+                      return (
+                        <li
+                          key={i}
+                          className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition"
+                        >
+                          <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-purple-600 text-white">
+                            <Icon size={20} />
+                          </div>
+
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-gray-900">
+                              {item.package_name}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              price: {item.price}
+                            </p>
+
+                            <p className="text-xs text-gray-500 capitalize">
+                              Payment: {item.payment_status}
+                            </p>
+                          </div>
+
+                          <span className="text-xs font-medium text-violet-600 hover:text-blue-600">
+                            {item.start_date}
+                          </span>
+                        </li>
+                      );
+                    })
+                  ) : (
+                    <li className="text-sm text-gray-500 text-center">
+                      No data found
+                    </li>
+                  )}
+                </ul>
+              )}
+
+              {value == 3 && (
+                <ul className="space-y-4">
+                  {dashboard?.last_three_wallet_transactions &&
+                  dashboard.last_three_wallet_transactions.length > 0 ? (
+                    dashboard.last_three_wallet_transactions.map((item, i) => {
+                      const Icon = CheckCircle;
+
+                      return (
+                        <li
+                          key={i}
+                          className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition"
+                        >
+                          <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-purple-600 text-white">
+                            <Icon size={20} />
+                          </div>
+
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-gray-900">
+                              {item.remarks}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              Points: {item.points}
+                            </p>
+
+                            <p className="text-xs text-gray-500 capitalize flex items-center gap-1">
+                              Type:
+                              <span
+                                className={
+                                  item.type == "credit"
+                                    ? "text-green-800"
+                                    : "text-red-800"
+                                }
+                              >
+                                {item.type}
+                              </span>
+                            </p>
+                          </div>
+
+                          <span className="text-xs font-medium text-violet-600 hover:text-blue-600">
+                            {item.created_at.slice(0, 10)}
+                          </span>
+                        </li>
+                      );
+                    })
+                  ) : (
+                    <li className="text-sm text-gray-500 text-center">
+                      No data found
+                    </li>
+                  )}
+                </ul>
+              )}
+            </section>
           </div>
         </>
       )}
@@ -165,52 +324,6 @@ function ActionCard({ title, action, button, icon: Icon }: any) {
   );
 }
 
-function DailyProgress() {
-  return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-      <h3 className="font-semibold text-gray-900 mb-4">📅 Daily Progress</h3>
-
-      {["Reading", "Listening", "Grammar"].map((item, i) => (
-        <div key={i} className="mb-3">
-          <div className="flex justify-between text-sm text-gray-600 mb-1">
-            <span>{item}</span>
-            <span>70%</span>
-          </div>
-
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div className="bg-gradient-to-r from-violet-500 to-blue-500 h-2 rounded-full w-[70%]" />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function PerformanceReport() {
-  return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-      <h3 className="font-semibold text-gray-900 mb-4">
-        📊 Performance Report
-      </h3>
-
-      <ul className="space-y-2 text-sm text-gray-700">
-        <li>
-          ✔ Tests Taken: <b>18</b>
-        </li>
-        <li>
-          ✔ Avg Score: <b>72%</b>
-        </li>
-        <li>
-          ✔ Accuracy: <b>68%</b>
-        </li>
-        <li>
-          ✔ Weak Area: <b>Grammar</b>
-        </li>
-      </ul>
-    </div>
-  );
-}
-
 function Milestones() {
   return (
     <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
@@ -222,79 +335,5 @@ function Milestones() {
         <li>🚀 Reached 70% Accuracy</li>
       </ul>
     </div>
-  );
-}
-
-function RecentActivity() {
-  const activities = [
-    {
-      title: "Mock Test – Reading Section",
-      meta: "Score: 68% • 2 hours ago",
-      icon: PlayCircle,
-      color: "text-violet-600",
-      bg: "bg-violet-50",
-      action: "Resume",
-    },
-    {
-      title: "Grammar Notes – N4",
-      meta: "Completed yesterday",
-      icon: FileText,
-      color: "text-blue-600",
-      bg: "bg-blue-50",
-      action: "View",
-    },
-    {
-      title: "Listening Practice",
-      meta: "Completed • Score 75%",
-      icon: CheckCircle,
-      color: "text-green-600",
-      bg: "bg-green-50",
-      action: "Review",
-    },
-  ];
-
-  return (
-    <section className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-gray-900">🕒 Recent Activity</h3>
-        <button className="text-sm text-violet-600 hover:underline">
-          View All
-        </button>
-      </div>
-
-      <ul className="space-y-4">
-        {activities.map((item, i) => {
-          const Icon = item.icon;
-          return (
-            <li
-              key={i}
-              className="
-                flex items-center gap-4
-                p-3 rounded-xl
-                hover:bg-gray-50
-                transition
-              "
-            >
-              <div
-                className={`w-10 h-10 rounded-lg flex items-center justify-center ${item.bg} ${item.color}`}
-              >
-                <Icon size={20} />
-              </div>
-
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-900">
-                  {item.title}
-                </p>
-                <p className="text-xs text-gray-500">{item.meta}</p>
-              </div>
-
-              <button className="text-sm font-semibold text-violet-600 hover:text-blue-600">
-                {item.action}
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-    </section>
   );
 }
