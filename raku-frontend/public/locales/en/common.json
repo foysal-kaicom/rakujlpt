@@ -498,11 +498,11 @@
       "elite": "Elite VIP"
     },
     "ui": {
-      "pts": "pts",
-      "points_full": "points",
+      "pts": "coins",
+      "points_full": "coins",
       "next_goal": "Next Goal",
       "no_milestones": "No more milestones",
-      "points_to_reward": "points to reach your next reward 🎉",
+      "points_to_reward": "coins to reach your next reward 🎉",
       "required": "Required",
       "unlocked": "Unlocked",
       "unlock": "Unlock",
