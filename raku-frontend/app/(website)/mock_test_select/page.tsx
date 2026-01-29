@@ -80,14 +80,14 @@ export default function MockTestSelect() {
   }, []);
 
   const handleChooseTest = (test: any) => {
-    const filters = {
-      type: test.short_name,
-      title: test.title,
-      duration: test.duration,
-      total_point: test.total_point,
-    };
-    const params = new URLSearchParams(filters as any).toString();
-    router.push(`/mock_test_select/${test.id}?${params}`);
+    // const filters = {
+    //   type: test.short_name,
+    //   title: test.title,
+    //   duration: test.duration,
+    //   total_point: test.total_point,
+    // };
+    // const params = new URLSearchParams(filters as any).toString();
+    router.push(`/mock_test_select/${test.id}`);
   };
 
   return (

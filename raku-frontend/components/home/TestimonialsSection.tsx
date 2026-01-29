@@ -51,7 +51,7 @@ export default function TestimonialsSection() {
           }}
           autoplay={{
             delay: 4000,
-            disableOnInteraction: false,
+            disableOnInteraction: true,
           }}
           loop={true}
           breakpoints={{
