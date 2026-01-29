@@ -530,7 +530,9 @@
       "points": "Points",
       "remarks": "Remarks",
       "date": "Date"
-    }
+    },
+    "transfer_success": "Coins transferred successfully",
+    "transfer_failed": "Failed to transfer coins"
   },
   "my_agent": {
     "title": "My Agent",
