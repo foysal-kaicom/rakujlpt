@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { FaWallet, FaLockOpen, FaLock, FaCrown } from "react-icons/fa";
+import { FaWallet, FaLockOpen, FaLock, FaArrowRight } from "react-icons/fa";
 
 import BreadCrumb from "@/components/BreadCrumb";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
@@ -13,6 +13,7 @@ import Link from "next/link";
 import { ConfirmUnlockModal } from "@/app/(website)/practice/ConfirmUnlockModal";
 import Loader from "@/components/Loader";
 import ReferralTransferModal from "./ReferralTransferModal";
+import PaginatedComponent from "@/components/PaginateComponent";
 
 interface Roadmap {
   id: number;
@@ -68,6 +69,23 @@ export default function WalletSystem() {
   const [practiceTestsData, setPracticeTestsData] = useState<Roadmap[]>([]);
   const [isRefTransferOpen, setIsRefTransferOpen] = useState(false);
   const [transactionData, setTransactionData] = useState<any[]>([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  // Calculate pagination
+  const totalExams = transactionData.length;
+  const totalPages = Math.ceil(totalExams / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentTransectionData = transactionData.slice(
+    startIndex,
+    startIndex + itemsPerPage,
+  );
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) setCurrentPage(page);
+  };
 
   const fetchRoadmaps = async () => {
     setLoading(true);
@@ -326,7 +344,7 @@ export default function WalletSystem() {
               {t("wallet.sections.unlock_features")}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {practiceTestsData.map((f) => {
+              {practiceTestsData.slice(0, 3).map((f) => {
                 const unlocked = Boolean(f.is_unlocked);
 
                 return (
@@ -370,7 +388,6 @@ export default function WalletSystem() {
                       <p className="mt-2 text-sm text-gray-500 line-clamp-3">
                         {t(f.description)}
                       </p>
-
                     </div>
 
                     {/* Footer */}
@@ -410,6 +427,17 @@ export default function WalletSystem() {
                   </div>
                 );
               })}
+              <Link
+                href={"/practice"}
+                className="bg-slate-200/50 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-center items-center min-h-50 cursor-pointer"
+              >
+                <span className="bg-purple-500 p-2 rounded-full text-white">
+                  <FaArrowRight className="size-5" />
+                </span>
+                <span className="text-purple-600 font-medium capitalize">
+                  View all
+                </span>
+              </Link>
             </div>
           </div>
 
@@ -458,65 +486,78 @@ export default function WalletSystem() {
             <h2 className="text-xl font-bold mb-4">
               {t("wallet.transaction_history")}
             </h2>
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="bg-gradient-to-r from-purple-700 to-purple-600">
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-white">
-                        {t("wallet.table.id")}
-                      </th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-white">
-                        {t("wallet.table.type")}
-                      </th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-white">
-                        {t("wallet.table.points")}
-                      </th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-white">
-                        {t("wallet.table.remarks")}
-                      </th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-white">
-                        {t("wallet.table.date")}
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-purple-50">
-                    {transactionData.map((transaction: any) => (
-                      <tr
-                        key={transaction.id}
-                        className="border-b border-purple-100 hover:bg-purple-100 transition-colors"
-                      >
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                          #{transaction.id}
-                        </td>
-                        <td className="px-6 py-4 text-sm">
-                          <span
-                            className={`px-3 py-1 rounded-full text-xs font-medium ${
-                              transaction.type === "credit"
-                                ? "bg-green-100 text-green-700"
-                                : "bg-red-100 text-red-700"
-                            }`}
+            {transactionData.length > 0 ? (
+              <>
+                <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="bg-gradient-to-r from-purple-700 to-purple-600">
+                          <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                            {t("wallet.table.id")}
+                          </th>
+                          <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                            {t("wallet.table.type")}
+                          </th>
+                          <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                            {t("wallet.table.points")}
+                          </th>
+                          <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                            {t("wallet.table.remarks")}
+                          </th>
+                          <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                            {t("wallet.table.date")}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-purple-50">
+                        {currentTransectionData.map((transaction: any) => (
+                          <tr
+                            key={transaction.id}
+                            className="border-b border-purple-100 hover:bg-purple-100 transition-colors"
                           >
-                            {transaction.type.toUpperCase()}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-sm font-semibold text-gray-900">
-                          {transaction.points}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-600">
-                          {transaction.remarks}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-600">
-                          {new Date(
-                            transaction.created_at,
-                          ).toLocaleDateString()}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                            <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                              #{transaction.id}
+                            </td>
+                            <td className="px-6 py-4 text-sm">
+                              <span
+                                className={`px-3 py-1 rounded-full text-xs font-medium ${
+                                  transaction.type === "credit"
+                                    ? "bg-green-100 text-green-700"
+                                    : "bg-red-100 text-red-700"
+                                }`}
+                              >
+                                {transaction.type.toUpperCase()}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 text-sm font-semibold text-gray-900">
+                              {transaction.points}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-600">
+                              {transaction.remarks}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-600">
+                              {new Date(
+                                transaction.created_at,
+                              ).toLocaleDateString()}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <PaginatedComponent
+                  handlePageChange={handlePageChange}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                />
+              </>
+            ) : (
+              <div className="text-center text-gray-600">
+                No transaction history found
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

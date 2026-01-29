@@ -369,7 +369,7 @@
     "agreement_error": "You must agree to the terms and conditions",
     "pay_btn": "Pay Now",
     "loading": "Redirecting…",
-    "trust_text": "🔐 SSLCommerz secure payment · No card data stored",
+    "trust_text": "🔐 secure payment · No card data stored",
     "success": "Subscription successful",
     "failed": "Subscription failed"
   },
