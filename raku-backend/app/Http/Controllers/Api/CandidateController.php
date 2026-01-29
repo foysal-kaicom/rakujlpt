@@ -562,4 +562,20 @@ class CandidateController extends Controller
             return $this->responseWithError($e->getMessage(), 'Something went wrong.');
         }
     }
+
+    public function getCandidateByCode($candidate_code)
+    {
+        $candidate = Candidate::where('candidate_code', $candidate_code)->first();
+
+        if (!$candidate) {
+            return response()->json(['message' => 'Candidate not found'], 404);
+        }
+        $candidateData = [
+            'first_name' => $candidate->first_name,
+            'last_name' => $candidate->last_name,
+            'candidate_code' => $candidate->candidate_code,
+            'photo' => $candidate->photo
+        ];
+        return $this->responseWithSuccess(['candidate' => $candidateData],'Candidate data fetched successfully.', 200);
+    }
 }
