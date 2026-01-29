@@ -395,14 +395,14 @@ export default function WalletSystem() {
                       <p className="mb-2 text-xs text-violet-600 font-semibold text-center bg-violet-50 px-5 py-1 rounded-4xl w-fit mx-auto">
                         {f.total_stages} Stages
                       </p>
-                      {unlocked && (
+                      {/* {unlocked && ( */}
                         <p className="mb-3 text-sm text-gray-500 font-medium">
                           {t("wallet.ui.required")}:{" "}
                           <span className="font-semibold text-gray-700">
                             {f.unlock_coins} {t("wallet.ui.points_full")}
                           </span>
                         </p>
-                      )}
+                      {/* )} */}
 
                       <button
                         disabled={unlocked || points < f.unlock_coins}
