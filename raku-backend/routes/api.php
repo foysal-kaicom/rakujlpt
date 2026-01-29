@@ -111,6 +111,9 @@ Route::prefix('v1')->group(function () {
             Route::post('/wallet-coin-transfer', [WalletController::class, 'transferCoin']);
 
             Route::get('/agent', [CandidateAgentController::class, 'getCandidateAgentData']);
+
+            //get candiadte using candidate_code
+            Route::get('/get-candidate/{candidate_code}', [CandidateController::class, 'getCandidateByCode']);
         });
 
         Route::group(['prefix' => 'review'], function () {
