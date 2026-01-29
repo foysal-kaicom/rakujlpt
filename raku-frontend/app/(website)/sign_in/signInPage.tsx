@@ -7,7 +7,7 @@ import Link from "next/link";
 
 // Third-party libraries
 import { toast } from "sonner";
-import { useTranslation } from "react-i18next"; // Import added
+import { useTranslation } from "react-i18next";
 import { signIn } from "next-auth/react";
 
 // Icons
@@ -26,7 +26,7 @@ import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import Loader from "@/components/Loader";
 
 export default function LoginPage() {
-  const { t } = useTranslation("common"); // Hook initialization
+  const { t } = useTranslation("common");
 
   // Breadcrumb data (Now using translation)
   const breadCrumbData = [

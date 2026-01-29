@@ -5,7 +5,6 @@ import { Sparkles, Rocket } from "lucide-react";
 import Link from "next/link";
 import axiosInstance from "@/utils/axios";
 import { toast } from "sonner";
-import { Confetti } from "@neoconfetti/react";
 import BreadCrumb from "@/components/BreadCrumb";
 import PracticeSkeleton from "./PracticeSkeleton";
 import Image from "next/image";
