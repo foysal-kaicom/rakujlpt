@@ -151,26 +151,43 @@ export default function WalletSystem() {
     }
   };
 
-  const handleTransferCoins = async (receiverCode: string, amount: number) => {
+  const handleTransferCoins = async (receiverCode: string, amount: number, password: string) => {
     try {
       const response = await axiosInstance.post(
         `/candidate/wallet-coin-transfer`,
         {
           receiver_code: receiverCode,
           amount: amount,
+          password: password,
         },
       );
       if (response?.data?.success) {
-        toast.success(t("wallet.referral.transfer_success"));
+        toast.success(t("wallet.transfer_success"));
         // Refresh wallet data
         fetchWalletData();
         setIsRefTransferOpen(false);
+      } else {
+        toast.error(t("wallet.transfer_failed"));
+      }
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message ?? t("wallet.transfer_failed"));
+    }
+  };
+
+  const getReceiverInfo = async (receiverCode: string) => {
+    try {
+      const response = await axiosInstance.get(
+        `/candidate/get-candidate/${receiverCode}`,
+      );
+      if (response?.data?.success) {
+        return response?.data?.data?.candidate;
       } else {
         toast.error(t("errors.transfer_coins"));
       }
     } catch (error: any) {
       toast.error(t("errors.transfer_coins"));
     }
+    return null;
   };
 
   return (
@@ -396,12 +413,12 @@ export default function WalletSystem() {
                         {f.total_stages} Stages
                       </p>
                       {/* {unlocked && ( */}
-                        <p className="mb-3 text-sm text-gray-500 font-medium">
-                          {t("wallet.ui.required")}:{" "}
-                          <span className="font-semibold text-gray-700">
-                            {f.unlock_coins} {t("wallet.ui.points_full")}
-                          </span>
-                        </p>
+                      <p className="mb-3 text-sm text-gray-500 font-medium">
+                        {t("wallet.ui.required")}:{" "}
+                        <span className="font-semibold text-gray-700">
+                          {f.unlock_coins} {t("wallet.ui.points_full")}
+                        </span>
+                      </p>
                       {/* )} */}
 
                       <button
@@ -573,6 +590,7 @@ export default function WalletSystem() {
         userReferralCode={user?.candidate_code ?? ""}
         currentCoins={points}
         onTransferCoins={handleTransferCoins}
+        onVerifyReceiver={getReceiverInfo}
       />
     </>
   );
