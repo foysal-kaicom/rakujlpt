@@ -198,7 +198,7 @@ export default function Header() {
               loading="lazy"
             />
           ) : (
-            <FaUser className="size-8 rounded-full object-cover aspect-auto ring-3 ring-purple-400 text-white bg-purple-400" />
+            <FaUser className="size-8 p-1.5 rounded-full object-cover aspect-auto ring-3 ring-purple-200 text-white bg-purple-300" />
           )}
           <div>
             <p className="line-clamp-1 capitalize font-semibold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
