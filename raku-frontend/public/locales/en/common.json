@@ -532,7 +532,8 @@
       "date": "Date"
     },
     "transfer_success": "Coins transferred successfully",
-    "transfer_failed": "Failed to transfer coins"
+    "transfer_failed": "Failed to transfer coins",
+    "candidate_not_found": "Receiver Candidate not found"
   },
   "my_agent": {
     "title": "My Agent",
