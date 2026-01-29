@@ -80,13 +80,22 @@ class MockTestController extends Controller
                     $section->question_limit = $section->question_quantity;
                     $section->sample_question = $section->section->sample_question;
                     // dd($section);
-                    $data = MockTestSectionResource::make($section);
+
+                    $resource = new MockTestSectionResource($section);
+                    $data = $resource->toArray(request());
+
+                    // ✅ SKIP if group is empty
+                    if (empty($data['group'])) {
+                        continue;
+                    }
+
 
                     if ($data) {
                         $sectionWiseQuestions[] = $data;
                     }
                 }
             } else {
+
                 $allSections = MockTestSection::with([
                     'mockTestQuestion',
                     'mockTestQuestionGroup',
@@ -97,12 +106,31 @@ class MockTestController extends Controller
                     })
                     ->get();
 
-                foreach ($allSections as $section) {
-                    $data = MockTestSectionResource::make($section);
 
-                    if ($data) {
-                        $sectionWiseQuestions[] = $data;
+                foreach ($allSections as $section) {
+
+                    // 🔒 Pick random set ONLY ONCE per section
+                    if ($section->mockTestModule->slug === 'listening') {
+
+                        $availableSets = $section->mockTestQuestionGroup
+                            ->pluck('set_no')
+                            ->unique()
+                            ->values();
+
+                        $section->selected_set_no = $availableSets->isNotEmpty()
+                            ? $availableSets->random()
+                            : null;
                     }
+
+                    $resource = new MockTestSectionResource($section);
+                    $data = $resource->toArray(request());
+
+                    // ✅ SKIP if group is empty
+                    if (count($data['group']) === 0) {
+                        continue;
+                    }
+
+                    $sectionWiseQuestions[] = $data;
                 }
             }
 
@@ -112,6 +140,7 @@ class MockTestController extends Controller
                 'exam_total_point' => $exam->total_point ?? null,
                 'sections'   => $sectionWiseQuestions
             ], "Questions generated for: {$exam->title}");
+
         } catch (Throwable $ex) {
             return $this->responseWithError("Something went wrong.", $ex->getMessage());
         }
@@ -171,8 +200,8 @@ class MockTestController extends Controller
                 if (!$question) continue;
 
                 $moduleName = $question->section->mockTestModule->name ?? 'Unknown';
-               
-           
+
+
 
                 if (!isset($modulesScore[$moduleName])) {
                     // HARD FAIL > silent corruption
@@ -223,7 +252,7 @@ class MockTestController extends Controller
             ]);
 
             $mockTestRecord->per_question_mark = $per_question_mark;
-            $mockTestRecord->exam=$exam;
+            $mockTestRecord->exam = $exam;
 
 
             $subscriptionId = UserSubscription::where('candidate_id', $candidateId)
