@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ExamDetailsResource;
 use App\Http\Resources\ExamResource;
+use App\Models\CustomMockTest;
 use App\Models\Exam;
 use App\Models\MockTestModule;
 use App\Models\MockTestSection;
@@ -33,22 +35,41 @@ class ExamController extends Controller
 
     public function examModulesWithSections($examId)
     {
-        $examDetails = Exam::query()
+        $type = Exam::query()->select('id','type')->findOrFail($examId)->type;
+    
+        if ($type === 'general') {
+            $exam = Exam::query()
+                ->select('id','title','name','type','pass_point','total_point','duration','description')
+                ->withSum('sections as total_exam_question_quantity', 'question_limit')
+                ->with([
+                    'mockTestModules' => function ($q) {
+                        $q->select('id','exam_id','name')
+                          ->withSum('sections as total_module_question_quantity', 'question_limit')
+                          ->with(['sections:id,mock_test_module_id,title,status,question_limit']);
+                    },
+                    'reviews:id,exam_id,reviewer_name,reviewer_designation,rating,body'
+                ])
+                ->findOrFail($examId);
+    
+            return $this->responseWithSuccess(new ExamDetailsResource($exam), 'Exam details fetched.');
+        }
+    
+        // custom / agent
+        $exam = Exam::query()
             ->select('id','title','name','type','pass_point','total_point','duration','description')
-            ->withSum('sections as total_exam_question_quantity', 'question_limit')
             ->with([
-                'mockTestModules' => function ($query) {
-                    $query->select('id','exam_id','name')
-                      ->withSum('sections as total_module_question_quantity', 'question_limit')
+                'reviews:id,exam_id,reviewer_name,reviewer_designation,rating,body',
+                'customMockTests' => function ($q) {
+                    $q->select('id','exam_id','mock_test_module_id','mock_test_section_id','question_quantity')
                       ->with([
-                          'sections:id,mock_test_module_id,title,status,question_limit'
+                          'mockTestModule:id,exam_id,name',
+                          'section:id,mock_test_module_id,title,status',
                       ]);
-                },
-                'reviews:id,exam_id,reviewer_name,reviewer_designation,rating,body'
+                }
             ])
             ->findOrFail($examId);
     
-        return $this->responseWithSuccess($examDetails, 'Exam details fetched.');
+        return $this->responseWithSuccess(new ExamDetailsResource($exam), 'Exam details fetched.');
     }
     
 
