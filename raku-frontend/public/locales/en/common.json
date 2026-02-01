@@ -369,7 +369,7 @@
     "agreement_error": "You must agree to the terms and conditions",
     "pay_btn": "Pay Now",
     "loading": "Redirecting…",
-    "trust_text": "🔐 SSLCommerz secure payment · No card data stored",
+    "trust_text": "🔐 secure payment · No card data stored",
     "success": "Subscription successful",
     "failed": "Subscription failed"
   },
@@ -530,6 +530,83 @@
       "points": "Points",
       "remarks": "Remarks",
       "date": "Date"
+    },
+    "transfer_success": "Coins transferred successfully",
+    "transfer_failed": "Failed to transfer coins",
+    "candidate_not_found": "Receiver Candidate not found"
+  },
+  "referral_modal": {
+    "header_title": "Referral & Coin Transfer",
+    "tabs": {
+      "referral": "Referral",
+      "transfer_coins": "Transfer Coins"
+    },
+    "referral_tab": {
+      "your_link_label": "Your Referral Link",
+      "how_it_works": {
+        "title": "How Referral Works",
+        "step_1": "Share your referral link with friends",
+        "step_2": "They sign up using your referral link",
+        "step_3": "Both you and your friend can earn bonus coins!",
+        "step_4": "Use coins to unlock premium features and exams"
+      },
+      "rewards": {
+        "coins_for_you": "Coins for You",
+        "coins_for_friend": "Coins for Friend"
+      }
+    },
+    "transfer_tab": {
+      "your_code_label": "Your Referral Code",
+      "available_balance": "Available Balance",
+      "receiver_code_label": "Receiver's Referral Code",
+      "receiver_code_placeholder": "Enter referral code",
+      "coin_amount_label": "Coin Amount",
+      "coin_amount_placeholder": "Enter amount",
+      "important_notes": {
+        "title": "Important Notes:",
+        "note_1": "Coin transfers are instant and cannot be reversed",
+        "note_2": "Make sure to verify the receiver's referral code",
+        "note_3": "Minimum transfer amount is 1 coin"
+      },
+      "button": {
+        "verifying": "Verifying...",
+        "continue": "Continue to Transfer"
+      }
+    },
+    "confirmation": {
+      "title": "Confirm Transfer",
+      "transfer_amount_label": "Transfer Amount:",
+      "balance_after_label": "Your Balance After:",
+      "warning": {
+        "title": "Critical Warning",
+        "item_1": "This action cannot be undone",
+        "item_2": "Coins will be transferred immediately",
+        "item_3": "Double-check the receiver's information",
+        "item_4": "No refunds are available for transfers"
+      },
+      "password_label": "Enter Your Password to Confirm",
+      "password_placeholder": "Enter your password",
+      "button_confirm": "Confirm Transfer"
+    },
+    "common": {
+      "copied": "Copied",
+      "copy": "Copy",
+      "cancel": "Cancel",
+      "processing": "Processing...",
+      "coins": "Coins"
+    },
+    "toasts": {
+      "link_copied": "Referral link copied to clipboard!",
+      "code_copied": "Referral code copied!"
+    },
+    "errors": {
+      "receiver_code_required": "Please enter receiver's referral code",
+      "self_transfer": "You cannot transfer coins to yourself",
+      "invalid_amount": "Please enter a valid coin amount",
+      "insufficient_coins": "Insufficient coins",
+      "receiver_not_found": "Receiver not found",
+      "password_required": "Please enter your password",
+      "transfer_failed": "Transfer failed"
     }
   },
   "my_agent": {

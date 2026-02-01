@@ -51,6 +51,34 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [scrollCount]);
 
+  useEffect(() => {
+    if (isSidebarOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isSidebarOpen]);
+
+  useEffect(() => {
+    if (!isSidebarOpen) return;
+
+    const scrollY = window.scrollY;
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+
+    return () => {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      window.scrollTo(0, scrollY);
+    };
+  }, [isSidebarOpen]);
+
   const handleLogout = async () => {
     try {
       const response = await axiosInstance.get("/candidate/logout");
@@ -182,8 +210,8 @@ export default function Header() {
             </p>
           </div>
 
-          <div className="bg-white grid grid-cols-1 rounded-md text-sm shadow absolute right-1/2 translate-x-1/2 top-10 scale-0 group-hover:scale-100 w-[200px] h-[210px] opacity-0 group-hover:opacity-100 overflow-clip duration-400 origin-top outline outline-gray-200 p-1">
-            {SidebarData.slice(0, 4).map((item, i) => (
+          <div className="bg-white grid grid-cols-1 rounded-md text-sm shadow absolute right-1/2 translate-x-1/2 top-10 scale-0 group-hover:scale-100 w-[200px] h-[280px] opacity-0 group-hover:opacity-100 overflow-clip duration-400 origin-top outline outline-gray-200 p-1">
+            {SidebarData.slice(0, 6).map((item, i) => (
               <Link
                 key={i}
                 href={item.to}
@@ -375,7 +403,7 @@ export default function Header() {
             {isAuthenticated && token && user ? (
               <button
                 onClick={handleLogout}
-                className="text-sm font-medium 2xl:text-sm flex w-[100px] items-center gap-1 py-1 px-3 2xl:py-2 2xl:px-5 text-white bg-red-600 rounded-full border-2 border-red-600 hover:bg-white hover:text-red-600 duration-300 cursor-pointer"
+                className="text-sm font-medium 2xl:text-sm flex justify-center w-[110px] items-center gap-1 py-1 px-3 2xl:py-2 2xl:px-5 text-white bg-red-600 rounded-full border-2 border-red-600 hover:bg-white hover:text-red-600 duration-300 cursor-pointer"
               >
                 {t("nav.logout")}
                 <IoLogOut className="size-5" />
