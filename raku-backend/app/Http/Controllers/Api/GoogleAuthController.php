@@ -30,17 +30,6 @@ class GoogleAuthController extends Controller
         }
 
         try {
-            // $response = Http::get("https://www.googleapis.com/oauth2/v3/userinfo", [
-            //     'access_token' => $request->token,
-            // ]);
-
-            // if (!$response->ok()) {
-            //     Log::info($response);
-            //     return $this->responseWithError("Error", "Invalid Google token");
-
-            // }
-
-            // $googleUser = $response->json();
 
             $fullName = $request->name ?? 'Unknown User';
 
@@ -62,17 +51,17 @@ class GoogleAuthController extends Controller
             // Send welcome email only for new users
             if ($candidate->wasRecentlyCreated) {
                 $candidate->password = bcrypt(Str::random(12));
-                $candidate->candidate_code = strtoupper(Str::random(7));
+                // $candidate->candidate_code = strtoupper(Str::random(7));
                 $candidate->save();
                 dispatch(new CandidateRegistrationEmailJob($candidate));
                 walletTransaction($candidate, 'new_registration');
             }
 
             // daily login bonus
-            $today = now()->toDateString();
+      
             if (
                 !$candidate->last_login ||
-                Carbon::parse($candidate->last_login)->toDateString() !== $today
+                Carbon::parse($candidate->last_login)->toDateString() !== now()->toDateString()
             ) {
                 walletTransaction($candidate, 'daily_login');
             }
