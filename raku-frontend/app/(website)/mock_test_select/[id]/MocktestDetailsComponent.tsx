@@ -159,11 +159,9 @@ export default function MockTestDetailsPage() {
                   <div className="mt-4 flex gap-4 text-sm">
                     <span
                       className={`px-3 py-1 rounded-full ${
-                        moduleIndex === 0
+                        moduleIndex % 2 == 0
                           ? "bg-pink-100 text-pink-700"
-                          : moduleIndex === 1
-                            ? "bg-purple-100 text-purple-700"
-                            : "bg-indigo-100 text-indigo-700"
+                          : "bg-purple-100 text-purple-700"
                       }`}
                     >
                       {modules?.sections.length} Section

@@ -12,8 +12,22 @@ export default function MocktestAnsEvaluation({
   const router = useRouter();
   return (
     <>
-      <div className="min-h-screen bg-linear-to-br from-purple-50/90 to-indigo-100/90 p-4 inset-0 fixed z-20">
+      <div className="min-h-screen bg-linear-to-br from-purple-50 to-indigo-100 p-4 relative">
         <div className="max-w-5xl p-4 rounded mx-auto">
+          <div className="bg-white border border-purple-400 p-3 rounded-xl my-5 flex justify-between tesxt-sm sticky top-0 z-10">
+            <button
+              onClick={() => setShowAnsEval(false)}
+              className="bg-red-600 text-white px-3 py-1 rounded-md hover:opacity-80 duration-300 cursor-pointer drop-shadow-sm drop-shadow-red-800 border-b border-white/50"
+            >
+              Close
+            </button>
+            <button
+              onClick={() => router.back()}
+              className="bg-purple-600 text-white px-3 py-1 rounded-md hover:opacity-80 duration-300 cursor-pointer drop-shadow-sm drop-shadow-violet-800 border-b border-white/50"
+            >
+              Back
+            </button>
+          </div>
           <div className="space-y-3">
             <div className="p-4 md:p-8 bg-white rounded-xl outline outline-purple-200">
               {/* Group-level content */}
@@ -110,20 +124,7 @@ export default function MocktestAnsEvaluation({
               </div>
             </div>
           </div>
-          <div className="bg-white border border-purple-400 p-3 rounded-xl my-5 flex justify-between tesxt-sm">
-            <button
-              onClick={() => setShowAnsEval(false)}
-              className="bg-red-600 text-white px-3 py-1 rounded-md hover:opacity-80 duration-300 cursor-pointer drop-shadow-sm drop-shadow-red-800 border-b border-white/50"
-            >
-              Close
-            </button>
-            <button
-              onClick={() => router.back()}
-              className="bg-purple-600 text-white px-3 py-1 rounded-md hover:opacity-80 duration-300 cursor-pointer drop-shadow-sm drop-shadow-violet-800 border-b border-white/50"
-            >
-              Back
-            </button>
-          </div>
+          
         </div>
       </div>
     </>

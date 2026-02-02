@@ -53,8 +53,8 @@ export default function AnswerConsent({
   };
 
   return (
-    <div className="min-h-screen w-full bg-linear-to-br from-purple-50 via-indigo-50 to-purple-50 flex flex-col items-center justify-center p-6">
-      <div className="backdrop-blur-xl bg-purple-100 rounded-3xl p-5 lg:p-8 w-full max-w-3xl shadow-2xl border border-purple-400 animate-fadeIn">
+    <div className="min-h-screen w-full bg-linear-to-br from-purple-50 via-indigo-50 to-purple-50 flex flex-col items-center justify-center md:p-6">
+      <div className="backdrop-blur-xl bg-purple-100 md:rounded-3xl p-5 lg:p-8 w-full max-w-3xl md:shadow-2xl md:border border-purple-400 animate-fadeIn">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-purple-600 text-center tracking-wide">
           Confirm Submission
         </h1>
