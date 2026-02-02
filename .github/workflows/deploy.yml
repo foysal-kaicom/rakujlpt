@@ -10,6 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Start SSH agent and unlock your key
+      - name: Start SSH agent
+        uses: webfactory/ssh-agent@v0.8.1
+        with:
+          ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
+          ssh-passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}
+
+      # Step 2: Pull latest code on server
       - name: Pull latest code
         uses: appleboy/ssh-action@v0.1.6
         with:
@@ -19,6 +27,3 @@ jobs:
           script: |
             cd /var/www/rakujlpt
             git pull origin main
-
-
-     
