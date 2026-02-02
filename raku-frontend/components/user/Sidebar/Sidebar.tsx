@@ -23,7 +23,7 @@ export default function Sidebar() {
     return (
       <div className="fixed top-[80px] left-0 h-[calc(100vh-80px)] w-[300px] bg-white/80 backdrop-blur-xl border-r border-gray-200 shadow-[0_10px_40px_rgba(0,0,0,0.04)] hidden xl:flex flex-col overflow-y-auto scrollbar-thin">
         {/* Profile */}
-        <Link href="/profile">
+        <Link href="/settings/profile">
           <div className="relative px-6 pt-10 pb-6 text-center">
             <div className="absolute inset-0 h-32 bg-gradient-to-br from-purple-100 via-pink-100 to-indigo-100 rounded-b-3xl" />
 
@@ -51,7 +51,7 @@ export default function Sidebar() {
         </Link>
 
         {/* Navigation */}
-        <div className="flex-1 px-4 py-6 space-y-2 font-semibold">
+        <div className="flex-1 px-4 pb-6 space-y-2 font-semibold">
           {SidebarData.map((data, index) => {
             const active = path.startsWith(data.to);
 

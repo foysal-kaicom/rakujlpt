@@ -77,6 +77,7 @@ export default function MocktestResultModal({
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
+      setIsSubmitted(false)
     }
   };
 

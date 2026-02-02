@@ -270,7 +270,7 @@ export default function Header() {
             isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <div className="flex flex-col gap-5 h-full overflow-y-scroll pb-10 pt-5 px-6 lg:px-8 container mx-auto scrollbar-hide">
+          <div className="flex flex-col gap-5 h-full overflow-y-scroll pb-24 pt-5 px-6 lg:px-8 container mx-auto scrollbar-hide">
             <div className="space-y-5">
               {isAuthenticated && token && user && (
                 <>
@@ -303,7 +303,11 @@ export default function Header() {
                       </p>
                     </Link>
                   </div>
-                  <div className="space-y-5 border-b border-indigo-100 pb-5 text-violet-800">
+                  <div className="space-y-5 border-b border-indigo-100 pb-5 text-violet-800 relative">
+                    <div className="flex justify-end absolute right-0 -top-2">
+                      <LanguageSwitcher />
+                    </div>
+
                     {/* Sidebar Items */}
                     {SidebarData.map((item, index) => (
                       <Link
@@ -397,7 +401,6 @@ export default function Header() {
                   </div>
                 );
               })}
-              <LanguageSwitcher />
             </div>
 
             {isAuthenticated && token && user ? (

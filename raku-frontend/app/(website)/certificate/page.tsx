@@ -66,7 +66,7 @@ export default function QRScannerPage() {
       <div className="absolute -bottom-24 -right-16 w-96 h-96 bg-pink-200/30 rounded-full filter blur-3xl animate-pulse-slow"></div>
       <WebpageWrapper>
         <BreadCrumb breadCrumbData={breadCrumbData} />
-        <div className="flex flex-col items-center justify-center py-8">
+        <div className="flex flex-col items-center justify-center py-10">
           {/* Header */}
           <div className="text-center mb-10">
             <h1 className="text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-400 to-purple-500 pb-2">

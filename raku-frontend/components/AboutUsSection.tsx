@@ -22,7 +22,7 @@ export default function AboutUsSection() {
       <WebpageWrapper>
         <BreadCrumb breadCrumbData={breadCrumbData} />
 
-        <div className="flex flex-col-reverse lg:flex-row items-center gap-12 relative z-10 pt-15">
+        <div className="flex flex-col-reverse lg:flex-row items-center gap-12 relative z-10 pt-10">
           {/* Left content */}
           <div className="lg:w-1/2 space-y-6">
             <h2 className="text-4xl sm:text-5xl font-extrabold leading-snug bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-400 to-purple-500 animate-gradient-x">
