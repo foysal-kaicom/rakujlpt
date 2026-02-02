@@ -38,77 +38,97 @@
         <table class="table table-striped table-hover align-middle">
             <thead class="table-light">
                 <tr>
-                    <th scope="col" class="text-uppercase text-secondary small">ID</th>
+                    {{-- <th scope="col" class="text-uppercase text-secondary small">ID</th> --}}
+                    <th scope ="col" class="text-uppercase text-secondary small">Review Date</th>
                     <th scope="col" class="d-none d-sm-table-cell text-uppercase text-secondary small">Reviewer</th>
                     <th scope="col" class="d-none d-lg-table-cell text-uppercase text-secondary small">Designation</th>
                     <th scope="col" class="d-none d-xl-table-cell text-uppercase text-secondary small">Review</th>
                     <th scope="col" class="text-uppercase text-secondary small">Rating</th>
                     <th scope="col" class="d-none d-md-table-cell text-uppercase text-secondary small">Image</th>
                     <th scope="col" class="text-uppercase text-secondary small">Status</th>
+                    
                     <th scope="col" class="d-none d-md-table-cell text-uppercase text-secondary small">Created</th>
                     <th scope="col" class="text-uppercase text-secondary small">Action</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($reviews as $review)
-                <tr>
-                    <td>{{ $review->id }}</td>
+                    <tr>
+                        {{-- <td>{{ $review->id }}</td> --}}
+                        <td class="d-none d-md-table-cell">
+                            {{ $review->created_at?->format('d M Y') }}
+                        </td>
 
-                    <td class="d-none d-sm-table-cell fw-semibold">{{ $review->reviewer_name }}</td>
+                        <td class="d-none d-sm-table-cell fw-semibold">{{ $review->reviewer_name }}</td>
 
-                    <td class="d-none d-lg-table-cell">{{ $review->reviewer_designation ?: '—' }}</td>
+                        <td class="d-none d-lg-table-cell">{{ $review->reviewer_designation ?: '—' }}</td>
 
-                    <td class="d-none d-xl-table-cell text-muted truncate-2">
-                        {{ \Illuminate\Support\Str::limit($review->body, 30) }}
-                    </td>
+                        <td class="d-none d-xl-table-cell text-muted truncate-2">
+                            {{ \Illuminate\Support\Str::limit($review->body, 30) }}
+                        </td>
 
-                    <td>
-                        <span class="badge bg-indigo-600">{{ $review->rating }}/5</span>
-                    </td>
+                        <td>
+                            <span class="badge bg-indigo-600">{{ $review->rating }}/5</span>
+                        </td>
 
-                    <td class="d-none d-md-table-cell">
-                        @if($review->image)
-                            <img class="avatar" src="{{ asset($review->image) }}" alt="review image">
-                        @else
-                            <img class="avatar" src="{{ asset('imagePH.png') }}" alt="placeholder">
-                        @endif
-                    </td>
+                        <td class="d-none d-md-table-cell">
+                            @if($review->image)
+                                <img class="avatar" src="{{ asset($review->image) }}" alt="review image">
+                            @else
+                                <img class="avatar" src="{{ asset('imagePH.png') }}" alt="placeholder">
+                            @endif
+                        </td>
 
-                    <!-- ✅ Status Toggle -->
-                    <td>
-                        @hasPermission('review.toggleStatus')
-                        <form action="{{ route('review.toggleStatus', $review->id) }}" method="POST" class="d-inline-block">
-                            @csrf
-                            <div class="form-check form-switch toggle-switch-lg">
-                                <input 
-                                    type="checkbox" 
-                                    class="form-check-input toggle-switch" 
-                                    id="reviewToggle{{ $review->id }}" 
-                                    onchange="if(confirm('Are you sure you want to {{ $review->status == 'active' ? 'deactivate' : 'activate' }} this review?')) { this.form.submit(); } else { this.checked = !this.checked; }"
-                                    {{ $review->status == true ? 'checked' : '' }}
-                                >
-                            </div>
-                        </form>
-                        @endHasPermission
-                    </td>
-
-                    <td class="d-none d-md-table-cell">
-                        {{ $review->created_at?->format('d M Y') }}
-                    </td>
-
-                    <td>
-                        <div class="d-flex gap-2">
-                            @hasPermission('review.edit')
-                            <a href="{{ route('review.edit', $review->id) }}" class="badge p-2 bg-success text-white" style="width: 70px">Edit</a>
+                        <!-- ✅ Status Toggle -->
+                        <td>
+                            @hasPermission('review.toggleStatus')
+                            <form action="{{ route('review.toggleStatus', $review->id) }}" method="POST" class="d-inline-block">
+                                @csrf
+                                <div class="form-check form-switch toggle-switch-lg">
+                                    <input 
+                                        type="checkbox" 
+                                        class="form-check-input toggle-switch" 
+                                        id="reviewToggle{{ $review->id }}" 
+                                        onchange="if(confirm('Are you sure you want to {{ $review->status == 'active' ? 'deactivate' : 'activate' }} this review?')) { this.form.submit(); } else { this.checked = !this.checked; }"
+                                        {{ $review->status == true ? 'checked' : '' }}
+                                    >
+                                </div>
+                            </form>
                             @endHasPermission
+                        </td>
+                        <td>
+                            @php
+                                switch($review->review_status) {
+                                    case 'approved':
+                                        $badgeClass = 'bg-success text-white';
+                                        break;
+                                    case 'rejected':
+                                        $badgeClass = 'bg-danger text-white';
+                                        break;
+                                    default: // pending
+                                        $badgeClass = 'bg-warning text-dark';
+                                }
+                            @endphp
+                            <span class="badge {{ $badgeClass }}">
+                                {{ ucfirst($review->review_status) }}
+                            </span>
+                        </td>
 
-                        </div>
-                    </td>
-                </tr>
+                        
+
+                        <td>
+                            <div class="d-flex gap-2">
+                                @hasPermission('review.edit')
+                                <a href="{{ route('review.edit', $review->id) }}" class="badge p-2 bg-success text-white" style="width: 70px">Edit</a>
+                                @endHasPermission
+
+                            </div>
+                        </td>
+                    </tr>
                 @empty
-                <tr>
-                    <td colspan="9" class="text-center text-muted py-4">No reviews found.</td>
-                </tr>
+                    <tr>
+                        <td colspan="9" class="text-center text-muted py-4">No reviews found.</td>
+                    </tr>
                 @endforelse
             </tbody>
         </table>
