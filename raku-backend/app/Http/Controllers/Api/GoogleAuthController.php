@@ -61,6 +61,7 @@ class GoogleAuthController extends Controller
             // Send welcome email only for new users
             if ($candidate->wasRecentlyCreated) {
                 $candidate->password = bcrypt(Str::random(12));
+                $candidate->candidate_code = strtoupper(Str::random(7));
                 $candidate->save();
                 dispatch(new CandidateRegistrationEmailJob($candidate));
             }
