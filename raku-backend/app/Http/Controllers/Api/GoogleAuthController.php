@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Jobs\CandidateRegistrationEmailJob;
+use Throwable;
+use Carbon\Carbon;
 use App\Models\Candidate;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
-use Throwable;
+use App\Jobs\CandidateRegistrationEmailJob;
 
 class GoogleAuthController extends Controller
 {
@@ -64,9 +65,29 @@ class GoogleAuthController extends Controller
                 $candidate->candidate_code = strtoupper(Str::random(7));
                 $candidate->save();
                 dispatch(new CandidateRegistrationEmailJob($candidate));
+                walletTransaction($candidate, 'new_registration');
             }
 
-        $token = auth('candidate')->login($candidate);
+            // daily login bonus
+            $today = now()->toDateString();
+            if (
+                !$candidate->last_login ||
+                Carbon::parse($candidate->last_login)->toDateString() !== $today
+            ) {
+                walletTransaction($candidate, 'daily_login');
+            }
+
+            // ensure candiadte_code exist
+            if (empty($candidate->candidate_code)) {
+                $candidate->candidate_code = strtoupper(Str::random(7));
+            }
+
+            $candidate->update([
+                'last_login' => now(),
+                'candidate_code' => $candidate->candidate_code,
+            ]);
+
+            $token = auth('candidate')->login($candidate);
 
             return response()->json([
                 'data' => $candidate,
