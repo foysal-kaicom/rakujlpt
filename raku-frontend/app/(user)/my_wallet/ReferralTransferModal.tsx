@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { X, Copy, Check, Send, Gift, Info, AlertTriangle, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 interface ReceiverInfo {
   first_name: string;
@@ -17,7 +18,7 @@ interface ReferralTransferModalProps {
   userReferralCode: string;
   currentCoins: number;
   onTransferCoins: (receiverCode: string, amount: number, password: string) => Promise<void>;
-  onVerifyReceiver: (receiverCode: string) => Promise<ReceiverInfo>; // New prop to fetch receiver info
+  onVerifyReceiver: (receiverCode: string) => Promise<ReceiverInfo>;
 }
 
 export default function ReferralTransferModal({
@@ -28,9 +29,8 @@ export default function ReferralTransferModal({
   onTransferCoins,
   onVerifyReceiver,
 }: ReferralTransferModalProps) {
-  const [activeTab, setActiveTab] = useState<"referral" | "transfer">(
-    "referral",
-  );
+  const [activeTab, setActiveTab] = useState<"referral" | "transfer">("referral");
+  const { t } = useTranslation("common");
   const [copied, setCopied] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
   const [receiverCode, setReceiverCode] = useState("");
@@ -49,36 +49,36 @@ export default function ReferralTransferModal({
   const handleCopyLink = () => {
     navigator.clipboard.writeText(referralLink);
     setLinkCopied(true);
-    toast.success("Referral link copied to clipboard!");
+    toast.success(t("referral_modal.toasts.link_copied"));
     setTimeout(() => setLinkCopied(false), 2000);
   };
 
   const handleCopyCode = () => {
     navigator.clipboard.writeText(userReferralCode);
     setCopied(true);
-    toast.success("Referral code copied!");
+    toast.success(t("referral_modal.toasts.code_copied"));
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleTransferClick = async () => {
     // Initial validations
     if (!receiverCode.trim()) {
-      toast.error("Please enter receiver's referral code");
+      toast.error(t("referral_modal.errors.receiver_code_required"));
       return;
     }
 
     if (receiverCode.trim() === userReferralCode) {
-      toast.error("You cannot transfer coins to yourself");
+      toast.error(t("referral_modal.errors.self_transfer"));
       return;
     }
 
     if (!coinAmount || Number(coinAmount) <= 0) {
-      toast.error("Please enter a valid coin amount");
+      toast.error(t("referral_modal.errors.invalid_amount"));
       return;
     }
 
     if (Number(coinAmount) > currentCoins) {
-      toast.error("Insufficient coins");
+      toast.error(t("referral_modal.errors.insufficient_coins"));
       return;
     }
 
@@ -89,7 +89,7 @@ export default function ReferralTransferModal({
       setReceiverInfo(info);
       setShowConfirmation(true);
     } catch (error: any) {
-      toast.error(error.message || "Receiver not found");
+      toast.error(error.message || t("referral_modal.errors.receiver_not_found"));
     } finally {
       setIsVerifying(false);
     }
@@ -97,13 +97,12 @@ export default function ReferralTransferModal({
 
   const handleConfirmTransfer = async () => {
     if (!password.trim()) {
-      toast.error("Please enter your password");
+      toast.error(t("referral_modal.errors.password_required"));
       return;
     }
 
     setIsTransferring(true);
     try {
-
       // Proceed with transfer
       await onTransferCoins(receiverCode, Number(coinAmount), password);
       
@@ -114,7 +113,7 @@ export default function ReferralTransferModal({
       setShowConfirmation(false);
       setReceiverInfo(null);
     } catch (error: any) {
-      toast.error(error.message || "Transfer failed");
+      toast.error(error.message || t("referral_modal.errors.transfer_failed"));
     } finally {
       setIsTransferring(false);
     }
@@ -146,7 +145,7 @@ export default function ReferralTransferModal({
           {/* Header */}
           <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
             <h2 className="text-xl font-bold text-gray-900">
-              Referral & Coin Transfer
+              {t("referral_modal.header_title")}
             </h2>
             <button
               onClick={onClose}
@@ -169,7 +168,7 @@ export default function ReferralTransferModal({
               >
                 <div className="flex items-center justify-center gap-2">
                   <Gift className="h-4 w-4" />
-                  Referral
+                  {t("referral_modal.tabs.referral")}
                 </div>
                 {activeTab === "referral" && (
                   <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-violet-600" />
@@ -185,7 +184,7 @@ export default function ReferralTransferModal({
               >
                 <div className="flex items-center justify-center gap-2">
                   <Send className="h-4 w-4" />
-                  Transfer Coins
+                  {t("referral_modal.tabs.transfer_coins")}
                 </div>
                 {activeTab === "transfer" && (
                   <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-violet-600" />
@@ -201,7 +200,7 @@ export default function ReferralTransferModal({
                 {/* Referral Link */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Your Referral Link
+                    {t("referral_modal.referral_tab.your_link_label")}
                   </label>
                   <div className="flex gap-2">
                     <input
@@ -217,12 +216,12 @@ export default function ReferralTransferModal({
                       {linkCopied ? (
                         <>
                           <Check className="h-5 w-5" />
-                          <span className="hidden sm:inline">Copied</span>
+                          <span className="hidden sm:inline">{t("referral_modal.common.copied")}</span>
                         </>
                       ) : (
                         <>
                           <Copy className="h-5 w-5" />
-                          <span className="hidden sm:inline">Copy</span>
+                          <span className="hidden sm:inline">{t("referral_modal.common.copy")}</span>
                         </>
                       )}
                     </button>
@@ -237,27 +236,27 @@ export default function ReferralTransferModal({
                     </div>
                     <div>
                       <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                        How Referral Works
+                        {t("referral_modal.referral_tab.how_it_works.title")}
                       </h3>
                       <ul className="space-y-2 text-sm text-gray-600">
                         <li className="flex items-start gap-2">
                           <span className="text-blue-600 font-bold mt-0.5">
                             1.
                           </span>
-                          <span>Share your referral link with friends</span>
+                          <span>{t("referral_modal.referral_tab.how_it_works.step_1")}</span>
                         </li>
                         <li className="flex items-start gap-2">
                           <span className="text-blue-600 font-bold mt-0.5">
                             2.
                           </span>
-                          <span>They sign up using your referral link</span>
+                          <span>{t("referral_modal.referral_tab.how_it_works.step_2")}</span>
                         </li>
                         <li className="flex items-start gap-2">
                           <span className="text-blue-600 font-bold mt-0.5">
                             3.
                           </span>
                           <span>
-                            Both you and your friend can earn bonus coins!
+                            {t("referral_modal.referral_tab.how_it_works.step_3")}
                           </span>
                         </li>
                         <li className="flex items-start gap-2">
@@ -265,7 +264,7 @@ export default function ReferralTransferModal({
                             4.
                           </span>
                           <span>
-                            Use coins to unlock premium features and exams
+                            {t("referral_modal.referral_tab.how_it_works.step_4")}
                           </span>
                         </li>
                       </ul>
@@ -279,14 +278,14 @@ export default function ReferralTransferModal({
                     <div className="text-3xl font-bold text-violet-600 mb-1">
                       50
                     </div>
-                    <div className="text-xs text-gray-600">Coins for You</div>
+                    <div className="text-xs text-gray-600">{t("referral_modal.referral_tab.rewards.coins_for_you")}</div>
                   </div>
                   <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4 text-center">
                     <div className="text-3xl font-bold text-green-600 mb-1">
                       50
                     </div>
                     <div className="text-xs text-gray-600">
-                      Coins for Friend
+                      {t("referral_modal.referral_tab.rewards.coins_for_friend")}
                     </div>
                   </div>
                 </div>
@@ -296,7 +295,7 @@ export default function ReferralTransferModal({
                 {/* Referral Code */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Your Referral Code
+                    {t("referral_modal.transfer_tab.your_code_label")}
                   </label>
                   <div className="flex gap-2">
                     <div className="flex-1 px-4 py-3 bg-violet-50 border border-violet-200 rounded-xl text-lg font-bold text-violet-700 text-center">
@@ -317,15 +316,15 @@ export default function ReferralTransferModal({
                 {/* Current Balance */}
                 <div className="bg-gradient-to-r from-violet-600 to-purple-600 rounded-xl p-5 text-white">
                   <div className="text-sm opacity-90 mb-1">
-                    Available Balance
+                    {t("referral_modal.transfer_tab.available_balance")}
                   </div>
-                  <div className="text-3xl font-bold">{currentCoins} Coins</div>
+                  <div className="text-3xl font-bold">{currentCoins} {t("referral_modal.common.coins")}</div>
                 </div>
 
                 {/* Transfer Form */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Receiver's Referral Code
+                    {t("referral_modal.transfer_tab.receiver_code_label")}
                   </label>
                   <input
                     type="text"
@@ -333,20 +332,20 @@ export default function ReferralTransferModal({
                     onChange={(e) =>
                       setReceiverCode(e.target.value.toUpperCase())
                     }
-                    placeholder="Enter referral code"
+                    placeholder={t("referral_modal.transfer_tab.receiver_code_placeholder")}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Coin Amount
+                    {t("referral_modal.transfer_tab.coin_amount_label")}
                   </label>
                   <input
                     type="number"
                     value={coinAmount}
                     onChange={(e) => setCoinAmount(e.target.value)}
-                    placeholder="Enter amount"
+                    placeholder={t("referral_modal.transfer_tab.coin_amount_placeholder")}
                     min="1"
                     max={currentCoins}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
@@ -376,15 +375,15 @@ export default function ReferralTransferModal({
                       <Info className="h-5 w-5 text-amber-600" />
                     </div>
                     <div className="text-sm text-gray-700">
-                      <p className="font-semibold mb-1">Important Notes:</p>
+                      <p className="font-semibold mb-1">{t("referral_modal.transfer_tab.important_notes.title")}</p>
                       <ul className="space-y-1 text-sm text-gray-600">
                         <li>
-                          • Coin transfers are instant and cannot be reversed
+                          • {t("referral_modal.transfer_tab.important_notes.note_1")}
                         </li>
                         <li>
-                          • Make sure to verify the receiver's referral code
+                          • {t("referral_modal.transfer_tab.important_notes.note_2")}
                         </li>
-                        <li>• Minimum transfer amount is 1 coin</li>
+                        <li>• {t("referral_modal.transfer_tab.important_notes.note_3")}</li>
                       </ul>
                     </div>
                   </div>
@@ -399,12 +398,12 @@ export default function ReferralTransferModal({
                   {isVerifying ? (
                     <>
                       <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      Verifying...
+                      {t("referral_modal.transfer_tab.button.verifying")}
                     </>
                   ) : (
                     <>
                       <Send className="h-5 w-5" />
-                      Continue to Transfer
+                      {t("referral_modal.transfer_tab.button.continue")}
                     </>
                   )}
                 </button>
@@ -432,7 +431,7 @@ export default function ReferralTransferModal({
               {/* Confirmation Header */}
               <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
                 <h3 className="text-lg font-bold text-gray-900">
-                  Confirm Transfer
+                  {t("referral_modal.confirmation.title")}
                 </h3>
                 <button
                   onClick={handleCancelConfirmation}
@@ -476,15 +475,15 @@ export default function ReferralTransferModal({
                 {/* Transfer Details */}
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Transfer Amount:</span>
+                    <span className="text-sm text-gray-600">{t("referral_modal.confirmation.transfer_amount_label")}</span>
                     <span className="text-lg font-bold text-gray-900">
-                      {coinAmount} Coins
+                      {coinAmount} {t("referral_modal.common.coins")}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Your Balance After:</span>
+                    <span className="text-sm text-gray-600">{t("referral_modal.confirmation.balance_after_label")}</span>
                     <span className="text-lg font-bold text-violet-600">
-                      {currentCoins - Number(coinAmount)} Coins
+                      {currentCoins - Number(coinAmount)} {t("referral_modal.common.coins")}
                     </span>
                   </div>
                 </div>
@@ -497,13 +496,13 @@ export default function ReferralTransferModal({
                     </div>
                     <div className="text-sm">
                       <p className="font-semibold text-red-900 mb-1">
-                        Critical Warning
+                        {t("referral_modal.confirmation.warning.title")}
                       </p>
                       <ul className="space-y-1 text-red-700 text-xs">
-                        <li>• This action cannot be undone</li>
-                        <li>• Coins will be transferred immediately</li>
-                        <li>• Double-check the receiver's information</li>
-                        <li>• No refunds are available for transfers</li>
+                        <li>• {t("referral_modal.confirmation.warning.item_1")}</li>
+                        <li>• {t("referral_modal.confirmation.warning.item_2")}</li>
+                        <li>• {t("referral_modal.confirmation.warning.item_3")}</li>
+                        <li>• {t("referral_modal.confirmation.warning.item_4")}</li>
                       </ul>
                     </div>
                   </div>
@@ -512,14 +511,14 @@ export default function ReferralTransferModal({
                 {/* Password Verification */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Enter Your Password to Confirm
+                    {t("referral_modal.confirmation.password_label")}
                   </label>
                   <div className="relative">
                     <input
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Enter your password"
+                      placeholder={t("referral_modal.confirmation.password_placeholder")}
                       disabled={isTransferring}
                       className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                       onKeyPress={(e) => {
@@ -550,7 +549,7 @@ export default function ReferralTransferModal({
                     disabled={isTransferring}
                     className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                   >
-                    Cancel
+                    {t("referral_modal.common.cancel")}
                   </button>
                   <button
                     onClick={handleConfirmTransfer}
@@ -560,12 +559,12 @@ export default function ReferralTransferModal({
                     {isTransferring ? (
                       <>
                         <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        Processing...
+                        {t("referral_modal.common.processing")}
                       </>
                     ) : (
                       <>
                         <Check className="h-5 w-5" />
-                        Confirm Transfer
+                        {t("referral_modal.confirmation.button_confirm")}
                       </>
                     )}
                   </button>

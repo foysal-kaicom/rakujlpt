@@ -182,10 +182,10 @@ export default function WalletSystem() {
       if (response?.data?.success) {
         return response?.data?.data?.candidate;
       } else {
-        toast.error(t("errors.transfer_coins"));
+        toast.error(t("wallet.candidate_not_found"));
       }
     } catch (error: any) {
-      toast.error(t("errors.transfer_coins"));
+      toast.error(t("wallet.candidate_not_found"));
     }
     return null;
   };
