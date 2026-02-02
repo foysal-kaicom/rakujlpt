@@ -57,7 +57,7 @@
                         @error('reviewer_designation') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <label class="form-label fw-semibold">Rating</label>
                         <select name="rating" class="form-select form-select-lg shadow-sm rounded-2">
                             @for ($i = 1; $i <= 5; $i++)
@@ -68,12 +68,22 @@
                         </select>
                         @error('rating') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Review Status</label>
+                        <select name="review_status" class="form-select form-select-lg shadow-sm rounded-2">
+                            <option value="pending"  {{ $review->review_status === 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="approved" {{ $review->review_status === 'approved' ? 'selected' : '' }}>Approved</option>
+                            <option value="rejected" {{ $review->review_status === 'rejected' ? 'selected' : '' }}>Rejected</option>
+                        </select>
+                    </div>
 
                     <div class="col-md-12">
                         <label class="form-label fw-semibold">Review</label>
                         <textarea name="body" rows="5" class="form-control shadow-sm rounded-2" placeholder="Write the review here...">{{ old('body', $review->body) }}</textarea>
                         @error('body') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
+
+                    
                 </div>
             </div>
         </div>

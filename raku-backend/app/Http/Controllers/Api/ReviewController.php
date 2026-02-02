@@ -46,6 +46,8 @@ class ReviewController extends Controller
                     'body'                  => $validated['body'],
                     'rating'                => $validated['rating'],
                     'reviewer_name'         => auth('candidate')->user()->full_name,
+                    'status'                => 0, // Pending status
+                    'review_status'         => 'pending',
                 ]
             );
 
