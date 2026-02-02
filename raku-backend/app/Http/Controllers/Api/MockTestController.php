@@ -328,4 +328,67 @@ class MockTestController extends Controller
             return $this->responseWithError("Something went wrong", $ex->getMessage());
         }
     }
+
+    public function previewAnswers(Request $request)
+    {
+        try {
+            $data = $request->all();
+
+            $request->validate([
+                'answers' => 'required|array',
+                'answers.*.id' => 'required|integer|exists:mock_test_questions,id',
+                'answers.*.answer' => 'required|integer',
+            ]);
+
+            $answers = collect($data['answers'])->keyBy('id');
+
+            // Extract question IDs
+            $questionIds = $answers->keys();
+
+            // Fetch questions with options, group, and section
+            $questions = MockTestQuestion::with(['mockTestQuestionOption', 'mockTestQuestionGroup', 'section'])
+                ->whereIn('id', $questionIds)
+                ->get()
+                ->keyBy('id');
+
+            $groupedData = [];
+            foreach ($answers as $questionId => $answerData) {
+                $question = $questions->get($questionId);
+                if (!$question) continue;
+
+                $group = $question->mockTestQuestionGroup;
+                $groupType = $group->group_type ?? 'Unknown Type';
+
+                $section = $question->section;
+                $sectionId = $section->id ?? 'unknown';
+
+                $sectionName = $section->title ?? 'Unknown Section';
+
+                if (!isset($groupedData[$sectionId])) {
+                    $groupedData[$sectionId] = [
+                        'section_id' => $sectionId,
+                        // 'group_type' => $groupType,
+                        'section_name' => $sectionName,
+                        'questions' => []
+                    ];
+                }
+
+                $options = $question->mockTestQuestionOption;
+                $groupedData[$sectionId]['questions'][] = [
+                    'question_id' => $question->id,
+                    'group_type' => $groupType,
+                    'question' => $question->title,
+                    'options' => $options->values,
+                    'correct_answer' => $options->correct_answer_index,
+                    'user_answer' => $answerData['answer'],
+                ];
+            }
+
+            $previewData = array_values($groupedData);
+
+            return $this->responseWithSuccess($previewData, "Preview generated successfully.");
+        } catch (Throwable $ex) {
+            return $this->responseWithError("Something went wrong.", $ex->getMessage());
+        }
+    }
 }
