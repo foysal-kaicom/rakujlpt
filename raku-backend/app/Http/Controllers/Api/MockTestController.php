@@ -379,6 +379,7 @@ class MockTestController extends Controller
                     'group_type'    => $groupType,
                     'content'       =>$group->content,
                     'proficiency_level'       =>$question->proficiency_level,
+                    'question_type'      => $question->type,
                     'question'      => $question->title,
                     'options'       => $options->values,
                     'correct_answer' => $options->correct_answer_index,
