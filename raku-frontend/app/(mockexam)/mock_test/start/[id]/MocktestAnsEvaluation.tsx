@@ -17,14 +17,13 @@ interface ApiResponse {
 interface Section {
   section_id: number;
   section_name: string;
-  group_type: "audio" | "passage" | "image" | null;
-  content?: string | null;
   questions: Question[];
 }
 
 interface Question {
   question_id: number;
-  group_type: string;
+  group_type: "audio" | "passage" | "image" | null;
+  content?: string | null;
   question: string;
   options: string | Record<string, string>;
   correct_answer: string;
@@ -156,17 +155,17 @@ export default function MocktestAnsEvaluation({
                   {section.questions.map((q) => (
                     <div key={q.question_id} className="bg-white p-4 md:p-8">
                       {/* AUDIO */}{" "}
-                      {q.group_type === "audio" && q.question && (
+                      {q.group_type === "audio" && q.content && (
                         <audio controls className="w-full mb-6">
                           {" "}
-                          <source src={q.question} />{" "}
+                          <source src={q?.content} />{" "}
                         </audio>
                       )}{" "}
                       {/* PASSAGE */}{" "}
-                      {q.group_type !== "audio" && q.question && (
+                      {q.group_type !== "audio" && q.content && (
                         <div
                           className="p-4 bg-purple-50 rounded-md mb-8 leading-8"
-                          dangerouslySetInnerHTML={{ __html: q.question }}
+                          dangerouslySetInnerHTML={{ __html: q.content }}
                         />
                       )}
                       {/* QUESTION */}
