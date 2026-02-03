@@ -357,29 +357,40 @@ class MockTestController extends Controller
                 if (!$question) continue;
 
                 $group = $question->mockTestQuestionGroup;
+                $groupId = $group->id ?? 'unknown';
                 $groupType = $group->group_type ?? 'Unknown Type';
+                $type = $group->type ?? 'Unknown Type';
 
                 $section = $question->section;
                 $sectionId = $section->id ?? 'unknown';
-
                 $sectionName = $section->title ?? 'Unknown Section';
 
+                // Initialize section if not exists
                 if (!isset($groupedData[$sectionId])) {
                     $groupedData[$sectionId] = [
                         'section_id' => $sectionId,
-                        // 'group_type' => $groupType,
                         'section_name' => $sectionName,
+                        'groups' => []
+                    ];
+                }
+
+                // Initialize group under section if not exists
+                if (!isset($groupedData[$sectionId]['groups'][$groupId])) {
+                    $groupedData[$sectionId]['groups'][$groupId] = [
+                        'group_id' => $groupId,
+                        'group_type' => $groupType,
+                        'type' => $type,
+                        'content' => $group->content ?? '',
                         'questions' => []
                     ];
                 }
 
+                // Add question to group
                 $options = $question->mockTestQuestionOption;
-                $groupedData[$sectionId]['questions'][] = [
+                $groupedData[$sectionId]['groups'][$groupId]['questions'][] = [
                     'question_id'   => $question->id,
-                    'group_type'    => $groupType,
-                    'content'       =>$group->content,
-                    'proficiency_level'       =>$question->proficiency_level,
-                    'question_type'      => $question->type,
+                    'proficiency_level' => $question->proficiency_level,
+                    'question_type' => $question->type,
                     'question'      => $question->title,
                     'options'       => $options->values,
                     'correct_answer' => $options->correct_answer_index,
@@ -387,7 +398,12 @@ class MockTestController extends Controller
                 ];
             }
 
-            $previewData = array_values($groupedData);
+            // Reformat to use array values for sections and groups
+            $previewData = [];
+            foreach ($groupedData as $section) {
+                $section['groups'] = array_values($section['groups']);
+                $previewData[] = $section;
+            }
 
             return $this->responseWithSuccess($previewData, "Preview generated successfully.");
         } catch (Throwable $ex) {
