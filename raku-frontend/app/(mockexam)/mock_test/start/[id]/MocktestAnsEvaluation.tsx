@@ -17,6 +17,14 @@ interface ApiResponse {
 interface Section {
   section_id: number;
   section_name: string;
+  groups: Group[];
+}
+
+interface Group {
+  group_id: number;
+  group_type: string;
+  type: string;
+  content: string | null;
   questions: Question[];
 }
 
@@ -25,6 +33,7 @@ interface Question {
   group_type: "audio" | "passage" | "image" | null;
   content?: string | null;
   question: string;
+  question_type: string;
   options: string | Record<string, string>;
   correct_answer: string;
   user_answer: number | null;
@@ -43,7 +52,7 @@ export default function MocktestAnsEvaluation({
   const router = useRouter();
   const [sections, setSections] = useState<Section[]>([]);
   const [loading, setLoading] = useState(false);
-  const [openSections, setOpenSections] = useState<Set<number>>(new Set()); // Track open sections
+  const [openSections, setOpenSections] = useState<Set<number>>(new Set());
 
   const previewAnswer = async () => {
     try {
@@ -81,15 +90,6 @@ export default function MocktestAnsEvaluation({
     return options;
   };
 
-  const toggleSection = (id: number) => {
-    setOpenSections((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(id)) newSet.delete(id);
-      else newSet.add(id);
-      return newSet;
-    });
-  };
-
   if (loading) {
     return <p className="text-center mt-10">Loading...</p>;
   }
@@ -102,25 +102,61 @@ export default function MocktestAnsEvaluation({
     );
   }
 
-  let globalQuestionIndex = 0;
+  const questionIndexMap = new Map<number, number>();
+
+  let counter = 0;
+
+  sections.forEach((section) => {
+    section.groups.forEach((group) => {
+      group.questions.forEach((q) => {
+        counter += 1;
+        questionIndexMap.set(q.question_id, counter);
+      });
+    });
+  });
 
   return (
     <div className="min-h-screen bg-linear-to-br from-purple-50 to-indigo-100 p-4">
       <div className="max-w-5xl mx-auto">
         {/* HEADER */}
-        <div className="bg-white border border-purple-400 p-3 rounded-xl my-5 flex justify-between sticky top-0 z-10">
-          <button
-            onClick={() => setShowAnsEval(false)}
-            className="bg-red-600 text-white px-3 py-1 rounded-md"
-          >
-            Close
-          </button>
-          <button
-            onClick={() => router.back()}
-            className="bg-purple-600 text-white px-3 py-1 rounded-md"
-          >
-            Back
-          </button>
+        <div className="sticky top-0 z-20 backdrop-blur bg-white/80 border border-purple-200 rounded-2xl my-5 p-3 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            {/* LEFT ACTIONS */}
+            <div className="flex gap-2">
+              <button
+                onClick={() =>
+                  setOpenSections(new Set(sections.map((s) => s.section_id)))
+                }
+                className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-emerald-700 active:scale-95 transition cursor-pointer"
+              >
+                Expand All
+              </button>
+
+              <button
+                onClick={() => setOpenSections(new Set())}
+                className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200 active:scale-95 transition cursor-pointer"
+              >
+                Collapse All
+              </button>
+            </div>
+
+            {/* RIGHT ACTIONS */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowAnsEval(false)}
+                className="inline-flex items-center gap-2 rounded-xl bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-rose-700 active:scale-95 transition cursor-pointer"
+              >
+                Close
+              </button>
+
+              <button
+                onClick={() => router.back()}
+                className="inline-flex items-center gap-2 rounded-xl bg-purple-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-purple-700 active:scale-95 transition cursor-pointer"
+              >
+                Back
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* SECTIONS */}
@@ -129,17 +165,24 @@ export default function MocktestAnsEvaluation({
           return (
             <div
               key={section.section_id}
-              className="bg-purple-50 rounded-xl outline outline-purple-200 mb-4"
+              className="bg-purple-50 rounded-xl outline outline-purple-200 mb-4 shadow"
             >
               {/* SECTION HEADER */}
               <div
-                className={`p-4 md:p-6 flex justify-between items-center bg-purple-600  cursor-pointer ${isOpen ? "rounded-t-xl" : "rounded-xl"}`}
-                onClick={() => toggleSection(section.section_id)}
+                className={`p-4 md:p-6 flex justify-between items-center bg-purple-600 cursor-pointer ${
+                  isOpen ? "rounded-t-xl" : "rounded-xl"
+                }`}
+                onClick={() => setOpenSections(new Set([section.section_id]))} // Only one open
               >
                 <h2 className="text-xl font-bold text-white">
                   {section.section_name}{" "}
                   <span className="font-medium text-base">
-                    ({section.questions.length})
+                    (
+                    {section.groups.reduce(
+                      (total, group) => total + group.questions.length,
+                      0,
+                    )}
+                    )
                   </span>
                 </h2>
                 {isOpen ? (
@@ -151,83 +194,103 @@ export default function MocktestAnsEvaluation({
 
               {/* SECTION CONTENT */}
               {isOpen && (
-                <div className=" space-y-1">
-                  {section.questions.map((q) => (
-                    <div key={q.question_id} className="bg-white p-4 md:p-8">
-                      {/* AUDIO */}{" "}
-                      {q.group_type === "audio" && q.content && (
-                        <audio controls className="w-full mb-6">
-                          {" "}
-                          <source src={q?.content} />{" "}
+                <div className="space-y-1">
+                  {section.groups.map((group) => (
+                    <div
+                      key={group.group_id}
+                      className="bg-purple-100 p-4 md:p-6 space-y-2"
+                    >
+                      {/* GROUP CONTENT */}
+                      {group.group_type === "audio" && group.content && (
+                        <audio
+                          controls
+                          className="w-full mb-4 bg-white p-2 rounded-full"
+                        >
+                          <source src={group.content} />
                         </audio>
-                      )}{" "}
-                      {/* PASSAGE */}{" "}
-                      {q.group_type !== "audio" && q.content && (
+                      )}
+                      {group.group_type !== "audio" && group.content && (
                         <div
-                          className="p-4 bg-purple-50 rounded-md mb-8 leading-8"
-                          dangerouslySetInnerHTML={{ __html: q.content }}
+                          className="p-4 bg-white rounded-md mb-4 leading-7"
+                          dangerouslySetInnerHTML={{ __html: group.content }}
                         />
                       )}
-                      {/* QUESTION */}
-                      <div className="flex gap-2 text-lg mb-3">
-                        {q.proficiency_level === "N5" && (
-                          <FaStar className="text-purple-700 mt-1" />
-                        )}
-                        <span className="font-semibold">
-                          Q{++globalQuestionIndex}:
-                        </span>
-                        <div dangerouslySetInnerHTML={{ __html: q.question }} />
-                      </div>
-                      {/* OPTIONS */}
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                        {Object.entries(parseOptions(q.options))
-                          .filter(
-                            ([_, option]) => option && option.trim() !== "",
-                          )
-                          .map(([key, option]) => {
-                            const isUserSelected =
-                              Number(key) === q.user_answer;
-                            const isCorrect = key === q.correct_answer;
-                            const isWrong = isUserSelected && !isCorrect;
 
-                            return (
+                      {/* QUESTIONS */}
+                      {group.questions.map((q) => (
+                        <div
+                          key={q.question_id}
+                          className="bg-white p-4 md:p-6 rounded-md"
+                        >
+                          <div className="flex gap-2 text-lg mb-3">
+                            {q.proficiency_level === "N5" && (
+                              <FaStar className="text-purple-700 mt-1" />
+                            )}
+                            <span className="font-semibold">
+                              Q{questionIndexMap.get(q.question_id)}:
+                            </span>
+
+                            {q.question_type === "text" && (
                               <div
-                                key={key}
-                                className={`flex items-center gap-3 p-2 rounded-md font-medium border ${
-                                  isCorrect
-                                    ? "bg-green-100 border-green-400"
-                                    : isWrong
-                                      ? "bg-red-100 border-red-400"
-                                      : "border-transparent"
-                                }`}
-                              >
-                                {/* ICON */}
-                                <div className="size-6 flex items-center justify-center">
-                                  {isCorrect && (
-                                    <FaCheck className="text-green-600" />
-                                  )}
-                                  {isWrong && (
-                                    <span className="text-red-600 font-bold">
-                                      ✕
-                                    </span>
-                                  )}
-                                </div>
-
-                                {/* OPTION TEXT */}
-                                <div
-                                  className={`${
-                                    isCorrect
-                                      ? "text-green-800"
-                                      : isWrong
-                                        ? "text-red-800"
-                                        : ""
-                                  }`}
-                                  dangerouslySetInnerHTML={{ __html: option }}
+                                dangerouslySetInnerHTML={{ __html: q.question }}
+                                className="mb-3"
+                              />
+                            )}
+                            {q.question_type === "image" && (
+                              <div className="w-full mb-3">
+                                <img
+                                  src={q.question}
+                                  alt=""
+                                  className="sm:max-w-[220px] md:max-w-[250px] mx-auto"
                                 />
                               </div>
-                            );
-                          })}
-                      </div>
+                            )}
+                          </div>
+
+                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                            {Object.entries(parseOptions(q.options))
+                              .filter(
+                                ([_, option]) => option && option.trim() !== "",
+                              )
+                              .map(([key, option]) => {
+                                const isUserSelected =
+                                  Number(key) === q.user_answer;
+                                const isCorrect = key === q.correct_answer;
+                                const isWrong = isUserSelected && !isCorrect;
+
+                                return (
+                                  <div
+                                    key={key}
+                                    className={`flex items-center gap-3 p-2 rounded-md font-medium border ${
+                                      isCorrect
+                                        ? "bg-green-100 border-green-400"
+                                        : isWrong
+                                          ? "bg-red-100 border-red-400"
+                                          : "bg-purple-50 border-purple-300"
+                                    }`}
+                                  >
+                                    <div className="size-6 flex items-center justify-center border rounded-full bg-white border-gray-500">
+                                      {isCorrect && (
+                                        <FaCheck className="text-green-600" />
+                                      )}
+                                      {isWrong && (
+                                        <span className="text-red-600 font-bold">
+                                          ✕
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div
+                                      className={`w-[calc(100%-36px)] ${isCorrect ? "text-green-800" : isWrong ? "text-red-800" : ""}`}
+                                      dangerouslySetInnerHTML={{
+                                        __html: option,
+                                      }}
+                                    />
+                                  </div>
+                                );
+                              })}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   ))}
                 </div>
