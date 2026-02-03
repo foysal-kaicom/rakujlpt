@@ -375,12 +375,14 @@ class MockTestController extends Controller
 
                 $options = $question->mockTestQuestionOption;
                 $groupedData[$sectionId]['questions'][] = [
-                    'question_id' => $question->id,
-                    'group_type' => $groupType,
-                    'question' => $question->title,
-                    'options' => $options->values,
+                    'question_id'   => $question->id,
+                    'group_type'    => $groupType,
+                    'content'       =>$group->content,
+                    'proficiency_level'       =>$question->proficiency_level,
+                    'question'      => $question->title,
+                    'options'       => $options->values,
                     'correct_answer' => $options->correct_answer_index,
-                    'user_answer' => $answerData['answer'],
+                    'user_answer'   => $answerData['answer'],
                 ];
             }
 
