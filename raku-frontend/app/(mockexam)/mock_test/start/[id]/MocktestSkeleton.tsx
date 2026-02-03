@@ -6,6 +6,8 @@ import Image from "next/image";
 export default function SkeletonMockExam({ isCountingDown }: any) {
   const [counter, setCounter] = useState(5);
   const [launched, setLaunched] = useState(false);
+  const maxCount = 5;
+  const progress = (counter / maxCount) * 100;
 
   useEffect(() => {
     if (!isCountingDown) return;
@@ -99,32 +101,90 @@ export default function SkeletonMockExam({ isCountingDown }: any) {
         </div>
       </div>
       <div className="fixed inset-0 p-5 flex justify-center items-center bg-white/30 backdrop-blur-xs">
-        <div
-          className={`max-w-md w-full bg-gradient-to-br from-violet-500 to-purple-600 shadow-2xl shadow-violet-500/30 rounded-2xl px-10 py-12 text-center flex flex-col items-center gap-4 `}
-        >
-          <div className="relative h-20 flex items-center justify-center overflow-hidden">
-            <div className="flex items-center justify-center w-14 h-14 rounded-full bg-white/20">
+        <div className="relative max-w-md w-full bg-gradient-to-br from-violet-500 via-purple-600 to-fuchsia-600 shadow-2xl shadow-violet-500/40 rounded-3xl px-10 py-14 text-center flex flex-col items-center gap-6">
+          {/* ambient glow */}
+          <div className="absolute inset-0 bg-white/10 blur-3xl opacity-30 pointer-events-none" />
+
+          {/* loader */}
+          <div className="relative h-24 flex items-center justify-center">
+            <div className="relative flex items-center justify-center size-20 rounded-full bg-white/10 backdrop-blur">
+              <CircularProgress progress={progress} />
+
               <div
-                className={`absolute flex flex-col items-center ${launched ? "animate-rocket-launch" : "shake-pause"}`}
+                className={`absolute flex flex-col items-center ${
+                  launched ? "animate-rocket-launch" : "idle-shake-pause"
+                }`}
               >
                 <Image
                   src="/assets/icon/rocket.png"
-                  height={54}
-                  width={54}
+                  height={80}
+                  width={80}
                   alt=""
-                  className="relative z-10"
+                  className="relative z-10 drop-shadow-[0_0_14px_rgba(255,255,255,0.45)]"
                 />
+
                 <div
-                  className={`rocket-flame ${launched ? "flame-launch" : "flame-idle"}`}
+                  className={`rocket-flame ${
+                    launched ? "flame-launch" : "flame-idle"
+                  }`}
                 />
               </div>
             </div>
           </div>
-          <div className="text-xl font-semibold mt-2 text-white">
-            Starting in <span className="text-2xl font-bold">{counter}</span>s
-          </div>
+
+          {/* counter */}
+          {!launched && (
+            <div className="text-white tracking-wide">
+              <div className="text-sm uppercase opacity-80">
+                Exam Starting in
+              </div>
+              <div
+                key={counter}
+                className="text-4xl font-extrabold tabular-nums"
+              >
+                <span className="animate-scale-in">{counter}</span>s
+              </div>
+            </div>
+          )}
+
+          {launched && (
+            <div className="text-white text-2xl font-extrabold tracking-wider">
+              Started
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 }
+
+const CircularProgress = ({ progress }: { progress: number }) => {
+  const radius = 36;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (progress / 100) * circumference;
+
+  return (
+    <svg className="absolute inset-0 -rotate-90" width="100%" height="100%">
+      <circle
+        cx="50%"
+        cy="50%"
+        r={radius}
+        stroke="rgba(255,255,255,0.65)"
+        strokeWidth="4"
+        fill="transparent"
+      />
+      <circle
+        cx="50%"
+        cy="50%"
+        r={radius}
+        stroke="#a855f7"
+        strokeWidth="4"
+        fill="transparent"
+        strokeDasharray={circumference}
+        strokeDashoffset={offset}
+        strokeLinecap="round"
+        className="transition-all duration-300"
+      />
+    </svg>
+  );
+};

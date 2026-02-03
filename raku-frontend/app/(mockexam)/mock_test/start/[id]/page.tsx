@@ -163,7 +163,7 @@ export default function ExamPage() {
           `/mock-test/get-questions?exam_id=${id}`,
         );
         const elapsedTime = Date.now() - startTime;
-        const remainingDelay = Math.max(5800 - elapsedTime, 0);
+        const remainingDelay = Math.max(6200 - elapsedTime, 0);
 
         await new Promise((resolve) => setTimeout(resolve, remainingDelay));
 
