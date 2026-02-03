@@ -14,6 +14,7 @@ import type {
   ExamResult,
   ModuleStats,
   ModuleWiseScore,
+  AnswerPayload
 } from "@/types/Mocktest/MockExam.type";
 
 interface ModuleQuestionCounts {
@@ -24,6 +25,7 @@ interface MocktestResultModalProps {
   setIsSubmitted: (value: boolean) => void;
   moduleQuestionCounts: ModuleQuestionCounts;
   id: number | string;
+  answerPayload:AnswerPayload[]
 }
 
 export default function MocktestResultModal({
@@ -31,6 +33,7 @@ export default function MocktestResultModal({
   setIsSubmitted,
   moduleQuestionCounts,
   id,
+  answerPayload
 }: MocktestResultModalProps) {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -224,7 +227,7 @@ export default function MocktestResultModal({
           </div>
         </div>
       )}
-      {showAnsEval && <MocktestAnsEvaluation setShowAnsEval={setShowAnsEval} />}
+      {showAnsEval && <MocktestAnsEvaluation setShowAnsEval={setShowAnsEval} answerPayload={answerPayload}/>}
     </>
   );
 }
