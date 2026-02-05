@@ -2,144 +2,305 @@
 
 @section('contents')
 
+@php
+    $isCustom = ($exam->type ?? 'general') === 'custom';
+
+    // Prefill custom selections (sent from controller edit())
+    $selectedExamId = old('exam_id', $selectedExamId ?? ($exam->id ?? null));
+    $selectedModuleIds = old('modules', $selectedModuleIds ?? []);
+    $selectedSectionWeights = old('module', $selectedSectionWeights ?? []);
+@endphp
+
 <div class="card shadow-lg border-0 rounded-3">
     <div class="card-header py-3 rounded-top bg-indigo-300">
-        <h3 class="fs-5 fw-semibold mb-0 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="size-6" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M21 8V12H19V9H14V4H5V20H11V22H3.9934C3.44495 22 3 21.556 3 21.0082V2.9918C3 2.45531 3.4487 2 4.00221 2H14.9968L21 8ZM13.7857 15.3269C13.8246 14.5997 14.3858 14.0083 15.11 13.9313L15.9807 13.8389C16.0841 13.8279 16.1815 13.7845 16.2589 13.715L16.9102 13.1299C17.4519 12.6431 18.2669 12.6218 18.8334 13.0795L19.5145 13.6298C19.5954 13.6951 19.6949 13.7333 19.7988 13.7389L20.6731 13.7857C21.4003 13.8246 21.9917 14.3858 22.0687 15.11L22.1611 15.9807C22.1721 16.0841 22.2155 16.1815 22.285 16.2589L22.8701 16.9102C23.3569 17.4519 23.3782 18.2669 22.9205 18.8334L22.3702 19.5145C22.3049 19.5954 22.2667 19.6949 22.2611 19.7988L22.2143 20.6731C22.1754 21.4003 21.6142 21.9917 20.89 22.0687L20.0193 22.1611C19.9159 22.1721 19.8185 22.2155 19.7411 22.285L19.0898 22.8701C18.5481 23.3569 17.7331 23.3782 17.1666 22.9205L16.4855 22.3702C16.4046 22.3049 16.3051 22.2667 16.2012 22.2611L15.3269 22.2143C14.5997 22.1754 14.0083 21.6142 13.9313 20.89L13.8389 20.0193C13.8279 19.9159 13.7845 19.8185 13.715 19.7411L13.1299 19.0898C12.6431 18.5481 12.6218 17.733 13.0795 17.1666L13.6298 16.4855C13.6951 16.4046 13.7333 16.3051 13.7389 16.2012L13.7857 15.3269ZM21.0303 17.0303L19.9697 15.9697L17.5 18.4393L16.0303 16.9697L14.9697 18.0303L17.5 20.5607L21.0303 17.0303Z"></path>
-            </svg> Edit Exam</h3>
+        <h3 class="fs-5 fw-semibold mb-0 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-6" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21 8V12H19V9H14V4H5V20H11V22H3.9934C3.44495 22 3 21.556 3 21.0082V2.9918C3 2.45531 3.4487 2 4.00221 2H14.9968L21 8Z"></path>
+            </svg>
+
+            {{ $isCustom ? 'Edit Custom Mock Test' : 'Edit Full Mock Test' }}
+        </h3>
     </div>
 
-    <!-- Form -->
-    <form action="{{ $isCopy ? route('mock-tests.exam.store') : route('mock-tests.exam.update', $exam->id) }}" 
+    <form action="{{ $isCopy ? route('mock-tests.exam.store', ['type' => $isCustom ? 'custom' : 'general']) : route('mock-tests.exam.update', $exam->id) }}"
           method="POST" enctype="multipart/form-data" class="p-4">
         @csrf
+        @if(!$isCopy)
+        @endif
+
+        {{-- keep type fixed in update --}}
+        <input type="hidden" name="type" value="{{ $isCustom ? 'custom' : 'general' }}">
 
         <div class="row g-4">
-            <!-- Image Upload -->
+
+            {{-- Image Upload --}}
             <div class="col-md-3 text-center">
                 <div class="position-relative border rounded bg-light d-flex align-items-center justify-content-center shadow-sm h-[250px]">
-                    <img id="imagePreview" 
-                         src="{{ $exam->image ? asset($exam->image) : asset('imagePH.png') }}" 
-                         alt="Exam Image" class="size-full object-fit-cover rounded" />
-                    <button type="button" id="removeImage" 
-                            class="btn btn-sm btn-light border shadow-sm position-absolute top-0 end-0 rounded-circle">
-                        ×
-                    </button>
+                    <img id="imagePreview"
+                         src="{{ $exam->image ? asset($exam->image) : asset('imagePH.png') }}"
+                         alt="Exam Image" class="w-100 h-[250px] object-fit-cover rounded" />
+                    <button type="button" id="removeImage"
+                            class="btn btn-sm btn-light border shadow-sm position-absolute top-0 end-0 rounded-circle">×</button>
                 </div>
+
                 <input type="file" accept="image/*" id="fileInput" name="image" class="d-none" />
-                <label for="fileInput" class="btn btn-outline-primary mt-3 w-100 rounded-pill">
+                <label for="fileInput" class="btn btn-outline-primary mt-3 w-100 rounded-pill flex items-center gap-2 justify-center">
                     📷 Change Image
                 </label>
-                @error('image')
-                    <div class="text-danger small">{{ $message }}</div>
-                @enderror
+                @error('image') <div class="text-danger small">{{ $message }}</div> @enderror
             </div>
 
-            <!-- Form Fields -->
+            {{-- Fields --}}
             <div class="col-md-9">
                 <div class="row g-3">
-                    <!-- Exam Title -->
+
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Exam Title <span class="text-danger">*</span></label>
                         <input type="text" name="title" value="{{ old('title', $exam->title) }}"
-                            class="form-control form-control-lg shadow-sm rounded-2" placeholder="Enter exam title" required />
+                               class="form-control form-control-lg shadow-sm rounded-2" required />
                         @error('title') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
 
-                    <!-- Exam Name -->
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Select Exam Type <span class="text-danger">*</span></label>
                         <select name="name" class="form-control form-control-lg shadow-sm rounded-2" required>
                             <option value="" disabled {{ old('name', $exam->name) ? '' : 'selected' }}>Select Short Name</option>
-                            <option value="JLPT" {{ (old('name', $exam->name) === 'JLPT') ? 'selected' : '' }}>JLPT</option>
-                            <option value="JPT"  {{ (old('name', $exam->name) === 'JPT')  ? 'selected' : '' }}>JPT</option>
-                            <option value="NAT"  {{ (old('name', $exam->name) === 'NAT')  ? 'selected' : '' }}>NAT</option>
-                            <option value="JFT"  {{ (old('name', $exam->name) === 'JFT')  ? 'selected' : '' }}>JFT</option>
+                            <option value="JLPT" {{ old('name', $exam->name)==='JLPT' ? 'selected' : '' }}>JLPT</option>
+                            <option value="JPT"  {{ old('name', $exam->name)==='JPT'  ? 'selected' : '' }}>JPT</option>
+                            <option value="NAT"  {{ old('name', $exam->name)==='NAT'  ? 'selected' : '' }}>NAT</option>
+                            <option value="JFT"  {{ old('name', $exam->name)==='JFT'  ? 'selected' : '' }}>JFT</option>
                         </select>
                         @error('name') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
 
-                    <!-- Duration -->
                     <div class="col-md-3">
                         <label class="form-label fw-semibold">Duration (minutes)</label>
                         <input type="number" name="duration" min="1" value="{{ old('duration', $exam->duration) }}"
-                            class="form-control form-control-lg shadow-sm rounded-2" placeholder="e.g. 90" />
-                        @error('duration') <div class="text-danger small">{{ $message }}</div> @enderror
+                               class="form-control form-control-lg shadow-sm rounded-2" />
                     </div>
 
-                    <!-- Pass Point -->
                     <div class="col-md-3">
                         <label class="form-label fw-semibold">Pass Point</label>
-                        <input type="number" min="1" name="pass_point" value="{{ old('pass_point', $exam->pass_point) }}"
-                            class="form-control form-control-lg shadow-sm rounded-2" placeholder="e.g. 60" />
-                        @error('pass_point') <div class="text-danger small">{{ $message }}</div> @enderror
+                        <input type="number" name="pass_point" min="1" value="{{ old('pass_point', $exam->pass_point) }}"
+                               class="form-control form-control-lg shadow-sm rounded-2" />
                     </div>
 
-                    <!-- Total Point -->
                     <div class="col-md-3">
                         <label class="form-label fw-semibold">Total Point</label>
-                        <input type="number" min="1" name="total_point" value="{{ old('total_point', $exam->total_point) }}"
-                            class="form-control form-control-lg shadow-sm rounded-2" placeholder="e.g. 100" />
-                        @error('total_point') <div class="text-danger small">{{ $message }}</div> @enderror
+                        <input type="number" name="total_point" min="1" value="{{ old('total_point', $exam->total_point) }}"
+                               class="form-control form-control-lg shadow-sm rounded-2" />
                     </div>
 
-                    <!-- Answer Value -->
                     <div class="col-md-3">
                         <label class="form-label fw-semibold">Answer Value</label>
-                        <input type="number" min="1" name="answer_value" value="{{ old('answer_value', $exam->answer_value) }}"
-                            class="form-control form-control-lg shadow-sm rounded-2" placeholder="e.g. 1" />
-                        @error('answer_value') <div class="text-danger small">{{ $message }}</div> @enderror
+                        <input type="number" name="answer_value" min="1" value="{{ old('answer_value', $exam->answer_value) }}"
+                               class="form-control form-control-lg shadow-sm rounded-2" />
                     </div>
 
-                    <!-- Description -->
+                    {{-- CUSTOM ONLY: Exam + Modules + Sections --}}
+                    @if($isCustom)
+                        <div class="col-md-12">
+                            <div class="grid grid-cols-2 xl:grid-cols-3 gap-8 border p-3 capitalize bg-blue-50">
+
+                                <div>
+                                    <label for="exam_select" class="form-label font-semibold">Select Exam</label>
+                                    <select name="exam_id" id="exam_select" class="border rounded p-2 w-full">
+                                        <option value="">-- Select an Exam --</option>
+                                        @foreach($exams as $e)
+                                            <option value="{{ $e->id }}" {{ (string)$selectedExamId === (string)$e->id ? 'selected' : '' }}>
+                                                {{ $e->title }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div id="modules_container" class="space-y-3 border-r hidden">
+                                    <p class="form-label font-semibold">Select Module</p>
+                                    <div id="modules_list" class="pl-5"></div>
+                                </div>
+
+                                <div id="sections_container" class="space-y-3 col-span-2 xl:col-span-1 hidden">
+                                    <p class="form-label font-semibold">Select Section</p>
+                                    <div id="sections_list"></div>
+                                </div>
+
+                            </div>
+                        </div>
+                    @endif
+
                     <div class="col-md-12">
                         <label class="form-label fw-semibold">Description</label>
-                        <textarea name="description" rows="4" class="form-control shadow-sm rounded-2"
-                            placeholder="Brief details about the exam">{{ old('description', $exam->description) }}</textarea>
-                        @error('description') <div class="text-danger small">{{ $message }}</div> @enderror
+                        <textarea name="description" rows="4" class="form-control shadow-sm rounded-2">{{ old('description', $exam->description) }}</textarea>
                     </div>
+
                 </div>
             </div>
         </div>
 
         <div class="pt-4 flex justify-end">
             <button type="submit"
-                class="w-full md:w-auto px-6 py-2 bg-indigo-500 text-white font-semibold rounded-xl shadow hover:bg-indigo-600 transition flex items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-4" fill="currentColor">
-                    <path d="M18 21V13H6V21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3H17L21 7V20C21 20.5523 20.5523 21 20 21H18ZM16 21H8V15H16V21Z"></path>
-                </svg> Save Changes
+                    class="w-full md:w-auto px-6 py-2 bg-indigo-500 text-white font-semibold rounded-xl shadow hover:bg-indigo-600 transition flex items-center gap-1">
+                Save Changes
+            </button>
         </div>
     </form>
 </div>
 
-<!-- JavaScript for Image Preview -->
+{{-- Image preview --}}
 <script>
-    document.getElementById("fileInput").addEventListener("change", function(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById("imagePreview").src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    });
+document.getElementById("fileInput").addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
 
-    
-    // Trigger the change event on page load to set the correct initial state
-    // document.getElementById('urlTypeSelect').dispatchEvent(new Event('change'));
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById("imagePreview").src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+});
 
-    // document.getElementById("removeImage").addEventListener("click", function() {
-    //     document.getElementById("imagePreview").src = "{{ asset('assets/img/default-image.jpg') }}";
-    //     document.getElementById("fileInput").value = ""; // Reset the input field
-    // });
-
-    document.getElementById("removeImage").addEventListener("click", function() {
-        document.getElementById("imagePreview").src = "{{ asset('imagePH.png') }}";
-        document.getElementById("fileInput").value = "";
-        console.log("Image removed, reset to default.");
-    });
+document.getElementById("removeImage").addEventListener("click", function() {
+    document.getElementById("imagePreview").src = "{{ asset('imagePH.png') }}";
+    document.getElementById("fileInput").value = "";
+});
 </script>
 
 @endsection
 
+
+@push('js')
+@if($isCustom)
+<script>
+$(document).ready(function() {
+    const $examSelect = $('#exam_select');
+    const $modulesContainer = $('#modules_container');
+    const $modulesList = $('#modules_list');
+    const $sectionsContainer = $('#sections_container');
+    const $sectionsList = $('#sections_list');
+
+    const selectedModuleIds = @json(array_map('strval', $selectedModuleIds ?? []));
+    const selectedSectionWeights = @json($selectedSectionWeights ?? []);
+
+    function getWeight(moduleId, sectionId) {
+        if (!selectedSectionWeights[moduleId]) return null;
+        if (!selectedSectionWeights[moduleId]['section_weights']) return null;
+        return selectedSectionWeights[moduleId]['section_weights'][sectionId] ?? null;
+    }
+
+    // 1) Load modules
+    $examSelect.on('change', function() {
+        const examId = $(this).val();
+
+        $modulesList.empty();
+        $sectionsList.empty();
+        $modulesContainer.addClass('hidden');
+        $sectionsContainer.addClass('hidden');
+
+        if (!examId) return;
+
+        $.ajax({
+            url: '/api/get-modules-by-exam/' + examId,
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if (!response || response.length === 0) return;
+
+                let modulesHtml = '';
+                response.forEach(module => {
+                    const isChecked = selectedModuleIds.includes(String(module.id)) ? 'checked' : '';
+                    modulesHtml += `
+                        <div class="mb-2">
+                            <input type="checkbox" name="modules[]" value="${module.id}" id="module_${module.id}"
+                                class="module-checkbox" ${isChecked}>
+                            <label for="module_${module.id}">${module.name}</label>
+                        </div>
+                    `;
+                });
+
+                $modulesList.html(modulesHtml);
+                $modulesContainer.removeClass('hidden');
+
+                // Auto load sections for pre-checked modules
+                if ($('.module-checkbox:checked').length) {
+                    $('.module-checkbox:checked').first().trigger('change');
+                }
+            }
+        });
+    });
+
+    // 2) Load sections
+    $modulesContainer.on('change', '.module-checkbox', function() {
+        const checkedModules = [];
+        $('.module-checkbox:checked').each(function() {
+            checkedModules.push($(this).val());
+        });
+
+        $sectionsList.empty();
+        $sectionsContainer.addClass('hidden');
+
+        if (checkedModules.length === 0) return;
+
+        $.ajax({
+            url: '/api/get-sections-by-modules',
+            type: 'POST',
+            data: {
+                module_ids: checkedModules,
+                _token: '{{ csrf_token() }}'
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (!response || response.length === 0) return;
+
+                let sectionsHtml = '';
+                response.forEach(section => {
+                    const moduleId = String(section.mock_test_module_id);
+                    const sectionId = String(section.id);
+                    const weightName = `module[${moduleId}][section_weights][${sectionId}]`;
+
+                    const weightVal = getWeight(moduleId, sectionId);
+                    const isChecked = (weightVal !== null && weightVal !== undefined && weightVal !== '') ? 'checked' : '';
+                    const isDisabled = isChecked ? '' : 'disabled';
+                    const isRequired = isChecked ? 'required' : '';
+
+                    sectionsHtml += `
+                        <div class="pl-5 flex justify-between items-center gap-2 mb-2">
+                            <div class="w-[calc(100%-84px)] flex gap-1.5">
+                                <input type="checkbox" id="section_${sectionId}"
+                                    class="section-checkbox"
+                                    data-target-weight="#weight_${sectionId}"
+                                    ${isChecked}>
+                                <label class="w-[calc(100%-18px)]" for="section_${sectionId}">${section.title}</label>
+                            </div>
+                            <input type="number" name="${weightName}" id="weight_${sectionId}"
+                                class="border rounded p-1 ml-2 w-20 bg-white"
+                                placeholder="quantity" value="${weightVal ?? ''}" ${isDisabled} ${isRequired}>
+                        </div>
+                    `;
+                });
+
+                $sectionsList.html(sectionsHtml);
+                $sectionsContainer.removeClass('hidden');
+            }
+        });
+    });
+
+    // 3) checkbox enable/disable weight
+    $sectionsContainer.on('change', '.section-checkbox', function() {
+        const targetId = $(this).data('target-weight');
+        const $weightInput = $(targetId);
+
+        if ($(this).is(':checked')) {
+            $weightInput.prop('disabled', false).prop('required', true);
+        } else {
+            $weightInput.val('').prop('disabled', true).prop('required', false);
+        }
+    });
+
+    // ✅ Auto-trigger on load if exam already selected
+    if ($examSelect.val()) {
+        $examSelect.trigger('change');
+    }
+});
+</script>
+@endif
+@endpush

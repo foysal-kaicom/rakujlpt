@@ -575,17 +575,47 @@ class MockTestController extends Controller
     public function deleteQuestion($id)
     {
         try {
-            $question = MockTestQuestion::findOrFail($id);
+            
+            DB::transaction(function () use ($id) {
 
-            $question->delete();
-
+                $question = MockTestQuestion::withTrashed()
+                    ->with('mockTestQuestionGroup')
+                    ->lockForUpdate()
+                    ->findOrFail($id);
+            
+                $group = $question->mockTestQuestionGroup;
+            
+                if (!$group) {
+                    $question->delete();
+                    return;
+                }
+            
+                $otherExists = MockTestQuestion::withTrashed()
+                    ->where('mock_test_question_group_id', $group->id)
+                    ->where('id', '!=', $question->id)
+                    ->exists();
+            
+                if ($group->type === 'multiple' && $otherExists) {
+                    throw new \Exception("Cannot delete: this multiple group has other questions.");
+                }
+            
+                $question->update(['mock_test_question_group_id' => null]);
+            
+                $group->delete();
+                $question->delete();
+            });
+            
+    
             Toastr::success("Question deleted successfully.");
-            return redirect()->back();
+            return redirect()->route('mock-tests.question.list');
+    
         } catch (\Throwable $ex) {
+            // DB::rollback();
             Toastr::error("Failed to delete question: " . $ex->getMessage());
             return redirect()->back();
         }
     }
+    
 
     public function getReportsData(Request $request)
     {
@@ -683,3 +713,6 @@ class MockTestController extends Controller
     }
 
 }
+
+
+
