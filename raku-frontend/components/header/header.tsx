@@ -206,7 +206,7 @@ export default function Header() {
               {user?.last_name}
             </p>
             <p className="line-clamp-1 text-xs font-semibold bg-linear-to-r from-blue-600  to-purple-600 bg-clip-text text-transparent">
-              {user?.email.slice(0, 14) || user?.phone_number.slice(0, 14)}
+              {user?.email ? user?.email.slice(0, 14) : user?.phone_number.slice(0, 14)}
             </p>
           </div>
 
@@ -299,7 +299,7 @@ export default function Header() {
                       </p>
 
                       <p className="text-sm">
-                        {user?.email || user?.phone_number}
+                        {user?.email ? user?.email  : user ?.phone_number}
                       </p>
                     </Link>
                   </div>

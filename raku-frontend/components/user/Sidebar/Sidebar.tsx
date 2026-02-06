@@ -45,7 +45,7 @@ export default function Sidebar() {
               <p className="mt-3 text-lg font-semibold text-gray-800">
                 {user?.first_name} {user?.last_name}
               </p>
-              <p className="text-sm text-gray-500 font-medium">{user?.email}</p>
+              <p className="text-sm text-gray-500 font-medium">{user?.email ? user?.email  : user ?.phone_number}</p>
             </div>
           </div>
         </Link>

@@ -4,6 +4,7 @@ import { Toaster } from "sonner";
 import RouteLoader from "@/components/RouteLoader";
 import MetaPixel from "@/components/MetaPixel";
 import I18nProvider from "./i18n-provider";
+import { ToastProvider } from "raku-toast-react";
 
 export const metadata: Metadata = {
   title:
@@ -65,6 +66,7 @@ export default function RootLayout({
             duration={3000}
             closeButton={true}
           />
+          <ToastProvider />
         </I18nProvider>
       </body>
     </html>
