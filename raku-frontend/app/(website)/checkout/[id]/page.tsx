@@ -137,12 +137,8 @@ export default function CheckoutPage() {
     }
   }, [packageDetails]);
 
-  const handleSubscribe = async () => {
-    // if (!agreed) {
-    //   toast.error(t("checkout.agreement_error"));
-    //   return;
-    // }
-
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
       const response = await subscriptionService.subscribePackage(
         id,

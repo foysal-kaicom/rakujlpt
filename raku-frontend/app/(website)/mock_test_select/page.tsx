@@ -80,13 +80,6 @@ export default function MockTestSelect() {
   }, []);
 
   const handleChooseTest = (test: any) => {
-    // const filters = {
-    //   type: test.short_name,
-    //   title: test.title,
-    //   duration: test.duration,
-    //   total_point: test.total_point,
-    // };
-    // const params = new URLSearchParams(filters as any).toString();
     router.push(`/mock_test_select/${test.id}`);
   };
 
@@ -97,13 +90,13 @@ export default function MockTestSelect() {
       ) : (
         <div className="relative pt-5 pb-20 bg-gradient-to-br from-blue-50 via-pink-50 to-purple-100 min-h-[70vh] overflow-clip">
           <div className="absolute -top-16 -left-16 w-60 h-60 bg-yellow-200/30 rounded-full filter blur-3xl animate-bounce-slow"></div>
-        <div className="absolute -bottom-24 -right-16 w-96 h-96 bg-pink-200/30 rounded-full filter blur-3xl animate-pulse-slow"></div>
+          <div className="absolute -bottom-24 -right-16 w-96 h-96 bg-pink-200/30 rounded-full filter blur-3xl animate-pulse-slow"></div>
 
           <div className="relative z-10">
             <WebpageWrapper>
               <BreadCrumb breadCrumbData={breadCrumbData} />
 
-              <div className="md:w-2/3 xl:w-1/2 mt-15 text-center mx-auto">
+              <div className="md:w-2/3 xl:w-1/2 mt-10 text-center mx-auto">
                 <h2 className="text-4xl sm:text-5xl font-extrabold pb-3 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-400 to-purple-500">
                   {t("mock.title")}
                 </h2>

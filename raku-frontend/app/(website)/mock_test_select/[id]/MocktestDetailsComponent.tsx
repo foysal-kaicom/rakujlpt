@@ -89,7 +89,7 @@ export default function MockTestDetailsPage() {
       <div className="pt-5">
         <BreadCrumb breadCrumbData={breadCrumbData} />
 
-        <main className="space-y-12 py-8 max-w-6xl mx-auto">
+        <main className="space-y-12 py-10 max-w-6xl mx-auto">
           <section className="relative z-10 flex flex-col justify-center items-center text-center">
             <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/70 backdrop-blur-md border border-white/40 rounded-full text-pink-600 text-sm font-medium shadow">
               <Sparkles className="w-4 h-4" />
@@ -138,7 +138,9 @@ export default function MockTestDetailsPage() {
           <section>
             <SectionTitle title="Module-wise Question Breakdown" />
 
-            <div className={`mt-4 gap-6 ${examDetails?.mock_test_modules && examDetails?.mock_test_modules?.length > 2 ? 'grid md:grid-cols-2 xl:grid-cols-3' : 'flex flex-col md:flex-row justify-center'}`}>
+            <div
+              className={`mt-4 gap-6 ${examDetails?.mock_test_modules && examDetails?.mock_test_modules?.length > 2 ? "grid md:grid-cols-2 xl:grid-cols-3" : "flex flex-col md:flex-row justify-center"}`}
+            >
               {examDetails?.mock_test_modules.map((modules, moduleIndex) => (
                 <div
                   key={modules.id}
@@ -157,11 +159,9 @@ export default function MockTestDetailsPage() {
                   <div className="mt-4 flex gap-4 text-sm">
                     <span
                       className={`px-3 py-1 rounded-full ${
-                        moduleIndex === 0
+                        moduleIndex % 2 == 0
                           ? "bg-pink-100 text-pink-700"
-                          : moduleIndex === 1
-                            ? "bg-purple-100 text-purple-700"
-                            : "bg-indigo-100 text-indigo-700"
+                          : "bg-purple-100 text-purple-700"
                       }`}
                     >
                       {modules?.sections.length} Section
@@ -183,11 +183,9 @@ export default function MockTestDetailsPage() {
                   <div
                     key={review.id}
                     className={`rounded-2xl p-6 border ${
-                      index === 0
-                        ? "border-pink-200 bg-pink-50"
-                        : index === 1
-                          ? "border-purple-200 bg-purple-50"
-                          : "border-indigo-200 bg-indigo-50"
+                      index % 2 == 0
+                        ? "border-purple-200 bg-purple-50"
+                        : "border-indigo-200 bg-indigo-50"
                     }`}
                   >
                     <p className="font-medium text-slate-900">
@@ -201,7 +199,9 @@ export default function MockTestDetailsPage() {
                     </p>
 
                     <p className="mt-2 text-slate-600">{review.body}</p>
-                    <p className="mt-2 text-slate-600 text-sm">- {review.reviewer_designation || "Student"}</p>
+                    <p className="mt-2 text-slate-600 text-sm">
+                      - {review.reviewer_designation || "Student"}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -237,33 +237,33 @@ function SectionTitle({ title }: { title: string }) {
   );
 }
 
-function Review({
-  name,
-  rating,
-  text,
-  color,
-}: {
-  name: string;
-  rating: number;
-  text: string;
-  color: string;
-}) {
-  const borderColor =
-    color === "pink"
-      ? "border-pink-200"
-      : color === "violet"
-        ? "border-purple-200"
-        : "border-indigo-200";
-  return (
-    <div className={`rounded-2xl p-6 bg-${color}-50 border ${borderColor}`}>
-      <p className="font-medium text-slate-900">{name}</p>
-      <p className="flex gap-1 items-center">
-        {[...Array(rating)].map((_, i) => (
-          <IoMdStar key={i} className="text-yellow-500 size-5" />
-        ))}
-      </p>
+// function Review({
+//   name,
+//   rating,
+//   text,
+//   color,
+// }: {
+//   name: string;
+//   rating: number;
+//   text: string;
+//   color: string;
+// }) {
+//   const borderColor =
+//     color === "pink"
+//       ? "border-pink-200"
+//       : color === "violet"
+//         ? "border-purple-200"
+//         : "border-indigo-200";
+//   return (
+//     <div className={`rounded-2xl p-6 bg-${color}-50 border ${borderColor}`}>
+//       <p className="font-medium text-slate-900">{name}</p>
+//       <p className="flex gap-1 items-center">
+//         {[...Array(rating)].map((_, i) => (
+//           <IoMdStar key={i} className="text-yellow-500 size-5" />
+//         ))}
+//       </p>
 
-      <p className="mt-2 text-slate-600">{text}</p>
-    </div>
-  );
-}
+//       <p className="mt-2 text-slate-600">{text}</p>
+//     </div>
+//   );
+// }
