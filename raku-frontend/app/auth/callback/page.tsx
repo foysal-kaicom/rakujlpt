@@ -5,7 +5,7 @@ import { getSession } from "next-auth/react";
 import axios from "axios";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 
 import { DefaultSession } from "next-auth";
 

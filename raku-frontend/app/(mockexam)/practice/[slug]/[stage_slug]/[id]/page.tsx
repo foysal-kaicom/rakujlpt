@@ -12,7 +12,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import axiosInstance from "@/utils/axios";
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 import AIHint from "./AiHint";
 
 // Types

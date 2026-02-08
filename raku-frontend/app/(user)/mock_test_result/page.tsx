@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 import axiosInstance from "@/utils/axios";
 import { useTranslation } from "react-i18next";
 

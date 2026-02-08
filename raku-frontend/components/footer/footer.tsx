@@ -9,7 +9,7 @@ import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 
 import { useBusinessSettingsStore } from "@/stores/useBusinessStore";
 
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 import { useTranslation } from "react-i18next";
 
 import { newsletterService } from "@/services/common.service";

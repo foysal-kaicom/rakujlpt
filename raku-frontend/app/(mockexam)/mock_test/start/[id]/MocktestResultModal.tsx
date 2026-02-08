@@ -8,7 +8,7 @@ import CircularProgress from "@/components/CircularProgress";
 import MocktestAnsEvaluation from "./MocktestAnsEvaluation";
 
 import axiosInstance from "@/utils/axios";
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 
 import type {
   ExamResult,

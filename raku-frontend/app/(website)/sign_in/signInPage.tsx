@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 // Third-party libraries
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 import { useTranslation } from "react-i18next";
 import { signIn } from "next-auth/react";
 

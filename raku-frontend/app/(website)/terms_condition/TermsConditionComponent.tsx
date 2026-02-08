@@ -6,7 +6,7 @@ import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import axiosInstance from "@/utils/axios";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 
 interface TermsCondition {
   type: string;

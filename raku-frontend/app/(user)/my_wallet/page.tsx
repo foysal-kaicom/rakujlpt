@@ -8,7 +8,7 @@ import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useTranslation } from "react-i18next";
 import axiosInstance from "@/utils/axios";
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 import Link from "next/link";
 import { ConfirmUnlockModal } from "@/app/(website)/practice/ConfirmUnlockModal";
 import Loader from "@/components/Loader";

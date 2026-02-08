@@ -2,7 +2,7 @@
 
 import { Suspense, useState } from "react";
 import axiosInstance from "@/utils/axios";
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import BreadCrumb from "@/components/BreadCrumb";

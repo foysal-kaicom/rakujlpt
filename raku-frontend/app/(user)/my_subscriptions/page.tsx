@@ -8,7 +8,7 @@ import { FiArrowRight } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
 
 import axiosInstance from "@/utils/axios";
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 
 import BreadCrumb from "@/components/BreadCrumb";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";

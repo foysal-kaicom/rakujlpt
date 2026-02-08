@@ -7,7 +7,7 @@ import { Bell, Calendar, Gift, Info } from "lucide-react";
 import BreadCrumb from "@/components/BreadCrumb";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 import axiosInstance from "@/utils/axios";
 import Loader from "@/components/Loader";
 

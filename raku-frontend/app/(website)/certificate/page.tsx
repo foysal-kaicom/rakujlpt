@@ -6,7 +6,7 @@ import BreadCrumb from "@/components/BreadCrumb";
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 
 export default function QRScannerPage() {
   const { t } = useTranslation("common");

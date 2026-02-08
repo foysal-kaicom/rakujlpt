@@ -6,7 +6,6 @@ import { useParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 
 import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
-import HeadLine2 from "@/components/HeadLine2";
 import BreadCrumb from "@/components/BreadCrumb";
 import SuspenseLoader from "@/components/SuspenseLoader";
 

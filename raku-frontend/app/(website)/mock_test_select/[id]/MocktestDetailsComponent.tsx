@@ -12,7 +12,7 @@ import { IoMdStar } from "react-icons/io";
 
 import { useExamStore } from "@/stores/useExamStore";
 import axios from "axios";
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 
 interface ExamResponse {
   data: Exam;

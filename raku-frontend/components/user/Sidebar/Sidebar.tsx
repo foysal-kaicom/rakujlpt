@@ -4,7 +4,7 @@ import Link from "next/link";
 import { SidebarData } from "./sidebarData";
 import { FaSignOutAlt } from "react-icons/fa";
 import axiosInstance from "@/utils/axios";
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 
 import { useAuthStore } from "@/stores/useAuthStore";
 import { usePathname, useRouter } from "next/navigation";

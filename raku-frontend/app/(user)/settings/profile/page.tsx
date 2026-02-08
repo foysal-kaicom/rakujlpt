@@ -9,7 +9,7 @@ import Image from "next/image";
 import { useState, useEffect, Suspense } from "react";
 
 import axiosInstance from "@/utils/axios";
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 
 import BreadCrumb from "@/components/BreadCrumb";
 import UserHeadline from "@/components/user/UserHeadline/UserHeadline";

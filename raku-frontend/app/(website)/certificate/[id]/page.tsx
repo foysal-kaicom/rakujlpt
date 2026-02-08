@@ -7,7 +7,7 @@ import WebpageWrapper from "@/components/wrapper/WebpageWrapper";
 import BreadCrumb from "@/components/BreadCrumb";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 
 interface Details {
   name: string;
