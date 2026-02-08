@@ -5,7 +5,7 @@ import { Suspense, useState, useRef, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 // Third-party libraries
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 
 // Icons
 import { MdEmail, MdErrorOutline } from "react-icons/md";

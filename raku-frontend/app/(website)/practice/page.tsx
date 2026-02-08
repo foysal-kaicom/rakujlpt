@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { Sparkles, Rocket } from "lucide-react";
 import Link from "next/link";
 import axiosInstance from "@/utils/axios";
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 import BreadCrumb from "@/components/BreadCrumb";
 import PracticeSkeleton from "./PracticeSkeleton";
 import Image from "next/image";

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { X, Copy, Check, Send, Gift, Info, AlertTriangle, Eye, EyeOff } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 import { useTranslation } from "react-i18next";
 
 interface ReceiverInfo {

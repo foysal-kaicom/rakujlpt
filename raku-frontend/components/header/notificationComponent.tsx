@@ -4,7 +4,7 @@ import { IoMailOpenOutline } from "react-icons/io5";
 
 import { useState, useEffect } from "react";
 import axiosInstance from "@/utils/axios";
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 
 interface NotificationItem {
   id: number;

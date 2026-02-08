@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { toast } from "raku-toast-react";
 
 import PricingCard from "../PricingCard";
 
@@ -21,6 +21,7 @@ const PricingSection = () => {
       const plans = await subscriptionService.getHomePlans();
       setPlansData(plans);
     } catch (error: any) {
+      toast
       toast.error(
         error?.message || t("pricing.error_fetching_plans", "Cannot get subscription plans at this moment" )
       );

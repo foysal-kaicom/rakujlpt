@@ -9,7 +9,7 @@ import {
   IoMdCheckboxOutline,
 } from "react-icons/io";
 
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 import { useTranslation } from "react-i18next";
 
 import BreadCrumb from "@/components/BreadCrumb";

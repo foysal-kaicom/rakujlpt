@@ -5,7 +5,7 @@ import { IoLogIn, IoLogOut } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 import { FaUser } from "react-icons/fa";
 
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 import axiosInstance from "@/utils/axios";
 import axios from "axios";
 

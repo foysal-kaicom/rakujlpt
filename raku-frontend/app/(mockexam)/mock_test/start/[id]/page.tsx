@@ -18,7 +18,7 @@ import {
   FaUsers,
 } from "react-icons/fa";
 
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 import axiosInstance from "@/utils/axios";
 import { useExamStore } from "@/stores/useExamStore";
 

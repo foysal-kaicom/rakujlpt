@@ -8,7 +8,7 @@ import { MdEmail } from "react-icons/md";
 import { FaUser, FaLock, FaEye, FaEyeSlash, FaPhone } from "react-icons/fa";
 
 import axios from "axios";
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 import { useTranslation } from "react-i18next";
 import { signIn } from "next-auth/react";
 

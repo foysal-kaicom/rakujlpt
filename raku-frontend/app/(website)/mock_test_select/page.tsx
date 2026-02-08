@@ -6,7 +6,7 @@ import axios from "@/utils/axios";
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { toast } from "raku-toast-react";
 
 import MockTestSelectSkeleton from "./mockSelectSkeleton";
 import CustomSelect from "@/components/CustomSelect";
