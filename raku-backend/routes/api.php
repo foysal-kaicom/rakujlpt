@@ -111,6 +111,9 @@ Route::prefix('v1')->group(function () {
             Route::post('/wallet-coin-transfer', [WalletController::class, 'transferCoin']);
 
             Route::get('/agent', [CandidateAgentController::class, 'getCandidateAgentData']);
+
+            //get candiadte using candidate_code
+            Route::get('/get-candidate/{candidate_code}', [CandidateController::class, 'getCandidateByCode']);
         });
 
         Route::group(['prefix' => 'review'], function () {
@@ -127,6 +130,7 @@ Route::prefix('v1')->group(function () {
         Route::group(['prefix' => 'mock-test', 'as' => 'mock-test.', 'middleware' => ['checkSubscription']], function () {
             Route::get('/get-questions', [MockTestController::class, 'getQuestions']);
             Route::post('/submit-answer', [MockTestController::class, 'evaluateAnswers']);
+            Route::post('/preview-answers', [MockTestController::class, 'previewAnswers']);
         });
 
         Route::group(['prefix' => 'mock-test', 'as' => 'mock-test.'], function () {

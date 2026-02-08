@@ -14,7 +14,7 @@ export default function QuestionCompositionComponent() {
       <WebpageWrapper>
         <BreadCrumb breadCrumbData={breadCrumbData} />
 
-        <section className="relative pt-15">
+        <section className="relative pt-10">
           <div className="relative z-10 max-w-5xl mx-auto text-center md:px-6">
             <h2 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-pink-400 to-purple-500 py-2">
               <span className="uppercase">
@@ -82,7 +82,7 @@ export default function QuestionCompositionComponent() {
           </div>
         </section>
 
-        <section className="relative pt-15">
+        <section className="relative pt-10">
           <div className="relative z-10 max-w-5xl mx-auto text-center md:px-6">
             <h2 className="text-4xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-400 to-purple-500 py-2">
               {t("composition.jpt.heading")}

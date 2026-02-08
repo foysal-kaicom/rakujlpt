@@ -33,7 +33,7 @@ class CMSController extends Controller
     }
 
     public function getReviewList(){
-        $reviews = Review::where('status', 1)->get();
+        $reviews = Review::where('status', 1)->where('review_status', 'approved')->get();
         return $this->responseWithSuccess($reviews, 'All reviews fetched.');
     }
 

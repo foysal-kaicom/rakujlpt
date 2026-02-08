@@ -75,7 +75,7 @@ const PackagesComponent = () => {
 
         <div className="container mx-auto px-4 lg:px-8 relative z-10">
           <BreadCrumb breadCrumbData={breadCrumbData} />
-          <div className="text-center mb-16 mt-15">
+          <div className="text-center mb-16 mt-10">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
               {t("pricing.title")}{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-400 to-purple-500">

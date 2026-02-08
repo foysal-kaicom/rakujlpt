@@ -18,7 +18,7 @@ class ReviewController extends Controller
 
     public function list()
     {
-        $reviews = Review::paginate(10);
+        $reviews = Review::orderBy('created_at', 'desc')->paginate(10);
         return view('cms.reviews.list', compact('reviews'));
     }
 
@@ -42,6 +42,8 @@ class ReviewController extends Controller
             $imageUploadResponse = $this->fileStorageService->uploadImageToCloud($image, 'reviewer');
             $validated['image'] = $imageUploadResponse['public_path'];
         }
+        
+        $validated['review_status'] = 'approved';
 
         Review::create($validated);
 
@@ -66,6 +68,7 @@ class ReviewController extends Controller
             'reviewer_designation' => 'nullable|string|max:255',
             'rating' => 'required|integer|min:1|max:5',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'review_status' => 'nullable|in:pending,approved,rejected',
         ]);
     
         if ($request->hasFile('image')) {
@@ -77,6 +80,8 @@ class ReviewController extends Controller
             $imageUploadResponse = $this->fileStorageService->uploadImageToCloud($image, 'reviewer');
             $validated['image'] = $imageUploadResponse['public_path'];
         }
+
+      
     
         $review->update($validated);
     

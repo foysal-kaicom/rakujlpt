@@ -51,6 +51,34 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [scrollCount]);
 
+  useEffect(() => {
+    if (isSidebarOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isSidebarOpen]);
+
+  useEffect(() => {
+    if (!isSidebarOpen) return;
+
+    const scrollY = window.scrollY;
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+
+    return () => {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      window.scrollTo(0, scrollY);
+    };
+  }, [isSidebarOpen]);
+
   const handleLogout = async () => {
     try {
       const response = await axiosInstance.get("/candidate/logout");
@@ -170,7 +198,7 @@ export default function Header() {
               loading="lazy"
             />
           ) : (
-            <FaUser className="size-8 rounded-full object-cover aspect-auto ring-3 ring-purple-400 text-white bg-purple-400" />
+            <FaUser className="size-8 p-1.5 rounded-full object-cover aspect-auto ring-3 ring-purple-200 text-white bg-purple-300" />
           )}
           <div>
             <p className="line-clamp-1 capitalize font-semibold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -178,12 +206,12 @@ export default function Header() {
               {user?.last_name}
             </p>
             <p className="line-clamp-1 text-xs font-semibold bg-linear-to-r from-blue-600  to-purple-600 bg-clip-text text-transparent">
-              {user?.email.slice(0, 14) || user?.phone_number.slice(0, 14)}
+              {user?.email ? user?.email.slice(0, 14) : user?.phone_number.slice(0, 14)}
             </p>
           </div>
 
-          <div className="bg-white grid grid-cols-1 rounded-md text-sm shadow absolute right-1/2 translate-x-1/2 top-10 scale-0 group-hover:scale-100 w-[200px] h-[210px] opacity-0 group-hover:opacity-100 overflow-clip duration-400 origin-top outline outline-gray-200 p-1">
-            {SidebarData.slice(0, 4).map((item, i) => (
+          <div className="bg-white grid grid-cols-1 rounded-md text-sm shadow absolute right-1/2 translate-x-1/2 top-10 scale-0 group-hover:scale-100 w-[200px] h-[280px] opacity-0 group-hover:opacity-100 overflow-clip duration-400 origin-top outline outline-gray-200 p-1">
+            {SidebarData.slice(0, 6).map((item, i) => (
               <Link
                 key={i}
                 href={item.to}
@@ -242,7 +270,7 @@ export default function Header() {
             isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <div className="flex flex-col gap-5 h-full overflow-y-scroll pb-10 pt-5 px-6 lg:px-8 container mx-auto scrollbar-hide">
+          <div className="flex flex-col gap-5 h-full overflow-y-scroll pb-24 pt-5 px-6 lg:px-8 container mx-auto scrollbar-hide">
             <div className="space-y-5">
               {isAuthenticated && token && user && (
                 <>
@@ -271,11 +299,15 @@ export default function Header() {
                       </p>
 
                       <p className="text-sm">
-                        {user?.email || user?.phone_number}
+                        {user?.email ? user?.email  : user ?.phone_number}
                       </p>
                     </Link>
                   </div>
-                  <div className="space-y-5 border-b border-indigo-100 pb-5 text-violet-800">
+                  <div className="space-y-5 border-b border-indigo-100 pb-5 text-violet-800 relative">
+                    <div className="flex justify-end absolute right-0 -top-2">
+                      <LanguageSwitcher />
+                    </div>
+
                     {/* Sidebar Items */}
                     {SidebarData.map((item, index) => (
                       <Link
@@ -369,13 +401,12 @@ export default function Header() {
                   </div>
                 );
               })}
-              <LanguageSwitcher />
             </div>
 
             {isAuthenticated && token && user ? (
               <button
                 onClick={handleLogout}
-                className="text-sm font-medium 2xl:text-sm flex w-[100px] items-center gap-1 py-1 px-3 2xl:py-2 2xl:px-5 text-white bg-red-600 rounded-full border-2 border-red-600 hover:bg-white hover:text-red-600 duration-300 cursor-pointer"
+                className="text-sm font-medium 2xl:text-sm flex justify-center w-[110px] items-center gap-1 py-1 px-3 2xl:py-2 2xl:px-5 text-white bg-red-600 rounded-full border-2 border-red-600 hover:bg-white hover:text-red-600 duration-300 cursor-pointer"
               >
                 {t("nav.logout")}
                 <IoLogOut className="size-5" />

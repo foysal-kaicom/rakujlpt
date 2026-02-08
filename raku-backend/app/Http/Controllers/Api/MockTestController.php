@@ -328,4 +328,86 @@ class MockTestController extends Controller
             return $this->responseWithError("Something went wrong", $ex->getMessage());
         }
     }
+
+    public function previewAnswers(Request $request)
+    {
+        try {
+            $data = $request->all();
+
+            $request->validate([
+                'answers' => 'required|array',
+                'answers.*.id' => 'required|integer|exists:mock_test_questions,id',
+                'answers.*.answer' => 'required|integer',
+            ]);
+
+            $answers = collect($data['answers'])->keyBy('id');
+
+            // Extract question IDs
+            $questionIds = $answers->keys();
+
+            // Fetch questions with options, group, and section
+            $questions = MockTestQuestion::with(['mockTestQuestionOption', 'mockTestQuestionGroup', 'section'])
+                ->whereIn('id', $questionIds)
+                ->get()
+                ->keyBy('id');
+
+            $groupedData = [];
+            foreach ($answers as $questionId => $answerData) {
+                $question = $questions->get($questionId);
+                if (!$question) continue;
+
+                $group = $question->mockTestQuestionGroup;
+                $groupId = $group->id ?? 'unknown';
+                $groupType = $group->group_type ?? 'Unknown Type';
+                $type = $group->type ?? 'Unknown Type';
+
+                $section = $question->section;
+                $sectionId = $section->id ?? 'unknown';
+                $sectionName = $section->title ?? 'Unknown Section';
+
+                // Initialize section if not exists
+                if (!isset($groupedData[$sectionId])) {
+                    $groupedData[$sectionId] = [
+                        'section_id' => $sectionId,
+                        'section_name' => $sectionName,
+                        'groups' => []
+                    ];
+                }
+
+                // Initialize group under section if not exists
+                if (!isset($groupedData[$sectionId]['groups'][$groupId])) {
+                    $groupedData[$sectionId]['groups'][$groupId] = [
+                        'group_id' => $groupId,
+                        'group_type' => $groupType,
+                        'type' => $type,
+                        'content' => $group->content ?? '',
+                        'questions' => []
+                    ];
+                }
+
+                // Add question to group
+                $options = $question->mockTestQuestionOption;
+                $groupedData[$sectionId]['groups'][$groupId]['questions'][] = [
+                    'question_id'   => $question->id,
+                    'proficiency_level' => $question->proficiency_level,
+                    'question_type' => $question->type,
+                    'question'      => $question->title,
+                    'options'       => $options->values,
+                    'correct_answer' => $options->correct_answer_index,
+                    'user_answer'   => $answerData['answer'],
+                ];
+            }
+
+            // Reformat to use array values for sections and groups
+            $previewData = [];
+            foreach ($groupedData as $section) {
+                $section['groups'] = array_values($section['groups']);
+                $previewData[] = $section;
+            }
+
+            return $this->responseWithSuccess($previewData, "Preview generated successfully.");
+        } catch (Throwable $ex) {
+            return $this->responseWithError("Something went wrong.", $ex->getMessage());
+        }
+    }
 }

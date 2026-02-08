@@ -32,6 +32,7 @@ import AnswerConsent from "./Answerconsent";
 import type {
   ExamSection,
   ModuleQuestionCounts,
+  AnswerPayload
 } from "@/types/Mocktest/MockExam.type";
 
 /* -------------------- Helpers -------------------- */
@@ -53,6 +54,8 @@ export default function ExamPage() {
   const [sidebarShow, setSidebarShow] = useState(false);
   const [result, setResult] = useState<any>(null);
   const [showConsent, setShowConsent] = useState(false);
+  const [isCountingDown, setIsCountingDown] = useState(false);
+  const [answerPayload , setAnswerPayload] = useState<AnswerPayload[]>([])
 
   const sliderRef = useRef<HTMLDivElement>(null);
   const questionRefs = useRef<Record<number, HTMLDivElement | null>>({});
@@ -151,11 +154,18 @@ export default function ExamPage() {
     if (!examStarted || isSubmitted) return;
 
     const fetchExam = async () => {
+      const startTime = Date.now();
       try {
         setLoading(true);
+        setIsCountingDown(true);
+
         const { data } = await axiosInstance.get(
           `/mock-test/get-questions?exam_id=${id}`,
         );
+        const elapsedTime = Date.now() - startTime;
+        const remainingDelay = Math.max(6200 - elapsedTime, 0);
+
+        await new Promise((resolve) => setTimeout(resolve, remainingDelay));
 
         setQuestions(data.data.sections);
         setExamTitle(data.data.exam_title);
@@ -209,6 +219,8 @@ export default function ExamPage() {
         id: Number(id),
         answer: Number(value),
       }));
+
+      setAnswerPayload(payload)
 
       const { data } = await axiosInstance.post(
         `/mock-test/submit-answer?exam_id=${id}&total_questions=${totalQuestions}`,
@@ -325,7 +337,13 @@ export default function ExamPage() {
   const isLastStep = !canGoNext;
 
   /* -------------------- Render -------------------- */
-  if (loading) return <SkeletonMockExam />;
+  if (loading)
+    return (
+      <SkeletonMockExam
+        isCountingDown={isCountingDown}
+        setIsCountingDown={setIsCountingDown}
+      />
+    );
 
   if (isSubmitted) {
     return (
@@ -334,6 +352,7 @@ export default function ExamPage() {
         setIsSubmitted={setIsSubmitted}
         moduleQuestionCounts={moduleQuestionCounts}
         id={id}
+        answerPayload={answerPayload}
       />
     );
   }

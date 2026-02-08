@@ -57,7 +57,7 @@ export default function LanguageSwitcher() {
             onClick={() => setIsOpen(false)}
           />
 
-          <div className="absolute xl:right-0 mt-3 w-52 z-20 rounded-2xl overflow-clip bg-white/90 backdrop-blur border border-slate-200 shadow-2xl origin-top">
+          <div className="absolute right-0 xl:-right-1/2 mt-3 w-52 z-20 rounded-2xl overflow-clip bg-white/90 backdrop-blur border border-slate-200 shadow-2xl origin-top">
             {(Object.keys(languages) as Lang[]).map((lang) => (
               <button
                 key={lang}

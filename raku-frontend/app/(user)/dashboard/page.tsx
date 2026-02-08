@@ -63,35 +63,35 @@ export default function Dashboard() {
             {/* Quick Actions */}
             <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 mb-6 mt-8">
               <ActionCard
-                title="Mock Test"
+                title={t("dashboard.sections.exam_solution.items.mock_test")}
                 button="Start Test"
                 icon={IoIosAlarm}
                 action={"/mock_test_select"}
               />
               <ActionCard
-                title="Practice Roadmap"
-                button="View Materials"
+                title={t("dashboard.sections.exam_solution.items.practice")}
+                button="Start Practice"
                 icon={GiStairsGoal}
                 action={"/practice"}
               />
 
               <ActionCard
-                title="Exam Pattern"
-                button="View Materials"
+                title={t("dashboard.sections.exam_solution.items.exam_pattern")}
+                button="View Pattern"
                 icon={LuComponent}
                 action={"/question_composition"}
               />
 
               <ActionCard
-                title="Course Materials"
+                title={t("dashboard.sections.exam_solution.items.materials")}
                 button="View Materials"
                 icon={PiNotebookFill}
                 action={"/dashboard"}
               />
 
               <ActionCard
-                title="Tips"
-                button="View Materials"
+                title={t("dashboard.sections.exam_solution.items.tips")}
+                button="View Tips"
                 icon={MdTipsAndUpdates}
                 action={"/dashboard"}
               />
@@ -192,8 +192,8 @@ export default function Dashboard() {
                       );
                     })
                   ) : (
-                    <li className="text-sm text-gray-500 text-center">
-                      No data found
+                    <li className="text-sm text-gray-500 text-center capitalize">
+                      No Recent Mocktest found
                     </li>
                   )}
                 </ul>
@@ -216,11 +216,11 @@ export default function Dashboard() {
                           </div>
 
                           <div className="flex-1">
-                            <p className="text-sm font-medium text-gray-900">
+                            <p className="text-sm font-medium text-gray-900 capitalize">
                               {item.package_name}
                             </p>
-                            <p className="text-xs text-gray-500">
-                              price: {item.price}
+                            <p className="text-xs text-gray-500 capitalize">
+                              Price: {item.price}
                             </p>
 
                             <p className="text-xs text-gray-500 capitalize">
@@ -235,8 +235,8 @@ export default function Dashboard() {
                       );
                     })
                   ) : (
-                    <li className="text-sm text-gray-500 text-center">
-                      No data found
+                    <li className="text-sm text-gray-500 text-center capitalize">
+                     No Recent Subscriprion found
                     </li>
                   )}
                 </ul>
@@ -287,8 +287,8 @@ export default function Dashboard() {
                       );
                     })
                   ) : (
-                    <li className="text-sm text-gray-500 text-center">
-                      No data found
+                    <li className="text-sm text-gray-500 text-center capitalize">
+                      No Recent Wallet activity found
                     </li>
                   )}
                 </ul>

@@ -4,7 +4,7 @@ import { Toaster } from "sonner";
 import RouteLoader from "@/components/RouteLoader";
 import MetaPixel from "@/components/MetaPixel";
 import I18nProvider from "./i18n-provider";
-import BrevoChat from "@/components/BrevoChat"
+import { ToastProvider } from "raku-toast-react";
 
 export const metadata: Metadata = {
   title:
@@ -60,13 +60,13 @@ export default function RootLayout({
           <RouteLoader />
           <MetaPixel />
           {children}
-          <BrevoChat/>
           <Toaster
             position="top-center"
             richColors
             duration={3000}
             closeButton={true}
           />
+          <ToastProvider />
         </I18nProvider>
       </body>
     </html>

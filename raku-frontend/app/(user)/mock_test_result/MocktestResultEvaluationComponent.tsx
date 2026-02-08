@@ -242,10 +242,14 @@ export default function MocktestResultEvaluation({
                           <div className="grid md:grid-cols-2 gap-6">
                             {Object.entries(moduleScores).map(
                               ([moduleName, score]) => {
-                                const percentage = (
-                                  (score.correct / score.answered) *
-                                  100
-                                ).toFixed(1);
+                                const answered = Number(score?.answered);
+                                const correct = Number(score?.correct);
+
+                                const percentage =
+                                  answered > 0
+                                    ? ((correct / answered) * 100).toFixed(2)
+                                    : "0.00";
+
                                 const colorClass =
                                   parseFloat(percentage) >= 50
                                     ? "bg-green-600"

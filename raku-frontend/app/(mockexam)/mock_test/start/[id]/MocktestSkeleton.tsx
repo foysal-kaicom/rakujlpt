@@ -1,8 +1,35 @@
-import { FaClock } from "react-icons/fa";
+import { useState, useEffect } from "react";
 
-export default function SkeletonMockExam() {
+import { FaClock } from "react-icons/fa";
+import Image from "next/image";
+
+export default function SkeletonMockExam({ isCountingDown }: any) {
+  const [counter, setCounter] = useState(5);
+  const [launched, setLaunched] = useState(false);
+  const maxCount = 5;
+  const progress = (counter / maxCount) * 100;
+
+  useEffect(() => {
+    if (!isCountingDown) return;
+
+    setCounter(5);
+
+    const interval = setInterval(() => {
+      setCounter((prev) => {
+        if (prev === 1) {
+          clearInterval(interval);
+          setLaunched(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isCountingDown]);
+
   return (
-    <div className="min-h-screen bg-linear-to-br from-purple-50 to-indigo-100 animate-pulse">
+    <div className="min-h-screen bg-linear-to-br from-purple-50 to-indigo-100">
       {/* Header */}
       <div className="bg-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row gap-5 justify-between md:items-center">
@@ -17,10 +44,7 @@ export default function SkeletonMockExam() {
       {/* Steps */}
       <div className="flex space-x-3 overflow-x-auto bg-white border-b shadow-sm px-4 py-3 justify-center items-center">
         {Array.from({ length: 4 }).map((_, idx) => (
-          <div
-            key={idx}
-            className="h-8 w-24 bg-gray-200 rounded-lg"
-          ></div>
+          <div key={idx} className="h-8 w-24 bg-gray-200 rounded-lg"></div>
         ))}
       </div>
 
@@ -53,10 +77,7 @@ export default function SkeletonMockExam() {
           {/* questions */}
           <div className="p-8 bg-white space-y-8">
             {Array.from({ length: 2 }).map((_, idx) => (
-              <div
-                key={idx}
-                className=" space-y-4"
-              >
+              <div key={idx} className=" space-y-4">
                 <div className="h-5 w-3/4 bg-gray-200 rounded"></div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
                   {Array.from({ length: 4 }).map((_, i) => (
@@ -79,6 +100,91 @@ export default function SkeletonMockExam() {
           </div>
         </div>
       </div>
+      <div className="fixed inset-0 p-5 flex justify-center items-center bg-white/30 backdrop-blur-xs">
+        <div className="relative max-w-md w-full bg-gradient-to-br from-violet-500 via-purple-600 to-fuchsia-600 shadow-2xl shadow-violet-500/40 rounded-3xl px-10 py-14 text-center flex flex-col items-center gap-6">
+          {/* ambient glow */}
+          <div className="absolute inset-0 bg-white/10 blur-3xl opacity-30 pointer-events-none" />
+
+          {/* loader */}
+          <div className="relative h-24 flex items-center justify-center">
+            <div className="relative flex items-center justify-center size-20 rounded-full bg-white/10 backdrop-blur">
+              <CircularProgress progress={progress} />
+
+              <div
+                className={`absolute flex flex-col items-center ${
+                  launched ? "animate-rocket-launch" : "idle-shake-pause"
+                }`}
+              >
+                <Image
+                  src="/assets/icon/rocket.png"
+                  height={80}
+                  width={80}
+                  alt=""
+                  className="relative z-10 drop-shadow-[0_0_14px_rgba(255,255,255,0.45)]"
+                />
+
+                <div
+                  className={`rocket-flame ${
+                    launched ? "flame-launch" : "flame-idle"
+                  }`}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* counter */}
+          {!launched && (
+            <div className="text-white tracking-wide">
+              <div className="text-sm uppercase opacity-80">
+                Exam Starting in
+              </div>
+              <div
+                key={counter}
+                className="text-4xl font-extrabold tabular-nums"
+              >
+                <span className="animate-scale-in">{counter}</span>s
+              </div>
+            </div>
+          )}
+
+          {launched && (
+            <div className="text-white text-2xl font-extrabold tracking-wider">
+              Started
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
+
+const CircularProgress = ({ progress }: { progress: number }) => {
+  const radius = 36;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (progress / 100) * circumference;
+
+  return (
+    <svg className="absolute inset-0 -rotate-90" width="100%" height="100%">
+      <circle
+        cx="50%"
+        cy="50%"
+        r={radius}
+        stroke="rgba(255,255,255,0.65)"
+        strokeWidth="4"
+        fill="transparent"
+      />
+      <circle
+        cx="50%"
+        cy="50%"
+        r={radius}
+        stroke="#a855f7"
+        strokeWidth="4"
+        fill="transparent"
+        strokeDasharray={circumference}
+        strokeDashoffset={offset}
+        strokeLinecap="round"
+        className="transition-all duration-300"
+      />
+    </svg>
+  );
+};
