@@ -131,6 +131,10 @@ Route::group(['middleware' => 'auth', 'checkPermission'], function () {
         Route::get('/reports/list', [MockTestController::class, 'getReportsData'])->name('reports.list');
         Route::get('/reports/export', [MockTestController::class, 'exportReportsCsv'])->name('reports.export');
 
+        //question import
+        Route::get('/question-import-page', [MockTestController::class, 'importForm'])->name('question-import-page');
+        Route::get('/question-import-sample', [MockTestController::class, 'downloadSampleCsv'])->name('question-import-sample');
+        Route::post('/question-import', [MockTestController::class, 'questionImport'])->name('question-import');
 
         // ajax dependent dropdown routes
         Route::get('/modules/{examId}', [MockTestController::class, 'getModulesByExam'])->name('modules.byExam');

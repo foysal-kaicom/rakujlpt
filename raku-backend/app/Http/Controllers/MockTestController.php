@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ImportMockTestCsvNamesRequest;
 use App\Http\Requests\StoreMockTestRequest;
 use App\Models\Candidate;
 use App\Models\Exam;
@@ -465,6 +466,7 @@ class MockTestController extends Controller
             'content' => 'nullable|string',
             'audio-content' => 'nullable|file|mimes:mp3,ogg,wav',
             'remarks' => 'nullable|string',
+            'publish' => 'nullable|boolean',
         ]);
 
         if ($validate->fails()) {
@@ -493,6 +495,7 @@ class MockTestController extends Controller
         }
 
         $questionGroup->set_no = $request->set_no;
+        $questionGroup->is_draft = $request->has('publish') ? 0 : 1;
         $questionGroup->save();
 
         $questionGroup->mockTestQuestion()->update([
@@ -712,6 +715,185 @@ class MockTestController extends Controller
         return response()->stream($callback, 200, $headers);
     }
 
+    public function importForm()
+    {
+        return view('mock-tests.question-import');
+    }
+   
+    public function questionImport(ImportMockTestCsvNamesRequest $request)
+    {
+        $path = $request->file('csv')->getRealPath();
+
+        // Read all rows
+        $rows = [];
+        if (($handle = fopen($path, 'r')) !== false) {
+            while (($data = fgetcsv($handle, 0, ',')) !== false) {
+                $rows[] = $data;
+            }
+            fclose($handle);
+        }
+
+        if (count($rows) < 2) {
+            toastr()->error("CSV is empty.");
+            return back();
+        }
+
+        $headers = array_map('trim', $rows[0]);
+
+        // BOM fix for first header
+        if (isset($headers[0])) {
+            $headers[0] = preg_replace('/^\xEF\xBB\xBF/', '', $headers[0]);
+        }
+
+        unset($rows[0]);
+
+        try {
+            DB::beginTransaction();
+
+            foreach ($rows as $row) {
+                $row = array_map('trim', $row);
+
+                if (empty(array_filter($row))) continue;
+
+                // convert row -> assoc
+                $assoc = [];
+                foreach ($headers as $i => $key) {
+                    $assoc[$key] = $row[$i] ?? null;
+                }
+
+                // minimal required
+                if (
+                    empty($assoc['exam_name']) || empty($assoc['module_name']) || empty($assoc['section_title']) ||
+                    empty($assoc['group_type']) || $assoc['set_no'] === null ||
+                    empty($assoc['proficiency_level']) || empty($assoc['question_type']) ||
+                    empty($assoc['option_1']) || empty($assoc['option_2']) || empty($assoc['option_3']) ||
+                    empty($assoc['answer'])
+                ) {
+                    continue;
+                }
+
+                $exam = Exam::where('name', trim($assoc['exam_name']))->first();
+                if (!$exam) throw new \Exception("Exam not found: {$assoc['exam_name']}");
+
+                $module = MockTestModule::where('exam_id', $exam->id)
+                    ->where('name', trim($assoc['module_name']))
+                    ->first();
+                if (!$module) throw new \Exception("Module not found: {$assoc['module_name']}");
+
+                $section = MockTestSection::where('mock_test_module_id', $module->id)
+                    ->where('title', trim($assoc['section_title']))
+                    ->first();
+                if (!$section) throw new \Exception("Section not found: {$assoc['section_title']}");
+
+                // Create group (per row, since group_type=single => one group per question)
+                $groupType = strtolower(trim($assoc['group_type']));
+                $groupBy = !empty($assoc['group_by']) ? strtolower(trim($assoc['group_by'])) : null;
+
+                $groupContent = $assoc['group_content'] ?? null;
+                if ($groupBy === 'audio' && empty($groupContent)) $groupContent = 'dummy audio';
+                if ($groupBy === 'passage' && empty($groupContent)) $groupContent = 'dummy passage';
+
+                $questionGroup = MockTestQuestionGroup::create([
+                    'mock_test_section_id' => $section->id,
+                    'type' => $groupType,
+                    'group_type' => $groupBy,
+                    'content' => $groupContent,
+                    'question_quantity' => 1,
+                    'is_draft' => true, 
+                    'set_no' => (int)$assoc['set_no'],
+                    'remarks' => $assoc['remarks'] ?? null,
+                ]);
+
+                // Create question
+                $questionType = strtolower(trim($assoc['question_type']));
+                $questionText = $assoc['question'] ?? '';
+
+                if ($questionType === 'image' && empty($questionText)) $questionText = 'dummy image';
+                if ($questionType === 'text' && empty($questionText)) $questionText = 'dummy text';
+
+                $question = MockTestQuestion::create([
+                    'title' => $questionText,
+                    'mock_test_section_id' => $section->id,
+                    'mock_test_question_group_id' => $questionGroup->id,
+                    'proficiency_level' => strtoupper(trim($assoc['proficiency_level'])),
+                    'type' => $questionType,
+                    'hints' => $assoc['hints'] ?? null,
+                ]);
+
+                $options = [
+                    1 => $assoc['option_1'],
+                    2 => $assoc['option_2'],
+                    3 => $assoc['option_3'],
+                ];
+                if (!empty($assoc['option_4'])) $options[4] = $assoc['option_4'];
+
+                MockTestQuestionOption::create([
+                    'mock_test_question_id' => $question->id,
+                    'values' => json_encode($options, JSON_UNESCAPED_UNICODE),
+                    'correct_answer_index' => (string)((int)$assoc['answer']),
+                ]);
+            }
+
+            DB::commit();
+            Toastr::success("CSV import completed.");
+            return redirect()->route('mock-tests.question.list');
+
+        } catch (Throwable $ex) {
+            DB::rollBack();
+            toastr()->error($ex->getMessage());
+            return back();
+        }
+    }
+
+    public function downloadSampleCsv()
+    {
+        $headers = [
+            'exam_name','module_name','section_title','group_type','group_by','set_no','remarks','group_content',
+            'proficiency_level','question_type','question','hints','option_1','option_2','option_3','option_4','answer'
+        ];
+
+        $sampleRows = [
+            [
+                'JLPT','Listening','Dialogue','single','passage','1','Imported Set 1',
+                'This is the passage text for Set 1. It can be long, and can contain commas too.',
+                'N5','text','What is the main idea of the passage?','',
+                'Option A','Option B','Option C','', '1'
+            ],
+            [
+                'JLPT','Listening','Dialogue','single','passage','2','Imported Set 2',
+                'This is the passage text for Set 2. It can be long, and can contain commas too.',
+                'N5','image','dummy image','Upload image later',
+                'Option A','Option B','Option C','Option D', '4'
+            ],
+            [
+                'JLPT','Listening','Dialogue','single','audio','3','Imported Listening Set',
+                'dummy audio',
+                'N5','text','What did the speaker buy?','',
+                'Apple','Banana','Milk','', '2'
+            ],
+        ];
+
+        $filename = 'mock_test_questions_sample.csv';
+
+        return response()->streamDownload(function () use ($headers, $sampleRows) {
+            $handle = fopen('php://output', 'w');
+
+            // header
+            fputcsv($handle, $headers);
+
+            // rows
+            foreach ($sampleRows as $row) {
+                fputcsv($handle, $row);
+            }
+
+            fclose($handle);
+        }, $filename, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+        ]);
+    }
+
+    
+    
 }
 
 
