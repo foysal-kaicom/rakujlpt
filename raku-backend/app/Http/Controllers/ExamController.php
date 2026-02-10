@@ -6,13 +6,23 @@ use App\Http\Requests\ExamListFilterRequest;
 use App\Http\Requests\ExamRequest;
 use App\Models\CustomMockTest;
 use App\Models\Exam;
+use App\Models\MockTestModule;
+use App\Services\FileStorageService;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ExamController extends Controller
 {
+    public $fileStorageService;
+    public function __construct(FileStorageService $fileStorageService)
+    {
+        $this->fileStorageService = $fileStorageService;
+    }
+
     public function list(ExamListFilterRequest $request)
     {
         $orderBy = $request->order_by ?? 'id';
@@ -44,15 +54,14 @@ class ExamController extends Controller
 
     public function store(ExamRequest $request)
     {
-
         try {
             $data = $request->validated();
 
-
             if ($request->hasFile('image')) {
-                $imageName = time() . '_' . $request->file('image')->getClientOriginalName();
-                $request->file('image')->move(public_path('exam_images'), $imageName);
-                $data['image'] = 'exam_images/' . $imageName;
+                $image = $request->file('image');
+
+                $imageUploadResponse = $this->fileStorageService->uploadImageToCloud($image, 'exam');
+                $data['image'] = $imageUploadResponse['public_path'];
             }
 
             $data['created_by'] = Auth::id();
@@ -62,23 +71,19 @@ class ExamController extends Controller
             $exam = Exam::create($data);
 
             if ($request->type == 'custom') {
-
-                // 1. Prepare a timestamp so all records have the same time
                 $now = now();
                 $insertData = [];
 
-                // 2. Build the array in memory (PHP loops are extremely fast compared to DB queries)
                 foreach ($request->input('module', []) as $moduleKey => $module) {
                     if (!empty($module['section_weights'])) {
                         foreach ($module['section_weights'] as $sectionKey => $questionQty) {
-                            // Optional: Filter out empty values
                             if ($questionQty > 0) {
                                 $insertData[] = [
                                     'exam_id'              => $exam->id,
                                     'mock_test_module_id'  => $moduleKey,
                                     'mock_test_section_id' => $sectionKey,
                                     'question_quantity'    => $questionQty,
-                                    'created_at'           => $now, // 'insert' doesn't auto-fill timestamps
+                                    'created_at'           => $now,
                                     'updated_at'           => $now,
                                 ];
                             }
@@ -86,8 +91,6 @@ class ExamController extends Controller
                     }
                 }
 
-
-                // 3. Perform a single Bulk Insert Query
                 if (!empty($insertData)) {
                     CustomMockTest::insert($insertData);
                 }
@@ -95,6 +98,7 @@ class ExamController extends Controller
 
             Toastr::success('Exam Registered Successfully.');
             return redirect()->route('mock-tests.exam.list');
+
         } catch (\Exception $e) {
             Toastr::error('Exam not created');
             dd($e->getMessage());
@@ -106,32 +110,103 @@ class ExamController extends Controller
     {
         $exam = Exam::findOrFail($id);
         $isCopy = $request->query('isCopy', false);
-        return view('exam.edit', compact('exam', 'isCopy'));
+    
+        $exams = Exam::where('type', 'general')->latest()->get();
+        $isCustom = $exam->type === 'custom';
+    
+        $selectedExamId = null;
+        $selectedModuleIds = [];
+        $selectedSectionWeights = [];
+    
+        if ($isCustom) {
+            $rows = CustomMockTest::where('exam_id', $exam->id)->get();
+    
+            $selectedModuleIds = $rows->pluck('mock_test_module_id')->unique()->values()->toArray();
+    
+            foreach ($rows as $r) {
+                $selectedSectionWeights[$r->mock_test_module_id]['section_weights'][$r->mock_test_section_id]
+                    = $r->question_quantity;
+            }
+    
+            if (!empty($selectedModuleIds)) {
+                $selectedExamId = MockTestModule::whereIn('id', $selectedModuleIds)->value('exam_id');
+            }
+        }
+    
+        return view('exam.edit', compact(
+            'exam',
+            'isCopy',
+            'exams',
+            'isCustom',
+            'selectedExamId',
+            'selectedModuleIds',
+            'selectedSectionWeights'
+        ));
     }
 
     public function update(ExamRequest $request, $id)
     {
         try {
-            $exam = Exam::findOrFail($id);
-            $data = $request->validated();
-
-            if ($request->hasFile('image')) {
-                if ($exam->photo && file_exists(public_path($exam->photo))) {
-                    unlink(public_path($exam->photo));
+            DB::transaction(function () use ($request, $id) {
+    
+                $exam = Exam::findOrFail($id);
+                $data = $request->validated();
+    
+                if ($request->hasFile('image')) {
+                    $newFile = $request->file('image');
+    
+                    if ($exam->image) {
+                        $fileToDelete = $exam->image;
+                        $imageUploadResponse = $this->fileStorageService->updateFileFromCloud($fileToDelete, $newFile);
+                        $data['image'] = $imageUploadResponse['public_path'];
+                    } else {
+                        $imageUploadResponse = $this->fileStorageService->uploadImageToCloud($newFile, 'exam');
+                        $data['image'] = $imageUploadResponse['public_path'];
+                    }
                 }
-                $imageName = time() . '_' . $request->file('image')->getClientOriginalName();
-                $request->file('image')->move(public_path('exam_images'), $imageName);
-                $data['image'] = 'exam_images/' . $imageName;
-            }
-
-            $data['slug'] = rand(1, 99999) . '-' . Str::of($data['title'])->slug('-');
-
-            $exam->update($data);
-
+    
+                $data['slug'] = rand(1, 99999) . '-' . Str::of($data['title'])->slug('-');
+    
+                $exam->update($data);
+    
+                if ($exam->type === 'custom') {
+    
+                    CustomMockTest::where('exam_id', $exam->id)->delete();
+    
+                    $now = now();
+                    $insertData = [];
+    
+                    foreach ($request->input('module', []) as $moduleId => $module) {
+                        if (!empty($module['section_weights'])) {
+                            foreach ($module['section_weights'] as $sectionId => $qty) {
+                                $qty = (int) $qty;
+                                if ($qty > 0) {
+                                    $insertData[] = [
+                                        'exam_id'              => $exam->id,
+                                        'mock_test_module_id'  => (int) $moduleId,
+                                        'mock_test_section_id' => (int) $sectionId,
+                                        'question_quantity'    => $qty,
+                                        'agent_id'             => $exam->agent_id,
+                                        'created_at'           => $now,
+                                        'updated_at'           => $now,
+                                    ];
+                                }
+                            }
+                        }
+                    }
+    
+                    if (!empty($insertData)) {
+                        CustomMockTest::insert($insertData);
+                    }
+                }
+            });
+    
             Toastr::success('Exam Updated Successfully.');
             return redirect()->route('mock-tests.exam.list');
+    
         } catch (\Exception $e) {
             Toastr::error('Exam not updated');
+            Log::info($e->getMessage());
             return redirect()->route('mock-tests.exam.list');
         }
     }

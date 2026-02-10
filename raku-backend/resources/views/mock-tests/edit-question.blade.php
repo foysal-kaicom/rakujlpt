@@ -1,6 +1,7 @@
 @extends('master')
 
 @section('contents')
+@php use Illuminate\Support\Str; @endphp
 <div class="container">
     <!-- Question Group Edit Form -->
     <form action="{{ route('mock-tests.question-group.update', $question->mockTestQuestionGroup->id) . '?question_list_page=' . urlencode(request()->get('question_list_page', 1)) }}" class="mb-4" method="post" enctype="multipart/form-data">
@@ -76,17 +77,48 @@
                         placeholder="Enter remarks">
                 </div>
 
+                <div class="space-y-2 col-span-4 flex items-center gap-3 mt-2">
+                    <input
+                        type="checkbox"
+                        id="publish"
+                        name="publish"
+                        value="1"
+                        {{ old('publish', ($question->mockTestQuestionGroup->is_draft == 0)) ? 'checked' : '' }}
+                        class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                    >
+                    <label for="publish" class="font-semibold">
+                        Published <span class="text-xs text-gray-500">(If checked, it will be published)</span>
+                    </label>
+                </div>
+                
             </div>
             <div>
                 <div class="space-y-2 col-span-4">
-                    <div id="fileInputWrapper" class="space-y-2 hidden mt-3">
-                        <label for="fileInput" class="block font-semibold">Audio file</label>
-                        <input type="file" id="fileInput" name="audio-content" class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-1/2" />
+                    @php
+                    $audioContent = $question->mockTestQuestionGroup->content ?? '';
+                
+                    // treat these as "not uploaded"
+                    $isDummyAudio = empty($audioContent) || strtolower(trim($audioContent)) === 'dummy audio';
+                
+                    // optional: if you store real audio as URL or /path
+                    $looksLikeAudio = preg_match('/\.(mp3|wav|ogg)$/i', $audioContent) || Str::startsWith($audioContent, ['http://','https://','/']);
+                @endphp
+                
+                <div id="fileInputWrapper" class="space-y-2 hidden mt-3">
+                    <label for="fileInput" class="block font-semibold">Audio file</label>
+                    <input type="file" id="fileInput" name="audio-content"
+                           class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 w-1/2" />
+                
+                    @if(!$isDummyAudio && $looksLikeAudio)
                         <audio controls style="width:250px; height:25px;">
-                            <source src="{{ $question->mockTestQuestionGroup->content }}" type="audio/mpeg">
+                            <source src="{{ $audioContent }}" type="audio/mpeg">
                             Your browser does not support the audio element.
                         </audio>
-                    </div>
+                    @else
+                        <p class="text-sm text-gray-500">No audio uploaded</p>
+                    @endif
+                </div>
+                
 
                     <div id="passageTextareaWrapper" class="space-y-2 hidden mt-3 w-full">
                         <label for="passageTextarea" class="block font-semibold">Write Passage</label>

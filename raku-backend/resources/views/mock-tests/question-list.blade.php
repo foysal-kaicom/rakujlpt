@@ -35,7 +35,7 @@
         <!-- Section Header -->
         <div class="p-2 px-4 d-flex justify-content-between align-items-center bg-indigo-300">
 
-            <h3 class="text-md m-0">All Questions</h3>
+            <h3 class="text-md mr-2">All Questions</h3>
 
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8">
 
@@ -70,7 +70,15 @@
                 </div>
             </div>
 
-            <div class="flex gap-10">
+            <div class="flex gap-5">
+                <div class="dropdown rounded"
+                style="width: 150px;background-color: hsla(199, 76%, 75%, 0.841);color:#04070a">
+                <a href="{{ route('mock-tests.question-import-page') }}">
+                    <p class="cursor-pointer bg-green-700 text-center text-white p-2 rounded hover:bg-green-600">
+                        Import Question
+                    </p>
+                </a>
+            </div>
 
                 @hasPermission('mock-tests.question-setup.form')
                     <div class="dropdown rounded"
