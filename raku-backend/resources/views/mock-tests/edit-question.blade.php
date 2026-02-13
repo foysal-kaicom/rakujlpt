@@ -61,7 +61,7 @@
                         type="number"
                         name="set_no"
                         min="0"
-                        max="10"
+                        max="100"
                         value="{{ $question->mockTestQuestionGroup->set_no }}"
                         class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
                 </div>
