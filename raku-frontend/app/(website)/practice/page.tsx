@@ -107,7 +107,7 @@ export default function Practice() {
           <BreadCrumb breadCrumbData={breadCrumbData} />
 
           {/* HERO SECTION */}
-          <div className="mt-6 text-center">
+          <div className="xl:w-2/3 mx-auto mt-6 text-center">
             <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/70 backdrop-blur-md border border-white/40 rounded-full text-pink-600 text-sm font-medium shadow">
               <Sparkles className="w-4 h-4" />
               {t("practicePage.badge")}
@@ -142,7 +142,7 @@ export default function Practice() {
 
           {/* PRACTICE LEVEL SECTION */}
           <div className="mt-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center sm:text-left">
               {t("practicePage.choose_roadmap")}
             </h2>
 

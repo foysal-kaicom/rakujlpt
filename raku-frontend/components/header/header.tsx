@@ -198,7 +198,7 @@ export default function Header() {
               loading="lazy"
             />
           ) : (
-            <FaUser className="size-8 rounded-full object-cover aspect-auto ring-3 ring-purple-400 text-white bg-purple-400" />
+            <FaUser className="size-8 p-1.5 rounded-full object-cover aspect-auto ring-3 ring-purple-200 text-white bg-purple-300" />
           )}
           <div>
             <p className="line-clamp-1 capitalize font-semibold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -206,7 +206,7 @@ export default function Header() {
               {user?.last_name}
             </p>
             <p className="line-clamp-1 text-xs font-semibold bg-linear-to-r from-blue-600  to-purple-600 bg-clip-text text-transparent">
-              {user?.email.slice(0, 14) || user?.phone_number.slice(0, 14)}
+              {user?.email ? user?.email.slice(0, 14) : user?.phone_number.slice(0, 14)}
             </p>
           </div>
 
@@ -270,7 +270,7 @@ export default function Header() {
             isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <div className="flex flex-col gap-5 h-full overflow-y-scroll pb-10 pt-5 px-6 lg:px-8 container mx-auto scrollbar-hide">
+          <div className="flex flex-col gap-5 h-full overflow-y-scroll pb-24 pt-5 px-6 lg:px-8 container mx-auto scrollbar-hide">
             <div className="space-y-5">
               {isAuthenticated && token && user && (
                 <>
@@ -299,11 +299,15 @@ export default function Header() {
                       </p>
 
                       <p className="text-sm">
-                        {user?.email || user?.phone_number}
+                        {user?.email ? user?.email  : user ?.phone_number}
                       </p>
                     </Link>
                   </div>
-                  <div className="space-y-5 border-b border-indigo-100 pb-5 text-violet-800">
+                  <div className="space-y-5 border-b border-indigo-100 pb-5 text-violet-800 relative">
+                    <div className="flex justify-end absolute right-0 -top-2">
+                      <LanguageSwitcher />
+                    </div>
+
                     {/* Sidebar Items */}
                     {SidebarData.map((item, index) => (
                       <Link
@@ -397,7 +401,6 @@ export default function Header() {
                   </div>
                 );
               })}
-              <LanguageSwitcher />
             </div>
 
             {isAuthenticated && token && user ? (

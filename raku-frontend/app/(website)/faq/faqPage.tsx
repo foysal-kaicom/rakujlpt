@@ -69,7 +69,7 @@ export default function Faq() {
       <WebpageWrapper>
         <BreadCrumb breadCrumbData={breadCrumbData} />
 
-        <div className="relative z-10 max-w-3xl mx-auto text-center pt-15">
+        <div className="relative z-10 max-w-3xl mx-auto text-center pt-10">
           <h1 className="text-5xl md:text-6xl font-extrabold pb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-400 to-purple-500">
             {t("faq.title")}
           </h1>

@@ -63,7 +63,7 @@
 
                 <div class="space-y-2">
                     <label class="block font-semibold">Set No</label>
-                    <input type="number" name="set_no" min="0" max="10"
+                    <input type="number" name="set_no" min="0" max="100"
                         class="bg-white drop-shadow-md text-sm border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
                         placeholder="Enter set number">
                 </div>
