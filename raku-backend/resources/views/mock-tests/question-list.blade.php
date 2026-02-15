@@ -175,7 +175,7 @@
                     },
                     {
                         data: 'section',
-                        name: 'section.title'
+                        name: 'section'
                     },
                     {
                         data: 'type',
@@ -187,7 +187,7 @@
                     },
                     {
                         data: 'bundle_type',
-                        name: 'mockTestQuestionGroup.type'
+                        name: 'bundle_type'
                     },
                     {
                         data: 'action',
